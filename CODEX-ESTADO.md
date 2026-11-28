@@ -1,7 +1,311 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 11:01** · publicado em **28/11/2026 11:06** (UTC-3)
+> Ultima resposta processada: **28/11/2026 11:24** · publicado em **28/11/2026 11:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 11:24 · sessao 108fb1930b64 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
+
+**Caso 20: VERMELHO esperado na igualdade de atos e foto de Q, nos dois horários.** A recusa entra por `validacao.recusar_pergunta` em autocommit, depois da absorção da âncora e antes de abrir a transação de Q. Com o veto por `raise _Reprovada('recusa_humana_vigente')`, a transação de Q pode ser revertida e a recusa continua gravada. `app/chamados/services/materializacao.py:1047–1084,1124–1149` · `app/chamados/services/validacao.py:974–1000`
+
+Conferi em memória as âncoras do texto, compilei os quatro módulos de teste resultantes e conferi os alvos do catálogo. O ambiente falhou ao importar `django.core.management`, e a cópia está sem metadados Git. Execução ORM/HTTP no HEAD, identidade Git e Ruff [nao verificado]. `app/manage.py:7–18` · `app/config/settings_test.py:1–9`
+
+## 1. Recusa commitada antes da transação de Q [nao verificado]
+
+lei: caso 20, grupo 6. A recusa humana vigente prevalece em Q. A passagem preserva o ato de recusa e a foto resultante, sem acrescentar `ABSORCAO` em Q. A escolha de uma identidade persistente de passagem segue aberta no material fornecido. O código já distingue os carimbos da própria passagem por PK em memória, pois duas portas podem carimbar no mesmo instante. `matriz.md:30,79` e `r2.txt:8` conforme o anexo · `app/docs/PROMPTS.md:2950` · `app/chamados/services/materializacao.py:1064–1067`
+
+Em `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py`, substitua a linha `from datetime import datetime, time, timedelta` pelas três primeiras linhas abaixo. Substitua também `from django.db import IntegrityError` pela última linha. Cada âncora ocorre uma vez. `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:2–6`
+
+```python
+from contextlib import contextmanager
+from datetime import datetime, time, timedelta
+from sys import _getframe
+```
+
+```python
+from django.db import IntegrityError, transaction
+```
+
+Insira o helper imediatamente antes de `class PassagemDaAusenciaTest(BaseCortes):` (1). Ele delega toda abertura ao `atomic` real. O callback roda na chamada que vai **criar** o contexto da candidata, antes de entrar nele. A comparação usa o objeto de código em execução, inclusive quando a contraprova troca `__code__`. `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:32` · `app/chamados/services/materializacao.py:1074–1080` · `app/chamados/tests/e4d_matriz_mutantes.py:14–37`
+
+```python
+@contextmanager
+def antes_do_atomic_da_candidata(numero, interpor):
+    atomic_real = transaction.atomic
+    codigo = M._materializar_ausencia_de_resposta.__code__
+    chamadas = 0
+
+    def atomic_observado(*args, **kwargs):
+        nonlocal chamadas
+        if _getframe(1).f_code is codigo:
+            chamadas += 1
+            if chamadas == numero:
+                interpor()
+        return atomic_real(*args, **kwargs)
+
+    with patch.object(transaction, 'atomic', new=atomic_observado):
+        yield
+    if chamadas < numero:
+        raise AssertionError((numero, chamadas, 'atomic da candidata não alcançado'))
+
+
+```
+
+## 2. Caso 20 com a asserção da regra em primeiro lugar
+
+Em `app/chamados/tests/test_e4d_matriz_reds.py`, substitua os dois imports abaixo, cada qual com uma ocorrência. `app/chamados/tests/test_e4d_matriz_reds.py:29,38`
+
+```python
+# Original
+from django.test import RequestFactory, SimpleTestCase
+from chamados.tests.cortes_f2_f9_apoio import AGORA, DIA, BaseCortes
+
+# Mutado, cada import no seu sítio
+from django.test import RequestFactory, SimpleTestCase, TransactionTestCase
+from chamados.tests import test_e4c_f5_a1c_passagem_da_ausencia as a1c
+from chamados.tests.cortes_f2_f9_apoio import AGORA, DIA, BaseCortes, criar_empresa_e_colaborador
+```
+
+Retire o intervalo que começa em `    def test_caso_20_recusa_para_so_q_e_preserva_irma_ja_absorvida(self):` e termina imediatamente antes de `    def test_caso_24_ancora_fora_deixa_dependente_sem_cobranca(self):` (1 de cada). Insira a classe abaixo antes de `class MatrizAusenciaTest(ApoioMatriz):` (1). O intervalo retirado inclui a exigência de uma assinatura `pedido_id` para passagens de ausência. `app/chamados/tests/test_e4d_matriz_reds.py:1320,1440–1516`
+
+```python
+class Caso20RecusaCommitadaTest(TransactionTestCase):
+    _escape = a1c.PassagemDaAusenciaTest._escape
+    _irma_da_celula = a1c.PassagemDaAusenciaTest._irma_da_celula
+    _irma_com_luz = a1c.PassagemDaAusenciaTest._irma_com_luz
+    _responder = a1c.PassagemDaAusenciaTest._responder
+    _ausencia = a1c.PassagemDaAusenciaTest._ausencia
+    atos = staticmethod(ApoioMatriz.atos)
+
+    def setUp(self):
+        super().setUp()
+        self.relogio = self.enterContext(freeze_time(T0))
+        self.enterContext(calado())
+        self.push = self.enterContext(patch('chamados.fcm_utils.push_fcm_colaborador', autospec=True)) [nao verificado]
+        _, self.colab = criar_empresa_e_colaborador()
+        self.admin = User.objects.create_user(username='admin_recusa_commitada')
+        self.usuario = User.objects.create_user(username='colab_recusa_commitada')
+        self.colab.usuario = self.usuario
+        self.colab.save(update_fields=['usuario'])
+        self.disputa = DisputaSupervisao.objects.create(colaborador=self.colab)
+
+    def foto(self, p):
+        return P.objects.values_list(*RVM).get(pk=p.pk)
+
+    def preparar(self):
+        e = self._escape('hora')
+        q = self._irma_com_luz()
+        self._responder(q, '19:02')
+        P.objects.create(
+            disputa=self.disputa, celula_id=q.celula_id, data_evento=q.data_evento,
+            tipo_resposta='hora', motivo='intervalo_volta', pergunta='A que horas voltou?',
+        )
+        q.refresh_from_db()
+        self.assertEqual(q.celula.veredito, 'concorde')
+        self.assertIs(juizes.fato_do_marco_no_espelho(q), True)
+        self.assertEqual(self.atos(q), [DP.RESPOSTA])
+        self.assertEqual(self.foto(q), (T0, '19:02', None, None, None, None, ''))
+        self.relogio.move_to(T1)
+        return e, q
+
+    def test_caso_20_recusa_humana_prevalece_em_q_no_empate(self):
+        self.verificar_recusa_na_passagem(T1)
+
+    def test_caso_20_recusa_humana_prevalece_em_q_depois_do_relogio(self):
+        self.verificar_recusa_na_passagem(T2)
+
+    def verificar_recusa_na_passagem(self, instante):
+        e, q = self.preparar()
+        motivo = 'Confirme a hora'
+
+        def recusar_q():
+            self.assertTrue(connection.get_autocommit())
+            self.assertFalse(connection.in_atomic_block)
+            self.assertEqual(timezone.now(), T1)
+            anterior = e.decisoes.get(ato=DP.ABSORCAO)
+            self.assertEqual(
+                (anterior.ato_em, anterior.absorcao_escape_id, anterior.absorcao_ausencia_id),
+                (T1, e.pk, self._ausencia().pk),
+            )
+            self.assertEqual(self.atos(q), [DP.RESPOSTA])
+            self.relogio.move_to(instante)
+            r = validacao.recusar_pergunta(q.pk, self.admin, motivo)
+            self.assertEqual((r['ok'], r['estado']), (True, 'recusada'))
+            self.assertTrue(connection.get_autocommit())
+            self.assertFalse(connection.in_atomic_block)
+            recusa = q.decisoes.get(ato=DP.RECUSA)
+            self.assertEqual(
+                (recusa.ato_em, recusa.ato_por_id, recusa.ato_motivo, recusa.ato_texto),
+                (instante, self.admin.pk, motivo, '19:02'),
+            )
+            self.assertEqual(self.foto(q), VAZIA)
+
+        with a1c.antes_do_atomic_da_candidata(2, recusar_q):
+            self._responder(e, 'ATESTADO')
+
+        trilha = list(LogAuditoria.objects.filter(
+            acao=materializacao.ACAO_IRMA_VIVA_NA_AUSENCIA,
+            modelo='PerguntaDisputa', objeto_id=q.pk,
+        ).values_list('valor_depois', flat=True))
+        self.assertEqual(
+            (self.atos(q), self.foto(q)), ([DP.RESPOSTA, DP.RECUSA], VAZIA),
+            f'Regra 20: atos e foto de Q. Trilha da passagem: {trilha!r}',
+        )
+        self.push.assert_called_once() [nao verificado]
+
+    def test_caso_20_sem_recusa_absorve_q(self):
+        e, q = self.preparar()
+        self._responder(e, 'ATESTADO')
+        self.assertEqual(
+            list(q.decisoes.filter(ato=DP.ABSORCAO).values_list(
+                'ato_em', 'absorcao_escape_id', 'absorcao_ausencia_id',
+            )),
+            [(T1, e.pk, self._ausencia().pk)],
+            'Controle 20: vínculo de Q sem recusa',
+        )
+        self.assertTrue(DP.absorcao_vigente(P.objects.get(pk=q.pk)))
+        self.push.assert_not_called() [nao verificado]
+
+
+```
+
+A ordem por `id`, com a âncora promovida pela passagem, coloca Q na segunda tentativa. O teste mostra a absorção da âncora antes da recusa, prova autocommit dos dois lados da porta humana e deixa `agora` da passagem em `T1`. A segunda irmã permanece no universo da fixture. `app/chamados/models.py:3931–3934` · `app/chamados/services/materializacao.py:1047–1084`
+
+A resposta de `19:02` concorda com a luz de `19:00` no controle. Depois da recusa, a composta perdeu a resposta e a foto ficou vazia. O carimbo tentativo de Q, com o marco aceso, permite ao C6 encerrar Q na base. Isso deixa o caminho até `ABSORCAO` exposto ao teste. A trilha real entra na mensagem do asserto e o retorno `recusadas` é descartado pelo chamador de produção. `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:50–64` · `app/chamados/juizes.py:1428–1473,1512–1533,1544–1567` · `app/chamados/models.py:3474–3491,4450–4456` · `app/chamados/services/materializacao.py:1091–1149` · `app/core/observ.py:124–137` · `app/chamados/services/disputa_emissao.py:1595–1600`
+
+## 3. Cura de referência e mutantes B1/B2/B3/B0
+
+**Ensaio da cura.** Em `app/chamados/models.py`, insira antes da âncora composta `    @classmethod\n    def composta(cls, p):` (1). O leitor de referência devolve o ato vigente para que B2 consiga aplicar o relógio errado ao próprio ato. A seleção entre `RECUSA`, `RESPOSTA` e `REABERTURA` segue a ordem da sequência do ato. `app/chamados/models.py:4450–4456,4486–4515`
+
+```python
+    @classmethod
+    def recusa_humana_vigente(cls, p):
+        ultimo = max(
+            (d for d in p.decisoes.all() if d.ato in (cls.RECUSA, cls.RESPOSTA, cls.REABERTURA)),
+            key=lambda d: (d.ato_em, d.pk),
+            default=None,
+        )
+        return ultimo if ultimo is not None and ultimo.ato == cls.RECUSA else None
+
+```
+
+Em `app/chamados/services/materializacao.py`, insira antes de `                elif pergunta_respondida(leitura) and respondida_em_t1 is None:` (1). O nome do motivo abaixo exercita o caminho `_Reprovada`. A igualdade da regra usa a recusa humana gravada e a foto de Q, independentemente do motivo de auditoria adotado pela cura. `app/chamados/services/materializacao.py:1080,1094–1108,1136–1149`
+
+```python
+                elif (recusa := DecisaoPergunta.recusa_humana_vigente(q)) is not None:
+                    raise _Reprovada('recusa_humana_vigente')
+```
+
+A mesma interface aceita leitura direta pelo banco com `p.decisoes.filter(ato__in=(cls.RECUSA, cls.RESPOSTA, cls.REABERTURA)).order_by('-ato_em', '-pk').first()` no lugar de `max(...)`. Os três mutantes atuam na decisão da passagem. B1 desliga o veto, B2 recorta o ato pelo relógio e B3 lê a recusa da âncora em lugar da de Q. Os pares abaixo ancoram a cura de referência e servem para ambas as formas do leitor, com qualquer texto de motivo. Uma cura que organize a decisão em outra expressão precisa apontar o mutante à expressão correspondente. `app/chamados/models.py:4375–4378,4486–4515,4527–4550` · `app/chamados/services/materializacao.py:1080–1108`
+
+Em `app/chamados/tests/e4d_matriz_mutantes.py`, insira antes de `        '24_sem_veto_de_grupo': (materializacao._materializar_ausencia_de_resposta, (` (1). Cada par contém o original e o mutado exatos. Os originais de B1–B3 têm contagem 1 após a cura de referência. B0 já tem contagem 1 na cópia. `app/chamados/tests/e4d_matriz_mutantes.py:14–37,68–70` · `app/chamados/services/materializacao.py:1100,1128–1137`
+
+```python
+        '20_omite_recusa': (materializacao._materializar_ausencia_de_resposta, (
+            ('                elif (recusa := DecisaoPergunta.recusa_humana_vigente(q)) is not None:',
+             '                elif False:'),
+        )),
+        '20_corta_recusa_pelo_relogio': (materializacao._materializar_ausencia_de_resposta, (
+            ('                elif (recusa := DecisaoPergunta.recusa_humana_vigente(q)) is not None:',
+             '                elif ((recusa := DecisaoPergunta.recusa_humana_vigente(q)) is not None\n'
+             '                      and recusa.ato_em <= agora):'),
+        )),
+        '20_esconde_recusa': (materializacao._materializar_ausencia_de_resposta, (
+            ('DecisaoPergunta.recusa_humana_vigente(q)', 'DecisaoPergunta.recusa_humana_vigente(_escape)'),
+        )),
+        '20_veta_q_sem_recusa': (materializacao._materializar_ausencia_de_resposta, (
+            ('                        _carimbou = q.pk',
+             "                        if q.motivo == 'orfao_14h':\n"
+             "                            raise _Reprovada('q_vetada_no_controle')\n"
+             '                        _carimbou = q.pk'),
+        )),
+```
+
+| Teste | Base limpa `f300431af` com o texto | Com B.3 | Sob mutação |
+|---|---|---|---|
+| Caso 20, empate | VERMELHO em `Regra 20: atos e foto de Q` | VERDE | B1 e B3 VERMELHOS no mesmo asserto. B2 VERDE, pois `ato_em == agora`. `app/chamados/services/materializacao.py:1047,1080–1133` |
+| Caso 20, recusa posterior ao relógio | VERMELHO no mesmo asserto | VERDE | B1, B2 e B3 VERMELHOS no mesmo asserto. B2 exclui `T2` da decisão tomada com `agora=T1`. `app/chamados/services/materializacao.py:1047,1080–1133` |
+| Caso 20, controle sem recusa | VERDE | VERDE | B0 VERMELHO em `Controle 20: vínculo de Q sem recusa`. A lista de vínculos fica vazia após o rollback. `app/chamados/services/materializacao.py:1128–1140` |
+
+Esses são vereditos esperados. A contraprova começa pelo controle limpo, então B1–B3 param nesse controle na base vermelha. Com a cura, o braço mutado precisa falhar pelo asserto indicado e a contraprova completa deve ficar verde. Execução [nao verificado]. `app/chamados/tests/e4d_matriz_mutantes.py:585–612`
+
+LEI-AKITA: origem=`app/chamados/services/materializacao.py:1080–1108`, testemunha=`app/chamados/models.py:4450–4515`, RED=`Caso20RecusaCommitadaTest`, quem-mais-le=`app/chamados/services/disputa_emissao.py:1595–1600` e leitores de H4 em `:1508–1512,1621–1628`, juízes novos=`recusa_humana_vigente`, grupo 6, padrão=Single Source of Truth. RED ORM e itens dependentes de execução [nao verificado]. `CLAUDE.md:16–39,62–68` · `app/chamados/services/materializacao.py:1143–1149` · `app/chamados/models.py:4527–4550`
+
+## 4. Inversão do teste H4 do Opus [nao verificado]
+
+A expectativa antiga mandava absorver Q mesmo com a recusa gravada e, por consequência, exigia que H4 vetasse a próxima resposta. A inversão exige a recusa preservada, a ausência de absorção e o sucesso da próxima resposta pela entrada real. O teste vizinho que começa com uma absorção confirmada exige o veto H4 nesse outro estado. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:351–380` · `app/chamados/services/disputa_emissao.py:1508–1512,1621–1628`
+
+Em `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py`, substitua a âncora composta `from django.db import transaction\nfrom django.test import RequestFactory\n` (1) pelo bloco de imports. Substitua de `    def test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa(self):` até antes de `    def _ato_posterior_com_carimbo_de_pe(self, ato, instante_do_ato, instante_da_resposta):` (1 de cada). O teste usa a transação externa do `TestCase` e comprova que a gravação da recusa ocorre antes do savepoint da candidata. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:10–11,114–129,364–382` · `app/chamados/tests/cortes_f2_f9_apoio.py:47–51` · `app/chamados/services/materializacao.py:1074–1080`
+
+```python
+from django.db import connection, transaction
+from django.test import RequestFactory
+from django.utils import timezone
+```
+
+```python
+    def test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_prevalece(self):
+        irma, escape = self._irma_com_luz(), self._escape()
+        self._responder(irma)
+        self.relogio.move_to(T1)
+        savepoints = tuple(connection.savepoint_ids)
+
+        def recusar():
+            self.assertEqual(tuple(connection.savepoint_ids), savepoints)
+            self.assertEqual(timezone.now(), T1)
+            self.relogio.move_to(T2)
+            r = validacao.recusar_pergunta(irma.pk, self.admin, 'Confirme a hora')
+            self.assertEqual((r['ok'], r['estado']), (True, 'recusada'))
+            self.assertEqual(tuple(connection.savepoint_ids), savepoints)
+
+        with (patch('chamados.fcm_utils.push_fcm_colaborador', autospec=True) as push, [nao verificado]
+              a1c.antes_do_atomic_da_candidata(1, recusar)):
+            self._responder(escape, 'ATESTADO')
+
+        fresca = self._ler(irma.pk)
+        self.assertEqual(
+            list(fresca.decisoes.order_by('pk').values_list('ato', 'ato_em')),
+            [(D.RESPOSTA, T0), (D.RECUSA, T2)],
+        )
+        self.assertEqual(
+            (fresca.respondida_em, fresca.resposta_colab, fresca.validada_em, fresca.validada_por_id,
+             fresca.materializada_em, fresca.materializada_por_id, fresca.via_resolucao),
+            (None, '', None, None, None, None, ''),
+        )
+        self.assertFalse(D.absorcao_vigente(fresca))
+        self.relogio.move_to(T3)
+        self.assertEqual(self._entrada(fresca), (True, None))
+        self._assert_resposta(irma, instante=T3)
+        self.assertEqual(
+            list(irma.decisoes.order_by('pk').values_list('ato', 'ato_em')),
+            [(D.RESPOSTA, T0), (D.RECUSA, T2), (D.RESPOSTA, T3)],
+        )
+        push.assert_called_once() [nao verificado]
+
+
+```
+
+**Veredito esperado.** A expectativa antiga é verde na base. O texto invertido é vermelho na base por `ABSORCAO` extra na primeira igualdade, verde com B.3 e vermelho nessa mesma igualdade sob B1, B2 ou B3. O mesmo par original/mutado da seção 3 se aplica. Execução [nao verificado]. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364–380` · `app/chamados/services/materializacao.py:1100–1149`
+
+## 5. B.4 aplicável junto do texto de teste [nao verificado]
+
+Em `app/chamados/tests/e4d_matriz_mutantes.py`, retire de `    if nome == '20_ignora_recusa_no_empate':` até antes de `    if nome in {'25_absorcao_so_por_coluna', '26_devolve_sem_vinculo'}:`. Substitua de `M20IgnoraRecusaNoEmpate = a(` até antes de `M26DevolveSemVinculo = a(` pelo bloco abaixo. Cada delimitação ocorre uma vez. `app/chamados/tests/e4d_matriz_mutantes.py:383–405,665–670`
+
+```python
+b = partial(contraprova, matriz.Caso20RecusaCommitadaTest)
+M20OmiteRecusa = b('M20OmiteRecusa', '20_omite_recusa',
+                   'test_caso_20_recusa_humana_prevalece_em_q_no_empate', falha_em='Regra 20: atos e foto de Q')
+M20CortaRecusaPeloRelogio = b('M20CortaRecusaPeloRelogio', '20_corta_recusa_pelo_relogio',
+                             'test_caso_20_recusa_humana_prevalece_em_q_depois_do_relogio',
+                             falha_em='Regra 20: atos e foto de Q')
+M20EscondeRecusa = b('M20EscondeRecusa', '20_esconde_recusa',
+                     'test_caso_20_recusa_humana_prevalece_em_q_no_empate', falha_em='Regra 20: atos e foto de Q')
+M20VetaQSemRecusa = b('M20VetaQSemRecusa', '20_veta_q_sem_recusa',
+                     'test_caso_20_sem_recusa_absorve_q', falha_em='Controle 20: vínculo de Q sem recusa')
+```
+
+Substitua `def contraprova(base, classe, nome, teste, *, leitor=None):` (1) pela primeira linha abaixo. Substitua a linha da checagem de `mutacao_aplicada` (1) pelo segundo bloco. Isso exige o marcador da asserção da regra além da falha do próprio teste. A classe externa do executor usa `unittest.TestCase`, de modo que a execução interna de `TransactionTestCase` pode fazer commits. `app/chamados/tests/e4d_matriz_mutantes
+
+[truncado em 20000 de 45338 caracteres]
 
 ## 28/11 11:01 · sessao 364dc2fa8f54 · E4C-F5-INSTANTE · leitura · origem=Code
 
@@ -2619,16 +2923,4 @@ Na anuência, preserve sessão e confira a mensagem renderizada. Na triagem de h
 4. **Via nominal do chamado.** Qual evidência autoriza atribuir `cascade` legado a desligamento? A via nominal depende de pouso conjunto do escritor, do catálogo, do guarda de renascimento e dos leitores. O rito único do item 4 também segue com o opus na origem do fecho. `chamados/catalogo/motor.py:88`, `chamados/models.py:1132`, `chamados/models.py:1918`, `colaboradores/services/desligamento.py:253`, `chamados/models.py:2180`.
 5. **Instância humana anterior ao fecho.** A matriz deve aceitar a reabertura quando a instância via o chamado vivo e o estado relido sob trava já é terminal? `chamados/models.py:148`, `chamados/models.py:802`.
 
-## 28/11 10:05 · sessao 061f43170c1f · - · - · origem=Ronald (tmux)
-
-Conferi as bordas do item 7 sem editar arquivos.
-
-- O formulário de chamado próprio e o do DP já recebem a recusa antes do redirect. O dedup do DP relê o cadastro sob trava e registra a recusa. O template já apresenta a mensagem de erro. `chamados/services/abertura.py:66,167,174,200`, `chamados/views.py:141,217`, `templates/chamados/form_abertura.html:12`.
-- O lote novo já depende do chamado, dentro do mesmo `atomic`. As duas bordas já tratam `None`. O caminho de dedup ainda devolve um lote existente antes de consultar o cadastro. `chamados/services/regularizacao_ext.py:235,247,313`, `chamados/views_regularizacao.py:54`, `colaboradores/views.py:3049`.
-- O aceite de vínculo já recusa antes de substituir o aceite anterior, notificar ou auditar a abertura. O `ValueError` desfaz a transação do vínculo e chega à borda. `colaboradores/services/vinculo.py:169,387,423,429,440`, `colaboradores/views.py:451`.
-- Anuência já guarda `None` e preserva a sessão, mas o template servido não mostra `anuencia_erro`. O horário já continua pelo contrato da batida, com PK e sessão condicionados a chamado presente. Posto e férias já devolvem a condição de bloqueio com `None`, sem push vinculado. `ponto/services/triagem_batida.py:349,381,488,499`, `ponto/views.py:358`, `templates/ponto/triagem/fora_horario.html:3`, `ponto/utils.py:58,130`.
-- Os dois kernels descartam a emissão acessória de auditoria. A rejeição de justificativa grava a decisão antes de tentar abrir chamado, e seus pushes descrevem a rejeição sem apontar para o chamado. `api/views.py:720`, `api/views_core.py:714`, `ponto/services/justificativa.py:402,411,429`.
-- O selo C12 mora na pasta de testes. Para o opus, identificar cada chamada permitida por arquivo, escopo e AST, exigir uma ocorrência e manter a linha para diagnóstico. Os mutantes devem deslocar o corpo, duplicar uma chamada autorizada e introduzir um escritor em outro escopo. `chamados/tests/e4b_c12_ast.py:16,224`.
-- 5a e 5b já constam do HEAD. Os controles devem remover a entrada de desligamento no mapa de recusas, remover a autoria do payload e aceitar indevidamente uma assinatura ausente, inválida ou divergente da FK. O histórico ainda traduz o carimbo por desligamento como fato registrado. `chamados/services/materializacao.py:868,893`, `core/observ.py:105`, `chamados/services/trilha_reabertura.py:14`, `chamados/management/commands/auditar_invariantes_chamados.py:673`, `chamados/services/historico.py:104`.
-
-_8901 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8902 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
