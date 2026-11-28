@@ -11004,6 +11004,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 06:58:04 disjuntor (NEGOU B1)** -- agente a23ed16653cf5aad5 -- Bash -- alvo sha1:ded11706fd (310 car., na trilha privada)
+
 **28/11 06:12:03 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:26da7393f9 (521 car., na trilha privada)
 
 **28/11 05:55:52 disjuntor (NEGOU MODELO)** -- agente principal -- Agent general-purpose -- alvo sha1:f19c8408b4 (41 car., na trilha privada)
@@ -14976,6 +14978,8 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 06:35 colhido RETRATO-PDF-CORTA-POR-QUE item2/c2/folha.rc (06:35 rc 0): pista job 1128063410_0644d102, Ran 1035 OK, oom=0 -- os 13 RED viraram verdes; espera ver1 Codex antes da suite inteira
 - 06:39 colhido RETRATO-PDF-CORTA-POR-QUE item2/ver1/r.rc (06:39 rc 0): Codex verificador REPROVA. Triagem (amostra conferida supra_juiz.py:450, escala/models.py:1630, test_retrato_por_que_por_dia.py:563): (4) rotulo 'Trabalho em dia de ausencia' afirma mais que FATO_EM_AUSENCIA (batida sem par) PROCEDENTE -> c3 Codex; (2) selo AST so varre _retem, emissao direta passa PROCEDENTE -> opus testes; (5) vizinho drawer vacuo no caminho novo PROCEDENTE -> opus testes; (3) guarda 'uma chamada' com mock + localdate na 1a chamada do classificar_export = PRE-EXISTENTE fora do aval -> anexo ao opus final, mordida do mock -> opus testes; (1) drawer competencia inteira DESCARTADO: encaixe Q3 do aval ('fica como voce encaixou') -> anexo ao opus final
 - 06:42 colhido RETRATO-PDF-CORTA-POR-QUE item2/c3/r.rc (06:42 rc 0): 2 rotulos (fato_em_ausencia -> 'Batida em dia com ausencia', nunca_bateu -> 'Sem batida de ponto apuravel'), amostra cartorio.py:1233 conferida; commit na copia. Proximo: opus testes (2)(3-mock)(5) + mutantes dos 2 rotulos quando a vaga opus liberar
+- 06:58 colhido CUSTO-DE-COORDENACAO f1v2/v4 agente a23ed16653cf5aad5: PARADO pelo DISJUNTOR B1 (726921 tokens/30 min sem arquivo na wt -- trabalhou em rascunho fora dela). Sem commit; #5 e #3 feitos no rascunho (selo verde la, 0 except), guardados em logs/CUSTO-DE-COORDENACAO/f1v2/v4/rascunho/; #2 #8 #9 nao feitos; baseline dos 18 selos -> v4/base/rcs.txt. Proximo: v5 opus escrevendo DIRETO na wt, depois do t4 do RETRATO (vaga opus = 1)
+- 06:59 DESPACHO RETRATO-PDF-CORTA-POR-QUE t4: testes (2)(3)(5)+mutantes dos rotulos -> opus construtor (so testes, CCM-OPCAO-A) na wt-codex-retrato-pdf-corta-por-que-062609, log logs/RETRATO-PDF-CORTA-POR-QUE/item2/t4/folha.rc; F1 v5 depois (vaga opus = 1)
 - 06:40 DESPACHO RETRATO-PDF-CORTA-POR-QUE ver1: (4) rotulo -> Codex construtor c3 logs/RETRATO-PDF-CORTA-POR-QUE/item2/c3/r.rc | (2)(3-mock)(5) testes -> opus quando a vaga opus (F1 v4) liberar
 - 06:34 RETRATO-PDF-CORTA-POR-QUE item2 c2 commit 0644d1021 na copia: suite --only folha -> logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2/folha.rc; DESPACHO ver1 verificador -> Codex logs/RETRATO-PDF-CORTA-POR-QUE/item2/ver1/r.rc
 - 06:27 DESPACHO RETRATO-PDF-CORTA-POR-QUE item2: c2 construtor -> Codex (vaga 1, wt-codex-retrato-pdf-corta-por-que, logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2/r.rc); janela parcial DECIDIDO PELA LEI aval Q2 (so as datas da janela: motivo sem data na janela nao aparece) | contestavel
