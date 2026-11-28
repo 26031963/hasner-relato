@@ -6,10 +6,32 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 12:33:55.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (375.6 MB). Acoes na janela: **1869**.
+**Medido em 28/11/2026 12:41:09.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (377.2 MB). Acoes na janela: **1889**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:41:06 | Bash | Resumo do censo de cruzamento | `cd ~/saas-hasner; head -n 7 logs/RAZAO-DA-SOBRA/cruza1236/r.md \| cut -c1-500 \| sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g'` |
+| 12:41:02 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b516qp3qo.output; date +%H:%M; cd ~/saas-hasner; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 3` |
+| 12:37:50 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
+| 12:37:46 | Bash | Confere rcs sem colher | `cd ~/saas-hasner; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 3; echo r=$?` |
+| 12:37:42 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bnefxkpg1.output; date +%H:%M` |
+| 12:36:11 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
+| 12:36:08 | Bash | Confere lançamento | `cd ~/saas-hasner; tail -n 3 logs/RAZAO-DA-SOBRA/cruza1236/wrapper.out; cat logs/RAZAO-DA-SOBRA/cruza1236/r.rc 2>/dev/null` |
+| 12:36:01 | Bash | Codex censo do cruzamento e marcas | `cd ~/saas-hasner; H=$(git rev-parse HEAD); O=RAZAO-DA-SOBRA; D=logs/$O/cruza1236; mkdir -p $D /bin/grep -n "^\| RAZAO-DA-SOBRA\\|^\| PAR\b\\|^\| PAR-\\|^\| E1\\|^\| E1C" app/docs/BACKLOG.md \| cut -c1-2000 > $D/backlog.txt git worktree list > $D/worktrees.txt cat > $D/q.md <<'EOF' PAPEL: censo. Obra RAZAO-DA-SOBRA. Anexos: backlog.txt (linhas da RAZAO-DA-SOBRA, da PAR e da E1) e worktrees.txt (git ...` |
+| 12:35:48 | Bash | Resumo RAZAO-DA-SOBRA | `cd ~/saas-hasner; head -n 6 logs/RAZAO-DA-SOBRA/estado1233/r.md \| cut -c1-450 \| sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g'` |
+| 12:35:44 | Bash | O que acordou a espera | `cd ~/saas-hasner; date +%H:%M; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 4; cat logs/CUSTO-DE-COORDENACAO/f1v2/v7/pouso/suite.rc logs/RAZAO-DA-SOBRA/estado1233/r.rc 2>&1; bin/trava_teste.sh --quem 2>&1 \| tail -n 2` |
+| 12:35:37 | Bash | Confere a forma de uso do push.sh | `cd ~/saas-hasner; ls bin/push.sh && /bin/grep -n "^# \\|usage\\|Uso" bin/push.sh \| head -n 8 \| cut -c1-200` |
+| 12:35:36 | Bash | NOTA no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import re,sys h=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO\|RED-CERTO\|PUXA) ',l)) L[idx+1:idx+1]=[f'- {h} NOTA TESTE-DO-ESTRANHO-R0-2811-1235: a 1225 CHEGOU (R1, Codex so com o clone: 0/5/0 pelo gabarito ...` |
+| 12:35:30 | Bash | Fatias no BACKLOG e aval no PROMPTS | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('\| INVENTARIO-PELA-REGRA ')) new=[ '\| TESTE-DO-ESTRANHO-T1 \| fatia da INVENTARIO-PELA-REGRA (aval TESTE-DO-ESTRANHO-R0-2811-1235): R0 verde com atrito; R1 (Codex so com o clone) parcial \| o marcador ORDEM-VIVA-TOPO mora em comentario HTML (BACKLOG.md:8) e n ...` |
+| 12:35:14 | Bash | Formato das linhas do BACKLOG | `cd ~/saas-hasner; python3 - <<'EOF' L=open('app/docs/BACKLOG.md').read().split('\n') for i,l in enumerate(L): if l.startswith('\| INVENTARIO-PELA-REGRA ') or l.startswith('\| SONDA-ESPURIAS-RAMO2 '): c=l.split('\|'); print(i+1,len(c),[x[:60] for x in c]) EOF ls app/docs/HANDOFF* docs/HANDOFF* 2>/dev/null` |
+| 12:34:57 | Bash | Marca e espera | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import re,sys h=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO\|RED-CERTO\|PUXA) ',l)) L[idx+1:idx+1]=[f'- {h} colhido SONDA-ESPURIAS-RAMO2 estado1233/r.rc (12:34 rc 0): sonda s2 FEITA (963 colabs, 99 sobras, ...` |
+| 12:34:51 | Bash | Resumo SONDA-ESPURIAS-RAMO2 | `cd ~/saas-hasner; head -n 7 logs/SONDA-ESPURIAS-RAMO2/estado1233/r.md \| cut -c1-450 \| sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g'` |
+| 12:34:48 | Bash | Resultado da espera | `tail -n 4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bzue95uto.output; date +%H:%M` |
+| 12:34:37 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
+| 12:34:26 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
+| 12:34:23 | Bash | DESPACHO no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import re,sys h=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO\|RED-CERTO\|PUXA) ',l)) L[idx+1:idx+1]=[f'- {h} DESPACHO RAZAO-DA-SOBRA e SONDA-ESPURIAS-RAMO2 (REGRA DE ENCHER, as 2 vagas Codex livres): estado ...` |
+| 12:34:10 | Bash | Enche as 2 vagas Codex | `cd ~/saas-hasner; H=$(git rev-parse HEAD); for O in RAZAO-DA-SOBRA SONDA-ESPURIAS-RAMO2; do D=logs/$O/estado1233; mkdir -p $D; /bin/grep -n "^\| $O\\|^\| CASO-LITERAL-14\\|^\| RAMO2-B" app/docs/BACKLOG.md \| cut -c1-2500 > $D/backlog.txt; /bin/grep -n "$O" app/docs/RELATO.md \| tail -n 12 \| cut -c1-600 > $D/relato.txt cat > $D/q.md <<EOF PAPEL: leitura. Obra $O. Anexos: backlog.txt (linhas do BAC ...` |
+| 12:33:59 | Bash | Linhas das próximas obras Codex | `cd ~/saas-hasner; /bin/grep -n "^\| [A-Z0-9-]*RAZAO-DA-SOBRA\\|^\| [A-Z0-9-]*SONDA-ESPURIAS\\|^\| [A-Z0-9-]*CASO-LITERAL-14" app/docs/BACKLOG.md \| cut -c1-300; ls -d logs/*RAZAO* logs/*ESPURIAS* 2>/dev/null` |
 | 12:33:51 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/brez5b4qm.output; date +%H:%M` |
 | 12:28:44 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
 | 12:28:40 | Bash | Fatias na INVENTARIO e marca | `cd ~/saas-hasner; F=logs/INVENTARIO-PELA-REGRA/fatias_teste_do_estranho.md; { echo "# Fatias do TESTE-DO-ESTRANHO-2811-1225 (correcao Codex logs/TESTE-DO-ESTRANHO/correcao/r.md: acertou 0, parcial 5, travou 0)"; /bin/grep "^- TESTE-DO-ESTRANHO T" logs/TESTE-DO-ESTRANHO/correcao/r.md; } > $F; wc -l $F H=$(date +%H:%M); python3 - "$H" <<'EOF' import re,sys h=sys.argv[1]; p='app/docs/RELATO.md'; L=op ...` |
@@ -1877,5 +1899,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:46:54 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bey9jnzwr.output` |
 | 00:41:49 | Bash | Rearma a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 00:41:46 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bonxmr25i.output` |
-| 00:36:41 | Bash | Rearma a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
-| 00:36:37 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bmgqx2lby.output` |
