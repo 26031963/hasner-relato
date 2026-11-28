@@ -1,7 +1,76 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 09:21** · publicado em **28/11/2026 09:23** (UTC-3)
+> Ultima resposta processada: **28/11/2026 09:30** · publicado em **28/11/2026 09:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 09:30 · sessao 161b8cb42ffa · FDS-FERIAS-COM-BATIDA-PORTA · sonda · origem=Code
+
+**O Retrato oferece “Validar no fio” nas duas linhas. A cópia tem ações para corrigir a batida ou o agendamento, conforme o fato apurado pelo admin. A lista do HJ-090 é de leitura e não tem uma ação que decida a sobreposição.** `app/folha/retrato_folha.py:1077` · `app/ponto/services/retratar_humano.py:146` · `app/ferias/views.py:470` · `app/ferias/management/commands/listar_ferias_com_batida.py:1`
+
+Usei a saída raspada fornecida. A execução de `--sonda` por esta sessão ficou **[nao verificado]**. O envelope roda antes de chamar o Codex e grava arquivos intermediários. `bin/codex_pergunta.sh:15` · `bin/codex_pergunta.sh:628`
+
+### 1. Juiz e portas existentes
+
+- **Juiz da retenção.** `folha/export.py::dias_ferias_com_batida` cruza as datas dos agendamentos não cancelados com as batidas apuráveis pelo dia civil, dentro da competência. `classificar_export` recebe essas datas e grava `status='fora'`, `motivo='ferias_com_batida'` e `dias_ferias_com_batida`. É o juiz registrado para a entrada no TXT. `app/folha/export.py:464` · `app/folha/export.py:491` · `app/ferias/services.py:49` · `app/folha/export.py:892` · `app/core/juizes.py:336` · `app/docs/JUIZES.md:119`
+- **BATIDA, quando a marcação não foi trabalho.** No Calendário de Ponto, a ação da marcação “Não foi trabalho (retratar)” chama `ponto.views.retratar_batida_view` → `ponto.services.retratar_humano.retratar`. A retratação exige motivo e retira a marcação do conjunto apurável. Se houver outra batida apurável no mesmo dia coberto, o juiz continua indicando a sobreposição. `app/colaboradores/views.py:1986` · `app/templates/colaboradores/partials/_calendario_grade.html:134` · `app/ponto/views.py:3453` · `app/ponto/services/retratar_humano.py:146` · `app/ponto/turnos.py:2961` · `app/folha/export.py:499`
+- **CADASTRO, quando o lançamento de férias está errado.** A seção Férias do colaborador (`secao_ferias_colab`) oferece “Corrigir datas” → `editar_datas_admin` → `corrigir_datas_agendamento`. Também oferece cancelamento administrativo e correção justificada de férias concluídas, conforme o estado, ambas via `executar_cancelamento_admin`. Corrigir a janela pode retirar o dia da sobreposição. Mudar apenas o estado para `concluido` mantém a janela no universo do juiz. `app/ferias/views.py:851` · `app/templates/ferias/_secao_colab.html:143` · `app/ferias/views.py:541` · `app/ferias/services.py:736` · `app/templates/ferias/_secao_colab.html:159` · `app/ferias/views.py:397` · `app/ferias/views.py:451` · `app/ferias/services.py:662` · `app/ferias/services.py:53`
+- **Lista do admin, HJ-090 item (7).** `listar_ferias_com_batida` é o comando que lista os dias e lê o dono L-099 via `InsumosDoDono`. O universo dele parte de `Ausencia(tipo='ferias')` e cruza batidas apuráveis. A retenção da Folha parte de `AgendamentoFerias`. O comando imprime o resultado. O `dono='admin'` gravado no Retrato é o fio da UI. O dono L-099 de cada dia da amostra ficou **[nao verificado]**. `app/docs/BACKLOG.md:2159` · `app/docs/LEIS.md:122` · `app/ferias/management/commands/listar_ferias_com_batida.py:1` · `app/ferias/management/commands/listar_ferias_com_batida.py:41` · `app/ferias/management/commands/listar_ferias_com_batida.py:57` · `app/folha/retrato_folha.py:1261`
+
+### 2. Por que cai no fio
+
+`_fio_cru` grava `admin` no ramo `motivo != 'furo_espelho'`. `TIPO_POR_MOTIVO` dá o tipo `ferias`. `dono_da_linha` traduz o fio para o balde **Admin** da UI. Para montar os links, `portas_da_linha` tenta primeiro as ações gravadas. Com `acoes=[]`, cai em `PORTA_DO_FIO['admin']`, que dá **Validar no fio**. `PORTA_DO_TIPO['ferias']` vale `None`. `app/folha/retrato_folha.py:385` · `app/folha/retrato_folha.py:229` · `app/folha/retrato_folha.py:497` · `app/folha/retrato_folha.py:1001` · `app/folha/retrato_folha.py:1021` · `app/folha/retrato_folha.py:1055` · `app/folha/retrato_folha.py:1077`
+
+O ramo que colhe ações da `tarefa_do_dia` só percorre os retidos por `furo_espelho`. Para férias, o lavrador lê as datas do juiz do export e grava `acoes=[]`. O link passa o **PK do colaborador** ao modal, sem selecionar chamado ou dia. No modal, o botão Validar atua sobre uma `PerguntaDisputa`. O chamado 37604 veio como `registrado` no dado fornecido, e seu módulo `batida_fora_escala_leve` é de auditoria. A presença de um botão Validar no cartão específico do 37604 ficou **[nao verificado]**. `app/folha/fora_da_folha.py:156` · `app/folha/fora_da_folha.py:210` · `app/folha/retrato_folha.py:1250` · `app/folha/retrato_folha.py:1264` · `app/folha/retrato_folha.py:1082` · `app/chamados/urls.py:39` · `app/templates/chamados/partials/modal_fio.html:306` · `app/chamados/services/validacao.py:697` · `app/chamados/catalogo/natureza.py:18`
+
+### 3. Linhas da sonda
+
+As datas abaixo vêm da saída fornecida **[nao verificado em produção]**. Reproduzi os dois links com a função da cópia e a rota declarada. `app/folha/retrato_folha.py:1035` · `app/folha/retrato_folha.py:1077` · `app/config/urls.py:28` · `app/chamados/urls.py:39`
+
+| Colaborador | Dia(s) | Porta atual | Porta que pode resolver |
+|---|---|---|---|
+| `col344` | 07/11/2026 | **Validar no fio** · `/chamados/modal/344/` | Calendário, se a marcação for indevida, ou seção Férias, se o lançamento estiver errado. Qual se aplica **[nao verificado]**. `app/ponto/services/retratar_humano.py:146` · `app/ferias/views.py:470` |
+| `col976` | 07 a 20/11/2026, inclusive | **Validar no fio** · `/chamados/modal/976/` | As mesmas portas condicionais. Qual se aplica em cada dia **[nao verificado]**. `app/ponto/services/retratar_humano.py:146` · `app/ferias/views.py:470` |
+
+**Classe do roteamento: 2 linhas, 15 dias-colaborador**, pelo dado fornecido e pelo mesmo fallback nas duas linhas. O dado associa um chamado específico apenas a `col344`. Chamados correspondentes em `col976` ficam **[nao verificado]**. `app/folha/retrato_folha.py:1001` · `app/folha/retrato_folha.py:1077`
+
+### 4. Ponto de parada
+
+**É pergunta de lei/desenho.** A lista HJ-090 entrega o diagnóstico ao admin, e as duas ações existentes dependem de qual fato ele apurar. O dado fornecido não permite escolher uma porta de decisão para a classe. O ponto do roteamento é o fallback em `portas_da_linha`, compartilhado pelo painel do colaborador e por `fora_da_folha::o_que_segura`. `app/ferias/management/commands/listar_ferias_com_batida.py:66` · `app/ferias/situacao.py:284` · `app/folha/retrato_folha.py:1077` · `app/colaboradores/views.py:1007` · `app/folha/fora_da_folha.py:289`
+
+## 28/11 09:24 · sessao a8cc50a11a53 · E4D-CONTRATO-ROTA-B · verificador · origem=Code
+
+**REPROVADO.** A apresentação pelo carimbo cru no cartão e a releitura do carimbo após a porta foram corrigidas. A catraca do fio continua vermelha em `espera_o_texto_do_colaborador`, tanto na cópia quanto com o delta invertido em memória. `app/templates/chamados/partials/_pergunta_card.html:20–43` · `app/api/views.py:2653–2665` · `app/chamados/services/fio.py:213–226` · [app/chamados/tests/test_e4c_f5_selo_catraca.py:338–349](/home/ronald/codex_ws/f300431afb8d70fff57d33183044e245c1724870/app/chamados/tests/test_e4c_f5_selo_catraca.py:338)
+
+### 1. Apresentação e HTMX
+
+O cartão usa `resposta_composta` para opacidade, selo de validação, hora da resposta e abertura das ações. A presença da resposta passa por `perg.respondida`, que chama o C21 com a composta. O censo dos arquivos tocados e dos caminhos GET e HTMX encontrou zero leitores de apresentação desses três carimbos pela coluna crua da pergunta. O serviço ainda lê colunas cruas para fotos, escrita e auditoria. `app/templates/chamados/partials/_pergunta_card.html:20–43` · `app/chamados/templatetags/chamados_tags.py:144–147` · `app/chamados/models.py:3958–3965` · `app/api/views.py:1132–1150,2567–2582,2653–2665` · `app/chamados/services/disputa_emissao.py:1523–1546,1578–1583,1698–1705,2185–2205`
+
+O GET inclui o parcial após carregar `decisoes` e filtrar pelo C6. O HTMX renderiza o parcial diretamente após buscar o PK e também faz `prefetch_related('decisoes')`. A composta consome esse cache via `p.decisoes.all()`. O parcial calcula a composta para os carimbos e volta a calculá-la por `perg.respondida`, sobre as mesmas decisões carregadas. Contagem de consultas em Django [nao verificado]. `app/chamados/views.py:394–405,550–552` · `app/templates/chamados/detalhe_local.html:307–311` · `app/chamados/services/acoes_chamado.py:345–358` · `app/templates/chamados/partials/_pergunta_card.html:20` · `app/chamados/models.py:3958–3965,4482–4492,4506–4515`
+
+### 2. Escritores, leitores e contrato de retorno
+
+- **`ato_em`**. A porta humana fornece `_agora` no ato `RESPOSTA`. `DecisaoPergunta.registrar` persiste o lote e devolve os objetos criados. O recibo lê `ato_em` da última instância devolvida. Os leitores existentes incluem o redutor, o recorte temporal da tarefa e o histórico do modal. O campo registra o instante do ato. A regra de ajuste temporal é aplicada a `REABERTURA`, `DEVOLUCAO` e `RECUSA`. `app/chamados/services/disputa_emissao.py:1531–1534,1564–1571` · `app/chamados/models.py:4339–4346,4486–4504,4572–4587,4590–4623` · `app/chamados/services/tarefa_do_dia.py:383–403` · `app/templates/chamados/partials/modal_fio.html:204–212`
+- **`com_recibo` e retorno**. Só a API passa `True`. A entrada reexportada encaminha a opção e o núcleo a lê para montar o retorno. A tupla sempre tem dois itens. O segundo contém uma mensagem na recusa, `None` no sucesso padrão ou um `datetime` no sucesso com recibo. No JSON, `respondida_em` identifica o instante do pedido no POST e o instante vigente nas listagens. `app/chamados/models.py:4763–4766` · `app/chamados/services/disputa_emissao.py:1471–1484,1567–1571,1618–1628` · `app/api/views.py:1132–1150,2567–2582,2653–2665`
+
+| Chamador | Consumo do retorno |
+|---|---|
+| Web | Usa o padrão, desempacota `ok, erro` e lê `erro` na recusa. `app/chamados/views.py:1275–1283` |
+| `declarar_hora_colab` | Usa o padrão e lê `erro` na recusa. `app/chamados/services/declaracao_texto.py:445–454` |
+| `aplicar_declaracao` | Usa o padrão e lê `_erro` na recusa. `app/chamados/services/declaracao_texto.py:723–735` |
+| `acoes_disputa` | Chama o núcleo diretamente, com o padrão, e lê `erro` na recusa. `app/chamados/services/acoes_disputa.py:416–418,442–447` |
+| API | Pede recibo, usa `resultado` como mensagem na recusa e chama `isoformat()` no sucesso. `app/api/views.py:2653–2665` |
+
+### 3. Qual ato o recibo devolve
+
+- **Resposta nova.** A porta trava o colaborador, relê a pergunta, colhe `_agora`, salva a projeção e acrescenta a `RESPOSTA` deste pedido ao fim do lote. `registrar` insere na transação aninhada e a porta captura `atos[-1].ato_em` antes de sair do bloco externo. Na simulação em memória com outra resposta inserida após a saída desse bloco, a cópia devolveu o instante do pedido e o lado anterior devolveu o instante posterior. `app/chamados/services/disputa_emissao.py:1489–1503,1523–1534,1564–1571` · `app/chamados/models.py:2975–2980,4572–4587,4590–4623` · `app/api/views.py:2653–2665`
+- **Reenvio aceito.** O núcleo grava outro ato mesmo com texto idêntico. `ja_respondida` afeta a trilha e o rótulo do follow-up. O recibo é do novo ato. Os atalhos de declaração que aceitam ou reaproveitam a resposta anterior pulam o núcleo e seguem o retorno próprio da declaração. `app/chamados/services/disputa_emissao.py:1523–1571,1586–1591,1602–1618` · `app/chamados/services/declaracao_texto.py:445–447,723–739` · `app/chamados/tests/test_porta_resposta_pergunta.py:196–218`
+- **Recusa.** As guardas de vazio, valor inválido, absorção vigente e C6 retornam `(False, erro)` antes da gravação. A API envia a mensagem sem carimbo. Há zero ramos de sucesso sem ato novo no núcleo atual. A assertiva de `pedido_id` do caso 20 da matriz também fica insatisfeita na cópia e no lado anterior reconstruído. Execução do caso completo [nao verificado]. `app/chamados/services/disputa_emissao.py:1439–1484,1504–1524,1564–1571,1618` · `app/api/views.py:2637–2658` · `app/chamados/tests/test_e4d_matriz_reds.py:1451–1453`
+
+### 4. Catracas e classes de reprovação
+
+Executei **170 checagens em memória, com 169 aprovações e uma falha**, usando `unittest.TestCase` para as checagens sem banco e extraindo as constantes de modelo usadas pelos selos. A falha foi `fio.py:226`. A catraca exige origem composta nos dois ramos do `if`. Com `leitura` recebida por parâmetro, ela só consegue provar essa origem no ramo que compõe localmente. O montador atual entrega a composta. A falha já existe no lado anterior deste delta. Os selos de chamada, par ato/coluna e escritor único passaram. `app/chamados/services/fio.py:213–226,442–446` · `app/chamados/tests/test_e4c_f5_selo_catraca.py:237–250,338–349` · `app/chamados/tests/test_e4c_f5_selo_chamada.py:188–193` · `app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:572–594` · `app/chamados/tests/test_e1_entradas.py:185–227`
+
+O delta acrescenta zero juízes, escritores persistentes, leituras de relógio, derivações paralelas e blocos `except`. O recibo lê o ato da porta existente e os carimbos do cartão usam o redutor existente. Os quatro blobs conferem com os lados do anexo. Identidade dos commits, suíte Django, concorrência real e efeitos em produção [nao verificado]. `app/chamados/services/disputa_emissao.py:1489–1534,1564–1571,1586–1628` · `app/chamados/views.py:394–405` · `app/templates/chamados/partials/_pergunta_card.html:20–43` · `app/api/views.py:2653–2665`
 
 ## 28/11 09:21 · sessao 0b3354320924 · FERIADO-BOTAO-CORTADO · verificador · origem=Code
 
@@ -492,67 +561,4 @@ Implementar a faixa fixa no partial compartilhado. Escopo de escrita autorizado 
 
 perguntas de lei: 0
 
-## 28/11 08:52 · sessao 5e3c56e51ed8 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-Implementei os três leitores do caso 30 nos quatro arquivos autorizados. **A asserção da fila SQL continua vermelha pela leitura estática.** O filtro exclui a pergunta com `respondida_em` cru nulo antes da ordenação, que também usa a coluna. Execução da matriz, dos mutantes e comportamento em produção [nao verificado]. `app/chamados/tests/test_e4d_matriz_reds.py:1647–1663` · `app/chamados/juizes.py:1676–1681,1863–1868`
-
-### Censo do construtor
-
-- **Resposta e decisões.** As portas humana e automática gravam o par projetado e registram `RESPOSTA`. A porta pela trilha carimba o instante do texto existente. Reabertura e recusa registram a compensação e limpam a projeção. `registrar` insere os atos e `leitura` reduz a sequência. `respondida_em` tem dois sentidos conforme o objeto: a coluna crua na pergunta e o instante vigente na composta. O texto da composta vem da projeção. `app/chamados/services/disputa_emissao.py:1529–1567,1661,1695–1714,1757–1763,1785–1797` · `app/chamados/models.py:2758–2760,4486–4515,4590–4609`
-- **API e modal.** A emissão fornece enunciado, tipo, opções e destino, e a porta de nascimento grava o dia do fato. A API e o contexto do modal carregam as decisões em lote. A API escreve a representação para `/api/chamados/v2/` e usa o formatador existente de `resposta_display`, que lê o texto da sequência. O filtro do modal entrega a composta ao cartão, cuja guarda continua delegando ao juiz. `app/chamados/services/disputa_emissao.py:448–461` · `app/chamados/models.py:3330–3336,3958–3965,3985–4012` · `app/chamados/services/pergunta_no_app.py:51–57` · `app/chamados/services/fio.py:296–304,573–582` · `app/api/urls.py:73` · `app/api/views.py:1131–1151` · `app/templates/chamados/partials/modal_fio.html:217–223`
-- **Raio-X.** A emissão grava o pai e o nascimento e a costura gravam o destino. As portas de carimbo e descarimbo mantêm `materializada_em` e `via_resolucao`, a validação e a reabertura mantêm `validada_em` e `validada_por`, e `lavrar` grava `veredito_lavrado`. `creditos_perguntas` lê essas entradas e entrega os dois conjuntos de IDs a `particionar_verbos`. `app/chamados/services/disputa_emissao.py:601–606,1661,1714` · `app/chamados/models.py:3330–3336,3428–3432,3473–3482,3514,3658–3660` · `app/chamados/services/fio.py:1084–1088` · `app/chamados/services/validacao.py:164–178` · `app/chamados/veredito_lavrado.py:270–275` · `app/chamados/services/raiox.py:58–68,116–130` · `app/chamados/services/verbos.py:30–47`
-- **Outras leituras do instante cru.** `api_disputa_responder` ainda emite a coluna na confirmação da gravação. `q_vivas()` alcança a coluna pela face SQL. No raio-X, a coluna também integra a carga de campos usada pelo redutor existente para tratar a projeção sem linha correspondente. Os três leitores usam diretamente o resultado da composta, sem fallback próprio. `app/api/views.py:2661–2664` · `app/chamados/models.py:3770–3789,4429–4442,4486–4515` · `app/chamados/juizes.py:1676–1681` · `app/chamados/services/raiox.py:119–128` · `app/chamados/templatetags/chamados_tags.py:145–147`
-
-### REDs e mutantes para o Opus
-
-| Leitor | RED confirmado no código da base | Mutante descrito |
-|---|---|---|
-| API | Com `RESPOSTA` vigente às `10:05` e coluna nula, a base emite `null` no lugar do instante ISO. `app/chamados/tests/test_e4d_matriz_reds.py:1629–1636,1650–1658` | Serializar novamente `p.respondida_em`. `app/chamados/tests/e4d_matriz_mutantes.py:455–462` |
-| Modal | A guarda mostra `09:00`, mas o filtro de data recebe a coluna nula e omite `10:05`. `app/chamados/models.py:3958–3965` · `app/chamados/tests/test_e4d_matriz_reds.py:1659–1660` | Alimentar o filtro `date` com o instante cru. `app/chamados/tests/e4d_matriz_mutantes.py:464–479` |
-| Raio-X | O par cru chega ao juiz com instante nulo e o alvo cai em pendentes, junto do vizinho. `app/chamados/juizes.py:1644–1653` · `app/chamados/tests/test_e4d_matriz_reds.py:1661–1663` | Voltar a classificar pelo carimbo cru e deslocar o alvo para pendentes. `app/chamados/tests/e4d_matriz_mutantes.py:481–490` |
-| SQL | A fila perde o alvo e a asserção exige `[alvo, recente]` nessa ordem. `app/chamados/juizes.py:1863–1868` · `app/chamados/tests/test_e4d_matriz_reds.py:1647–1649` | Após o fechamento da fila, reordenar pela coluna crua, com nulos ao fim. `app/chamados/tests/e4d_matriz_mutantes.py:445–453` |
-
-O controle comum dos mutantes exige todos os subtestes verdes. Para aferir os três mutantes antes do fechamento do 30, o Opus pode isolar o controle de cada leitor. Para cobrir a origem do texto, pode usar `ato_texto='09:00'` e projeção `'09:07'`, cobrando `'09:07'` na API e no modal e `'09:00'` em `resposta_display`. Para detectar fallback, pode compensar uma `RESPOSTA` e deixar na coluna o mesmo instante da linha compensada. A composta deve devolver instante nulo, o modal deve omitir o bloco vigente e o raio-X deve classificar como pendente se a pergunta passar pela seleção. Esses casos adicionais estão descritos, com execução [nao verificado]. `app/chamados/tests/e4d_matriz_mutantes.py:598–610,687–694` · `app/chamados/models.py:3985–4012,4438–4442,4455–4456,4493–4515` · `app/chamados/services/raiox.py:116–130`
-
-### Arquivos tocados e diff resumido
-
-`git diff --check` e a compilação em memória dos três módulos Python passaram. A checagem estática encontrou zero `except` novo e zero leitura nova de relógio. Renderização Django e custo de consultas [nao verificado]. `app/api/views.py:1131–1151` · `app/chamados/templatetags/chamados_tags.py:144–147` · `app/chamados/services/raiox.py:116–130` · `app/templates/chamados/partials/modal_fio.html:217–223`
-
-- **`app/api/views.py`** · `api_chamados_v2` emite texto e instante da mesma composta por pergunta e mantém `p.resposta_display`. [Código](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/api/views.py:1131)
-- **`app/chamados/templatetags/chamados_tags.py`** · `resposta_composta` delega a `DecisaoPergunta.composta`. [Código](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/templatetags/chamados_tags.py:144)
-- **`app/templates/chamados/partials/modal_fio.html`** · O bloco de resposta usa o filtro para renderizar texto e instante com o formato de data existente. [Código](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/templates/chamados/partials/modal_fio.html:217)
-- **`app/chamados/services/raiox.py`** · `creditos_perguntas` usa `.only()` para limitar os campos, carrega decisões em lote e passa a composta ao juiz. Preserva a seleção, o filtro pela lavra e a precedência do destino vivo sobre o pai. [Código](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/raiox.py:51)
-
-## 28/11 08:47 · sessao 1d2bf79fe421 · ORFAS-VOLTOU · leitura · origem=Code
-
-## (2) Vigia de órfãs no placar e no topo
-
-**O encaixe já registrado é `bin/gerar_estado.py` para o ESTADO e `bin/relato.sh` para o topo do RELATO.** O precedente é `disco_estado.py::linha_gravada`, que lê uma medida pronta, e `no_topo_disco`, que põe o aviso abaixo das duas linhas úteis lidas pelo Stop. O placar de terminal `bin/placar_code.sh` também já tem precedente de leitura de contador em log. `app/docs/BACKLOG.md:2056`, `bin/gerar_estado.py:320–321`, `bin/relato.sh:37–49`, `bin/disco_estado.py:358–375,413–453`, `bin/placar_code.sh:554–558`.
-
-**Quem produz o número é `reconciliar_chamados.Command.handle`.** Ele soma os `.count()` do seletor canônico `reconciliador.perguntas_orfas_reatavies` e imprime a linha em stdout. O seletor pega perguntas sem chamado-destino, não materializadas, de motivo elegível e em disputa aberta. A sonda fornecida leu **3735 às 11:00**. Esse universo fica fora da soma que dá `rc 2`. O **I8 VIOL 3181**, às 07:23, vem de outra seleção, pelo C6, e o `rc 2` daquela auditoria é reservado a F1/F2. `app/chamados/management/commands/reconciliar_chamados.py:97–98,115–124`, `app/chamados/reconciliador.py:1640–1661`, `app/chamados/management/commands/auditar_invariantes_chamados.py:860–867,1866–1871,1886–1889`, `app/docs/RELATO.md:14438`.
-
-**Desenho mínimo proposto.** Um leitor em `bin/` extrai o inteiro da última linha completa e válida de `logs/reconciliador.log`. `relato.sh` lê uma vez por publicação e passa a mesma frase ao ESTADO e ao topo visível, abaixo da janela do Stop. A frase seria `Órfãs reatáveis 3735 · esperado ≤ 3735 (referência inicial)`. O teto de referência é uma proposta de aviso de regressão, fora do `TOTAL` e dos códigos de saída. Meta oficial do estoque [nao verificado]. A rodada de 15 minutos já existe. `app/docs/BACKLOG.md:2056`, `app/config/crons.py:395,1908–1917`, `bin/relato.sh:37–49,125–130`, `bin/disco_estado.py:413–453`, `bin/placar_code.sh:554–565`.
-
-**Contrato de instrumento proposto em cinco linhas**
-
-1. **Quem chama.** O timer atual chama `relato.sh`, que chama o leitor na publicação. `bin/hasner-relato.timer:4–7`, `bin/hasner-relato.service:12–15`.
-2. **Quem espera.** O ESTADO e o topo recebem o mesmo resultado nessa passada. A publicação segue com `NÃO MEDIDO` se a leitura falhar. `bin/relato.sh:37–49`, `bin/disco_estado.py:358–375`.
-3. **Falha e limite.** Ler só a cauda, com teto proposto de 64 KiB. Log ausente, ilegível ou sem linha válida no trecho dá `NÃO MEDIDO`. A linha do produtor sai sem carimbo próprio, então a hora da amostra só aparece quando puder ser comprovada. `app/chamados/management/commands/reconciliar_chamados.py:115`, `bin/disco_estado.py:358–375`.
-4. **Medida e caso que morde.** Com uma amostra anterior de `3735`, uma válida de `3736` e uma linha final truncada, as duas saídas têm de mostrar `3736 · esperado ≤ 3735 · AVISO`. Um `I8 VIOL 3181` no arquivo vizinho fica fora da leitura. O selo atual já extrai o inteiro da linha do produtor. `app/chamados/tests/test_selo_universo_reconciliador.py:65–75`, `app/chamados/management/commands/reconciliar_chamados.py:115–124`.
-5. **Quem desliga.** O mantenedor de `bin/` retira a chamada e a linha publicada no pouso próprio do instrumento. O disjuntor atua na publicação. `app/docs/BACKLOG.md:2056`, `bin/relato.sh:109–121`.
-
-## (3) Os 17 sem porta automática demonstrada
-
-| Grupo | Porta, obra da casa e arquivos |
-|---|---|
-| **11 sem FK de célula — classes 13 e 28** | A retratação por célula exige a FK. A rejunção existente liga **chamados** vivos. Para perguntas, o nascimento/reuso já liga a célula existente do dia do fato, e o rechaveamento serve quando o dia muda. Nenhuma dessas portas foi demonstrada para as 11. **RAIZ-DA-DISPUTA-17-SEM-PORTA**, fila **ESTRUTURA**. Perímetro provável de correção: `app/chamados/models.py` e `app/chamados/services/fio.py` para o vínculo, `app/chamados/reconciliador.py` se o ponto faltante for a chamada após o evento. Causa da FK nula e dono L-099 por pergunta [nao verificado]. `app/docs/BACKLOG.md:2047`, `app/docs/RELATO.md:14432,14439`, `app/chamados/rejuncao.py:50–63,98–108`, `app/chamados/models.py:3191–3213,3279–3284`, `app/chamados/services/fio.py:1181–1203`, `app/chamados/reconciliador.py:747–757,1508–1515`. |
-| **1 da classe 79** | O BACKLOG inclui esse caso nos 12 sem FK. Motivo, dia do fato, existência de célula e porta aplicável [nao verificado]. **RAIZ-DA-DISPUTA**, candidata **ESTRUTURA**. Para localizar o defeito, os arquivos são `app/chamados/services/disputa_emissao.py` e `app/chamados/services/fio.py` para a origem do dia, e `app/chamados/models.py` para a gravação da FK. Arquivo a alterar e dono L-099 da linha [nao verificado]. `app/docs/BACKLOG.md:2047`, `app/docs/RELATO.md:14432,14439`, `app/chamados/services/disputa_emissao.py:419–438`, `app/chamados/services/fio.py:1963–1982`, `app/chamados/models.py:3191–3213`. |
-| **5 com disputa fechada e pergunta viva** | O reate em lote e o S128 filtram disputa aberta, e `DisputaSupervisao.fechar()` sai antes de tratar as perguntas de uma disputa já fechada. Há porta humana **pelo fato do dia** quando cabe o ato de decidir o dia, via `fechar_o_fio_do_dia`, que busca por colaborador e dia e consulta o C6. A **DESLIGADO c3** tem o corte específico para baixar, com trilha e sem reabrir, a pergunta residual que segura o chamado-alvo do desligamento. Esse recorte cabe à **DESLIGADO** em `app/colaboradores/services/desligamento.py` e `app/chamados/models.py`. O residual geral fica na **RAIZ-DA-DISPUTA**, fila **ESTRUTURA**, com `app/chamados/models.py` no centro do fecho. Elegibilidade dos cinco para cada porta e dono L-099 por linha [nao verificado]. `app/chamados/reconciliador.py:1654–1661`, `app/chamados/services/disputa_emissao.py:2038–2042`, `app/chamados/models.py:2094–2100`, `app/ponto/services/veredito_celula.py:176–203`, `app/colaboradores/services/desligamento.py:150–190`, `app/docs/BACKLOG.md:2047,2197`. |
-
-**Os cinco colidem em `app/chamados/models.py`.** Se o caso entrar pela cascata de desligamento, também compartilha `app/colaboradores/services/desligamento.py`. O cruzamento dos cinco com o passivo elegível da c3 e a lista completa do diff da c3 ficam [nao verificado]. A **E4C** entra pela leitura do ato que alimenta a guarda. A **E4D** entra pelo escritor do ato de conclusão em `app/chamados/services/materializacao.py` se a mudança alcançar essa projeção. A matriz de quem decide o fecho já está na **RAIZ-DA-DISPUTA**. `app/chamados/models.py:349–366,2184–2198`, `app/docs/BACKLOG.md:2197,2219–2220`, `app/docs/RELATO.md:14778–14784`.
-
-**Perguntas de lei deste dossiê — 0 (abre).** A Q1 já registrada na c3 trata da reabertura humana anterior ao desligamento. Incidência dela nos cinco [nao verificado]. `app/docs/RELATO.md:23`, `app/docs/BACKLOG.md:2047,2056,2197`.
-
-Leitura apenas. A cópia fornecida está no diretório do hash informado. A confirmação de `HEAD` pelo Git ficou [nao verificado].
-
-_8876 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8878 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
