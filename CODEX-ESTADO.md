@@ -1,7 +1,127 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 06:01** · publicado em **28/11/2026 06:02** (UTC-3)
+> Ultima resposta processada: **28/11/2026 06:09** · publicado em **28/11/2026 06:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 06:09 · sessao 53963832703b · CRON-15-SOMBRA-CABE · leitura · origem=Code
+
+## CRON-15-SOMBRA-CABE · Passo 2
+
+**O paralelismo entre comandos, sozinho, não fecha o aval.** No subgrafo de leituras identificado na cópia, o caminho crítico soma **2.511 s**. O escalonamento guloso em quatro trilhas dá **2.532 s**, já **332 s acima do teto bruto de 2.200 s**, antes do `--refazer` e das reposições de lavra. Preservando também os gatilhos e as dependências declaradas, o caminho crítico sobe para **3.642 s**. O p95 de ponta a ponta de qualquer cenário paralelo fica **[nao verificado]**. `hist.tsv:1445–2507`, `app/config/crons.py:425–462,616,1532–1820`, `bin/sombra.sh:328–350,364–398`.
+
+O aval usa **04:05–05:00**, 3.300 s de parede e 2.200 s brutos com ×1,5. Se a mesma chegada às 05:00 também reservar os **120 s** da tolerância B6 da cópia, o teto bruto cai para **2.120 s**. A cópia declara **05:25** como vizinho do agendador e guarda **5.188 s** para `sombra.sh`, já com a folga aplicada, no JSON gerado em 31/10. Usei o corredor do aval nos cálculos. O crontab instalado e o hash da árvore ficam **[nao verificado]**. `app/config/crons.py:182–183,219,245–278,350–352`, `app/config/crons_duracao.json:78,106–110`, `bin/crons_duracao.py:55–76`.
+
+## A. Grafo e tempos
+
+O renderer seleciona comandos diários de hora fixa, expande empresas 2/3/4, coloca cada `ENC` um minuto após o último disparo do seu `gatilho` e ordena por minuto, com desempate pela inserção. Os horários abaixo são rótulos do renderer. O shell percorre a lista em primeiro plano, sem esperar esses horários. São **82 entradas e 81 invocações**. Na coluna de dados, `—` significa **[nao verificado]** para outro produtor da mesma rodada. Na coluna de agenda, `G` é `gatilho` e `D` é `depende`. `C` representa as três entradas do Cartório, 18–20. Para a simulação de agenda, expandi referências por nome para todas as variantes anteriores, como faz o contrato ao guardar o último minuto por nome. `app/config/crons.py:17,29–54,1946–1977`, `app/core/management/commands/crons.py:43–48`, `app/chamados/tests/test_contract_crons.py:241–298`, `bin/sombra.sh:346–386`.
+
+Os pesos são os **p95 por variante** do anexo, na ordem de `hist.tsv:2426–2507`. São **5.245 s** de trabalho no modelo e **5.095 s** de p95 das somas diárias observadas. Usei `detectar_par_relampago` sem `--retratar` e `pipeline_placar=0` pelo registro de `pulado`. Os cinco citados pesam **3.356 s** no modelo. Em 28/11, os cinco valores citados somam **3.331 s**. `hist.tsv:1445–2507,2442–2450,2462–2464,2496,2506`, `bin/crons_duracao.py:46–51`, `bin/sombra.sh:355–357`.
+
+| Nº | Hora | Entrada | p95 s | Agenda | Dados da rodada usados no modelo | `app/config/crons.py` |
+|---:|---|---|---:|---|---|---|
+| 1 | 03:20 | `calcular_metricas` | 18 | — | — | 400 |
+| 2 | 03:25 | `calcular_scores` | 147 | — | — | 401 |
+| 3 | 05:25 | `pre_fechamento --apply` | 72 | — | — | 406 |
+| 4 | 05:30 | `health_crawl` | 3 | — | — | 404 |
+| 5 | 05:47 | `lavrar_foto_folgas --apply` | 3 | — | — | 425 |
+| 6 | 05:50 | `gerar_celulas` | 37 | D 5 | 5 | 426 |
+| 7 | 06:00 | `termometro_regua --avaliar --lavrar` | 82 | D 6 | 6 | 428 |
+| 8 | 06:05 | `tripwire_celulas` | 19 | D 6 | 6 | 429 |
+| 9 | 06:06 | `efetivar_desligamentos_agendados --apply` | 2 | — | — | 440–441 |
+| 10 | 06:07 | `tripwire_vinculo_orfao --alarme` | 2 | — | 9 | 435–436 |
+| 11–14 | 06:15–06:18 | `sincronizar_status_ferias --apply`, `reverter_situacao_afastado --apply`, `tripwire_status_ferias --alarme`, `tripwire_situacao_afastado --alarme` | 2/2/2/2 | 13 D 11, 14 D 12 | 13 ← 11, 14 ← 12 | 442–459 |
+| 15 | 06:20 | `reconciliar_grade --empresa 2,3,4` | 90 | D 6,7 | 6,9,12 | 462 |
+| 16 | 06:24 | `detectar_cluster_espurio --alarme` | 4 | D 15 | 9,12 | 598 |
+| 17 | 06:26 | `detectar_par_relampago --dias 2 --apply` | 15 | D 15 | 9,12 | 605 |
+| 18–20 | 06:27/29/31 | `processar_cartorio --empresa 2/3/4 --apply` | 497/95/20 | D 15 | 6,7,9,12 | 616 |
+| 21 | 06:32 | `apurar_furos_diarios` | 30 | G/D C | C | 1536–1537 |
+| 22 | 06:33 | `disparar_perguntas_competencia --comp-corrente --alarme` | 38 | G 21, D C,21 | C,21 | 1548–1550 |
+| 23 | 06:34 | `reconciliar_perguntas_orfas --alarme` | 4 | G/D 22 | C,21 | 1553–1554 |
+| 24 | 06:35 | `lavrar_deslogados --apply` | 7 | G 23, D 21 | 21 | 1566–1568 |
+| 25 | 06:36 | `lavrar_he_pendente --apply` | 670 | G 24, D 21 | C,9,12 | 1581–1583 |
+| 26 | 06:37 | `recusar_ponta_pequena --alarme` | 27 | G/D 25 | 25 | 1594–1596 |
+| 27 | 06:38 | `vigiar_txt_dominio --alarme` | 16 | G 26, D 26,C | C,9,12 | 1619–1621 |
+| 28 | 06:39 | `lavrar_retrato_folha --apply` | 47 | G 27, D 27,C | C,9,12 | 1659–1661 |
+| 29 | 06:40 | `vigiar_pausa_export --alarme` | 11 | G 28, D 28,C | C,9,12 | 1683–1685 |
+| 30 | 06:41 | `vigiar_retido_calado --alarme` | 2 | G 29, D 28 | 28 | 1690–1692 |
+| 31 | 06:41 | `vigiar_fio_morto --alarme --alarme-passivo` | 168 | G 29, D C,23 | C,7,9,12,17,21 | 1746–1748 |
+| 32/35/38 | 06:42/44/46 | `reconciliar_geofence --empresa 2/3/4 --alarme` | 2/2/2 | — | — | 486 |
+| 33 | 06:42 | `vigiar_carimbo_sem_registro --alarme` | 47 | G 31, D C,23 | C | 1784–1786 |
+| 34 | 06:43 | `vigiar_ausencia_x_veredito --alarme` | 7 | G 33, D C | C | 1787–1793 |
+| 36 | 06:44 | `vigia_pareador_celula --alarme` | 5 | G 34, D C | C | 1794–1799 |
+| 37 | 06:45 | `lavrar_cxr_do_motor --apply` | 634 | G 36, D C | C,25 | 1800–1810 |
+| 39 | 06:46 | `selo_leitores_no_mesmo_numero --rollout --origem cron` | 1.222 | G 37, D C | C,9,12,25 | 1811–1820 |
+| 40 | 06:47 | `reconciliar_vinculo --alarme` | 2 | D 17 | — | 489 |
+| 41 | 06:48 | `detectar_intervalo_ausente --alarme` | 4 | D C | C | 491 |
+| 42 | 06:50 | `verificar_nucleo` | 16 | D 17 | — | 544 |
+| 43–45 | 06:54/56/58 | `supra_juiz --empresa 2/3/4 --executar` | 42/11/4 | D C | 18/19/20 respectivamente, mais 9,12 | 599 |
+| 46–48 | 07:02/03/04 | `reavaliar_ausencias_feriado --empresa 2/3/4 --alarme` | 24/7/3 | D C | 18/19/20 respectivamente | 608 |
+| 49 | 07:05 | `silenciar_chamados_isentos --alarme` | 1 | D C | C | 609 |
+| 50 | 07:07 | `mapa_divergencia --mes=$(date +\%-m) --ano=$(date +\%Y)` | 73 | D 21 | C,21,43–45 | 644 |
+| 51 | 07:10 | `fechar_becos_disputa --alarme` | 20 | D 23 | C,21 | 663 |
+| 52 | 07:12 | `flip_automatico --competencia --apply` | 12 | D 17,C | C | 707 |
+| 53–55 | 07:14/16/17 | `lavrar_fase_conflitante`, `lavrar_vigencia_sem_trilha`, `lavrar_vigencia_impossivel`, todos `--apply` | 2/2/2 | D 40 | — | 498–503 |
+| 56 | 07:18 | `auditar_invariantes_chamados --html` | 334 | D 21,52 | 21,43–45,52 | 542–543 |
+| 57 | 07:22 | `vigia_b5_ausencia` | 18 | D C | C | 661–662 |
+| 58/61/63 | 07:25/27/29 | `supra_juiz --empresa 2/3/4 --encerrada --alarme` | 45/12/4 | D 21 | 18/19/20 respectivamente | 600 |
+| 59 | 07:25 | `tripwire_tipo_batida --dias 60 --limiar 60` | 17 | D 52 | 52 | 676 |
+| 60 | 07:26 | `marcar_foto_ausente_retro --apply` | 3 | D 52 | 52 | 686–687 |
+| 62 | 07:28 | `vigia_plantio_overnight --dias=45` | 58 | D 52 | 52 | 646 |
+| 64 | 07:31 | `lavrar_jornada_lixo --apply` | 3 | — | — | 540–541 |
+| 65 | 07:33 | `lavrar_previsto_cego --apply` | 6 | D 40 | — | 514–515 |
+| 66/67/69 | 07:33/35/37 | `supra_juiz --empresa 2/3/4 --alarme` | 41/11/4 | D 21 | 18/19/20 respectivamente, mais 52 | 604 |
+| 68 | 07:36 | `lavrar_furo_sem_canal --apply` | 9 | D C | C | 531–532 |
+| 70 | 07:38 | `censo_fase_12x36 --min-plantoes 6 --lavrar` | 25 | D 40 | 5,6,25,52 | 638–639 |
+| 71 | 07:40 | `pipeline_placar --alarme` | 0 | D 56 | pulado | 747 |
+| 72 | 07:42 | `lavrar_teto_do_dia --apply` | 19 | D 43–45,58,61,63,66,67,69 | 6,25,52,70 | 521–522 |
+| 73 | 07:45 | `alertar_justificativas_sla` | 2 | — | C | 606 |
+| 74 | 07:46 | `alertar_retornos` | 3 | — | 9,11,12 | 607 |
+| 75 | 07:47 | `alertar_ferias_vencendo` | 3 | — | — | 708 |
+| 76 | 07:49 | `pautas_de_ferias --apply` | 2 | — | 9,12 | 711 |
+| 77 | 07:50 | `vigia_entrada_faltante` | 3 | — | — | 737–738 |
+| 78 | 07:51 | `escalonar_documentos_ausencia --apply` | 2 | — | — | 715–716 |
+| 79 | 08:00 | `alertar_disputas_pendentes` | 4 | — | 9,60 | 745 |
+| 80 | 08:05 | `suporte_hasner --fila` | 2 | — | — | 753–754 |
+| 81 | 08:30 | `esmeril_espelho --apply` | 333 | D C | C,21,43–45,52 | 640 |
+| 82 | 08:40 | `pautas_do_esmeril` | 2 | D 81 | reposição da lavra de prod | 643 |
+
+**Arestas que mudam a interpretação da agenda**
+
+- **5 → 6 → 7 → C.** A foto grava `FolgaDia`, o gerador grava `CelulaDia`, e o termômetro consulta célula na amostra de 14 dias e grava a régua do vínculo. O Cartório usa o veto na impressão do dia. O `reconciliar_grade` da cópia está sem `--apply`. Ele lê a célula, mas o caminho de emissão que consulta explicitamente o veto fica sob `apply`. Assim, **7 → C** é leitura de dado e **15 → C** preserva a ordem em que o diagnóstico de grade observa o estado anterior ao Cartório. `app/escala/folgas.py:193–218`, `app/escala/models.py:1080–1107,1297–1321`, `app/ponto/portas/celula.py:947–962`, `app/escala/regua_defesa.py:139–153,767–770`, `app/ponto/services/cartorio.py:1353–1363,1387–1437`, `app/ponto/services/furos_vetados.py:27–44`, `app/ponto/management/commands/reconciliar_grade.py:66–76,250–259,280–282,488–504`.
+- **C → 21 → 24/56** passa por ata, veredito e `FuroDiario`. Cartório e apuração também movem chamados e perguntas que abastecem os vigias. **22 → 23 → 24 → 25** é a corrente de gatilhos. Os dois comandos de perguntas no argv atual observam o estado. `lavrar_deslogados` lê os furos, e `lavrar_he_pendente` lê o espelho vivo depois da célula julgada. Leitura direta da lavra de deslogados ou de `FuroDiario` pelo lavrador de HE **[nao verificado]**. `app/ponto/services/cartorio.py:1554–1592,1905–1931`, `app/escala/services/furos_diarios.py:38–54`, `app/ponto/portas/celula.py:1278–1305`, `app/chamados/services/adesao.py:63–112`, `app/ponto/services/deslogados.py:92–109`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1332–1333,1405–1416`, `app/chamados/management/commands/disparar_perguntas_competencia.py:178–225`, `app/ponto/management/commands/reconciliar_perguntas_orfas.py:29–36`, `app/config/crons.py:1548–1583`.
+- **25 → 26 e 25 → 39** são insumos diferentes. O vigia da ponta pequena pede o snapshot de HE calculado no dia. O selo refaz a medição e consulta `DecisaoHE` vigente, que 25 pode revogar. O caminho do espelho usado por 37 também consulta decisões para montar os dias, mas o CXR extrai o campo publicado pelo motor. **37 → 39 é gatilho**. Na porta medida pelo selo, o caminho identificado usa espelho, fechamento, PDF, TXT e decisões vigentes. Uma leitura direta do snapshot CXR pelo selo fica **[nao verificado]**. `app/ponto/management/commands/lavrar_he_pendente.py:44–72`, `app/ponto/management/commands/recusar_ponta_pequena.py:66–100`, `app/ponto/services/espelho.py:936–949,1261–1265`, `app/ponto/services/cxr_na_lista.py:77–103`, `app/folha/porta_export.py:475–509,673–697`, `app/config/crons.py:1808–1820`.
+- **C → 27/28/29/30** tem dois ramos. TXT vigente, retrato e pausa consultam a porta do export e a célula. **28 → 30** passa pelo `RetratoFolha`. O gatilho **29 → 30** mantém a sequência da corrente. **31 → 37** preserva a leitura da lavra CXR que já existia. A lista que 31 usa lê ainda as lavras de previsto cego, fase, teto e Esmeril. O CXR também pode consultar a fase disponível quando atribui dono. A data efetivamente lida em cada corrida fica **[nao verificado]**. `app/folha/services/vigia_txt.py:207–232`, `app/folha/management/commands/lavrar_retrato_folha.py:64–79`, `app/folha/services/vigia_pausa.py:100–143`, `app/folha/vigia_retido_calado.py:52–77`, `app/chamados/services/vigia_fio.py:185–198`, `app/escala/services/cadastro_realidade.py:376–479,975–1055`, `app/ponto/management/commands/e6_oraculo.py:174–195`, `app/config/crons.py:1683–1692,1800–1810`.
+- **Outras leituras que importam para sobreposição.** Desligamento altera vínculo e chamados, retorno de afastamento altera `Colaborador.situacao`, e sincronização de férias altera `AgendamentoFerias.status`. As varreduras de ativos e de vigências podem observar essas mudanças. O flip altera `Batida.tipo`, recompõe turnos e anota chamados. Seus leitores anteriores, entre eles HE/CXR/selo, precisam continuar vendo o estado anterior ao flip para reproduzir a ordem serial. Pautas do Esmeril lê a chave que 81 grava em prod. Na sombra, 82 lê a lavra reposta imediatamente antes da chamada. `app/colaboradores/services/desligamento.py:147–149,182–190`, `app/ponto/management/commands/reverter_situacao_afastado.py:61–80`, `app/ferias/management/commands/sincronizar_status_ferias.py:33–49`, `app/ferias/management/commands/alertar_retornos.py:20–30`, `app/ponto/management/commands/flip_automatico.py:62–79`, `app/ponto/services/flip_batida.py:37–55`, `app/ponto/services/pautas_do_esmeril.py:52–61`, `bin/sombra.sh:364–381`.
+
+**Escalonamento.** Em cada liberação, ocupei as trilhas livres com o maior p95 pronto, desempate pelo nº do renderer, sem preempção. O modelo usa os mesmos pesos em todas as trilhas. A coluna de dados usa as arestas da tabela. A última acrescenta `G`, `D` e estas ordens de leitura/escrita identificadas: `7→9`, `15→C`, `31→37/65/70/72/81`, `37→70`, `25/37/39→52`. A cobertura exaustiva de leituras, escritas e travas indiretas fica **[nao verificado]**. `hist.tsv:1445–2507`, `app/config/crons.py:425–462,605–616,1532–1820,1946–1977`, `app/escala/services/cadastro_realidade.py:975–1055`, `app/ponto/management/commands/e6_oraculo.py:174–188`, `app/ponto/services/flip_batida.py:37–55`.
+
+| Trilhas | Só dados, s | Ganho sobre 5.245 s, s | Só dados + 360 s, ×1,5 | G + D + dados, s | G + D + dados + ordens acima, s |
+|---:|---:|---:|---:|---:|---:|
+| 2 | **2.751** | 2.494 | 4.666,5 | 3.893 | 4.231 |
+| 3 | **2.554** | 2.691 | 4.371 | 3.718 | 4.025 |
+| 4 | **2.532** | 2.713 | 4.338 | 3.668 | 3.997 |
+
+O caminho crítico de dados é **5 → 6 → 7 → 18 → 25 → 39**, com **3 + 37 + 82 + 497 + 670 + 1.222 = 2.511 s**. Com `G + D + dados`, a cadeia é **5 → 6 → 7 → 15 → 18 → 21 → 22 → 23 → 24 → 25 → 26 → 27 → 28 → 29 → 31 → 33 → 34 → 36 → 37 → 39**, com **3.642 s**. Acrescentando as ordens de leitura/escrita acima, o limite sobe para **3.991 s**. Os 360 s são aproximação do intervalo entre travas. Preparação do bloco, reposições, fechamento e contenção continuam fora das contas da tabela. `hist.tsv:1445–2507`, `espera.jsonl:96–97,146–147,282–283,458–459,492–493,521–522`, `bin/sombra.sh:328–350,378–407`.
+
+## B. Fidelidade
+
+**Paralelizar muda o que o verde prova.** A sombra atual executa os comandos em ordem serial sobre um banco compartilhado. Em prod, a corrente do Cartório executa seus elos em primeiro plano, mas os disparos fixos e as três empresas têm linhas próprias. O primeiro processo que pega o `flock` do elo espera os carimbos pertinentes, consulta a cada 10 s e sai 2 se eles faltarem no teto. O runner grava carimbo de fim para `rc=0` ou `2`. A sombra chama `tenant_command` diretamente e continua para o próximo após registrar o retorno. Um teste paralelo aí exercitaria outra ordem de observação dos dados e continuaria sem exercitar o protocolo de carimbos e espera de prod. `app/config/crons.py:1847–1890,1900–1929,1933–1977`, `bin/encadeado.sh:45–68,78–104`, `bin/cron_run.sh:5–26`, `bin/sombra.sh:351–386`.
+
+- **Reposição da lavra.** O host lê uma vez a lavra de prod. A importação inicial e as 81 reposições atualizam a mesma chave diária e o marcador MD5. Uma reposição pode sobrescrever a lavra que `esmeril_espelho --apply` acabou de gravar. Um leitor concorrente também pode pegar a lavra da sombra com marcador de prod e levantar `SemLavra`. `vigiar_fio_morto` e `pautas_do_esmeril` chegam a esse leitor. Para o dinheiro, a cópia atual calcula a elegibilidade da folga a 100% pelas assinaturas A2/A8 da competência do dia e pela classe da régua do vínculo. Esse cálculo tem insumos vivos que a ordem também pode afetar. `bin/sombra.sh:136–166,339,364–381`, `app/ponto/services/esmeril_espelho.py:291–308,342–377`, `app/escala/services/cadastro_realidade.py:1051–1055`, `app/ponto/services/pautas_do_esmeril.py:52–61`, `app/escala/services/escala_certa.py:19–51`, `app/ponto/motor_calculo_v2.py:1573–1583`.
+- **Travas, arquivos e fim.** `--refazer` e `--bloco` adquirem a trava global em chamadas separadas, com timeout padrão de **1.800 s**. Ela coordena processos que passam pelo wrapper. Dentro do bloco, `_repor_lavra.log` é um caminho único truncado em cada tentativa. A falha da reposição escreve um marcador nesse log e o comando seguinte ainda roda. Os logs dos comandos usam hora e nome, o TSV é recriado a cada corrida, e a cópia histórica usa a data. A trava PostgreSQL do selo é por schema × empresa × competência e coordena tentativas da porta de export. Ela tem escopo diferente das escritas do Cartório, do flip e da reposição. `bin/sombra_trava.sh:15–38`, `bin/sombra.sh:350–398,437–451`, `app/folha/porta_export.py:956–1010,1261–1285`.
+- **Consumidor e portão.** `bloco()` conta `rc=2` como alarme, remapeia erro de sintaxe reconhecido para 64 e carimba `OK` com divergência estrutural e erros zerados. Imprime a razão linhas/entradas e grava `SOMBRA_COMANDOS` a partir da lista. `--conferir` verifica a data, `STATUS=OK` e a resposta não vazia da contagem de migrations. O deploy normal e o reload da cópia usam esse portão. O placar de Code também chama `--conferir`. Já `pipeline_placar` consome `placar.jsonl` e o carimbo do vigia do fio no host. O portão da sombra pode ficar verde com alarme de negócio, inclusive `rc=2` do selo de leitores. A equivalência de conteúdo entre duas ordens de execução fica **[nao verificado]**. `bin/sombra.sh:120–125,380–433`, `bin/deploy.sh:151–168`, `bin/placar_code.sh:153–160`, `app/core/management/commands/pipeline_placar.py:54–98,110–137`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:323–340`.
+- **Há pares capazes de escrever a mesma linha sem `depende` entre eles.** `marcar_foto_ausente_retro` agrega contexto de uma disputa aberta e `alertar_disputas_pendentes` salva `ultimo_alerta_diario` no **mesmo JSON** da disputa. O alerta percorre instâncias já lidas. Uma sobreposição pode salvar contexto antigo por cima do novo. O termômetro e o desligamento também podem atualizar o mesmo `EscalaColaborador`, em colunas diferentes. Desligamento e Cartório podem transicionar o mesmo chamado elegível. A ocorrência efetiva desses conflitos nas corridas do anexo fica **[nao verificado]**. `app/config/crons.py:428,440–441,616,686–687,745`, `app/ponto/management/commands/marcar_foto_ausente_retro.py:94–105`, `app/chamados/services/disputa_emissao.py:530–579,673–681`, `app/ponto/management/commands/alertar_disputas_pendentes.py:30–49`, `app/chamados/models.py:2378–2394`, `app/colaboradores/services/vinculo.py:635–643,857–866,1079–1083`, `app/colaboradores/services/desligamento.py:182–190`, `app/ponto/services/cartorio.py:1583–1592,1603–1629`.
+
+## C. Recurso e trabalho repetido
+
+**O container Python tem quota de 1 CPU**, autorizado a rodar nas vCPUs **4–7**. `sombra_db` compartilha esse conjunto de teste e tem teto padrão de **3 GiB**. Quatro processos dentro do mesmo container continuam sujeitos à quota conjunta de 1 CPU. O dado raspado traz tempo de parede por comando. A divisão entre CPU Python, CPU PostgreSQL, I/O e espera por lock fica **[nao verificado]**. `bin/sombra.sh:182–191,378–385`, `bin/recursos.sh:37–41,53–56,71–78`, `bin/sombra_db.sh:89–99`.
+
+| Comando | p95 | Trabalho visível no código |
+|---|---:|---|
+| Selo dos leitores | **1.222 s** | Percorre empresas em rollout. Por colaborador que entra no TXT, busca colaborador e fechamento, monta espelho e coleta o cartão do PDF. Há também leitura de células e `DiaPago` por colaborador, e chamada ao comparador cartão × TXT. O desenho combina cálculo Python e consultas multiplicadas pelo universo. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:43–51,141–166,215–220`, `app/folha/porta_export.py:475–509,538–551,594–605,653–692`. |
+| HE pendente | **670 s** | Varre ativos por empresa e competência, chama `espelho_do_colab` por pessoa e percorre seus dias. A carga de decisões 
+
+[truncado em 20000 de 27245 caracteres]
 
 ## 28/11 06:01 · sessao 0d86d5029112 · CUSTO-DE-COORDENACAO · verificador · origem=Code
 
@@ -1186,14 +1306,4 @@ bash bin/suite.sh --dir /home/ronald/wt-codex-codigo-dominio-valido-013223 --onl
 - **Mordida.** O RED do item 1 exige attachment com nome canônico. A verificação da âncora é guarda de markup da página cheia e do parcial OOB. Download efetivo no navegador [nao verificado]. O RED de Escala exige `Paragraph` e texto integral com um caso longo. Quebra visual e caracteres especiais [nao verificado]. `app/folha/tests/test_retrato_pdf_pacote.py:47-49,187-204,210-222`.
 - **Relógio e ordem do deploy.** O instante do recorte vem da borda, vira `hoje` e alimenta as novas chamadas. O timestamp da auditoria tem relógio próprio preexistente e exclusão explícita do contrato do recorte. Os trechos novos não adquirem locks. O reload e as sondas de rota vêm antes do `mv` do carimbo no host. Se esse carimbo passar a ser visível no container, há uma janela possível de código novo com stamp velho ou ausente. `app/folha/views_retrato.py:146-147,177-184,244-247,399-446`, `app/relatorios/pdf_base.py:129-135`, `app/relatorios/utils_audit.py:13-20`, `bin/deploy.sh:357-373,416-419,432-436`.
 
-## 28/11 01:36 · sessao 5e85d18b9370 · - · - · origem=Ronald (tmux)
-
-**Item 5 deve voltar.** A montagem documentada leva `/home/ronald/saas-hasner/app` a `/app`. O novo default aponta para `/app/logs/deploy.stamp`, equivalente a `app/logs/deploy.stamp` no host. `bin/deploy.sh` grava `logs/deploy.stamp` na raiz do repositório, por arquivo temporário e `mv`. Assim, o bind-mount documentado não expõe o carimbo ao PDF. O Compose efetivo, montagens extras e `COMMIT_GIT` do processo ficam [nao verificado]. `app/docs/INFRA.md:22–30`, `app/ponto/management/commands/apurar_furo_da_exportada.py:25–28`, `app/config/settings/base.py:4–5`, `app/config/settings/saas.py:10`, `bin/deploy.sh:432–436`, `.gitignore:40–41`.
-
-- **Efeito na produção descrita.** Com `COMMIT_GIT`, a precedência e o limite de 40 caracteres seguem iguais. Sem a variável, sem `/app/.git` e sem carimbo no caminho novo, os dois ramos devolvem `''`. O rodapé fica `n/d` e o registro guarda vazio. Ambientes com checkout em `/app/.git` perdem aquele fallback. Se o carimbo passar a ser acessível, `read_text` sem tratamento pode propagar falha de leitura ou UTF‑8. `ler_deploy_stamp` devolve `{}` sem `QUANDO` e pode levantar `ValueError` com `QUANDO` não numérico. [nao verificado] o estado real desses arquivos. `obra.diff` anexo, `app/relatorios/utils_audit.py:11–20`, `app/core/esteira_vigia.py:1032–1042`, `app/relatorios/pdf_base.py:72–77,135,164`.
-- **Consumidores.** `gerar_pdf_auditavel` lê uma vez e passa o valor às duas fases e a `RegistroPDFAuditavel.commit_git`. Isso alcança retrato, espelho mensal, histórico de chamados, gestão de férias e gestão de HE. O espelho informacional é o outro chamador direto e usa o valor só no rodapé. O lote usa os dois caminhos e pode pular o colaborador se ambos levantarem exceção. `app/relatorios/pdf_base.py:133–170`, `app/folha/views_retrato.py:461–467`, `app/relatorios/pdf_espelho.py:1041–1074,1106–1116`, `app/relatorios/pdf_chamados.py:158–176`, `app/relatorios/services.py:235–255,338–347`, `app/ponto/views.py:886–894`.
-- **Semântica.** O shell escreve `git rev-parse HEAD` no `COMMIT`. O helper retorna até 40 caracteres sem validar formato. O rodapé mostra oito, a verificação pública mostra o valor persistido inteiro e a consulta usa o SHA‑256 do PDF canônico. O vigia passa o `COMMIT` inteiro ao `git revert` e usa oito só nas mensagens. `bin/deploy.sh:432–436`, `app/relatorios/utils_audit.py:13–20`, `app/relatorios/models.py:56`, `app/relatorios/pdf_base.py:72,147–164`, `app/chamados/views.py:1202–1222`, `app/templates/chamados/verificar_pdf.html:37,49`, `app/core/esteira_vigia.py:1297–1309`.
-- **Alcance do RED.** Os testes criam carimbo temporário e substituem o setting. Checam o valor devolvido, o registro e o argumento recebido pelos dois objetos de rodapé. O controle cobre a precedência de `COMMIT_GIT`. O caminho padrão, a montagem e o texto efetivamente renderizado estão fora dessas asserções. `app/folha/tests/test_retrato_pdf_pacote.py:274–322`.
-- **Import.** O topo de `core.esteira_vigia` carrega biblioteca padrão, cria logger, constantes e compila sete regex. As leituras ficam dentro de funções e o `main` é protegido por `__name__`. A inspeção estática não mostra ciclo nem leitura de disco ou settings pelo corpo do módulo. `utils_audit` resolve o setting na chamada. Tempo de import [nao verificado]. `app/core/esteira_vigia.py:27–36,64,83–109,351–357,605,1653–1654`, `app/relatorios/utils_audit.py:6–20`.
-
-_8843 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8844 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
