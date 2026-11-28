@@ -1,7 +1,422 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 14:12** · publicado em **28/11/2026 14:18** (UTC-3)
+> Ultima resposta processada: **28/11/2026 14:23** · publicado em **28/11/2026 14:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 14:23 · sessao d8f55c0f4fab · E4C-F5-INSTANTE · leitura · origem=Code
+
+Validei em memória o delta que recupera os vínculos aninhados e faz o gate acusar `projecao=?`. `app/core/censo_escritas.py:284` · `app/chamados/tests/test_chokepoint_chamado_gate.py:322` no delta.  
+**5 REDs** deram 6 falhas de asserção e zero erros na cópia. A cura passou **22/22** métodos com `unittest.TestCase` e os analisadores reais. `app/chamados/tests/test_e4c_f5_c4_red.py:1551` · `app/chamados/tests/test_chokepoint_chamado_gate.py:347` na cópia.  
+**4/4 mutantes mortos** por asserção. Censo **543 → 543**, com igualdade das tuplas completas. `app/core/censo_escritas.py:611` na cópia.  
+Próximo passo do aceite é a conferência pela sessão. Sessão, suíte Django e execução da base `c9fded10a` [nao verificado].
+
+### Vínculos e REDs
+
+A leitura única dos registros de `ligacoes` fica em `_Ligacao.ler`, com a iteração em `app/core/censo_escritas.py:284` no delta. A inferência em `:469` e a projeção em `:590` passam por ela. Para atribuições simples, anotadas e nomeadas, ambas chegam ao mesmo RHS armazenado em `vinculo.valor`. `app/core/censo_escritas.py:253,420,430,442,609` no delta.
+
+O trecho da cópia em `:340` passa a propagar os ramos em `:416` do delta, e o de `:363` passa a registrar o RHS sem condicioná-lo à profundidade em `:440`. A trava de `:519` dá lugar à seleção das escritas anteriores ao uso, da mais recente para a mais antiga. A primeira escrita garantida encerra a busca. Candidatos que levam a RHS distintos geram `projecao=?`. O controle verifica `p` e `q` nos respectivos ramos e a indeterminação após a junção. `app/core/censo_escritas.py:340,363,519` na cópia · `app/core/censo_escritas.py:595,609,630,641` · `app/chamados/tests/test_e4c_f5_c4_red.py:1663,1682` no delta.
+
+Cada hunk abaixo teve **1** ocorrência do trecho original na cópia. O conjunto passou em `git apply --check -p1`. `app/core/censo_escritas.py:58,204,311,359,376,498` · `app/chamados/tests/test_e4c_f5_c4_red.py:1660` · `app/chamados/tests/test_chokepoint_chamado_gate.py:318,424` na cópia.
+
+```diff
+--- a/app/core/censo_escritas.py
++++ b/app/core/censo_escritas.py
+@@ -58,6 +58,7 @@
+ import ast
+ import os
+ from collections import deque
++from typing import NamedTuple
+ 
+ CRIAR = frozenset({'create', 'get_or_create', 'update_or_create', 'bulk_create'})
+ ALTERAR = frozenset({'update', 'bulk_update'})
+@@ -204,11 +205,83 @@
+ )
+ 
+ 
++_NOS_TRY = (ast.Try, ast.TryStar)
++_NOS_COM_RAMOS = (
++    ast.If, ast.IfExp, ast.Match, ast.With, ast.AsyncWith,
++    ast.For, ast.AsyncFor, ast.While, *_NOS_TRY,
++)
++
++
++def _inicio(no):
++    return no.lineno, no.col_offset
++
++
++def _fim(no):
++    return no.end_lineno, no.end_col_offset
++
++
++def _contem(bloco, ponto):
++    return bloco and _inicio(bloco[0]) <= ponto < _fim(bloco[-1])
++
++
++def _filhos_com_ramos(no):
++    for campo, filhos in ast.iter_fields(no):
++        if not isinstance(filhos, list):
++            filhos = (filhos,)
++        for filho in filhos:
++            if not isinstance(filho, ast.AST):
++                continue
++            if isinstance(no, ast.BoolOp) and campo == 'values' and filho is not filhos[0]:
++                yield filho, ((no, campo, (filho,)),)
++            elif (isinstance(no, _NOS_COM_RAMOS)
++                  and campo in ('body', 'orelse', 'handlers', 'finalbody', 'cases')):
++                bloco = (filho,) if campo in ('handlers', 'cases') else filhos
++                yield filho, ((no, campo, bloco),)
++            else:
++                yield filho, ()
++
++
++class _Vinculo(NamedTuple):
++    ordem: int
++    local: bool
++    valor: ast.AST | None
++    ponto: tuple[int, int]
++    ramos: tuple
++    outra_evidencia: ast.AST | None = None
++    valor_e_evidencia: bool = True
++
++    def evidencia(self):
++        return self.valor if self.valor_e_evidencia else self.outra_evidencia
++
++    def alcance(self, uso):
++        # True = executado ao chegar ao uso; False = possivel; None = outro ramo.
++        garantido = True
++        for no, campo, bloco in self.ramos:
++            if _contem(bloco, uso) or campo == 'finalbody':
++                continue
++            if uso < _fim(no):
++                if isinstance(no, (ast.If, ast.IfExp, ast.Match)):
++                    return None
++                if isinstance(no, _NOS_TRY):
++                    if campo == 'body' and _contem(no.orelse, uso):
++                        continue
++                    if campo == 'handlers' and (
++                        _contem(no.orelse, uso)
++                        or (isinstance(no, ast.Try) and not _contem(no.finalbody, uso))
++                    ):
++                        return None
++            garantido = False
++        return garantido
++
++
+ class _Ligacao:
+     def __init__(self):
+-        self.vinculos = []  # (ordem, local, valor da projecao, evidencia do modelo)
++        self.vinculos = []
+         self.campos = set()
+         self.origem = None
++
++    def ler(self, locais=False):
++        return (v for v in self.vinculos if v.local or not locais)
+ 
+ 
+ class _Varredor(ast.NodeVisitor):
+@@ -311,46 +384,50 @@
+                 self.modulos.add(a.asname or a.name)
+ 
+     # -- escopos
+-    def _ligar_alvo(self, ligacoes, alvo, valor, origem, local, ordem):
++    def _ligar_alvo(self, ligacoes, alvo, vinculo):
+         if isinstance(alvo, ast.Name):
+-            ligacoes.setdefault(alvo.id, _Ligacao()).vinculos.append((ordem, local, valor, origem))
++            ligacoes.setdefault(alvo.id, _Ligacao()).vinculos.append(vinculo)
+         elif isinstance(alvo, ast.Starred):
+-            self._ligar_alvo(ligacoes, alvo.value, None, None, local, ordem)
++            self._ligar_alvo(ligacoes, alvo.value, vinculo._replace(valor=None, outra_evidencia=None))
+         elif isinstance(alvo, (ast.Tuple, ast.List)):
++            valor = vinculo.valor
+             elts = ()
+             if (isinstance(valor, (ast.Tuple, ast.List)) and len(alvo.elts) == len(valor.elts)
+                     and not any(isinstance(e, ast.Starred) for e in (*alvo.elts, *valor.elts))):
+                 elts = valor.elts
+             for i, item in enumerate(alvo.elts):
+-                evid = origem if i == 0 and isinstance(alvo, ast.Tuple) and isinstance(item, ast.Name) else None
+-                self._ligar_alvo(ligacoes, item, elts[i] if elts else None, evid, local, ordem)
++                evidencia = (vinculo.evidencia()
++                             if i == 0 and isinstance(alvo, ast.Tuple) and isinstance(item, ast.Name)
++                             else None)
++                self._ligar_alvo(ligacoes, item, vinculo._replace(
++                    valor=elts[i] if elts else None, outra_evidencia=evidencia, valor_e_evidencia=False))
+ 
+     def _colher_ligacoes(self, no, inferir):
+-        # A origem do modelo usa a ordem em largura e pode ler escopos filhos,
+-        # como antes. A tupla usa apenas os vinculos lexicais do escopo.
++        # A ordem em largura preserva a precedencia da inferencia de modelos.
+         ligacoes = {}
+-        fila = deque((sub, True, True) for sub in ast.iter_child_nodes(no))
++        fila = deque((sub, True, ramos) for sub, ramos in _filhos_com_ramos(no))
+         ordem = 0
+         while fila:
+-            sub, local, direta = fila.popleft()
++            sub, local, ramos = fila.popleft()
+             ordem += 1
+             if not local and not inferir:
+                 continue
+             filhos_locais = local and not isinstance(sub, _NOS_DE_ESCOPO)
+-            fila.extend((filho, filhos_locais, direta and isinstance(sub, ast.Expr))
+-                        for filho in ast.iter_child_nodes(sub))
++            fila.extend((filho, filhos_locais, ramos + novos_ramos)
++                        for filho, novos_ramos in _filhos_com_ramos(sub))
+             alvos, valor, origem = (), None, None
+             if isinstance(sub, ast.Assign):
+-                alvos, valor, origem = sub.targets, sub.value, sub.value
++                alvos, valor = sub.targets, sub.value
+                 for alvo in alvos:
+                     if (inferir and isinstance(alvo, ast.Attribute) and isinstance(alvo.value, ast.Name)
+                             and alvo.attr in self.unicos):
+                         ligacoes.setdefault(alvo.value.id, _Ligacao()).campos.add(self.unicos[alvo.attr])
+             elif isinstance(sub, ast.AnnAssign) and sub.value is None:
+                 if local and isinstance(sub.target, ast.Name):
+-                    self._ligar_alvo(ligacoes, sub.target, sub, None, local, ordem)
++                    self._ligar_alvo(ligacoes, sub.target, _Vinculo(
++                        ordem, local, sub, _fim(sub), ramos, valor_e_evidencia=False))
+             elif isinstance(sub, (ast.AnnAssign, ast.NamedExpr)):
+-                alvos, valor, origem = (sub.target,), sub.value, sub.value
++                alvos, valor = (sub.target,), sub.value
+             elif isinstance(sub, ast.AugAssign):
+                 alvos, origem = (sub.target,), sub.value
+             elif isinstance(sub, (ast.For, ast.AsyncFor, ast.comprehension)):
+@@ -359,8 +436,13 @@
+                 alvos, origem = (sub.optional_vars,), sub.context_expr
+             elif isinstance(sub, (ast.Delete, ast.TypeAlias)):
+                 alvos = sub.targets if isinstance(sub, ast.Delete) else (sub.name,)
+-            for alvo in alvos:
+-                self._ligar_alvo(ligacoes, alvo, valor if direta else None, origem, local, ordem)
++            if alvos:
++                vinculo = _Vinculo(
++                    ordem, local, valor, _fim(valor or origem or sub), ramos,
++                    outra_evidencia=origem, valor_e_evidencia=origem is None,
++                )
++                for alvo in alvos:
++                    self._ligar_alvo(ligacoes, alvo, vinculo)
+             if not local:
+                 continue
+             nomes = ()
+@@ -376,14 +458,15 @@
+                                   ast.MatchAs, ast.MatchStar, ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)):
+                 nomes = (sub.name,) if sub.name is not None else ()
+             for nome in nomes:
+-                ligacoes.setdefault(nome, _Ligacao()).vinculos.append((ordem, True, None, None))
++                ligacoes.setdefault(nome, _Ligacao()).vinculos.append(
++                    _Vinculo(ordem, local, None, _inicio(sub), ramos))
+         return ligacoes
+ 
+     def _inferir_amarras(self, ligacoes):
+         # Ponto fixo sobre os mesmos vinculos: qs = X.objects.filter(); for b in qs: b.save().
+         evidencias = sorted(
+-            ((ordem, nome, valor) for nome, ligacao in ligacoes.items()
+-             for ordem, _, _, valor in ligacao.vinculos if valor is not None),
++            ((v.ordem, nome, evidencia) for nome, ligacao in ligacoes.items()
++             for v in ligacao.ler() if (evidencia := v.evidencia()) is not None),
+             key=lambda item: item[0],
+         )
+         mudou = True
+@@ -498,31 +581,57 @@
+         return (isinstance(classe, ast.ClassDef) and classe.name == 'DecisaoPergunta'
+                 and isinstance(metodo, ast.FunctionDef) and metodo.name == 'registrar')
+ 
++    def _candidatos_da_projecao(self, nome, limite):
++        for i in range(limite, -1, -1):
++            escopo, ligacoes = self._escopos[i]
++            if isinstance(escopo, ast.ClassDef) and i != limite:
++                continue
++            ligacao = ligacoes.get(nome.id)
++            locais = list(ligacao.ler(locais=True)) if ligacao is not None else []
++            if locais:
++                break
++        else:
++            return []
++
++        uso = _inicio(nome)
++        escritas = [v for v in locais if not isinstance(v.valor, ast.AnnAssign)]
++        # Um fechamento pode ser chamado depois de uma escrita textual posterior ao seu corpo.
++        if i != limite and any(v.ponto > uso for v in escritas):
++            return []
++        anteriores = sorted(
++            (v for v in escritas if v.ponto <= uso),
++            key=lambda v: (v.ponto, v.ordem), reverse=True,
++        )
++        candidatos = []
++        for vinculo in anteriores:
++            alcance = vinculo.alcance(uso)
++            if alcance is not None:
++                candidatos.append((vinculo.valor, i))
++                if alcance:
++                    break
++        return candidatos
++
+     def _valor_da_projecao(self, valor):
+-        limite = len(self._escopos) - 1
+-        while isinstance(valor, (ast.Name, ast.NamedExpr)):
++        pendentes = [(valor, len(self._escopos) - 1)]
++        visitados = set()
++        encontrado = None
++        while pendentes:
++            valor, limite = item = pendentes.pop()
++            if item in visitados:
++                continue
++            visitados.add(item)
+             if isinstance(valor, ast.NamedExpr):
+-                valor = valor.value
+-                continue
+-            for i in range(limite, -1, -1):
+-                escopo, ligacoes = self._escopos[i]
+-                if isinstance(escopo, ast.ClassDef) and i != limite:
+-                    continue
+-                ligacao = ligacoes.get(valor.id)
+-                if ligacao is not None:
+-                    locais = [v for _, local, v, _ in ligacao.vinculos if local]
+-                    if locais:
+-                        break
++                pendentes.append((valor.value, limite))
++            elif isinstance(valor, ast.Name):
++                candidatos = self._candidatos_da_projecao(valor, limite)
++                if not candidatos:
++                    return None
++                pendentes.extend(candidatos)
++            elif valor is None or (encontrado is not None and valor is not encontrado):
++                return None
+             else:
+-                return None
+-            locais = [v for v in locais if not isinstance(v, ast.AnnAssign)]
+-            if len(locais) != 1 or locais[0] is None:
+-                return None
+-            ligado = locais[0]
+-            if (ligado.end_lineno, ligado.end_col_offset) > (valor.lineno, valor.col_offset):
+-                return None
+-            valor, limite = ligado, i
+-        return valor
++                encontrado = valor
++        return encontrado
+ 
+     def _projecao(self, no, valor):
+         """`projecao=(inst, campos)` = `inst.save(update_fields=campos)` neste sitio (`ESCRITA_POR_PROJECAO`)."""
+--- a/app/chamados/tests/test_e4c_f5_c4_red.py
++++ b/app/chamados/tests/test_e4c_f5_c4_red.py
+@@ -1660,6 +1660,77 @@
+                     (linha, None, 'save', 'DP.registrar(projecao=?) [projecao]'),
+                 ])
+ 
++    def test_RED_projecao_ligada_em_if_elif_else(self):
++        fonte = (
++            'from chamados.models import DecisaoPergunta as DP\n'
++            'def f(p, q, linhas, a, b):\n'
++            '    if a:\n'
++            "        proj = (p, ['respondida_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++            '    elif b:\n'
++            "        proj = (p, ['respondida_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++            '    else:\n'
++            "        proj = (q, ['respondida_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++            '    DP.registrar(linhas, projecao=proj)\n'
++        )
++        self.assertEqual(self._varrer(fonte), [
++            (5, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]'),
++            (8, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]'),
++            (11, 'PerguntaDisputa', 'save', 'q.save() [update_fields] [projecao]'),
++            (12, None, 'save', 'DP.registrar(projecao=?) [projecao]'),
++        ])
++
++    def test_RED_projecao_ligada_em_try_except_else_finally(self):
++        fonte = (
++            'from chamados.models import DecisaoPergunta as DP\n'
++            'def f(p, q, r, linhas):\n'
++            '    try:\n'
++            "        proj = (p, ['respondida_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++            '    except ValueError:\n'
++            "        proj = (q, ['validada_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++            '    else:\n'
++            '        DP.registrar(linhas, projecao=proj)\n'
++            "        proj = (r, ['respondida_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++            '    finally:\n'
++            "        proj = (p, ['respondida_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++            '    DP.registrar(linhas, projecao=proj)\n'
++        )
++        self.assertEqual(self._varrer(fonte), [
++            (linha, 'PerguntaDisputa', 'save', f'{inst}.save() [update_fields] [projecao]')
++            for linha, inst in ((5, 'p'), (8, 'q'), (10, 'p'), (12, 'r'), (15, 'p'), (16, 'p'))
++        ])
++
++    def test_RED_projecao_ligada_em_with(self):
++        fonte = (
++            'from chamados.models import DecisaoPergunta as DP\n'
++            'def f(p, linhas):\n'
++            '    with contexto():\n'
++            "        proj = (p, ['respondida_em'])\n"
++            '        DP.registrar(linhas, projecao=proj)\n'
++        )
++        self.assertEqual(self._varrer(fonte), [
++            (5, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]'),
++        ])
++
++    def test_RED_projecao_reatribuida_duas_vezes(self):
++        fonte = (
++            'from chamados.models import DecisaoPergunta as DP\n'
++            'def f(p, linhas):\n'
++            '    proj = obter()\n'
++            "    proj = (outro, ['respondida_em'])\n"
++            "    proj = (p, ['respondida_em'])\n"
++            '    DP.registrar(linhas, projecao=proj)\n'
++        )
++        self.assertEqual(self._varrer(fonte), [
++            (6, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]'),
++        ])
++
+     def test_os_dois_saves_da_porta_ficam_visiveis(self):
+         import ast
+ 
+```
+
+### Balde
+
+Na cópia, `tabela` recolhe `entidade=None` e o comando imprime esses achados com `--nao-atribuiveis`. O gate de chamado pula `None` em `:321`. O delta faz o gate consumir qualquer `None` com sufixo `[projecao]` antes do filtro de portas. O RED exige a acusação para ramos divergentes e para tupla cujo receptor ficou sem entidade, no próprio `chamados/models.py`. O `p.save()` comum da fixture continua sujeito ao filtro de `None`. `app/core/censo_escritas.py:649` · `app/core/management/commands/censo_escritas.py:37` · `app/chamados/tests/test_chokepoint_chamado_gate.py:321` · `app/core/portas.py:396` na cópia · `app/chamados/tests/test_chokepoint_chamado_gate.py:322,430,447` no delta.
+
+```diff
+--- a/app/chamados/tests/test_chokepoint_chamado_gate.py
++++ b/app/chamados/tests/test_chokepoint_chamado_gate.py
+@@ -318,6 +318,9 @@
+     ruins = []
+     for x in achados:
+         ent = x['entidade']
++        if ent is None and x['expr'].endswith(' [projecao]'):
++            ruins.append('%s:%d projecao=? %s' % (x['arquivo'], x['linha'], x['expr']))
++            continue
+         if ent is None or portas.familia_de(ent) != FAMILIA:
+             continue
+         if x['arquivo'] in (portas.porta_de(ent) or ()):
+@@ -424,6 +427,28 @@
+         self.assertEqual(len(fora_da_porta(
+             _achados(fonte, 'chamados/management/commands/x.py'))), 1)
+ 
++    def test_RED_o_gate_acusa_projecao_sem_entidade(self):
++        inicio = 'from chamados.models import DecisaoPergunta as DP\ndef f(p, q, linhas, flag):\n'
++        casos = (
++            ('ramos distintos',
++             '    if flag:\n'
++             "        proj = (p, ['respondida_em'])\n"
++             '    else:\n'
++             "        proj = (q, ['respondida_em'])\n"
++             '    DP.registrar(linhas, projecao=proj)\n',
++             7, 'DP.registrar(projecao=?) [projecao]'),
++            ('tupla sem entidade',
++             '    DP.registrar(linhas, projecao=(p, campos))\n',
++             3, 'p.save() [projecao]'),
++        )
++        arquivo = 'chamados/models.py'
++        for caso, corpo, linha, expr in casos:
++            with self.subTest(caso=caso):
++                fo
+
+[truncado em 20000 de 24782 caracteres]
 
 ## 28/11 14:12 · sessao d7103919d556 · C7-TELA-ADMIN-ENCERRA · leitura · origem=Code
 
@@ -1185,14 +1600,4 @@ M11RetryGanhaNovoPedido = h(
 
 [truncado em 20000 de 30480 caracteres]
 
-## 28/11 11:42 · sessao dad8aafbdcba · - · - · origem=Ronald (tmux)
-
-O caso 11 está vermelho por comportamento da porta. As perguntas vazias da fixture têm PKs selecionados, mas o predicado do escritor descarta ambas, e a assinatura atual não recebe identidade do pedido. O primeiro asserto da v3 é a falha observada, também nos controles iniciais de `M11DescartaReaberturaVazia` e `M11RetryGanhaNovoPedido`. A mutação só é instalada depois desse controle. `app/chamados/tests/test_e4d_matriz_reds.py:166–176,208–213,570–606` · `app/chamados/services/disputa_emissao.py:1631,1689–1719` · `app/chamados/tests/e4d_matriz_mutantes.py:570–612,650–653` · `aceite_v3.txt`, traceback do teste em `/app/chamados/tests/test_e4d_matriz_reds.py:603`.
-
-A cura pertence a `reabrir_para_correcao` e à persistência de `DecisaoPergunta`. Enviei o bloco à raiz. A identidade opcional fica no ato, com unicidade por pergunta e chave. Sob a trava existente, a porta exclui pedidos já registrados, grava uma linha por pergunta elegível para um pedido novo e só projeta ou acorda células quando há estado para alterar. A supressão seletiva do outbox precisa alcançar `DecisaoPergunta.registrar`, que hoje emite mesmo quando o serviço evita a projeção. As chamadas sem chave conservam a semântica legada, coberta por testes vizinhos. `app/chamados/services/disputa_emissao.py:1674–1719` · `app/chamados/models.py:3621–3660,4344–4396,4590–4623` · `app/chamados/tests/test_e3_porta_A_reabrir.py:44–64` · `app/chamados/tests/test_e4_expand.py:205–227`.
-
-Os marcadores de mordida são `Regra 11: o primeiro pedido deixa ato na pergunta vazia` para o descarte e `Regra 11: o retry preserva a trilha` para a troca de identidade. O mutante de descarte da v3 conserva âncora no teste de `ATOS_COM_FOTO`. O de retry já repassa a chave alterada na segunda chamada e preserva a assinatura inspecionada via `wraps`. `app/chamados/services/disputa_emissao.py:1674` · `app/chamados/tests/e4d_matriz_mutantes.py:292–302,650–653` · `r_v3.md`, bloco do caso 11 do anexo.
-
-As âncoras entregues à raiz têm contagem 1 por leitura em memória. Execução ORM e migração [nao verificado]. `app/chamados/models.py:4373,4395,4590,4622` · `app/chamados/services/disputa_emissao.py:1631,1674–1675,1683,1723` · `app/chamados/tests/e4d_matriz_mutantes.py:650–654`.
-
-_8927 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8928 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
