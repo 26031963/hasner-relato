@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 06:33:16.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (316.5 MB). Acoes na janela: **1653**.
+**Medido em 28/11/2026 06:40:10.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (318.0 MB). Acoes na janela: **1667**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:39:58 | Bash | Confere a cópia e registra a triagem | `cd ~/saas-hasner; WT=/home/ronald/wt-codex-retrato-pdf-corta-por-que-062609; git -C $WT status --porcelain --ignored \| head; git -C $WT log --oneline -1 H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') i=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado) ',l)) L.insert(i+1,f"- {h} colhido RETRATO-PDF ...` |
+| 06:39:49 | Bash | Procura quem lê o rótulo e o lançador da c2 | `cd ~/saas-hasner; WT=$(cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2_wt.txt); git -C $WT grep -n "Trabalho em dia de aus\\|fato_em_ausencia'" -- app \| head; ls logs/RETRATO-PDF-CORTA-POR-QUE/item2/; cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2/lanca.sh` |
+| 06:39:43 | Bash | Confere amostra dos achados do verificador | `cd ~/saas-hasner; WT=$(cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2_wt.txt); sed -n 440,456p $WT/app/ponto/supra_juiz.py; echo ---; sed -n 1624,1634p $WT/app/escala/models.py; echo ---; sed -n 550,585p $WT/app/folha/tests/test_retrato_por_que_por_dia.py` |
+| 06:39:27 | Bash | Lê o laudo do verificador | `cd ~/saas-hasner; cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/ver1/r.md \| cut -c1-900` |
+| 06:39:24 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bu7amdnyi.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
+| 06:35:57 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 06:35:56 | Bash | Marca a coleta da suíte folha | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') i=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado) ',l)) L.insert(i+1,f"- {h} colhido RETRATO-PDF-CORTA-POR-QUE item2/c2/folha.rc (06:35 rc 0): pista job 1128063410_0644d102, Ran 1035 OK, oom=0 -- os 13 RED viraram verdes; espera ver ...` |
+| 06:35:51 | Bash | Lê o veredito da suíte folha | `cd ~/saas-hasner; L=logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2/folha.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; tail -4 $L` |
+| 06:35:47 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b6f0as1ww.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
+| 06:34:22 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 06:34:09 | Bash | Confere que suíte e verificador começaram | `cd ~/saas-hasner; /usr/bin/sleep 10; tail -2 logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2/folha.log; tail -1 logs/RETRATO-PDF-CORTA-POR-QUE/item2/ver1/wrapper.out` |
+| 06:34:05 | Bash | Lança suíte folha e verificador Codex do item 2 | `cd ~/saas-hasner; WT=$(cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2_wt.txt); Q=logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2 cat > $Q/suite.sh <<EOF cd /home/ronald/saas-hasner bash bin/suite.sh --dir $WT --only "folha" > $Q/folha.log 2>&1 < /dev/null; echo "rc=\$? \$(date +%H:%M:%S)" > $Q/folha.rc EOF setsid bash $Q/suite.sh >/dev/null 2>&1 & # verificador Codex V=logs/RETRATO-PDF-CORTA-POR-QUE/item2/ve ...` |
+| 06:33:46 | Bash | Commita a cura do Codex na cópia | `cd ~/saas-hasner; WT=$(cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2_wt.txt); cd $WT; git add app/folha/export.py app/folha/fora_da_folha.py app/folha/retrato_folha.py app/folha/views_retrato.py app/templates/folha/_retrato_lista.html app/templates/folha/_retrato_o_que_fazer.html app/templates/folha/_retrato_raiox.html git commit -q -F - <<'EOF' RETRATO-PDF-CORTA-POR-QUE item 2 c2: o Por que mostra  ...` |
+| 06:33:36 | Bash | Confere o diff do construtor e marca coleta | `cd ~/saas-hasner; WT=$(cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2_wt.txt); git -C $WT diff --stat \| tail -1; git -C $WT diff \| /bin/grep -cE '^\+.*\bexcept\b'; git -C $WT diff \| /bin/grep -E '^\+.*(timezone\.now\|date\.today\|datetime\.now)' \| head; git -C $WT diff app/folha/export.py \| head -40 H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=ope ...` |
+| 06:33:29 | Bash | Lê a entrega do construtor Codex | `cd ~/saas-hasner; Q=logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2; tail -5 $Q/wrapper.out; cat $Q/r.md \| cut -c1-500; WT=$(cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2_wt.txt); git -C $WT status --short \| head -20` |
+| 06:33:25 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bvdhun8mn.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
 | 06:32:21 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 06:32:18 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b8iosal3s.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
 | 06:29:54 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
@@ -1661,5 +1677,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:42:42 | Bash | Vê o estado do ver6 | `cd ~/saas-hasner; ls -la --time-style=+%H:%M logs/FERIADO-UM-JUIZ/ver6/; tail -3 logs/FERIADO-UM-JUIZ/ver6/wrapper.out \| cut -c1-200` |
 | 18:42:39 | Bash | Confere se o ver6 e a suíte seguem vivos | `pgrep -af 'codex_pergunta.sh' \| cut -c1-120; tail -1 ~/saas-hasner/logs/FERIADO-UM-JUIZ/c8/s/s.log \| cut -c1-150` |
 | 18:42:35 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bvqxkzygm.output; date +%H:%M` |
-| 18:37:30 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 18:37:26 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b2r1xgjty.output; date +%H:%M` |
