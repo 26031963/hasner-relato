@@ -1,7 +1,309 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 01:39** · publicado em **28/11/2026 01:40** (UTC-3)
+> Ultima resposta processada: **28/11/2026 01:43** · publicado em **28/11/2026 01:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 01:43 · sessao db69fbcafc44 · FERIADO-UM-JUIZ · leitura · origem=Code
+
+**O DIFF deve rodar duas vezes sobre a mesma sombra**. Monte o `app/` da árvore viva para o **ANTES** e o `app/` de `d765154a3` para o **DEPOIS**, via `SONDA_ARVORE`. O gravado da sombra é a terceira coluna, usada para estimar o que o apply escreveria. Deltas reais, lista do TXT e hashes de hoje seguem [não verificado]. `bin/sonda_leitura.sh:226-240` `bin/diff_o124_frota.py:4-14` `app/ponto/services/diff_frota.py:7-12`
+
+### 1. Instrumento e universo
+
+- **`bin/diff_o124_frota.py` é o precedente para comparar duas árvores.** Ele roda o escritor real em modo leitura em cada montagem e compara as duas fotos por colaborador e campo. O script original fixa uma competência por rodada e chama o recalculador sem filtro de empresa. **`diff_frota.medir`** é o serviço da casa para gravado, hoje e novo quando a mudança é uma mutação dentro de uma única árvore. Ele parte de quem já tem mensal gravado. `bin/diff_o124_frota.py:10-14` `bin/diff_o124_frota.py:20-42` `bin/diff_o124_frota.py:47-69` `app/ponto/services/diff_frota.py:45-89`
+- **`diff_calculador` compara motor e calculador por dia e rubrica dentro do código carregado.** Recebe um par `--mes/--ano` por chamada, percorre todas as empresas ativas e parte dos IDs com mensal gravado. `--contra-gravado` acrescenta a comparação do calculador com o mensal. `--periodos-do-fechamento` captura os períodos da mesma árvore e intercepta a lavratura. `app/ponto/management/commands/diff_calculador.py:25-56` `app/ponto/management/commands/diff_calculador.py:98-135` `app/ponto/management/commands/diff_calculador.py:541-588`
+- **`sombra.sh --cobre INI FIM` consulta o carimbo de cobertura.** Use a janela de cada empresa, incluindo o dia adicional em cada ponta que o fechamento consulta. A vigência começa em 11/2026 e alcança 12/2026. Com corte 21, 20/11 é a véspera da janela da 12 e entra na busca de batidas. O corte efetivo das três empresas e a cobertura de hoje seguem [não verificado]. `bin/sombra.sh:219-233` `app/core/sombra_cobertura.py:32-49` `app/ponto/janelas.py:10-21` `app/ponto/janelas.py:54-57` `app/ponto/services/fechamento.py:155-173` `app/ponto/services/fechamento.py:601-604` `app/ponto/services/fechamento.py:685-699` `app/folha/export.py:383-391`
+
+### 2. Sonda de impacto
+
+`--sombra` seleciona `sombra_db/sombra`. Por padrão, a sonda monta `$RAIZ/app:/app:ro`, onde `$RAIZ` é a raiz do **wrapper chamado**. A opção de árvore é `SONDA_ARVORE=<cópia>/app`. O `--dir` é da suíte. O HEAD vivo `93e305860` e a disponibilidade dessa opção no wrapper instalado seguem [não verificado]. `bin/sonda_leitura.sh:31` `bin/sonda_leitura.sh:38-45` `bin/sonda_leitura.sh:66-71` `bin/sonda_leitura.sh:93-97` `bin/sonda_leitura.sh:226-240` `bin/suite.sh:170`
+
+A sonda usa o universo integral do recalculador para as empresas 2, 3 e 4 nas competências 11 e 12, inclusive quem ainda está sem mensal. Os totais incluem diferenças de **0,01 h** e mostram quantos valores preenchidos entraram em cada soma. No TXT 11, segue a chamada do gerador a `classificar_export` sobre os mensais em memória. A marca `ITEM_8` mostra quando zerar só a HE100 feriado numa cópia em memória devolve o motivo `cadastro_zero`. `SEM_CELULA` distingue esse caso de cadastro sem previsto com célula. A coluna `TXT` preserva o veredito real, inclusive quando uma retenção posterior ainda barra o colaborador. `app/ponto/services/fechamento.py:490-507` `app/ponto/services/fechamento.py:619-622` `app/ponto/services/fechamento.py:962-973` `app/ponto/services/fechamento.py:1016-1021` `app/ponto/management/commands/recalcular_fechamento.py:54-55` `app/folha/views.py:214-222` `app/folha/export.py:924-926` `app/folha/export.py:948-1005`
+
+Conteúdo de `impacto_feriado.py` para a sessão. Sintaxe, comparador e projeção do item 8 conferidos com dados sintéticos. Execução com Django e a sombra real [não verificado].
+
+```python
+import json
+import sys
+from copy import copy
+from decimal import Decimal
+
+ANO, MESES, EMPRESAS = 2026, (11, 12), (2, 3, 4)
+
+
+def projetar(registros, campos):
+    saida = {}
+    for f in registros:
+        valores = (getattr(f, campo) for campo in campos)
+        saida[str(f.colaborador_id)] = [None if v is None else str(v) for v in valores]
+    return saida
+
+
+def vereditos(empresa, fechamentos):
+    from folha.export import classificar_export
+
+    itens = classificar_export(empresa, 11, ANO, fechamentos=fechamentos)
+    candidatos = []
+    for f in fechamentos:
+        if f.horas_trabalhadas == 0 and f.horas_extras_100_feriado > 0:
+            copia = copy(f)
+            copia.horas_extras_100_feriado = 0
+            candidatos.append(copia)
+    retidos_sem_he = {
+        i["colaborador_id"]: (
+            "SEM_CELULA" if i["detalhe"].startswith("Sem NENHUMA celula") else "SEM_PREVISTO"
+        )
+        for i in classificar_export(empresa, 11, ANO, fechamentos=candidatos)
+        if i["motivo"] == "cadastro_zero"
+    }
+    return {
+        str(i["colaborador_id"]): [
+            i["status"], i["motivo"],
+            retidos_sem_he.get(i["colaborador_id"]) if i["motivo"] != "cadastro_zero" else None,
+        ]
+        for i in itens
+    }
+
+
+def coletar():
+    from django.db import connection, transaction
+
+    with transaction.atomic():
+        with connection.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cur.execute("SELECT current_database(), current_schema(), current_user, "
+                        "current_setting('transaction_read_only')")
+            if cur.fetchone() != ("sombra", "juliani", "leitor", "on"):
+                raise RuntimeError("Sonda exige sombra/juliani com leitor em READ ONLY")
+
+        from colaboradores.models import Empresa
+        from ponto.janelas import janela_fechamento
+        from ponto.management.commands.recalcular_fechamento import RUBRICAS
+        from ponto.models import FechamentoMensal
+        from ponto.services.fechamento import recalcular_fechamento_mes, universo_da_competencia
+
+        dados = {}
+        for mes in MESES:
+            for eid in EMPRESAS:
+                empresa = Empresa.objects.get(pk=eid)
+                janela = janela_fechamento(mes, ANO, empresa)
+                gravado = FechamentoMensal.objects.filter(
+                    mes=mes, ano=ANO, colaborador__empresa_id=eid
+                )
+                lidos = recalcular_fechamento_mes(
+                    mes, ANO, empresa_id=eid, somente_leitura=True,
+                    retornar_objeto=True, lavrar_dias_pagos=False, propagar_falha=True,
+                )
+                esperados = set(universo_da_competencia(mes, ANO, eid).values_list("pk", flat=True))
+                if lidos.keys() != esperados:
+                    raise RuntimeError(f"Leitura incompleta emp{eid} {mes:02d}/{ANO}")
+                dados[f"{mes:02d}/{ANO} emp{eid}"] = {
+                    "janela": [d.isoformat() for d in janela],
+                    "gravado": projetar(gravado, RUBRICAS),
+                    "lido": projetar(lidos.values(), RUBRICAS),
+                    "txt": vereditos(empresa, list(lidos.values())) if mes == 11 else {},
+                }
+        transaction.set_rollback(True)
+
+    print("IMPACTO_JSON", json.dumps({"campos": RUBRICAS, "dados": dados}, sort_keys=True))
+
+
+def delta(antes, depois):
+    return None if antes is None or depois is None else Decimal(depois) - Decimal(antes)
+
+
+def linha(*valores):
+    print(*(v if v is not None else "-" for v in valores), sep="\t")
+
+
+def comparar(antes, depois):
+    campos = antes["campos"]
+    a, b = antes["dados"], depois["dados"]
+    if campos != depois["campos"] or a.keys() != b.keys():
+        raise SystemExit("Escopos ou rubricas de comparação diferentes")
+    if any(a[k]["gravado"] != b[k]["gravado"] or a[k]["janela"] != b[k]["janela"] for k in a):
+        raise SystemExit("O gravado ou a janela mudou entre as leituras")
+
+    linha("FOLHA", "comp empresa", "colaborador", "rubrica",
+          "gravado", "antes", "depois", "efeito", "delta_apply")
+    for grupo in sorted(a):
+        linha("JANELA", grupo, *a[grupo]["janela"])
+        gravado, velho, novo = a[grupo]["gravado"], a[grupo]["lido"], b[grupo]["lido"]
+        fotos = (gravado, velho, novo)
+        vazio = [None] * len(campos)
+        for cid in sorted(gravado.keys() | velho.keys() | novo.keys(), key=int):
+            col = f"col{int(cid):03d}"
+            if not all(cid in foto for foto in fotos):
+                linha("UNIVERSO", grupo, col, *(cid in foto for foto in fotos))
+            for pos, campo in enumerate(campos):
+                g, v, n = (foto.get(cid, vazio)[pos] for foto in fotos)
+                linha("FOLHA", grupo, col, campo, g, v, n, delta(v, n), delta(g, n))
+
+        for pos, campo in enumerate(campos):
+            colunas = [[Decimal(v[pos]) for v in foto.values() if v[pos] is not None] for foto in fotos]
+            g, v, n = (sum(valores, Decimal(0)) for valores in colunas)
+            linha("TOTAL", grupo, "frota", campo, g, v, n, n - v, n - g,
+                  *(len(valores) for valores in colunas))
+
+        ta, tb = a[grupo]["txt"], b[grupo]["txt"]
+        for cid in sorted(ta.keys() | tb.keys(), key=int):
+            va = ta.get(cid, ["sem_fechamento", None, None])
+            vb = tb.get(cid, ["sem_fechamento", None, None])
+            movimento = "ENTROU" if vb[0] == "entra" and va[0] != "entra" else (
+                "SAIU" if va[0] == "entra" and vb[0] != "entra" else "-"
+            )
+            linha("TXT", grupo, f"col{int(cid):03d}", movimento, *va[:2], *vb[:2])
+            if va[2] or vb[2]:
+                linha("ITEM_8", grupo, f"col{int(cid):03d}", movimento, va[2], vb[2])
+
+
+if sys.argv[1:] == ["--comparar"]:
+    comparar(json.loads(next(sys.stdin)), json.loads(next(sys.stdin)))
+else:
+    coletar()
+```
+
+As duas rodadas devem usar a mesma foto da sombra, sem refresh ou outro escritor no intervalo. A igualdade do gravado e das janelas detecta parte das mudanças de entrada. Cada rodada tem seu próprio snapshot e o fechamento usa o relógio para o teto de furos, relevante na 12 em curso. `app/ponto/services/fechamento.py:679-680` `app/ponto/services/fechamento.py:1147-1154` `bin/diff_o124_frota.py:10-14`
+
+**Há uma diferença operacional importante.** O Python acima abre `READ ONLY` e termina com rollback. O wrapper provisiona role e GRANTs, reescreve `logs/.env_leitor`, copia a sonda para um temporário e grava trilha. Se a proibição de escrita inclui esses atos administrativos, use a montagem direta abaixo com leitor e rede **já provisionados**. Ela também evita depender de `app/logs` e `app/media` na cópia, usados como pontos de montagem pelo wrapper. A disponibilidade desses pontos e do leitor provisionado na sessão segue [não verificado]. `bin/sonda_leitura.sh:115-181` `bin/sonda_leitura.sh:184-203` `bin/sonda_leitura.sh:216-219` `bin/sonda_leitura.sh:245-250` `bin/sombra.sh:180-191`
+
+```bash
+(
+  set -euo pipefail
+  viva=/home/ronald/saas-hasner
+  obra=/home/ronald/codex_ws/d765154a302318df66e6fd7c1a8ab01dab660004
+  sonda=/caminho/da/sessao/impacto_feriado.py
+
+  test "$(git -C "$viva" rev-parse --short=9 HEAD)" = 93e305860
+
+  rodar() {
+    SONDA_ARVORE="$1" bash "$viva/bin/sonda_leitura.sh" --sombra "$sonda"
+  }
+
+  medir() {
+    rodar "$1" 2>&1 | awk '
+      /^IMPACTO_JSON / { sub(/^IMPACTO_JSON /, ""); print; n++ }
+      END { if (n != 1) exit 1 }
+    '
+  }
+
+  antes=$(medir "$viva/app") || { echo "Falhou a leitura ANTES" >&2; exit 1; }
+  depois=$(medir "$obra/app") || { echo "Falhou a leitura DEPOIS" >&2; exit 1; }
+  printf '%s\n%s\n' "$antes" "$depois" | python3 -B "$sonda" --comparar
+)
+```
+
+Para a montagem direta, substitua `rodar` no bloco acima pela função a seguir. Ela usa a imagem, a rede e a credencial de leitor da sonda, com a árvore em `/codigo:ro` e logs em tmpfs. Execução desse comando na sessão [não verificado]. `bin/sonda_leitura.sh:42-51` `bin/sonda_leitura.sh:232-240` `bin/recursos.sh:81` `app/config/settings/sombra.py:47-51` `app/config/settings/saas.py:118-143`
+
+```bash
+rodar() {
+  (
+    source "$viva/bin/recursos.sh"
+    docker run --rm --read-only $TESTE_DOCKER \
+      --network sonda_leitura --env-file "$viva/logs/.env_leitor" \
+      -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo -e PYTHONDONTWRITEBYTECODE=1 \
+      --mount "type=bind,src=$1,dst=/codigo,readonly" \
+      --mount "type=bind,src=$sonda,dst=/sonda.py,readonly" \
+      --tmpfs /app/logs --tmpfs /app/media --workdir /codigo \
+      saas-hasner-core:latest \
+      python /codigo/manage.py tenant_command shell --schema=juliani \
+      --settings=config.settings.sombra \
+      --command "exec(open('/sonda.py').read())"
+  )
+}
+```
+
+### 3. Reversão e apply da 11
+
+- **Escritor genérico da foto pré-apply.** `carimbo_gravado --empresa ID --mes 11 --ano 2026` usa `foto()` e grava valores por colaborador e campo em `logs/carimbo_gravado/`. A obra da janela de HE é um precedente explícito. Seu apply grava as fotos `antes` em `logs/janela_he/` antes de alterar cadastro e chamar o recalculador. `recalcular_fechamento --apply` só grava seu próprio JSON **depois** do recálculo. `app/ponto/management/commands/carimbo_gravado.py:29-56` `app/ponto/management/commands/carimbo_gravado.py:101-113` `app/ponto/management/commands/carimbo_gravado.py:145-155` `app/ponto/management/commands/aplicar_janela_he_total.py:75-90` `app/ponto/management/commands/aplicar_janela_he_total.py:116-146` `app/ponto/management/commands/recalcular_fechamento.py:130-151`
+- **Precedentes de reversão em `logs/`.** `bin/snapshot_relavratura_10_2026.py` escreve `/app/logs/reversao_relavratura_10_2026.json` e `bin/snapshot_o263_comp10.py` escreve `/app/logs/reversao_o263_comp10.json`. Ambos guardam mensal, `DiaPago.motor` e IDs sem mensal anterior. Para esta obra, a foto precisa cobrir também `DiaPago.oraculo`, pois a porta relavra as duas versões. `restaurar_fechamento` repõe campos de linhas mensais existentes. A existência de um arquivo de reversão específico da 11 em `logs/*/reversao*` segue [não verificado]. `bin/snapshot_relavratura_10_2026.py:25-64` `bin/snapshot_o263_comp10.py:53-84` `app/ponto/services/fechamento.py:1235-1239` `app/ponto/services/fechamento.py:1262-1266` `app/ponto/services/fechamento.py:1300-1319` `app/ponto/services/dia_pago.py:368-373` `app/ponto/services/fechamento.py:1398-1437`
+- **Porta do apply.** É `tenant_command recalcular_fechamento --schema=juliani --mes 11 --ano 2026 --empresa ID --apply`, uma chamada por empresa do escopo. A chamada encaminha apenas `(11, 2026, ID)` e grava mensal e lavra nessa chave. A 12 pode mudar por uma chamada independente após o deploy, por exemplo, pelo recálculo por evento que resolve a competência da data do fato. Os contadores `recusas_oraculo` e `falhas_tecnicas_oraculo` saem no resumo da lavra. Seus valores e a prova pós-apply seguem [não verificado]. `app/ponto/management/commands/recalcular_fechamento.py:77-81` `app/ponto/management/commands/recalcular_fechamento.py:110-133` `app/ponto/services/fechamento.py:962-973` `app/ponto/services/fechamento.py:1235-1239` `app/ponto/services/fechamento.py:1320-1351` `app/ponto/services/fechamento.py:1836-1853`
+
+### 4. Hash do FechamentoMensal de 06, 07, 08 e 09
+
+A função da casa é **`ponto.portas.regen_exportada.hash_do_gravado(colaborador, mes, ano)`**. Ela consulta o mensal gravado e retorna 12 caracteres do MD5. O conjunto exclui chaves e carimbos como `previsto_em`, `derivado_em` e `atualizado_em`. Para um digest por empresa e competência, use SHA-256 do JSON ordenado de `carimbo_gravado.foto(eid, mes, 2026)` e publique também a contagem de linhas. Repita nos quatro meses, no mesmo banco antes e depois do apply, incluindo todas as empresas para a prova histórica. `app/ponto/portas/regen_exportada.py:35-38` `app/ponto/portas/regen_exportada.py:56-74` `app/ponto/portas/regen_exportada.py:121-122` `app/ponto/portas/regen_exportada.py:194-195` `app/ponto/management/commands/carimbo_gravado.py:29-56`
+
+```python
+from hashlib import sha256
+import json
+
+from colaboradores.models import Empresa
+from ponto.management.commands.carimbo_gravado import foto
+
+for mes in (6, 7, 8, 9):
+    for eid in Empresa.objects.order_by("pk").values_list("pk", flat=True):
+        mensal = foto(eid, mes, 2026)
+        dados = json.dumps(mensal, sort_keys=True, separators=(",", ":")).encode()
+        print(f"{mes:02d}/2026 emp{eid} linhas={len(mensal)} sha256={sha256(dados).hexdigest()}")
+```
+
+`ExportacaoDominio.hash_sha256` é o campo do **TXT**. Os hashes do mensal antes e depois do apply seguem [não verificado]. `app/folha/models.py:75-84` `app/ponto/portas/regen_exportada.py:62-74`
+
+## 28/11 01:43 · sessao a0c0bb04d7f1 · RETRATO-PDF-CORTA-POR-QUE · censo · origem=Code
+
+# Dossiê antes do construtor · RETRATO-PDF-CORTA-POR-QUE, item 2
+
+O vínculo **dia → motivo** já existe na fonte. Ele se perde em `fora_da_folha`, que entrega à lavra os motivos agregados e as datas planas. O aval fornecido autoriza preservar esse vínculo em chave opcional, usar um mapa de rótulos junto ao produtor e mostrar no **Por quê** apenas as datas da janela. `app/folha/export.py:1268` · `app/folha/fora_da_folha.py:214` · `app/folha/fora_da_folha.py:234` · `app/folha/fora_da_folha.py:246` · `aval.txt:2`
+
+Usei o aval anexado. A entrada indicada em `PROMPTS.md` está [nao verificado] na cópia, cujo arquivo termina na linha 3194. O SHA Git da cópia, as linhas de produção e a execução da suíte estão [nao verificado]. `app/docs/PROMPTS.md:3194`
+
+## 1. Lavrador e contrato da fonte
+
+- **Escritor único em produção.** `lavrar_retrato_folha --apply` chama `montar_linhas` e persiste `linhas` e `lavrado_em` por `empresa`, `mes` e `ano` com `update_or_create`. O cron usa o mesmo comando. O selo AST cobra um único importador de produção de `montar_linhas`. A linha nasce em `montar_linhas`; `o_que_fazer` é leitor. `app/folha/management/commands/lavrar_retrato_folha.py:65` · `app/folha/management/commands/lavrar_retrato_folha.py:72` · `app/folha/management/commands/lavrar_retrato_folha.py:77` · `app/config/crons.py:1659` · `app/folha/tests/test_retrato_folha_um_derivador.py:68` · `app/folha/retrato_folha.py:1237` · `app/folha/retrato_folha.py:1079`
+- **`tipo`.** A lavra grava um valor por colaborador. Para `furo_espelho`, `_tipo_cru` consulta `TIPO_POR_CAUSA` com a `causa` já gravada em `FechamentoMensal.causa_espelho`. Para os demais bloqueios, usa `TIPO_POR_MOTIVO`. Há `sem_causa` para bloqueio sem tipo conhecido e `''` para quem entra ou sai da conta. `app/folha/retrato_folha.py:379` · `app/folha/retrato_folha.py:1167` · `app/folha/retrato_folha.py:1250`
+- **`datas`.** Para `furo_espelho`, `fora_da_folha` já tem `_dias` vindos de `com_dias=True` e projeta `[str(d['data']) for d in _dias]`. Quando `_c.get('dias')` é `None`, a lavra tenta `dias_ferias_com_batida` do item do export. Grava uma lista plana `AAAA-MM-DD` ou `None` quando falta forma de dia. Retratos anteriores à E2 podem vir sem `datas`. O `informativo` de rescisão tem chave própria. `app/folha/fora_da_folha.py:115` · `app/folha/fora_da_folha.py:246` · `app/folha/export.py:885` · `app/folha/retrato_folha.py:1227` · `app/folha/retrato_folha.py:1243` · `app/folha/retrato_folha.py:1255` · `app/folha/models.py:334`
+- **Retorno exato de `motivos_retencao_celula(com_dias=True)`.** Tupla `(motivos, dias)`. `motivos` é `list[str]`, sem duplicatas e ordenada lexicalmente. `dias` é `list[dict]`, em ordem cronológica, com um registro por **dia de retenção do colaborador**. As chaves são `data: datetime.date`, `motivo: str`, `veredito: str | None` e `celula_id: int | None`. `data` é o dia civil da célula, sem hora, ainda em Python. Na falta da célula, os dois últimos campos são `None`; célula existente sem veredito conserva o ID. Isento, desligado, intervalo colapsado ou nenhum dia retido resultam em `([], [])`. O modo padrão devolve só a lista de motivos. `app/folha/export.py:1214` · `app/folha/export.py:1247` · `app/folha/export.py:1265` · `app/folha/export.py:1268` · `app/folha/export.py:1273` · `app/folha/export.py:1304` · `app/escala/models.py:1696` · `app/escala/models.py:1783` · `app/escala/apps.py:5`
+
+## 2. Leitores do JSON e tolerância a chave nova
+
+`RetratoFolha.linhas` é `JSONField` sem validador de esquema por linha na declaração. `linhas_do_retrato` devolve os dicionários pelo recorte e valida o argumento `filtro`. `recortar` valida grupos e valores do filtro. A chave extra atravessa esses leitores. `app/folha/models.py:350` · `app/folha/retrato_folha.py:98` · `app/folha/retrato_folha.py:647`
+
+| Leitor | O que faz com a chave desconhecida |
+|---|---|
+| **Tela inteira, parcial, barra e contadores** | `_recorte_da_barra` abre as linhas e `_cadastro` copia o dicionário. A barra lê os eixos conhecidos; `_tabela` projeta campos explícitos e hoje passa `motivo` a `rotulo_do_motivo`. A chave extra passa pelo recorte e fica fora da saída. `app/folha/views_retrato.py:116` · `app/folha/views_retrato.py:194` · `app/folha/views_retrato.py:278` · `app/folha/views_retrato.py:324` · `app/folha/views_retrato.py:345` · `app/folha/retrato_folha.py:114` |
+| **PDF do retrato e Raio-X** | Usam `_recorte_da_barra`. O PDF extrai as células explicitamente. O Raio-X agrupa por `tipo` e projeta `motivo` e `dias`. Ambos toleram a chave e hoje a ignoram. `app/folha/views_retrato.py:388` · `app/folha/views_retrato.py:414` · `app/folha/views_retrato.py:489` · `app/folha/views_retrato.py:500` |
+| **Drawer do colaborador** | `linha_do_colab` devolve o dicionário inteiro. `o_que_fazer`, `portas_da_linha` e o template leem campos específicos. A chave extra chega à linha e hoje fica sem consumo. O drawer mostra o rótulo agregado, o tipo único e as datas planas em ISO. `app/colaboradores/views.py:994` · `app/folha/retrato_folha.py:950` · `app/folha/retrato_folha.py:1047` · `app/folha/retrato_folha.py:1112` · `app/templates/folha/_retrato_o_que_fazer.html:42` |
+| **Comandos e frescor** | `vigiar_retido_calado` lê os bloqueados e campos específicos, com tratamento próprio para ausência de `dias_sem_leitura`. Tolera a chave extra. `lavrar_retrato_folha` conta a linha recém-montada em memória, inclusive no dry-run. O frescor consulta o carimbo `lavrado_em`. `app/folha/management/commands/vigiar_retido_calado.py:30` · `app/folha/vigia_retido_calado.py:77` · `app/folha/management/commands/lavrar_retrato_folha.py:65` · `app/folha/retrato_folha.py:1413` |
+| **TXT** | A geração segue `classificar_export` → `montar_linhas_export` e valida o layout do TXT. A descarga do histórico devolve `ExportacaoDominio.conteudo`. A chave do JSON do retrato está fora das duas rotas. `app/folha/views.py:219` · `app/folha/views.py:275` · `app/folha/views.py:282` · `app/folha/export.py:719` · `app/folha/views.py:574` |
+| **Testes** | O selo da lavra compara o **conjunto exato de chaves** de uma linha e acusa a adição nessa fixture. O teste de idempotência compara duas lavras completas. O teste de lookup do drawer exige que a linha volte inteira. Os testes de período e de literal de mapa cobram a saída exibida. Os demais consumidores acima leem campos selecionados. `app/folha/tests/test_retrato_folha_quadros.py:1425` · `app/folha/tests/test_retrato_folha_contador.py:270` · `app/folha/tests/test_retrato_folha_drawer.py:140` · `app/folha/tests/test_retrato_folha_drawer.py:213` · `app/folha/tests/test_retrato_folha_periodo.py:371` |
+
+## 3. Universo diário e molde AST
+
+**Oito códigos possíveis na cópia.** `sem_celula` sai de dois caminhos do laço. Os outros sete são `espelho_furo`, `espelho_discordante`, `espelho_indefinida`, `espelho_cobranca_indevida`, `espelho_cobrado`, `espelho_nunca_bateu` e `espelho_fato_em_ausencia`, formados por `'espelho_' + c.veredito` para a tupla fechada `CelulaDia.VEREDITOS_ACUSAM`. Os protestos não cobráveis e a isenção de pausa podem suprimir o dia. `furo_espelho` é o motivo agregado do item do export. `ferias_com_batida` tem sua própria fonte de datas. `app/folha/export.py:1281` · `app/folha/export.py:1294` · `app/folha/export.py:1302` · `app/escala/models.py:1780` · `app/folha/export.py:977` · `app/folha/export.py:885`
+
+`MotivoExaustivoTest` fica em `app/folha/tests/test_retrato_folha_quadros.py:314`. `_motivos_da_fonte` faz `ast.parse` de `export.py`, localiza `classificar_export` e colhe strings não vazias de atribuições a `['motivo']` e de pares literais em dicionários. O teste antívacuidade exige pelo menos seis códigos e dois exemplos concretos. O teste de cobertura subtrai os destinos declarados e exige conjunto vazio. Para o selo diário, o mesmo molde precisa colher as chamadas a `_retem` em `_dias_sem_decisao` e resolver a concatenação pelo AST de `VEREDITOS_ACUSAM`. Assim um emissor novo sem rótulo deixa o selo vermelho. Os textos dos oito rótulos estão [nao verificado]. `app/folha/tests/test_retrato_folha_quadros.py:255` · `app/folha/tests/test_retrato_folha_quadros.py:317` · `app/folha/tests/test_retrato_folha_quadros.py:323` · `app/folha/export.py:1268` · `app/folha/export.py:1302` · `app/escala/models.py:1780` · `aval.txt:2`
+
+## 4. Janela do Q2
+
+É o intervalo inclusivo `de_data` / `ate_data` do calendário do filtro universal. `cfiltro.ler(request.GET)` valida as datas ISO e troca pontas invertidas. Uma ponta só já recorta. `_recorte_da_barra` passa os limites a `no_periodo`, que usa as `datas` planas para ajustar `dias` e `saldo` em cópia e conserva a lista integral. A janela sozinha mantém as linhas no universo. A janela da **competência**, usada pela fonte na lavra, vem de `janela_fechamento` e do corte da empresa. `app/templates/core/_filtro_campos.html:43` · `app/core/filtro.py:68` · `app/core/filtro.py:98` · `app/folha/views_retrato.py:216` · `app/folha/retrato_folha.py:1334` · `app/folha/fora_da_folha.py:146` · `app/ponto/janelas.py:54`
+
+Tela, PDF e Raio-X recebem esse recorte. Os links da lista e do Raio-X abrem o drawer com `mes` e `ano`. O drawer busca a linha integral e hoje mostra as datas ISO de toda a competência. `app/folha/views_retrato.py:230` · `app/folha/views_retrato.py:337` · `app/templates/folha/_retrato_lista.html:60` · `app/templates/folha/_retrato_raiox.html:68` · `app/colaboradores/views.py:994` · `app/templates/folha/_retrato_o_que_fazer.html:42`
+
+## 5. Matriz de RED
+
+| Caso | Asserção |
+|---|---|
+| **Linha nova** | Dar à fonte `03/11` e `05/11` com `espelho_furo` e `12/11` com `espelho_cobrado`. Conferir que a lavra preserva os três pares da chamada já feita e que o **Por quê** usa os rótulos do mapa do produtor, com cada data sob seu motivo. Cobrir também férias, cuja lista plana vem de outra fonte. `app/folha/fora_da_folha.py:115` · `app/folha/fora_da_folha.py:214` · `app/folha/retrato_folha.py:1231` · `aval.txt:2` |
+| **Linha antiga sem a chave** | Abrir a mesma linha legada. Conferir o rótulo agregado na tela e no PDF, o tipo único e as datas ISO planas no drawer. Incluir legado anterior à E2, com `datas` ausente e Dias vazio sob janela. `app/folha/views_retrato.py:291` · `app/folha/views_retrato.py:424` · `app/folha/retrato_folha.py:1118` · `app/templates/folha/_retrato_o_que_fazer.html:42` · `app/folha/tests/test_retrato_folha_periodo.py:172` |
+| **Janela que corta** | Com `05/11` a `12/11`, exigir `05/11` e `12/11` em **Por quê**, dois dias contados e a linha gravada intacta. Cobrir uma ponta só e janela que corta todos os dias. O selo atual de período compara todas as colunas textuais salvo Dias e precisa contemplar a mudança autorizada em **Por quê**. A saída textual quando sobram zero pares está [nao verificado]. `app/folha/retrato_folha.py:1334` · `app/folha/tests/test_retrato_folha_periodo.py:155` · `app/folha/tests/test_retrato_folha_periodo.py:371` · `aval.txt:2` |
+| **Motivo sem rótulo** | Retirar uma entrada do mapa ou acrescentar um emissor no produtor. O selo AST deve falhar informando o código faltante. Uma varredura vazia também deve falhar. `app/folha/tests/test_retrato_folha_quadros.py:317` · `app/folha/tests/test_retrato_folha_quadros.py:323` · `aval.txt:2` |
+| **Tela, PDF e drawer leem o mesmo** | Alimentar as três portas com a mesma linha persistida. Cobrar igualdade de rótulos e datas em tela e PDF sob a mesma query, e leitura dos mesmos pares no drawer. Cobrar zero chamadas ao retentor nesses leitores. A igualdade de apresentação e a janela no drawer dependem da pergunta 1. `app/folha/views_retrato.py:260` · `app/folha/views_retrato.py:388` · `app/colaboradores/views.py:1001` · `app/folha/tests/test_retrato_pdf.py:138` · `app/folha/tests/test_retrato_folha_drawer.py:213` |
+
+## 6. Arquivos × obras em voo
+
+| Área | Toque previsto e cruzamento |
+|---|---|
+| **Fonte e lavra** | `app/folha/export.py` para o mapa, `app/folha/fora_da_folha.py` para transportar os pares já disponíveis e `app/folha/retrato_folha.py` para persistir e ler a chave. Cruzamento informado com **CODIGO-DOMINIO-VALIDO** em `export.py` e `retrato_folha.py`, que hoje também tratam o bloqueio de cadastro e sua projeção. `app/folha/export.py:881` · `app/folha/export.py:1185` · `app/folha/fora_da_folha.py:234` · `app/folha/retrato_folha.py:379` · `app/folha/retrato_folha.py:1237` |
+| **Tela, PDF e Raio-X** | `app/folha/views_retrato.py` contém as três projeções e é o cruzamento informado com **RETRATO c1**. Os outros sítios informados da c1 são `app/relatorios/utils_audit.py` e `app/config/settings/base.py`. A ligação atual com o PDF auditável passa por `gerar_pdf_auditavel` e `get_commit_git`. `app/folha/views_retrato.py:291` · `app/folha/views_retrato.py:424` · `app/folha/views_retrato.py:443` · `app/folha/views_retrato.py:503` · `app/relatorios/pdf_base.py:135` · `app/relatorios/utils_audit.py:7` · `app/config/settings/base.py:4` |
+| **Drawer e cadastro** | Se o drawer herdar a janela, os pontos são os links da lista e do Raio-X, `app/colaboradores/views.py` e o parcial `_retrato_o_que_fazer.html`. `colaboradores/views.py` também contém a edição do código de folha. `folha/views.py` contém o fluxo do TXT. O diff efetivo das duas obras em voo e a sobreposição exata nos trechos de views e cadastro estão [nao verificado]. `app/templates/folha/_retrato_lista.html:60` · `app/templates/folha/_retrato_raiox.html:68` · `app/colaboradores/views.py:994` · `app/colaboradores/views.py:1356` · `app/templates/folha/_retrato_o_que_fazer.html:42` · `app/folha/views.py:275` |
+
+Os pontos de teste a tocar são o contrato de chaves da lavra, o molde AST, a janela, a paridade do PDF e o contrato do drawer conforme o alcance aprovado. A regra herdada é a testemunha ler a mesma autoridade, com um escritor canônico por estado. `app/folha/tests/test_retrato_folha_quadros.py:314` · `app/folha/tests/test_retrato_folha_quadros.py:1425` · `app/folha/tests/test_retrato_folha_periodo.py:371` · `app/folha/tests/test_retrato_pdf.py:138` · `app/folha/tests/test_retrato_folha_drawer.py:213` · `app/docs/LEIS.md:60` · `app/docs/LEIS.md:65`
+
+## 7. Perguntas de lei
+
+**0 para abrir a lavra e o recorte de tela/PDF.** Q1 e Q2 estão decididas no anexo. Restam dois detalhes de saída para fechar a matriz inteira. `aval.txt:2` · `CLAUDE.md:443`
+
+1. **Drawer.** A paridade pedida inclui exibir os pares sob a mesma janela, inclusive ao abrir pelo Raio-X? Se inclui, o **Por quê** pode exibir rótulo com datas no próprio valor ou os pares devem aparecer em linhas de detalhe? O corte atual e o selo exigem valor literal de mapa no bloco. `app/docs/CORTES.md:405` · `app/folha/tests/test_retrato_folha_drawer.py:213` · `app/templates/folha/_retrato_raiox.html:68`
+2. **Janela sem pares.** Para uma linha nova cujos pares ficam todos fora da janela, o **Por quê** fica vazio ou conserva o rótulo agregado, sem datas? O código atual define o vazio da coluna Dias; a saída de **Por quê** nesse caso está [nao verificado]. `app/folha/retrato_folha.py:1343` · `app/folha/views_retrato.py:291` · `aval.txt:2`
 
 ## 28/11 01:39 · sessao fb68df3fdb61 · RETRATO-PDF-CORTA-POR-QUE · verificador · origem=Code
 
@@ -1111,99 +1413,4 @@ Tela, comando e recálculo por evento usam o padrão `False`, que preserva mensa
 - **Campo com dois significados.** `nao_decide` continua significando rubrica sem afirmação no DIFF e suficiência para declarar dono na guarda. Reproduzi a chamada direta com `horas_falta` só em `NAO_DECIDE` e sem `faltas_por_dia`: gravou `0.0` com a chave em `calculador_nao_decide`. O fechamento fornece o mapa de faltas. `app/ponto/calculador/regras.py:532` `app/ponto/management/commands/diff_calculador.py:508` `app/ponto/services/dia_pago.py:59` `app/ponto/services/dia_pago.py:172` `app/ponto/services/dia_pago.py:340` `app/ponto/services/fechamento.py:946` `app/ponto/services/fechamento.py:1304`
 - **Selo e `except`.** O delta adiciona **0** cláusulas `except` e remove **0**. Na AST dos blobs de produção, `dia_pago.py` ficou em 1 e `fechamento.py` em 9. Rodei 56 controles com uma falha esperada e 41 estruturais verdes. A falha esperada local é a borda 20/21 com troca de 6x1 para 12x36. Os quatro blobs de saída coincidem com o anexo. A identidade do commit inteiro, os 100 testes da pista e a execução ORM com banco ficam **[nao verificado]** nesta cópia. `app/ponto/services/dia_pago.py:469` `app/ponto/services/fechamento.py:1320` `app/ponto/tests/feriado_um_juiz_mutantes.py:535` `app/ponto/tests/feriado_um_juiz_mutantes.py:584` `app/ponto/tests/feriado_um_juiz_mutantes.py:753` `app/ponto/tests/test_feriado_um_juiz.py:965`
 
-## 27/11 23:52 · sessao 1e4ec689109c · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-A cura da c12 está na cópia. O cabeçalho `sticky` ganhou `z-index:1` dentro do drawer. A checagem estática confirmou as camadas `10999` do drawer, `11000` do popover e `100000` da confirmação, além do `isolation:isolate` da célula. [Cabeçalho](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_drawer_generico.html:4) · [Drawer](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_drawer_generico.html:3) · [Popover](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:133) · [Confirmação](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_dialogo.html:113) · [Célula](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:68)
-
-### RED, GREEN e m12
-
-Antes da cura, a checagem estática retornou `sintaxe Python OK, caso RED presente` com o cabeçalho ainda em `position:sticky;top:0`. A sintaxe da sonda também passou no V8. A saída do RED e do GREEN no Chromium está [nao verificado]. `node`, `chromium` e `chromium-browser` estavam ausentes do `PATH` desta sessão. [Caso RED](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:594) · [Driver](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:562) [nao verificado]
-
-O caso abre o calendário diretamente no drawer de `base.html` a 1366 px. A sonda posiciona a célula de 20/11 na primeira linha e a estende à largura da grade para passar sob os dois centros na mesma rolagem. Exige rolagem efetiva e a presença da célula sob ambos os pontos antes de cobrar que `elementFromPoint` acerte o × e o título. O m12 remove somente o `z-index` inline do cabeçalho e exige os dois resultados `False`. [Sonda](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:208) · [Cenário desktop](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:716) · [MORDE](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:612)
-
-Comandos para a sessão, a partir de `app/`. O primeiro deve falhar com o template da base e passar com a cura. O segundo aplica o m12 e deve falhar pelos dois hit-tests. O terceiro exige essa falha específica. O quarto inclui o smoke existente de página e drawer. [Asserção comum](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:579) · [Smoke de clique](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:588)
-
-```sh
-classe=core.tests.test_smoke_clique_feriado_vira_trabalho.SmokeCliqueFeriadoViraTrabalhoTest
-caso="$classe.test_cabecalho_do_drawer_fica_acima_do_calendario_ao_rolar"
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m django test "$caso" --settings=config.settings.ci --noinput
-
-SMOKE_FERIADO_MUTANTE=drawer-sem-z-index-no-cabecalho PYTHONDONTWRITEBYTECODE=1 \
-  python3 -m django test "$caso" --settings=config.settings.ci --noinput
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m django test \
-  "$classe.test_MORDE_drawer_sem_z_index_no_cabecalho" --settings=config.settings.ci --noinput
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m django test "$classe" --settings=config.settings.ci --noinput
-```
-
-### Censo do drawer genérico
-
-- **Colaboradores e Retrato.** Cadastro e Espelho pela lista, Benefícios, lista e Raio-X do Retrato. As ações do Retrato também abrem vínculo, fio, calendário e decisão de ausência. [Lista](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_lista_tabela.html:16) · [Benefícios](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/beneficios_lista.html:86) · [Lista do Retrato](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/folha/_retrato_lista.html:61) · [Raio-X do Retrato](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/folha/_retrato_raiox.html:70) · [Portas das ações](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/folha/retrato_folha.py:989)
-- **Fita, postos e mapas.** A fita entra pelo Situacional e pelas pendências de disputa. Postos reinjeta o painel após operações da lista. GPS do colaborador e os mapas de localização do fio e da gestão escrevem diretamente no corpo. [Situacional](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_ps_linha.html:4) · [Disputa](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/pendencias_disputa.html:9) · [Postos](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/postos.html:96) · [GPS](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/geo-colab-map.js:38) · [Mapa do fio](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/fio_colaborador.html:310) · [Mapa da gestão](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/painel_gestao.html:580)
-- **Chamados.** Prévia de validação em lote, Raio-X com filtro por empresa, busca no Arquivo e Arquivados do atendimento, com reinjeção nas duas buscas. [Lote](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/painel_gestao.html:14) · [Raio-X](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/painel_gestao.html:629) · [Filtro](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/partials/_raiox_lente.html:5) · [Arquivo](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/painel_gestao.html:416) · [Atendimento](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/meu_atendimento.html:45) · [Reinjeção do Arquivo](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/partials/_busca_arquivados.html:68) · [Reinjeção do atendimento](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/chamados/partials/_meus_arquivados.html:48)
-- **Férias, ausências, folha e holerites.** Seção de férias, painel de ausência, Raio-X da folha e do Retrato, publicação em lote e modos do quadrinho. O formulário do lote tem o corpo do drawer como alvo HTMX. [Férias](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/ferias/lista.html:81) · [Ausências](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/ponto/ausencias.html:217) · [Folha](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/folha/index.html:26) · [Retrato](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/folha/_retrato_barra.html:73) · [Lista DP](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/holerite/lista_dp.html:12) · [Histórico de lotes](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/holerite/historico_lotes.html:7) · [Quadrinho](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/holerite/_quadrinho_celula.html:17) · [Alvo HTMX](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/holerite/_lote_drawer.html:19)
-
-Na leitura da cópia, nenhum consumidor identificado dependia de conteúdo com camada `auto` ou `0` sobre o cabeçalho. O rodapé de ausência se ancora em `bottom:0`. As listas de posto e escala têm camadas positivas próprias, assim como o modal geográfico. O lightbox é anexado ao `body`. O comportamento desses consumidores em navegador está [nao verificado]. [Rodapé](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/ponto/partials/painel_ausencia.html:286) · [Posto](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/painel_posto.html:57) · [Escala](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/painel_vinculo.html:153) · [Modal geográfico](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_geo_modal.html:2) · [Lightbox](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_drawer_generico.html:60)
-
-O commit fica com a sessão pela proibição expressa de `git commit` no despacho. A certificação cabe ao Code e ao Opus final. O clique do Ronald no calendário real de 20/11 e o recorte de 360 px no WebView seguem [nao verificado]. [L-126](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/docs/LEIS.md:147) · [Recorte do smoke](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:699) [nao verificado]
-
-```text
-OBRA: FERIADO-BOTAO-CORTADO
-LEI-AKITA: origem=app/templates/core/_drawer_generico.html:4, testemunha=hit-test do título e do × em app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:235, RED=test_cabecalho_do_drawer_fica_acima_do_calendario_ao_rolar, quem-mais-le=app/templates/base.html:399 e app/templates/base_app.html:154, juizes novos=0, padrao=n/a (instrumento)
-```
-
-## 27/11 23:44 · sessao 62872894f163 · FERIADO-BOTAO-CORTADO · verificador · origem=Code
-
-**REPROVADO para pouso.** B1 está curado para snapshots gravados com c11, e B2 está curado no desenho do smoke de página. Há dois bloqueantes no recorte acordado de `base.html` a 1366 px: o c11 põe células do calendário acima do cabeçalho fixo do drawer quando há sobreposição na rolagem, e o clique pré-pouso do Ronald no calendário real de 20/11 segue [nao verificado]. A sobreposição é um achado de leitura do CSS. Sua ocorrência em uma sessão real segue [nao verificado]. `app/static/js/popover-acao.js:28` `app/static/js/popover-acao.js:176` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:242` `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/core/_drawer_generico.html:3` `app/docs/LEIS.md:99`
-
-### 1. B1 e B2 da ver2
-
-- **B1 — curado para gravações novas e para os listeners do componente.** O HTMX 1.9.10 emite `htmx:beforeHistorySave` antes de clonar o `body`. Nesse evento, `fecha(false)` fecha o `details`, devolve o painel ao pai, restaura CSS e `tabindex` e desliga o observador, sem devolver foco ao gatilho. Na restauração, o HTMX volta a executar os scripts do fragmento, e a guarda em `window` impede uma segunda instalação dos oito listeners do popover. Um snapshot antigo que já contenha um órfão continua fora do alcance de `fecha()`, que opera sobre `atual`. Existência de snapshots antigos afetados em uso real [nao verificado]. `app/core/tests/vendor/htmx-1.9.10.min.js:1` `app/static/js/popover-acao.js:28` `app/static/js/popover-acao.js:144` `app/static/js/popover-acao.js:160`
-- **B2 — curado.** O Client Django abre `colaboradores:detalhe`, exige `detalhe.html` e entrega seu HTML ao Chromium. O próprio script da ficha carrega o calendário por HTMX. A sonda espera `afterSettle` e exige a grade com primeira coluna de `420px`, a coluna do calendário com `overflow:hidden` e o fragmento dentro dela. A resposta HTMX vem do Client por CDP na origem virtual. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:134` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:242` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:677` `app/templates/colaboradores/detalhe.html:87` `app/templates/colaboradores/detalhe.html:202` `app/templates/colaboradores/detalhe.html:215` `app/core/tests/smoke_feriado_chromium.js:68`
-
-### 2. Pintura, rolagem, foco e consumidores
-
-- **c10.** A região interna vira grid e, nas células de 132 px que oferecem a ação, as batidas vivas e retratadas, inclusive **Inverter/Retratar** e **Desfazer**, passam visualmente para depois dos badges e, quando houver, da fileira de lote, **Resolver dia** e **Pauta DP**. Ícone, ausência, chamado e selos continuam no começo da região. A mudança é por `order:1`, com os controles das marcações ainda antes dos controles da fileira no DOM. O `tabindex="0"` da região permanece. A sequência efetiva com Tab e a rolagem produzida pelo foco, quando os controles coexistem, estão [nao verificado]. Como `calendario_partial.html` sempre passa `layout='mes'`, isso alcança também Semana, Quinzena e Competência pela mesma rota. `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:99` `app/templates/colaboradores/partials/_calendario_grade.html:102` `app/templates/colaboradores/partials/_calendario_grade.html:132` `app/templates/colaboradores/partials/_calendario_grade.html:138` `app/templates/colaboradores/calendario_partial.html:50` `app/templates/colaboradores/calendario_partial.html:67`
-- **c11.** A célula vira contexto de empilhamento. Dentro dela, o gatilho fica em `z-index:1` e toda a região rolável em `0`. Aberto, o painel vai para o `body` em `11000`, acima do drawer em `10999` e abaixo da confirmação em `100000`. O efeito colateral está no **cabeçalho do drawer genérico**: ele é `sticky` com `z-index:auto`, e o corpo posterior está no mesmo contexto do drawer. Quando o conteúdo rola por baixo do cabeçalho, a célula isolada é pintada depois dele. A faixa da célula pode cobrir o título e interceptar o **×** na área de interseção. O caminho direto do Retrato injeta o calendário no corpo rolável do drawer e expõe essa combinação. O hit-test do **×** durante a rolagem está [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:97` `app/templates/core/_drawer_generico.html:3` `app/templates/core/_drawer_generico.html:8` `app/templates/core/_drawer_generico.html:25` `app/templates/folha/_retrato_o_que_fazer.html:73` `app/folha/retrato_folha.py:1019` `app/static/js/popover-acao.js:127` `app/templates/core/_dialogo.html:113`
-- **Efeito compartilhado do JS.** **Tornar dia de trabalho**, **Inverter/Retratar** e **Resolver dia/Cobrar este dia** passam a fechar antes de um snapshot HTMX, em qualquer superfície que os renderize. A fita de diagnóstico recebe esse efeito do JS, enquanto o CSS de c10/c11 exige `layout='mes'`. Furos passa só `dias` e `resumo` com `only`, portanto fica fora do novo ramo e das ações condicionadas às permissões. `app/templates/ponto/partials/_feriado_vira_trabalho.html:5` `app/templates/ponto/partials/_veredito_dia.html:5` `app/templates/ponto/partials/_veredito_dia.html:25` `app/templates/colaboradores/partials/_calendario_grade.html:134` `app/static/js/popover-acao.js:176` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/relatorios/furos.html:42`
-
-| Inclusão | Caminho na cópia |
-|---|---|
-| `popover-acao.js` | Inclusão direta em `app/templates/base.html:440` e `app/templates/base_app.html:194`. Ambas também incluem o drawer genérico em `app/templates/base.html:399` e `app/templates/base_app.html:154`. |
-| `_calendario_grade.html` | Três inclusões diretas. Calendário mensal em `app/templates/colaboradores/calendario_partial.html:67`, fita em `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`, Furos em `app/templates/relatorios/furos.html:42`. A view entrega o parcial mensal em `app/colaboradores/views.py:2010` e o diagnóstico em `app/colaboradores/views.py:2991`. |
-| Caminhos em `base.html` | Ficha em `app/templates/colaboradores/detalhe.html:1` e `:215`. Espelho do drawer em `app/templates/colaboradores/partials/painel_colaborador.html:182` e `app/templates/core/_drawer_generico.html:134`. Entradas do Espelho pela lista, Benefícios, lista e Raio-X do Retrato em `app/templates/colaboradores/partials/_lista_tabela.html:16`, `app/templates/colaboradores/beneficios_lista.html:84`, `app/templates/folha/_retrato_lista.html:61` e `app/templates/folha/_retrato_raiox.html:68`. Entrada direta no calendário pelo Retrato em `app/templates/folha/_retrato_o_que_fazer.html:73`. Entradas da fita em `app/templates/colaboradores/partials/_ps_linha.html:4` e `app/templates/colaboradores/partials/pendencias_disputa.html:9`. Furos estende `base.html` em `app/templates/relatorios/furos.html:1`. |
-| Caminhos em `base_app.html` | O drawer e o JS estão disponíveis pela casca e o parcial mensal é reaproveitável, condicionado a `ver_cadastro`. A ficha de gestor estende `base.html` literalmente. O Espelho pessoal usa `base_tpl` e tem template próprio. O smoke de `base_app.html` monta a página artificial e abre o drawer por JS com respostas do Client. Uma entrada real do WebView para a grade de gestor está [nao verificado]. `app/templates/base_app.html:154` `app/templates/base_app.html:194` `app/colaboradores/views.py:1975` `app/templates/colaboradores/detalhe.html:1` `app/templates/ponto/espelho.html:1` `app/core/context_processors.py:194` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:209` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:690` |
-
-### 3. Quem escreve e quem lê
-
-| Valor | Escrita → leitura |
-|---|---|
-| Oferta e permissão | `contexto_calendario` escreve `feriado_vira_trabalho_oferecido` a partir de feriado aplicável e célula existente com `trabalha is False`. A grade e o POST leem o mesmo booleano. `tem_acao` fornece `pode_editar_dia` e `pode_veredito` à view mensal e ao serviço da fita. A grade lê as flags, e o POST consulta `editar_escalas` de novo. `app/colaboradores/services/calendario.py:343` `app/colaboradores/services/calendario.py:791` `app/colaboradores/mixins.py:322` `app/colaboradores/views.py:1992` `app/colaboradores/views.py:2007` `app/colaboradores/services/drawer.py:157` `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/ponto/views.py:3607` `app/ponto/views.py:3624` |
-| Dados da grade | Os chamadores passam `layout`. O calendário produz `dias`, `cal_offset`, status, palavra, badges, batidas, retratadas e oferta de Resolver dia. A grade lê essas projeções. As batidas vivas são do **dia do turno** e as retratadas são agrupadas por **dia civil** em campos distintos. A ordem visual do bloco conserva a ordem das marcações dentro dele. `app/templates/colaboradores/calendario_partial.html:67` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/colaboradores/services/calendario.py:639` `app/colaboradores/services/calendario.py:673` `app/colaboradores/services/calendario.py:754` `app/colaboradores/services/calendario.py:812` `app/colaboradores/services/calendario.py:842` `app/templates/colaboradores/partials/_calendario_grade.html:124` |
-| `data-*` da grade e dos painéis | A grade escreve `data-celula-dia`, `data-mes` e `data-calendario-marcacoes`. A sonda e os selos usam a célula como âncora. `fita-mes.js` lê o mês formatado. O novo marcador de marcações é lido pelo seletor do mutante, e a ordem em produção vem do estilo inline. O parcial escreve `data-calendario-raiz`, que o HTMX lê para os swaps e a sonda lê para localizar o fragmento. Os três produtores de popover escrevem `data-popover-acao` e `data-popover-painel`. O componente e as sondas os leem como marcadores de `details` e do painel associado. `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:132` `app/static/js/fita-mes.js:11` `app/templates/colaboradores/calendario_partial.html:39` `app/templates/ponto/partials/_feriado_vira_trabalho.html:5` `app/templates/ponto/partials/_veredito_dia.html:5` `app/static/js/popover-acao.js:112` `app/static/js/popover-acao.js:162` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:77` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:259` |
-| Campos do POST | O parcial escreve `colab`, `dia` e `volta`, emite o CSRF e recebe `motivo` do administrador. `data-feriado-vira-trabalho` localiza na sonda o mesmo campo oculto `dia` que o navegador envia. O middleware lê o token, e a view valida os valores e entrega a edição à porta. `app/templates/ponto/partials/_feriado_vira_trabalho.html:7` `app/config/settings/base.py:58` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:259` `app/ponto/views.py:3584` `app/ponto/views.py:3610` `app/ponto/views.py:3632` |
-| Estado, foco e listeners | O navegador atualiza `details.open` e emite `toggle`. `abre` lê as medidas e guarda em `atual` os nós, o pai, o irmão, o CSS e o `tabindex`. `posiciona` escreve a geometria. `fecha` limpa `atual`, restaura o nó e seus atributos, e devolve foco quando cabível. O drawer emite `drawer:fechou`, o HTMX emite `beforeHistorySave`, e o componente escuta ambos. O mesmo componente escreve e lê `window.popoverAcaoInicializado`. O observador lê `isConnected` após mutações, e os demais listeners leem clique, Escape, resize, orientação e scroll. `app/static/js/popover-acao.js:28` `app/static/js/popover-acao.js:49` `app/static/js/popover-acao.js:105` `app/static/js/popover-acao.js:119` `app/static/js/popover-acao.js:144` `app/static/js/popover-acao.js:160` `app/templates/core/_drawer_generico.html:71` |
-| Snapshot HTMX | O HTMX escreve `{url, content, title, scroll}` no `htmx-history-cache`, lê a entrada pela URL, repõe o HTML e restaura a rolagem da janela. O popover altera o DOM antes da captura. A sonda lê `historyRestore.detail.item.content` e o DOM restaurado para contar órfãos. A chave de cache é do HTMX. `app/core/tests/vendor/htmx-1.9.10.min.js:1` `app/static/js/popover-acao.js:176` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:176` |
-| Instrumentação do smoke | Python escreve os dados da sonda, a marca `data-smoke-popover-script` e a resposta com `data-smoke-pagina`. A sonda lê os seletores, conta registros em `window.smokeListenersPopover` e emite as medidas. `fichaReal` na entrada escolhe o caminho, e no resultado registra o layout observado. O driver lê o mapa de GETs e transmite as medidas à asserção Python. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:59` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:124` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:147` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:249` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:521` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:541` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:689` `app/core/tests/smoke_feriado_chromium.js:52` `app/core/tests/smoke_feriado_chromium.js:68` |
-
-### 4. Mordida dos smokes e selos
-
-- **Há asserções capazes de pegar as duas falhas da ver2.** Sem a guarda, a repetição do script aumenta os três contadores instrumentados. Sem o fechamento pré-snapshot, a sonda parte de um painel no `body` e cobra zero órfãos no HTML salvo e no documento após Voltar e Avançar. `pagina-sem-ficha` contraria a exigência de `fichaReal=True`. O MORDE de recorte exige o painel dentro da viewport com hit-test falhando. Os demais MORDEs automáticos exigem a falha de viewport, gatilho ausente, drawer fechado, exceção ou sobreposição ao gatilho. O `7/7` é o resultado informado. Identidade dos sete, saídas individuais e execução da suíte inteira nesta cópia [nao verificado]. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:72` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:144` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:556` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:640` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:677`
-- **Os selos vizinhos têm sinal próprio.** A varredura distingue o exemplo estrutural ruim do bom. O selo de Resolver dia exige que o controle negativo estoure de fato. O de Retratar exige uma rota `/retratar/` entre os painéis medidos. O teste de quatro batidas exige os quatro horários em ordem, o gatilho antes da região e a célula mensal de 132 px. `app/core/tests/test_selo_popover_acao.py:88` `app/core/tests/test_selo_popover_acao.py:185` `app/core/tests/test_smoke_retratar_1366.py:167` `app/colaboradores/tests/test_feriado_botao_cortado.py:71`
-- **Lacunas que sobrevivem ao 7/7.** O mutante de empilhamento retira `isolation` e os dois `z-index` juntos, só no drawer. Nenhuma asserção mede o cabeçalho ou o **×** durante o scroll, nem a sequência com Tab. A sonda do feriado faz hit-test no submit e confere método e rota, mas o POST com motivo é coberto separadamente pelo Client Django, sem percorrer o formulário pelo Chromium. O histórico usa paginação sintética na ficha e conta três dos oito listeners. A paginação real da lista com drawer aberto, reabrir o popover depois de restaurar e o clique do Ronald em 20/11 seguem [nao verificado]. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:59` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:78` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:158` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:195` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:383` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:439` `app/templates/colaboradores/partials/_lista_tabela.html:54` `app/ponto/tests/test_kaua_feriado_pela_tela.py:149` `app/docs/LEIS.md:99`
-
-### 5. Classes e travas
-
-- **Segundo juiz, segundo escritor, relógio fora da borda, derivação paralela e campo com dois significados.** Zero introduzidos no delta fornecido. O template consome os predicados existentes. O POST passa o mesmo `agora` à consulta de oferta e à edição. A escrita de `CelulaDia` e sua trilha continuam na porta. Os marcadores novos identificam elementos ou instrumentam o ensaio. `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/templates/colaboradores/partials/_calendario_grade.html:132` `app/ponto/views.py:3622` `app/ponto/portas/celula.py:642` `app/ponto/portas/celula.py:665` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:521`
-- **Selo/RED e ordem de trava.** Há mordida para B1 e B2, com a lacuna de empilhamento acima. A porta lê `trabalha` com `select_for_update` dentro de `atomic`, aplica `so_se_folga` e só então grava. A ordem operacional suíte inteira → revisão final → pouso, e o smoke humano pré-pouso, seguem [nao verificado]. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:556` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:640` `app/ponto/portas/celula.py:642` `CLAUDE.md:421` `app/docs/LEIS.md:99`
-- **Cláusulas novas no delta:** **0 `except` Python e 0 `catch` JavaScript**. A rejeição da sonda e do driver vai para `motivo`, que precisa ser nulo na asserção. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:464` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:541` `app/core/tests/smoke_feriado_chromium.js:101` `app/core/tests/smoke_feriado_chromium.js:112`
-
-### 6. Lista do pouso [nao verificado]
-
-- **360 px.** A coluna inicial fixa de 420 px já excede a viewport da ficha. No drawer, a largura é limitada a `92vw` e o calendário conserva sete colunas e 132 px por célula. Visibilidade do gatilho, rolagem das marcações e acionabilidade do painel nessa largura [nao verificado]. `app/templates/colaboradores/detalhe.html:87` `app/templates/colaboradores/detalhe.html:202` `app/templates/core/_drawer_generico.html:3` `app/templates/colaboradores/partials/_calendario_grade.html:64` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:649`
-- **`base_app`.** Ficam a superfície real do WebView, a passagem pelo bootstrap e os cliques reais de página e drawer. A cobertura disponível é em Chromium desktop, a 1366, com a casca de ensaio e o bootstrap PWA desativado. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:651` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:690` `app/core/tests/smoke_feriado_chromium.js:92`
-- **Comparação com `main 59600163c` [nao verificado].** A cópia veio sem `.git`, e o delta fornecido começa em `c44771b4a`. Esse delta permite atribuir o novo empilhamento ao c11 e constatar que os 132 px já estavam no lado anterior do diff. A equivalência com `59600163c` e a identidade Git da cópia ficam [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:68`
-
-_8828 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8830 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
