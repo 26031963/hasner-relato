@@ -11012,6 +11012,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 12:55:58 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:9e2944f799 (102 car., na trilha privada)
+
 **28/11 12:22:18 disjuntor (NEGOU B1)** -- agente aba405eb7fba4f7a8 -- ToolSearch -- alvo sha1:da39a3ee5e (0 car., na trilha privada)
 
 **28/11 12:22:04 disjuntor (NEGOU B1)** -- agente aba405eb7fba4f7a8 -- Bash -- alvo sha1:5ae1807be5 (160 car., na trilha privada)
@@ -15266,6 +15268,10 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 12:41 colhido RAZAO-DA-SOBRA cruza1236/r.rc (12:40 rc 0): perimetro cruza PAR c1v13/c1v16 (nao pousou) e E1/DESLIGADO/E4C; veredito NAO vai a construtor; travada por: PAR (pre-requisito na ordem viva, PAR vem antes). Lei 0.
 - 12:41 DESPACHO CRON-15-SOMBRA-CABE estado1242: medida por etapa do sombra.sh (1o passo do aval VEZ) -> Codex leitura.
 - 12:43 colhido CRON-15-SOMBRA-CABE estado1242/r.rc (12:42 rc 0): medida inicial e dossie ja colhidos (p95 serie 5095 s x teto 2200 s; 4 trilhas 3997 s); travada por: PERGUNTA DE DESENHO no topo (Ronald); Codex sem passo andavel; lei 0.
+- 12:54 colhido CUSTO-DE-COORDENACAO f1v2/v7/pouso/suite.rc (12:54 rc 0): inteira de pouso VERDE na copia 9895efeac: OK (skipped=43, expected failures=41), Ran 18325 = Found 18328 - 3 QUARENTENA-PODADO, rc 0. Proximo: push dos 177 (aval TESTE-DO-ESTRANHO-R0 item 3, VM livre 12:54) + opus verificador em paralelo; pouso da v7 so depois do rc do push (nao commitar durante o push).
+- 12:55 NOTA PUSH-2811 logs/PUSH-2811/push.rc (12:55 rc 1): push barrado pelo regua_tickets -- placar do topo do TICKETS.md datado 25/11 (o mundo diz 28/11, idades +3 dias); cura = bin/tickets_placar.sh --escrever (derivado), commit e nova tentativa.
+- 12:56 NOTA PUSH-2811 push.rc (12:55 rc 1, 2a tentativa): placar OK; barrado pelo test_lei_protege_sitio -- range toca turnos_do_colab (L-085), recalcular_fechamento_mes (L-113), gerar_estado.gerar (L-120) sem commit citando. DESPACHO leis1257 -> Codex verificador (respeita/viola por lei); citar so depois do veredito.
+- 13:00 colhido PUSH-2811 leis1257/r.rc (12:59 rc 0): L-085 RESPEITA (e216b756a, turnos.py:1920), L-120 RESPEITA (a8623781e/8ea3d525c, gerar_estado.py:283-321); L-113 "VIOLA" DESCARTADO pela sessao: o achado e hipotese ("a escrita generica PODE mudar sem aviso"); o unico ato de frota do range (FUJ-FECHA apply 11) teve DIFF publicado ANTES (RELATO ## 11:53) e aviso ao DP (logs/FERIADO-UM-JUIZ/aviso_fernando.md), e fechamento.py:604-612 registra o recalculo de exportada citando a L-113; aviso e obrigacao do ATO, nao do sitio. Descarte vai ANEXO ao proximo opus que tocar fechamento (CODEX 5b). Cita as 3 leis num commit e repete o push.
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
