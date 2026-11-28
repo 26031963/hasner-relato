@@ -1,7 +1,244 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 01:56** · publicado em **28/11/2026 01:57** (UTC-3)
+> Ultima resposta processada: **28/11/2026 02:29** · publicado em **28/11/2026 02:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 02:29 · sessao a7747a4bca90 · CODIGO-DOMINIO-VALIDO · leitura · origem=Code
+
+```python
+# SONDA_ARVORE=/caminho/da/copia/app bin/sonda_leitura.sh --sombra /caminho/s12.py
+# O executor monta /app e /sonda em leitura (bin/sonda_leitura.sh:226-240).
+# O executor prepara credencial e grants, copia a sonda para um temporário e
+# grava a trilha (bin/sonda_leitura.sh:115-143,153-181,216-218,245-250).
+
+import logging
+import sys
+from collections import Counter
+from datetime import date
+
+from django.conf import settings
+from django.db import connection, transaction
+from django_tenants.utils import schema_context
+
+# Guarda da sombra (app/config/settings/sombra.py:29,49-50,60).
+if (
+    getattr(settings, "HASNER_SOMBRA", False) is not True
+    or connection.settings_dict["NAME"] != "sombra"
+):
+    raise SystemExit(1)
+
+
+def falha_sem_dados(tipo, _valor, _traceback):
+    print(f"S12_FALHA|{tipo.__name__}", file=sys.stderr)
+
+
+# Suprime logs e mensagens de falha que podem conter nomes
+# (app/ponto/services/fechamento.py:1327-1332, app/folha/export.py:23-33).
+logging.disable(logging.CRITICAL)
+sys.excepthook = falha_sem_dados
+
+from colaboradores.models import Empresa
+from folha.export import (
+    classificar_export,
+    janela_competencia,
+    montar_linhas_export,
+    validar_layout_dominio,
+)
+from ponto.services.fechamento import recalcular_fechamento_mes
+
+
+def tipo_layout(erro):
+    # Rótulos derivados dos tipos fixos do validador (app/folha/export.py:266-307).
+    if erro.startswith("reg10 campo "):
+        campo = erro.split(" ", 3)[2]
+        return f"reg10_campo_{campo}_nao_numerico"
+    for prefixo, tipo in (
+        ("reg10 len ", "reg10_len"),
+        ("reg10 const ", "reg10_const"),
+        ("reg11 soma ", "reg11_soma_8792"),
+        ("reg11 len ", "reg11_len"),
+        ("reg11 malformado:", "reg11_malformado"),
+        ("reg11 data invalida:", "reg11_data_invalida"),
+        ("linha desconhecida:", "linha_desconhecida"),
+    ):
+        if erro.startswith(prefixo):
+            return tipo
+    raise SystemExit("S12_FALHA|tipo_layout_desconhecido")
+
+
+mes, ano = 11, 2026
+erros_por_col = []
+
+# Schema e READ ONLY do molde (bin/sonda_leitura.sh:239-240,
+# bin/gate_cobranca.sh:23-25). REPEATABLE READ mantém o mesmo snapshot
+# nas remontagens de diagnóstico (app/folha/export.py:720-754).
+with schema_context("juliani"), transaction.atomic(durable=True):
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION READ ONLY, ISOLATION LEVEL REPEATABLE READ")
+
+    # Lookup por pk da entrega (app/folha/views.py:123).
+    empresa = Empresa.objects.get(pk=2)
+
+    # Guarda da janela do anexo (app/folha/export.py:47-51, app/ponto/janelas.py:36-57).
+    if janela_competencia(empresa, mes, ano) != (date(2026, 10, 21), date(2026, 11, 20)):
+        raise SystemExit(2)
+
+    # Mesma chamada da entrega (app/folha/views.py:215-217,
+    # app/ponto/services/fechamento.py:468-471,1152-1160,1333-1334).
+    fechamentos = list(
+        recalcular_fechamento_mes(
+            mes, ano, empresa_id=empresa.pk, somente_leitura=True, retornar_objeto=True
+        ).values()
+    )
+
+    # Mesmo veredito da entrega (app/folha/views.py:219-220, app/folha/export.py:774-798).
+    itens = classificar_export(empresa, mes, ano, fechamentos=fechamentos)
+
+    # Mesmos itens e fechamentos em memória (app/folha/views.py:273-276,
+    # app/folha/export.py:699-755).
+    linhas, entra_ids = montar_linhas_export(
+        empresa, mes, ano, itens=itens, fechamentos=fechamentos
+    )
+
+    # A view valida quando há linhas (app/folha/views.py:278-283,
+    # app/folha/export.py:266-307).
+    erros_layout = validar_layout_dominio(linhas) if linhas else []
+
+    if erros_layout:
+        posicao = 0
+        erros_conferidos = []
+        for fech in fechamentos:
+            pk = fech.colaborador_id
+            if pk not in entra_ids:
+                continue
+
+            # Atribui pelo pk do fechamento. O montador concatena os blocos
+            # na ordem recebida, e cada bloco não vazio começa com reg10
+            # (app/folha/export.py:34-45,215-221,726-755).
+            bloco, _ = montar_linhas_export(
+                empresa, mes, ano, itens=itens, fechamentos=[fech]
+            )
+            fim = posicao + len(bloco)
+            if linhas[posicao:fim] != bloco:
+                raise SystemExit("S12_FALHA|blocos_txt_divergentes")
+            posicao = fim
+
+            # O erro de soma se refere ao reg10 seguido dos reg11
+            # (app/folha/export.py:266-307).
+            for erro in validar_layout_dominio(bloco):
+                erros_conferidos.append(erro)
+                erros_por_col.append((tipo_layout(erro), pk))
+
+        if posicao != len(linhas) or erros_conferidos != erros_layout:
+            raise SystemExit("S12_FALHA|atribuicao_layout_divergente")
+
+    transaction.set_rollback(True)
+
+# Campos do veredito (app/folha/export.py:847-859,876-891).
+# O motivo None é impresso como "None".
+contagens = Counter((i["status"], str(i["motivo"])) for i in itens)
+for (status, motivo), total in sorted(contagens.items()):
+    print(f"CONTAGEM|{status}|{motivo}|{total}")
+
+invalidos = sorted(
+    (i["colaborador_id"], i["status"], i["motivo"])
+    for i in itens
+    if i["motivo"] == "codigo_dominio_invalido"
+)
+for pk, status, motivo in invalidos:
+    print(f"ITEM|col{pk:03d}|{status}|{motivo}")
+
+col1041 = next((i for i in itens if i["colaborador_id"] == 1041), None)
+if col1041 is None:
+    print("COL1041|ausente")
+else:
+    print(f"COL1041|{col1041['status']}|{col1041['motivo']}")
+
+print(f"TXT|linhas={len(linhas)}|erros_layout={len(erros_layout)}")
+for tipo, pk in erros_por_col:
+    print(f"ERRO|{tipo}|col{pk:03d}")
+
+# entra_ids conta o veredito, inclusive aptos sem linha (app/folha/export.py:725,734-755).
+entra = len(entra_ids)
+print(
+    f"S12|itens={len(itens)}|entra={entra}|fora={len(itens) - entra}"
+    f"|codigo_dominio_invalido={len(invalidos)}"
+    f"|col1041_presente={int(col1041 is not None)}"
+    f"|linhas={len(linhas)}|erros_layout={len(erros_layout)}"
+)
+
+# Premissas
+# - A cópia corresponde ao HEAD f0d213df9 e é a montada em /app [nao verificado].
+# - A sombra tem empresa pk=2, janela esperada e integração Domínio ativa [nao verificado].
+# - Execução na sombra, cobertura do recálculo e resultados de S12, inclusive
+#   presença e motivo de col1041 [nao verificado].
+# - Paridade dos dados da sombra com produção e liberação da entrega pela view
+#   [nao verificado].
+```
+
+## 28/11 02:27 · sessao 3c40eae37ee0 · CODIGO-DOMINIO-VALIDO · construtor · origem=Code
+
+O diff altera somente as três docstrings solicitadas. A comparação com `f0d213df9` confirmou que o texto fora delas é idêntico à base e que o parágrafo da O256 foi restaurado literalmente. Suíte e RED [não verificado]. [cadastro.py:54](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/services/cadastro.py:54), [retrato_folha.py:90](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/retrato_folha.py:90), [retrato_folha.py:1100](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/retrato_folha.py:1100)
+
+```diff
+diff --git a/app/colaboradores/services/cadastro.py b/app/colaboradores/services/cadastro.py
+index 196fb6eaf..e6e9c608c 100644
+--- a/app/colaboradores/services/cadastro.py
++++ b/app/colaboradores/services/cadastro.py
+@@ -51,7 +51,12 @@ NOME_NO_MODELO = {'codigo_folha': 'codigo_dominio'}
+ 
+ 
+ def codigo_dominio_e_numerico(codigo):
+-    """O código, após strip(), contém um ou mais dígitos ASCII."""
++    """Responde se o código contém um ou mais dígitos ASCII.
++
++    O chamador entrega o código já sem espaços após `strip()` em `colaboradores/views.py`
++    ou `folha/export.py`. O limite de 43 caracteres da linha do layout em `folha/export.py`
++    não é conferido aqui.
++    """
+     return codigo.isascii() and codigo.isdigit()
+ 
+ 
+diff --git a/app/folha/retrato_folha.py b/app/folha/retrato_folha.py
+index e53c46436..cce2d3312 100644
+--- a/app/folha/retrato_folha.py
++++ b/app/folha/retrato_folha.py
+@@ -87,7 +87,10 @@ def rotulo_do_motivo(motivo):
+ 
+ 
+ def detalhe_do_motivo(linha):
+-    """Complemento do rótulo com o código da linha lavrada."""
++    """Para `codigo_dominio_invalido`, exibe o VALOR GRAVADO da chave `codigo` da linha lavrada,
++    quando presente, com o prefixo fixo `codigo Dominio = ` e sem gerar texto, conforme o aval
++    CODIGO-DOMINIO-VALIDO-2811-0115 para o Retrato e o PDF.
++    """
+     if linha.get('motivo') == 'codigo_dominio_invalido' and linha.get('codigo'):
+         return f"codigo Dominio = {linha['codigo']}"
+     return ''
+@@ -1094,8 +1097,14 @@ def o_que_fazer(linha, hoje=None):
+     escolhe nada: cada linha e' (chave GRAVADA -> juiz que ja existe -> rotulo do mapa que ja
+     existe).
+ 
+-    Os valores sao ROTULOS de mapa, as mesmas palavras da coluna "Por quê" e das pilulas da barra.
+-    O complemento do motivo é um dado da linha lavrada, exibido ao lado do rótulo.
++    NENHUM TEXTO SE GERA (ordem Ronald 13/10 01:3x, literal: *"montado SO das chaves gravadas na
++    linha do retrato (motivo, dono, tipo, datas), sem texto gerado"*). Os valores sao ROTULOS de
++    mapa -- as MESMAS palavras da coluna "Por quê" e das pilulas da barra --, nunca frase montada.
++    A frase e' o item (4) da mesma ordem (o Haiku por cima deste bloco), e escrever prosa aqui seria
++    fazer o (4) fora de ordem.
++    Pelo aval CODIGO-DOMINIO-VALIDO-2811-0115, a exceção é o campo `detalhe` do item 'motivo', que
++    exibe o VALOR GRAVADO da chave `codigo` da linha lavrada, com prefixo fixo e sem gerar texto,
++    conforme a exibição do código gravado no Retrato e no PDF.
+ 
+     VALOR VAZIO CONTINUA APARECENDO, com o travessao: linha sem `dono` gravado (retrato legado) ja
+     tem resposta pelos juizes (`fio_da_linha` cai no `_fio_cru`), e o que nao tem resposta e' um
+```
+
+**Casos RED e mutantes para o opus**
+
+- **P1.** No Quem Cobrar, exigir que a coluna Folha mostre o rótulo de `codigo_dominio_invalido`. Mutante proposto: remover a entrada do mapa local para que a coluna mostre a chave crua. [relatorios/views.py:1729](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/relatorios/views.py:1729), [relatorios/views.py:1739](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/relatorios/views.py:1739)
+- **P2.** No Raio-X do Retrato, renderizar uma retenção com `codigo` gravado como `VIGIA` e exigir `codigo Dominio = VIGIA`. Mutante proposto: remover a renderização de `l.detalhe_motivo` do template. [folha/retrato_folha.py:94](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/retrato_folha.py:94), [templates/folha/_retrato_raiox.html:73](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/templates/folha/_retrato_raiox.html:73)
+- **Rescisão + `VIGIA`.** Para um colaborador que sai pelo módulo de rescisão e tem código `VIGIA`, exigir `status='fora'` e `motivo='rescisao_modulo_proprio'`. Mutante proposto: mover a guarda de código inválido para antes da guarda de rescisão. [folha/export.py:876](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/folha/export.py:876), [folha/export.py:886](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/export.py:886)
 
 ## 28/11 01:56 · sessao b70766398533 · CODIGO-DOMINIO-VALIDO · verificador · origem=Code
 
@@ -1379,65 +1616,4 @@ Rodei os três módulos localmente com o harness em memória e substitutos de `S
 - **Derivação paralela e campo com dois significados.** Persistem as divergências anteriores. Períodos e FT usam o mapa da jornada quando fornecido, enquanto o atraso de ligação usa a data civil de entrada. `nao_decide` sinaliza rubrica sem afirmação no DIFF e também satisfaz a declaração de dono na guarda. Efeito em produção **[nao verificado]**. `app/ponto/services/dia_pago.py:62`, `app/ponto/services/dia_pago.py:109`, `app/ponto/services/dia_pago.py:228`, `app/ponto/services/credito_parcial.py:73`, `app/ponto/management/commands/diff_calculador.py:508`
 - **Selo sem mordida.** Os três mutantes novos morreram nas asserções indicadas, com as lacunas remanescentes registradas no item 1. `app/ponto/tests/feriado_um_juiz_mutantes.py:189`, `app/ponto/tests/feriado_um_juiz_mutantes.py:802`
 
-## 28/11 00:00 · sessao 6e7123508798 · FIM-DE-SEMANA-JA · leitura · origem=Code
-
-**FIM-DE-SEMANA-JA.** O recorte traz sete pares em cinco disputas fechadas e uma cobrança indevida no chamado 38343. A cópia local não tem metadados Git para confirmar o hash `59600163ccc9cffb8f3ae148beede7cd7866ae86`. Identidade com o HEAD informado, estado atual dos casos e resultado de qualquer operação em produção [nao verificado]. `lista_por_par.md:3–8` `S2_r.md:14`
-
-## 1. Quem decide
-
-`ChamadoColaborador._decisao_do_fechamento` é a autoridade das duas recusas. `reconciliar()` executa a decisão e `reconciliaria()` consulta a mesma decisão em seco. A ordem é motor de estados, premissa do furo, conversa do pai e pergunta viva. Assim, `dia_furado_para_a_folha` pode ser a primeira recusa mesmo quando também há pergunta viva. `app/chamados/models.py:661–715`
-
-- **`pergunta_viva_na_competencia_aberta`.** O gate busca perguntas sem validação ancoradas no chamado. A âncora é `chamado_destino`, o filho, ou `disputa.chamado` quando falta destino. Ele filtra pela competência do dia e consulta o C6 com o **estado que o filho teria após fechar**. O C6 lê a sequência de decisões, a resposta, a tranca, a célula e o lastro. Em um ramo do lastro, lê também o estado do filho. `fechada_em` da disputa, por si só, não encerra a pergunta. Se todas as vivas podem ser reatadas a outra cobrança legítima do mesmo colab-dia, o próprio gate reaponta e grava a trilha. Se alguma não pode, recusa. `app/chamados/models.py:349–414` `app/chamados/models.py:429–464` `app/chamados/juizes.py:835` `app/chamados/juizes.py:1499–1589`
-- **`dia_furado_para_a_folha`.** O gate lê o chamado de furo e seu dia forte, depois `premissa_regularizada(para='folha')`. Entram justificativa aprovada, célula, veredito do admin, ata e lâmpadas dos marcos, cobertura de ausência e os fatos de jornada quando a célula não responde. Também aceita agrupamento sob pai vivo ou deduplicação se outra cobrança for a sobrevivente do C8. O gate de conversa do pai é separado e protege respostas sem veredito. `app/chamados/models.py:718–739` `app/chamados/models.py:783–837` `app/chamados/models.py:1318–1382` `app/chamados/juizes.py:508–569`
-- **Retenção da folha.** `classificar_export` consulta `motivos_retencao_celula` pelo espelho. O leitor usa a lavra e os protestos da célula, com as exceções previstas. A S4 mede pares do C2 no universo de chamados vivos. A prova de saída da retenção exige conferir o dia na Folha além de conferir o par na S4. `app/folha/export.py:977–982` `app/folha/export.py:1282–1316` `app/folha/fora_da_folha.py:125–165` `S4_r.md:1`
-
-## 2. Portas existentes e seus efeitos
-
-| Porta | Quem aciona, trilha e repetição | Batida, célula, escala/vínculo e dinheiro gravado |
-|---|---|---|
-| **Responder à pergunta**, no app ou PWA | O próprio colaborador autenticado. O POST confere dono e C6 mesmo com a disputa fechada. Grava `RESPOSTA` com usuário, texto e instante, preserva os atos anteriores e registra o motivo da pergunta no log. O app também registra o resultado do POST. Reenvio pode gravar outro ato. Uma resposta de hora pode seguir viva até o veredito. `app/api/views.py:2607–2664` `app/chamados/views.py:1228–1279` `app/chamados/services/disputa_emissao.py:1529–1611` `app/chamados/juizes.py:1521–1533` | **Batida não. Célula sim**, se a resposta gerar ausência ou disparar a reconciliação do dia. **Escala/vínculo não. Dinheiro gravado não diretamente**. Falta ou atestado pode alterar o insumo da folha e invalidar sua projeção. `app/chamados/services/disputa_emissao.py:1591–1596` `app/chamados/services/materializacao.py:1010–1046` `app/ponto/signals.py:148–152` `app/ponto/services/ausencia.py:581–597` |
-| **Validar** no Fio do admin, no cartão do filho | Gestor autenticado com permissão contextual no chamado. O Fio checa a pergunta exata, a âncora e o C6 sob trava, e passa `sem_reabrir=True` para a fechada. Exige resposta com texto e instante. Grava `VALIDACAO` com usuário, instante e texto, além de `val_perg_disp` e `validar_viva_em_disputa_fechada` quando o ato fica. A sequência preserva os atos anteriores. Já validada é recusada sem regravar. `app/chamados/views.py:24–38` `app/chamados/views.py:869–875` `app/chamados/utils.py:47–72` `app/chamados/services/fio.py:694–768` `app/chamados/services/validacao.py:164–178` `app/chamados/services/validacao.py:755–765` `app/chamados/services/validacao.py:825–843` | **Batida sim, pode plantar. Célula sim. Escala/vínculo não** no sentido de editar o vínculo ou o tipo de escala, mas o aceite de folga pode gravar `FolgaDia`. **Dinheiro gravado sim**, pode recalcular e persistir `FechamentoMensal`. O materializador pode alcançar irmãs já validadas. `app/chamados/services/validacao.py:587–602` `app/chamados/services/validacao.py:777–830` `app/chamados/services/materializacao.py:2040–2061` `app/chamados/services/materializacao.py:2240–2301` `app/ponto/services/fechamento.py:1184–1192` |
-| **Resolver dia**, no calendário, para um colab-dia | Admin com `regularizar_batida`. O botão exige dia passado, estado elegível e condição de último recurso. O serviço seleciona as perguntas de fato vivas do dia, inclusive de disputa fechada. Grava `admin_decidiu`, `SILENCIO` com autor, instante e motivo, e a lavra com antes/depois. O carimbo e a lavra iguais são idempotentes. Um novo POST aceito pode repetir o log do despachante. `app/ponto/views.py:3517–3556` `app/colaboradores/services/calendario.py:94–122` `app/colaboradores/services/calendario.py:493–508` `app/templates/colaboradores/partials/_calendario_grade.html:134` `app/ponto/services/veredito_celula.py:176–212` `app/ponto/services/veredito_celula.py:351–363` `app/chamados/models.py:3372–3386` `app/ponto/portas/celula.py:1113–1141` | **Batida sim** em `trabalhou`, se houver correção ou plantio. **Batida não** em `faltou` ou `justificado`, que podem criar ausência aprovada. **Célula sim. Escala/vínculo não. Dinheiro gravado sim**, se houver plantio com recálculo. A ausência pode invalidar a projeção, com efeito nos valores quando rederivados. `app/ponto/services/veredito_celula.py:317–357` `app/ponto/registro_batida.py:176–198` `app/ponto/services/ausencia.py:154–195` `app/ponto/services/ausencia.py:597` `app/ponto/services/fechamento.py:1822–1848` |
-| **Encerrar** (`resolvido`) no chamado local | Gestor autenticado com permissão contextual. No detalhe local, o chamado precisa estar sem GLPI. A mensagem com motivo fica no fio com o usuário. `estado_chamado` grava antes/depois e via `admin`. A transição exige premissa regularizada para chamado de furo e recusa pergunta viva ancorada ou disputa própria aberta que segure. Repetir o status é recusado, mas a mensagem já terá sido gravada e pode duplicar. `app/chamados/views.py:358–370` `app/chamados/views.py:418–421` `app/chamados/services/verbos.py:132–136` `app/chamados/services/acoes_chamado.py:292–331` `app/chamados/models.py:140–211` `app/chamados/models.py:304–308` `app/chamados/catalogo/motor.py:148–149` | **Batida não diretamente. Célula sim**, pelo rejulgamento disparado pela mudança de estado. **Escala/vínculo não. Dinheiro gravado não diretamente.** Se a cascata fechar outra disputa aberta, pode retomar regularização já confirmada e alcançar batida e recálculo. Esse efeito em 38343 [nao verificado]. `app/chamados/signals.py:91–118` `app/chamados/signals.py:123–146` `app/chamados/signals.py:189–218` `app/chamados/services/disputa_emissao.py:2221–2225` `app/chamados/services/regularizacao_ext.py:77–78` `app/ponto/registro_batida.py:176–198` |
-| **`supra_juiz --executar`**, retratação por lavra | Processo autorizado a rodar `manage.py` no tenant. Exige lavra `cobranca_indevida` com código, preserva conversa sem veredito, exclui a órfã de regeneração e passa pela retratação canônica e pelos gates de fechamento. Grava `estado_chamado` antes/depois com ator de processo `sistema:supra_juiz` e nota `retratado` com o motivo. Já encerrado sai da seleção de vivos. A unidade pode rejeitar justificativa vinculada. O menor recorte disponível é empresa e data, sem filtro de chamado ou colab. `app/ponto/management/commands/supra_juiz.py:61–74` `app/ponto/management/commands/supra_juiz.py:110` `app/ponto/management/commands/supra_juiz.py:246–295` `app/chamados/reconciliador.py:558–620` `app/core/observ.py:22–32` | **Batida não diretamente. Célula sim**, pelo cartório. **Escala/vínculo não. Dinheiro gravado não diretamente.** Vale a mesma ressalva de cascata do fechamento do chamado. `app/chamados/reconciliador.py:602–620` `app/chamados/signals.py:123–146` `app/chamados/signals.py:189–218` |
-
-Em **Resolver dia**, a tentativa de reconciliar os chamados vem antes da lavra `admin`. A premissa pode recusar nessa primeira tentativa. A lavra posterior faz o coletor da premissa aceitar a decisão humana, mas o fechamento do filho ainda precisa ser comprovado. A fila de eventos da célula volta a tentar os casos elegíveis. `app/ponto/services/veredito_celula.py:207–212` `app/ponto/services/veredito_celula.py:351–357` `app/chamados/models.py:1345–1349` `app/ponto/portas/celula.py:1130–1135` `app/chamados/reconciliador.py:1513–1533`
-
-## 3. Pergunta viva em disputa fechada
-
-**Há portas sem reabrir.** O colaborador pode responder pelo POST autenticado, o gestor pode validar uma resposta no Fio, e **Resolver dia** pode encerrar uma pergunta de fato com decisão comprovada do dia. O app põe as vivas de disputas fechadas no histórico, e o Fio web corrente do colaborador carrega as abertas. O teste da API comprova o aceite do POST de uma pergunta do histórico. A existência de um botão alcançável e de sessão utilizável para estes casos [nao verificado]. `app/api/tests/test_hx_api_estado.py:54–65` `app/chamados/services/pergunta_no_app.py:80–92` `app/chamados/services/fio.py:287–291` `app/chamados/services/fio.py:721–768` `app/ponto/services/veredito_celula.py:176–202`
-
-**SEM PORTA de expiração avulsa da muda.** A expiração por silêncio saiu do comando de arquivamento. `reconciliar_perguntas_orfas` é vigia, e o escritor por lâmpada seleciona disputas abertas. `admin_encerra` é método sem ação de tela localizada e, para disputa já fechada, encontra a guarda de fechamento antes de carimbar a pergunta. `app/chamados/management/commands/arquivar_competencia_encerrada.py:61–64` `app/ponto/management/commands/reconciliar_perguntas_orfas.py:1–8` `app/chamados/reconciliador.py:1166–1173` `app/chamados/models.py:2094–2102` `app/chamados/models.py:2210–2217` `app/docs/BACKLOG.md:1635`
-
-A **Reabertura administrativa** existe no cartão do pai. Staff ou `admin_ti`, com permissão contextual, escolhe motivo do catálogo e escreve justificativa de pelo menos 20 caracteres. A porta escolhe a fechada mais recente daquele pai, consome uma das duas reaberturas, cria nova pergunta, pode reabrir o chamado pai e grava nota assinada e log com motivo e contador. A nota guarda a justificativa. O log de reabertura não traz campos estruturados de antes/depois. Repetir o POST pode selecionar outra fechada do mesmo pai. O ato direto tem **batida não, célula possível pelo sinal do chamado, escala/vínculo não, dinheiro gravado não**. O refechamento comum continua sujeito ao C7, que recusa viva ou resposta sem veredito. **Reabrir e refechar não é uma saída para dar baixa na muda.** `app/templates/chamados/partials/modal_fio.html:418–443` `app/chamados/services/fio.py:694–719` `app/chamados/services/acoes_disputa.py:274–339` `app/chamados/models.py:2396–2431` `app/chamados/models.py:2122–2145` `app/chamados/signals.py:189–218`
-
-## 4. Roteiro para as oito ocorrências
-
-| Ocorrência | Porta recomendada |
-|---|---|
-| **col296 · 10/11 · 38343** | **Encerrar**, no chamado exato, pelo gestor autorizado, com o motivo factual da cobrança indevida. Confirmar primeiro que o seletor está disponível e que as guardas permitem `resolvido`. **Validar** trata uma resposta de pergunta. **Cancelar** é evento de sistema e o seletor humano o recusa. Se **Encerrar** recusar, a baixa desse PK fica **SEM PORTA comprovada no recorte**. O `supra_juiz --executar` tem alcance sobre outros chamados da empresa no dia. `S2_r.md:14` `app/templates/chamados/detalhe_local.html:374–405` `app/chamados/models.py:160–211` `app/chamados/views_cobrar.py:160–172` `app/chamados/catalogo/motor.py:139–149` `app/ponto/management/commands/supra_juiz.py:61–74` |
-| **col719 · 01/11 · 7751 → 36403** | **Responder**, pelo próprio col719, se a pergunta exata estiver alcançável no canal existente. A S4 indica que falta a resposta. **SEM PORTA** de baixa administrativa avulsa com a evidência fornecida. Se a resposta continuar viva aguardando veredito, o gestor usa **Validar** no mesmo filho. `lista_por_par.md:4` `app/api/tests/test_hx_api_estado.py:54–65` `app/chamados/services/fio.py:721–768` `app/chamados/services/validacao.py:755–758` |
-| **col719 · 03/11 · 7817 → 36796** | **Responder**, nas mesmas condições, para a pergunta deste filho. Alcance real [nao verificado]. `lista_por_par.md:5` `app/chamados/views.py:1228–1279` |
-| **col719 · 05/11 · 7888 → 37210** | **Responder**, nas mesmas condições, para a pergunta deste filho. Alcance real [nao verificado]. `lista_por_par.md:6` `app/chamados/views.py:1228–1279` |
-| **col935 · 18/11 · 8272 → 40002** | **Resolver dia**, individual, pelo admin com `regularizar_batida`, se a UI oferecer o dia e houver evidência para o veredito. **SEM PORTA** para baixar só a pergunta e liberar um dia cuja premissa ainda acusa. Oferta e veredito cabível [nao verificado]. `lista_por_par.md:7` `app/colaboradores/services/calendario.py:94–122` `app/ponto/views.py:3517–3546` `app/chamados/models.py:793–837` |
-| **col976 · 22/10 · 7385 → 34061 · três pares** | **Um Resolver dia** para 22/10, sob as mesmas condições. Conferir o conjunto de perguntas de fato vivas desse dia antes do ato, pois a porta opera no colab-dia. **SEM PORTA** para baixar os três pares mantendo uma premissa de furo que ainda acusa. IDs das três perguntas, oferta e veredito cabível [nao verificado]. `lista_por_par.md:8` `app/ponto/services/veredito_celula.py:176–212` `app/chamados/models.py:793–837` |
-
-1. **Antes dos atos**, obter a foto nominal em Sombra atualizada, empresa 2, competência 11. Registrar PK da pergunta, destino, C6, resposta válida ou não, `reconciliaria()` e lavra. Em seguida, tratar 38343 pelo chamado exato, os três dias de col719 pela resposta e os dois dias com recusa de premissa pelo calendário, conforme as condições da tabela. Essa ordem é operacional. A decisão do gate é por chamado e dia. `S4_r.md:1–3` `app/chamados/models.py:677–715` `app/chamados/models.py:793–837`
-2. **Depois de 38343**, conferir a transição com motivo no fio e a célula de 10/11. A mudança de status dispara o cartório em melhor esforço. **O col296 sai da marca `cobranca_indevida` da S2 quando a lavra deixar de trazer essa marca.** `COBRANCA_SEM_FURO` exige cobrança viva que ainda protesta, dia de trabalho, realizado suficiente e todas as células casadas. O encerramento de 38343 pode retirar esse insumo. Outra cobrança, outra retenção ou falha de rejulgamento no caso concreto [nao verificado]. `S2_r.md:14` `app/chamados/signals.py:189–218` `app/ponto/services/cartorio.py:1498–1508` `app/ponto/services/cartorio.py:1905–1913` `app/ponto/supra_juiz.py:476–484` `app/escala/models.py:1624` `app/folha/export.py:1282–1305`
-3. **Repetir S4 e S2 na foto posterior.** Para os sete pares, usar o coletor **`S4|C2` embutido em `S4_r.md`**, que requer o fonte original de `sonda_S1.py`. O bloco colado com o nome `s4_sonda.py` imprime **`S3|C1`** e serve para detalhar dias. Comparar por `(chamado, pergunta)` e conferir o ato gravado, o C6 e o estado do filho. Para a S2, repetir a coleta S1 que sustenta seu C1 e conferir a lavra de 10/11 do col296. Por fim, confirmar o dia em `dias_que_seguram` e a linha do colaborador em `classificar_export`. Disponibilidade do fonte original, nova coleta e efeito final no TXT [nao verificado]. `S4_r.md:1–3` `S2_r.md:7–14` `app/chamados/models.py:677–681` `app/folha/fora_da_folha.py:125–165` `app/folha/export.py:977–989`
-
-## 27/11 23:59 · sessao f5b9cdfcd0a7 · - · - · origem=Ronald (tmux)
-
-Para o **col296, chamado 38343**, a menor porta nominativa é o detalhe do chamado local. Um gestor autenticado da área registra o motivo no campo de resposta e seleciona **Encerrar** (`resolvido`). A ação exige chamado local sem GLPI e, para chamado de furo, exige premissa regularizada. Recusa se houver disputa própria aberta com guarda ou pergunta viva ancorada. Status exato, vínculo com GLPI, permissões efetivas e resultado para o #38343 ficam [nao verificado]. `app/chamados/views.py:24,35–38,358–370,418–421,547–552`, `app/chamados/utils.py:47–72`, `app/templates/chamados/detalhe_local.html:374–405`, `app/chamados/services/verbos.py:132–136`, `app/chamados/models.py:140–211`.
-
-A trilha é a nota com motivo e usuário, os logs `responder`/`status` e `estado_chamado` com antes/depois, via `admin` e autor. Repetir o status é recusado, mas a nota precede a transição e pode duplicar. Efeitos diretos do encerramento e do rejulgamento usual: batida **não**, célula **sim** pelo cartório, escala/vínculo **não**, dinheiro gravado **não**. Existe cascata condicional se o S143 fechar outra disputa e ela destravar regularização externa confirmada, com possível alteração em batida e recálculo. Incidência em #38343 [nao verificado]. `app/chamados/services/acoes_chamado.py:292–331`, `app/chamados/models.py:304–308,466–469`, `app/chamados/catalogo/motor.py:148–149`, `app/chamados/signals.py:112–146,189–218`, `app/chamados/services/disputa_emissao.py:2206–2225`, `app/chamados/services/regularizacao_ext.py:170–226`, `app/ponto/registro_batida.py:176–198`.
-
-`validar_inline` valida perguntas vivas respondidas em disputa aberta. `cancelado` é rejeitado na transição humana, mesmo para `admin_ti`; o `cancelar()` interno tem chamadores de comandos de revisão de vínculo/régua. O command `supra_juiz --executar` é a alternativa específica de sistema para lavra `cobranca_indevida`, mas o menor recorte por flags é empresa × dia. Ele preserva conversa sem veredito, cobrança órfã de regeneração e as guardas da retratação/reconciliação. Assina como `sistema:supra_juiz`, com `estado_chamado` antes/depois e nota `retratado` com motivo. O fechamento idempotente só atua em vivos e a retratação pode rejeitar justificativa pendente vinculada. `app/chamados/views_cobrar.py:145–172`, `app/chamados/catalogo/motor.py:139–156`, `app/chamados/models.py:839–858`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:58`, `app/escala/management/commands/fechar_avisos_regua_na_lista.py:48`, `app/ponto/management/commands/supra_juiz.py:61–67,110–118,190–212,246–295`, `app/chamados/reconciliador.py:558–620`, `app/core/observ.py:22–32,94–137`.
-
-**S2:** a baixa faz diferença quando o cartório relavra a célula. O status do chamado integra a impressão e `COBRANCA_SEM_FURO` exige chamado vivo entre os que ainda protestam. Após o ato, conferir o #38343 fora de `VIVOS`, a lavra de 10/11 sem essa marca e o dia ausente de `dias_que_seguram`. Outras retenções do col296 e efeito no TXT [nao verificado]. `app/ponto/services/cartorio.py:490–504,1432–1449,1498–1508,1905–1932`, `app/ponto/supra_juiz.py:476–484`, `app/escala/models.py:1624,1780`, `app/folha/export.py:1282–1303`, `app/folha/fora_da_folha.py:115–165`.
-
-Para órfãs de disputa fechada, a **validação no fio** admite uma viva fechada sem reabertura, desde que respondida. Os endpoints de resposta aceitam dona/dono + C6 viva sem exigir disputa aberta, mas a UI web exclui as fechadas e a consulta do app coloca a muda de disputa fechada no histórico. `Resolver dia`, quando oferecido e respaldado pelos fatos, pega perguntas não conversacionais de colab/dia sem filtrar disputa aberta e as carimba com autor e `SILENCIO`; pode mexer nas batidas e decide o dia inteiro. O `reconciliar` dos filhos vem antes da lavra administrativa, então verificar depois o chamado e a retenção independentemente do C6. `app/chamados/services/fio.py:287–291,721–769`, `app/chamados/services/validacao.py:755–758`, `app/chamados/views.py:1228–1279`, `app/api/views.py:2607–2658`, `app/chamados/services/pergunta_no_app.py:68–92`, `app/ponto/services/veredito_celula.py:180–212,317–363`, `app/colaboradores/services/calendario.py:94–104`.
-
-O método `admin_encerra` exige motivo e só atende silêncio, com trava para resposta sem veredito. A ausência de tela para ele está documentada. Reabrir pela UI acrescenta pergunta de conversa, e o fechamento ordinário volta a recusar C6 viva. `app/chamados/models.py:2122–2146,2184–2217`, `app/docs/BACKLOG.md:1635`, `app/chamados/services/acoes_disputa.py:274–339`.
-
-_8834 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8836 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
