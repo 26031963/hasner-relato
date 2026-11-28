@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 07:07:50.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (318.4 MB). Acoes na janela: **1635**.
+**Medido em 28/11/2026 07:14:43.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (318.4 MB). Acoes na janela: **1626**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:13:37 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 07:13:34 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bxd5h0a2a.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
+| 07:08:30 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 07:08:26 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b8vjehpf7.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
 | 07:03:22 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 07:03:21 | Bash | Escreve o brief da F1 v5 | `cd ~/saas-hasner; mkdir -p logs/CUSTO-DE-COORDENACAO/f1v2/v5; cat > logs/CUSTO-DE-COORDENACAO/f1v2/v5/brief.md <<'EOF' PAPEL: construir. OBRA CUSTO-DE-COORDENACAO F1 v5 (continua a v4, parada pelo DISJUNTOR B1 por trabalhar em rascunho fora da wt). Copia: /home/ronald/wt-custo-de-coordenacao-f1-013201 (HEAD 7ce2048c4). ESCREVER DIRETO NA COPIA desde o primeiro minuto; nada de rascunho fora dela. B ...` |
 | 07:03:07 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b23mz7a1q.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
@@ -1632,16 +1636,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:18:07 | Bash | Localiza as linhas que o aval responde | `cd ~/saas-hasner; /bin/grep -n 'FERIADO-L097\\|FERIADO-K1\\|^lei:.*REGISTRA-ACHADOS\\|^lei:.*DESLIGADO-PORTA' app/docs/RELATO.md \| cut -c1-400 \| head -20; tail -3 app/docs/PROMPTS.md \| cut -c1-300` |
 | 19:16:36 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 19:16:33 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b09oycsdo.output; date +%H:%M` |
-| 19:11:29 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 19:11:25 | Bash | Registra c10, cancelamento e g13 | `cd ~/saas-hasner; H=$(date +%H:%M); printf -- "- %s colhido FERIADO-UM-JUIZ escalonamento opus (somente leitura): CURA-C10, DECIDIDO PELA LEI L-095 (LEIS.md:113) + L-110 \| contestavel -- origem fechamento.py:1329-1334 (c5 pos set_rollback da lavra oraculo no atomic do mensal+motor; base 59600163c so logava; conferido pela sessao nos dois); guarda por dia em dia_pago.py:322; literal de pontualidad ...` |
-| 19:10:52 | Bash | Relança a suíte inteira do BOTÃO | `cd ~/saas-hasner; W=/home/ronald/wt-codex-feriado-botao-cortado-112417; git -C $W status --porcelain --ignored \| head -5; git -C $W log --oneline -1; G=logs/FERIADO-BOTAO-CORTADO/g13; mkdir -p $G; sed 's#g12#g13#g' logs/FERIADO-BOTAO-CORTADO/g12/lanca.sh > $G/lanca.sh; setsid bash $G/lanca.sh </dev/null >/dev/null 2>&1 & sleep 25; head -c 600 $G/g.log` |
-| 19:10:48 | Bash | Lê o lançador da suíte do BOTÃO | `cd ~/saas-hasner; ls logs/FERIADO-BOTAO-CORTADO/g12/; cat logs/FERIADO-BOTAO-CORTADO/g12/*.sh 2>/dev/null \| head -20` |
-| 19:10:23 | Bash | Escreve o brief c10 e lança o Codex construtor | `cd ~/saas-hasner; Q=logs/FERIADO-UM-JUIZ/c10; mkdir -p $Q; cp logs/FERIADO-UM-JUIZ/c9/FERIADO-UM-JUIZ-2711-1210.txt logs/FERIADO-UM-JUIZ/c9/LEIS-2711-1610.txt $Q/; cp logs/FERIADO-UM-JUIZ/ver7/r.md $Q/ver7_r.md; cat > $Q/q.md <<'EOF' PAPEL: construtor. OBRA FERIADO-UM-JUIZ, volta c10 sobre 597fdc40d (c9). Laudo REPROVADO anexo ver7_r.md. Decisao (escalonamento opus, conferida pela sessao): DECIDID ...` |
-| 19:10:03 | Bash | Limpa a cópia e lê a espera | `cd ~/saas-hasner; W=/home/ronald/wt-codex-feriado-um-juiz-152427; for d in app/staticfiles app/.ruff_cache app/.hypothesis app/.mypy_cache app/logs app/media; do rmdir "${W:?}/$d"; done; git -C $W status --porcelain --ignored \| head -5; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/banqib4ko.output; ls logs/FERIADO-UM-JUIZ/c9/s/` |
-| 19:09:53 | Bash | Cancela a suíte superada da c9 | `cd ~/saas-hasner; docker kill loving_mendel >/dev/null; kill 3835648 3836122 3836124 3838684 2>/dev/null; sleep 3; pgrep -af 'wt-codex-feriado-um-juiz-152427' \| grep -v pgrep \| cut -c1-120; bash bin/trava_teste.sh --quem; W=/home/ronald/wt-codex-feriado-um-juiz-152427; for d in app/staticfiles app/.ruff_cache app/.hypothesis app/.mypy_cache app/logs app/media; do [ -d "${W:?}/$d" ] && ls -ld "${ ...` |
-| 19:09:48 | Bash | Confirma que o container é da suíte c9 | `cd ~/saas-hasner; docker inspect loving_mendel --format '{{range .Mounts}}{{.Source}} {{end}}' \| tr ' ' '\n' \| /bin/grep -c wt-codex-feriado-um-juiz-152427` |
-| 19:09:43 | Bash | Localiza a suíte da c9 | `cd ~/saas-hasner; tail -c 300 logs/FERIADO-UM-JUIZ/c9/s/s.log; echo; ls logs/FERIADO-UM-JUIZ/c9/s/; pgrep -af 'wt-codex-feriado-um-juiz-152427' \| grep -v pgrep \| cut -c1-200; docker ps --format '{{.Names}} {{.Status}}' \| head` |
-| 19:09:38 | Bash | Confere a cópia e o lançador da c9 | `cd ~/saas-hasner; W=/home/ronald/wt-codex-feriado-um-juiz-152427; git -C $W status --porcelain \| head; cat logs/FERIADO-UM-JUIZ/c9/lanca.sh; ls logs/FERIADO-UM-JUIZ/c9/` |
-| 19:09:33 | Bash | Confere o acoplamento da sombra ao pago | `cd /home/ronald/wt-codex-feriado-um-juiz-152427; sed -n 1318,1340p app/ponto/services/fechamento.py; echo ----; git show 59600163c:app/ponto/services/fechamento.py \| sed -n 1314,1328p; /bin/grep -n 'L-095' ~/saas-hasner/app/docs/LEIS.md \| head -3 \| cut -c1-300` |
-| 19:08:09 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 19:08:05 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bi21lwf5t.output; date +%H:%M` |
