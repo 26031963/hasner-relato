@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 12:41:09.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (377.2 MB). Acoes na janela: **1889**.
+**Medido em 28/11/2026 12:51:36.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (377.4 MB). Acoes na janela: **1897**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:51:07 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
+| 12:51:03 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bf0v8ejj9.output; date +%H:%M; cd ~/saas-hasner; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 3` |
+| 12:46:30 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
+| 12:46:26 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bdyernrn3.output; date +%H:%M; cd ~/saas-hasner; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 3; ls logs/CUSTO-DE-COORDENACAO/f1v2/v7/pouso/` |
+| 12:43:03 | Bash | Marca e espera | `cd ~/saas-hasner; HH=$(date +%H:%M); python3 - "$HH" <<'EOF' import re,sys h=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO\|RED-CERTO\|PUXA) ',l)) L[idx+1:idx+1]=[f'- {h} colhido CRON-15-SOMBRA-CABE estado1242/r.rc (12:42 rc 0): medida inicial e dossie ja colhidos ( ...` |
+| 12:42:55 | Bash | Resumo CRON-15 | `cd ~/saas-hasner; head -n 7 logs/CRON-15-SOMBRA-CABE/estado1242/r.md \| cut -c1-500 \| sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g'` |
+| 12:42:51 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b8ukwiv26.output; date +%H:%M; cd ~/saas-hasner; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 3` |
+| 12:42:14 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
+| 12:42:10 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/br7609e8m.output; date +%H:%M; cd ~/saas-hasner; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 3` |
+| 12:41:32 | Bash | Marca e espera única | `cd ~/saas-hasner; HH=$(date +%H:%M); python3 - "$HH" <<'EOF' import re,sys h=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO\|RED-CERTO\|PUXA) ',l)) L[idx+1:idx+1]=[f'- {h} DESPACHO CRON-15-SOMBRA-CABE estado1242: medida por etapa do sombra.sh (1o passo do aval VEZ) - ...` |
+| 12:41:24 | Bash | Codex leitura CRON-15 | `cd ~/saas-hasner; H=$(git rev-parse HEAD); O=CRON-15-SOMBRA-CABE; D=logs/$O/estado1242; mkdir -p $D /bin/grep -n "^\| $O" app/docs/BACKLOG.md \| cut -c1-2500 > $D/backlog.txt; /bin/grep -n "$O" app/docs/RELATO.md \| tail -n 12 \| cut -c1-600 > $D/relato.txt ls -t logs/sombra*.log logs/sombra/*.log 2>/dev/null \| head -n 3 > $D/logs_sombra.txt; for f in $(head -n 2 $D/logs_sombra.txt); do /bin/grep ...` |
+| 12:41:12 | Bash | Marca e procura próximas obras | `cd ~/saas-hasner; HH=$(date +%H:%M); python3 - "$HH" <<'EOF' import re,sys h=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') idx=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO\|RED-CERTO\|PUXA) ',l)) L[idx+1:idx+1]=[f'- {h} colhido RAZAO-DA-SOBRA cruza1236/r.rc (12:40 rc 0): perimetro cruza PAR c1v13/c1v16 (nao pousou ...` |
 | 12:41:06 | Bash | Resumo do censo de cruzamento | `cd ~/saas-hasner; head -n 7 logs/RAZAO-DA-SOBRA/cruza1236/r.md \| cut -c1-500 \| sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g'` |
 | 12:41:02 | Bash | Resultado da espera | `tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b516qp3qo.output; date +%H:%M; cd ~/saas-hasner; python3 bin/rc_sem_colher.py 2>&1 \| tail -n 3` |
 | 12:37:50 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -n 6` |
@@ -1895,7 +1907,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:52:11 | Bash | Rearma a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 00:52:08 | Bash | Confere se a suíte do CRON-15 está viva | `cd ~/saas-hasner; ls -la --time-style=+%H:%M:%S logs/CRON-15-PRAZO-0412/g/; tail -c 200 logs/CRON-15-PRAZO-0412/g/g.log; echo; uptime` |
 | 00:52:04 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/brr4q8duf.output` |
-| 00:46:59 | Bash | Rearma a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
-| 00:46:54 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bey9jnzwr.output` |
-| 00:41:49 | Bash | Rearma a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
-| 00:41:46 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bonxmr25i.output` |
