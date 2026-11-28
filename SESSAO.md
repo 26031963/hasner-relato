@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 03:23:49.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (304.7 MB). Acoes na janela: **1787**.
+**Medido em 28/11/2026 03:30:45.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (304.7 MB). Acoes na janela: **1781**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:27:03 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 03:26:59 | Bash | Lê a espera e o andamento dos selos | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b94ckgw1x.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; R=logs/CUSTO-DE-COORDENACAO/f1v2/pasta/RESUMO.txt; wc -l < $R; tail -1 $R` |
+| 03:24:03 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
 | 03:21:54 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 03:21:48 | Bash | Procura rodada da pasta na base para comparar | `cd ~/saas-hasner; ls logs/CUSTO-DE-COORDENACAO/f1v2/ \| head -40; ls logs/CUSTO-DE-COORDENACAO/f1v2/pasta \| head -5` |
 | 03:21:44 | Bash | Lê a espera e os selos vermelhos | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bbhqpir5n.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; R=logs/CUSTO-DE-COORDENACAO/f1v2/pasta/RESUMO.txt; wc -l < $R; awk '$2!=0' $R` |
@@ -1788,12 +1791,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:35:21 | Bash | Lê o que acordou a espera e a carga | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bxs6z62ja.output; cat /proc/loadavg` |
 | 15:31:06 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 15:31:02 | Bash | Lê o que acordou a espera e a carga | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bx2lcruqf.output; cat /proc/loadavg` |
-| 15:25:57 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 15:25:52 | Bash | Registra leis e colheitas no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys;H=sys.argv[1] p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[7].startswith('lei: E1C-LIMITE-COMERCIAL') L.insert(8,f"lei: RAMO2-B-EM-TURNO-QUE-CRUZA c2v ({H}, recibo logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2v/recibo.md, commit 368363b16 na wt-221946) -- (2) limite da HE depois do marco: L-024 (660) x Art.58/59 (480); a c ...` |
-| 15:25:35 | Bash | Linhas do topo do RELATO | `cd ~/saas-hasner; /bin/grep -nE "^(PAREI\|lei:\|DECIDIDO\|MODO-COMUM\|ESPERANDO)" app/docs/RELATO.md \| head -20 \| cut -c1-160` |
-| 15:25:13 | Bash | Renomeia a wt da c4 e relança | `cd ~/saas-hasner; O=$(cat logs/FERIADO-UM-JUIZ/c4_wt.txt); N=/home/ronald/wt-codex-feriado-um-juiz-${O##*-}; git worktree move $O $N && echo $N > logs/FERIADO-UM-JUIZ/c4_wt.txt; git -C $N log --oneline -1 \| cut -c1-20; D=logs/FERIADO-UM-JUIZ/c4; sed -i "s#$O#$N#g" $D/lanca.sh; /bin/grep -c "$N" $D/lanca.sh; mv $D/wrapper.out $D/wrapper_rc2.out; rm -f $D/r.rc; setsid $D/lanca.sh >/dev/null 2>&1 </ ...` |
-| 15:24:53 | Bash | Lança construtor c4 do FERIADO em cópia nova | `cd ~/saas-hasner; D=logs/FERIADO-UM-JUIZ/c4; mkdir -p $D; W=$(cat logs/FERIADO-UM-JUIZ/c4_wt.txt); cp logs/AVAIS-1515/FERIADO-UM-JUIZ-2711-1210.txt logs/AVAIS-1515/FERIADO-K1-MOTOR-2611.txt $D/; cp logs/FERIADO-UM-JUIZ/ver3/r.md $D/ver3_r.md; cp logs/FERIADO-UM-JUIZ/ver3/leis.txt $D/ cat > $D/q.md <<'EOF' # FERIADO-UM-JUIZ c4 -- papel construtor, sobre c3 29488e3bb (copia nova; a c3 segue sob a su ...` |
-| 15:24:26 | Bash | Cria wt nova da c4 e lê o portão da 11 no export | `cd ~/saas-hasner; T=$(date +%H%M%S); W=/home/ronald/wt-codex-feriado-um-juiz-c4-$T; git worktree add --detach $W 29488e3bb 2>&1 \| tail -1; git -C $W log --oneline -1; echo $W > logs/FERIADO-UM-JUIZ/c4_wt.txt; /bin/grep -n "def particionar_ft\\|>= *11\\|competencia_promove\\|VIGENCIA" /home/ronald/wt-codex-feriado-um-juiz-121621/app/folha/export.py \| head -8; sed -n 740,752p /home/ronald/wt-codex ...` |
-| 15:24:06 | Bash | Localiza o texto do aval FERIADO-UM-JUIZ | `cd ~/saas-hasner; ls logs/AVAIS-1515/ \| /bin/grep -i feriado; cat logs/AVAIS-1515/FERIADO-UM-JUIZ-2711-1210.txt 2>/dev/null \|\| /bin/grep -n "FERIADO-UM-JUIZ-2711-1210" app/docs/PROMPTS.md \| cut -c1-1500` |
-| 15:24:01 | Bash | Texto do aval do FERIADO e do K1 | `cd ~/saas-hasner; ls logs/FERIADO-UM-JUIZ/ver3/; cat logs/FERIADO-UM-JUIZ/ver3/FERIADO-UM-JUIZ-2711-1210.txt 2>/dev/null \| head -c 3000; echo; sed -n 3016p app/docs/PROMPTS.md \| cut -c1-900` |
-| 15:23:53 | Read |  | `/home/ronald/saas-hasner/logs/FERIADO-UM-JUIZ/ver3/r.md` |
