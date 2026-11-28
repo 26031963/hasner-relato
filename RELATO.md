@@ -11021,6 +11021,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 16:39:27 disjuntor (NEGOU B1)** -- agente a976bd7e62a4c1324 -- Bash -- alvo sha1:b5bfdd68f7 (341 car., na trilha privada)
+
 **28/11 14:48:22 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:03cb5e7e4a (45 car., na trilha privada)
 
 **28/11 13:14:25 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:30362ca5d5 (209 car., na trilha privada)
@@ -15419,6 +15421,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 16:22 colhido FERIADO-SEM-LIMITE-DO-SUPRIMIDO c7/vizinhos2.rc (16:22 rc 0): lido -- ponto folha core Ran 8315 OK (skipped=29, expected failures=30), 0 FAIL/ERROR (catraca curada); inteira c7 lancada job 1128162237_477c2671 sobre 477c26714 (wt limpa); DIFF de frota comp 11 fica para depois do clear (nao abre ato com CLEAR devido)
 - 16:29 colhido C7-TELA-ADMIN-ENCERRA c2/inteira3/g.rc (16:25 rc 0): lido -- cert.rc 0 CERTIFICA de3ba88bc; mesmo assim c2 NAO pousa (ver1 BLOQUEIA 3, linha acima); vale so como base verde da c3
 - 16:29 NOTA ROTA-PISTA3-2811-1625: bin/suite.sh::_rota_pista so troca o host pista->pista3 nos 6 ssh (diff conferido: nenhuma linha de logica/estimativa); selo bin/tests/test_suite_rota_pista.sh RED com o ssh falso que so casava 'pista' (pede_sem_id e foto_avisada_na_limpa por OUTRA razao), ajustado SO o host do ssh falso (linha 42) -> rc 0 com todos os mutantes acusados; test_suite_sh.sh rc 0; CLAUDE.md sec.3 'VAI A PISTA 2' -> PISTA3. PISTA3-NA-ESTEIRA fica so com o que sobrar (pista_certifica.sh intocado)
+- 16:39 colhido E4C-F5-INSTANTE canario/a5/inteira2/g.rc (16:38 rc 1): lido -- pista3 Ran 18339 FAILED (failures=1) SO o smoke core.tests.test_smoke_clique_feriado_vira_trabalho::test_MORDE_gatilho_ausente ('Chromium encerrou' 2x); P1 curado (vocabulario passou); cert.rc 1; pela ORDEM-VIVA-2811-1400 (A) refeita na pista 2: inteira2p2 job 1128163912_09dc7235, julga la
 - 13:4x NOTA O30-F3-CONSTRUIR: raia wt-o30f3-pouso2-133746 = main 2ec537701 + merge --no-ff ac4ad27ce (fe5335be7, merge limpo; delecao declarada test_anexar_documento.py, c14 L-111); ERRO-BOBO levado as 2 linhas uteis do topo (o B3 so le la); inteira pre-opus lancada (logs/O30-F3-CONSTRUIR/pouso2/suite.rc); depois opus final (mao unica).
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
