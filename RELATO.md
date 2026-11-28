@@ -11012,6 +11012,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 12:05:56 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:6e2f61dcc0 (219 car., na trilha privada)
+
 **28/11 11:57:31 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:e73ad0acd5 (285 car., na trilha privada)
 
 **28/11 11:46:39 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:58ee70a294 (347 car., na trilha privada)
@@ -15239,6 +15241,9 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 11:59 colhido FERIADO-UM-JUIZ apply11/apply11.rc (11:55 rc 0): 4/4 empresas rc 0, hash exportadas IGUAL; prova de frota na secao 11:59.
 - 11:59 NOTA ORDEM-VIVA-2811-1200 (C): vaga.1/2/3.json de pid morto (1022287, 151668, 3228814; rc 0 fechados) arquivados em logs/vagas/historico/ e removidos; leases vaga.1..4 e meta.lock intactos.
 - 11:59 NOTA ROTA VM E4C-F5-INSTANTE aceite a3 (container compassionate_wu, cpuset 4-7): aceite RED-CERTO com mutantes roda copia NAO publicada; pista3 so roda sha publicado (refs/pista) -- ROTA VM: aceite de canario sobre wt local.
+- 12:02 DESPACHO ORDEM-VIVA-2811-1200 (vagas): FERIADO-BOTAO-FAIXA mapa+censo -> Codex leitura logs/FERIADO-BOTAO-FAIXA/mapa/r.rc | RAMO2-B c2x e RAMO2-HERANCA-VAO c1: dossie+brief prontos, construcao no motor = opus, travada por: vaga opus (CUSTO F1 v7 em curso) | CRON-15 d1 passo 2 (familias D, perguntas de lei 0): cura em bin/sombra.sh = opus, travada por: vaga opus | ORFAS (2)(3): bin/ + chamados/models.py = opus, travada por: vaga opus.
+- 12:03 DESPACHO CUSTO-DE-COORDENACAO-OBRA-PRONTA-ACORDA: mapa+censo (rc_sem_colher, juizes de ordem/job/PAREI, selo do marcador, casos RED descritos) -> Codex censo logs/CUSTO-DE-COORDENACAO-OBRA-PRONTA-ACORDA/censo/r.rc | construcao bin/ + selo -> opus (vaga opus: CUSTO F1 v7 sem construcao pendente, so colheita da pasta e commit pela sessao).
+- 12:06 RED-CERTO E4C-F5-INSTANTE canario a2+a3 (37 testes, chamados.tests e4c_f5_c4_red/o261e_f2/e3_porta_A) ok: HEAD FAILED 114, censo base 120, a2 85, cura a2+a3 OK; 30 mutantes (M1/M2/X/C e 9 campos str de ligacao) TODOS mortos (1 a 48 falhas cada); aceite em VM scratchpad/aceiteA3 rc 0 12:01, arvore restaurada ao fim. Proximo: montar a copia com a cura a2+a3 e opus verificador.
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
