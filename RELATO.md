@@ -11009,6 +11009,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 09:36:56 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:42594cf36d (216 car., na trilha privada)
+
 **28/11 09:34:17 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:85fbb22d66 (109 car., na trilha privada)
 
 **28/11 09:34:14 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:24e8a34e47 (53 car., na trilha privada)
@@ -15106,6 +15108,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 09:33 DECIDIDO PELA LEI L-099 + HJ-090 (7): FDS-FERIAS-COM-BATIDA-PORTA a linha ferias_com_batida oferece as DUAS portas existentes (BATIDA: Calendario do dia/retratar; CADASTRO: Ferias do colaborador/corrigir), na fonte portas_da_linha, sem juiz novo nem dinheiro | contestavel; reversao = git revert do pouso
 - 09:33 DESPACHO FDS-FERIAS-COM-BATIDA-PORTA c1: codigo -> Codex construtor (wt-codex-fds-ferias-porta sobre 1e935acde, empilhada na RETRATO pelo arquivo em comum retrato_folha.py) logs/FDS-FERIAS-COM-BATIDA-PORTA/c1/r.rc | RED -> opus (vaga opus ocupada pela DESLIGADO c4; entra em seguida)
 - 09:26 DESPACHO FDS-FERIAS-COM-BATIDA-PORTA: (1) porta que decide + (2) desenho da cura no Retrato + (3) numero da classe -> Codex sonda+leitura s1 (logs/FDS-FERIAS-COM-BATIDA-PORTA/s1/r.rc) | RED -> opus | cura do Retrato -> Codex construtor depois do s1. PUXADA FDS-FERIAS-COM-BATIDA-PORTA -> vaga Codex livre
+- 09:37 colhido FDS-FERIAS-COM-BATIDA-PORTA c1/r.rc (09:36 rc 0): Codex construtor, 18 linhas em retrato_folha.py::portas_da_linha (ferias_com_batida -> Calendario do 1o dia gravado + Ferias do colaborador; sem datas -> so Ferias), conferido (rotas existem, 0 except, le `datas` gravado); commit na wt; 3 casos RED descritos em c1/r.md -> opus quando a vaga liberar (DESLIGADO c4 nela)
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
