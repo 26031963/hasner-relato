@@ -1,7 +1,383 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 10:58** · publicado em **28/11/2026 10:59** (UTC-3)
+> Ultima resposta processada: **28/11/2026 11:01** · publicado em **28/11/2026 11:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 11:01 · sessao 364dc2fa8f54 · E4C-F5-INSTANTE · leitura · origem=Code
+
+# E4C-F5-INSTANTE · lote A · volta a2
+
+Na cópia, os três testes da cura6c ficaram **verdes**, o RED novo do censo ficou **vermelho** e os quatro REDs dos selos ficaram **vermelhos**. Com os diffs abaixo em memória, os oito ficaram verdes. Cada mutante foi aplicado isoladamente e derrubou por asserção os testes indicados na tabela. A execução usou `unittest.TestCase` e os analisadores AST da cópia. Identidade Git, execução de `486a1ffc4~1`, suíte Django e Ruff [nao verificado]. `app/core/censo_escritas.py:300–319,421–454,475–485,506–522` · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112,136–156,222–232` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
+
+Nos blocos de mutação, retire o primeiro caractere de cada linha e junte as linhas de cada lado com `\n`, sem quebra final. Confira `fonte.count(original) == 1` e aplique `fonte.replace(original, mutado, 1)`. `censo_base` designa a troca apenas de `app/core/censo_escritas.py` pela revisão histórica pedida. Os resultados históricos abaixo são esperados [nao verificado].
+
+## 1. Censo da projeção
+
+### `test_RED_registrar_com_projecao_por_variavel_e_acusado`
+
+Insira em `CensoLeAProjecaoTest`, antes de `test_os_dois_saves_da_porta_ficam_visiveis`, contagem **1**. **Hash verde. `censo_base` esperado vermelho [nao verificado].** `app/chamados/tests/test_e4c_f5_c4_red.py:1551–1562,1576` · `app/core/censo_escritas.py:442–454`
+
+```python
+    def test_RED_registrar_com_projecao_por_variavel_e_acusado(self):
+        fonte = (
+            'from chamados.models import DecisaoPergunta as DP\n'
+            'def f(p, linhas):\n'
+            "    proj = (p, ['respondida_em'])\n"
+            '    DP.registrar(linhas, projecao=proj)\n'
+        )
+        self.assertEqual(self._varrer(fonte), [
+            (4, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]'),
+        ])
+```
+
+**`M1-tupla`**, contagem **1**. A chamada continua com a chave `registrar`, mas perde o achado porque `proj` deixa de ser resolvida. `app/core/censo_escritas.py:426–429,444–447`
+
+```diff
+-        if isinstance(valor, ast.Name):
+-            _, atribuicoes = self._escopos_da_projecao[-1]
+-            valor = atribuicoes.get(valor.id)
+-        if not isinstance(valor, ast.Tuple) or len(valor.elts) != 2:
++        if not isinstance(valor, ast.Tuple) or len(valor.elts) != 2:
+```
+
+### `test_RED_salvar_a_projecao_direto_fora_da_porta_e_acusado`
+
+Insira em `CensoLeAProjecaoTest`, antes de `test_os_dois_saves_da_porta_ficam_visiveis`, contagem **1**. **Hash verde. `censo_base` esperado vermelho [nao verificado].** Cada subteste varre sua própria fonte e exige a tupla inteira. Assim os dois casos da linha 4 exercitam caminhos diferentes sem compartilhar a mesma chave `(linha, entidade)` numa varredura. `app/chamados/tests/test_e4c_f5_c4_red.py:1557–1562,1576` · `app/core/censo_escritas.py:421–440,506–522`
+
+```python
+    def test_RED_salvar_a_projecao_direto_fora_da_porta_e_acusado(self):
+        casos = (
+            ('funcao avulsa',
+             'from chamados.models import DecisaoPergunta as DP\n'
+             'def registrar(p):\n'
+             "    DP._salvar_a_projecao(p, ['respondida_em'])\n", 3, 'DP'),
+            ('registrar de outra classe',
+             'from chamados.models import DecisaoPergunta as DP\n'
+             'class Outra:\n'
+             '    def registrar(self, p):\n'
+             "        DP._salvar_a_projecao(p, ['respondida_em'])\n", 4, 'DP'),
+            ('outro classmethod de DecisaoPergunta',
+             'class DecisaoPergunta:\n'
+             '    @classmethod\n'
+             '    def outro(cls, p):\n'
+             "        cls._salvar_a_projecao(p, ['respondida_em'])\n", 4, 'cls'),
+        )
+        for caso, fonte, linha, receptor in casos:
+            with self.subTest(caso=caso):
+                self.assertEqual(self._varrer(fonte), [
+                    (linha, 'PerguntaDisputa', 'save', f'{receptor}._salvar_a_projecao() [projecao]'),
+                ])
+```
+
+**`M1-ignora-helper`**, contagem **1**. Os três subtestes perdem o achado. `app/core/censo_escritas.py:432`
+
+```diff
+-                self._anotar(no, 'PerguntaDisputa', 'save', '%s() [projecao]' % _texto(f))
++                pass
+```
+
+**`M1-nome-registrar`**, contagem **1**. Caem a função avulsa e `Outra.registrar`. `app/core/censo_escritas.py:436–440`
+
+```diff
+-        if len(self._escopos_da_projecao) != 3:
+-            return False
+-        _, (classe, _), (metodo, _) = self._escopos_da_projecao
+-        return (isinstance(classe, ast.ClassDef) and classe.name == 'DecisaoPergunta'
+-                and isinstance(metodo, ast.FunctionDef) and metodo.name == 'registrar')
++        metodo, _ = self._escopos_da_projecao[-1]
++        return isinstance(metodo, ast.FunctionDef) and metodo.name == 'registrar'
+```
+
+**`X-sem-nome-classe`**, contagem **1**. `Outra.registrar` ganha a dispensa e perde o achado da linha 4. `app/core/censo_escritas.py:438–440`
+
+```diff
+-        return (isinstance(classe, ast.ClassDef) and classe.name == 'DecisaoPergunta'
++        return (isinstance(classe, ast.ClassDef)
+```
+
+**`X-sem-cls`**, contagem **1**. `DecisaoPergunta.outro` perde o achado de `cls._salvar_a_projecao` da linha 4. `app/core/censo_escritas.py:422–432`
+
+```diff
+-            if (op == '_salvar_a_projecao' and (dono or classe_de_cls) == 'DecisaoPergunta'
++            if (op == '_salvar_a_projecao' and dono == 'DecisaoPergunta'
+```
+
+### `test_os_dois_saves_da_porta_ficam_visiveis`
+
+Substitua o método de mesmo nome em `CensoLeAProjecaoTest`, contagem **1**. **Hash verde. `censo_base` esperado vermelho pelo controle externo [nao verificado].** O teste lê todos os `save` da classe, incluindo os atribuídos a uma entidade, e preserva cada achado com `append`. Acrescentei ao texto lido um controle externo, em linha própria, para exigir que a dispensa interna conviva com a detecção do helper fora da porta. `app/chamados/tests/test_e4c_f5_c4_red.py:1557–1562,1576–1591` · `app/chamados/models.py:4780–4786,4797–4803,4821–4824` · `app/core/censo_escritas.py:421–440,506–522`
+
+```python
+    def test_os_dois_saves_da_porta_ficam_visiveis(self):
+        import ast
+
+        with open(os.path.join(self.APP, 'chamados/models.py'), encoding='utf-8') as arquivo:
+            fonte = arquivo.read().rstrip('\n')
+        classe, = (
+            no for no in ast.parse(fonte).body
+            if isinstance(no, ast.ClassDef) and no.name == 'DecisaoPergunta'
+        )
+        metodos = [no for no in ast.walk(classe) if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef))]
+        linha_externa = len(fonte.splitlines()) + 3
+        controle = (
+            '\n\ndef _controle_fora_da_porta(p):\n'
+            "    DecisaoPergunta._salvar_a_projecao(p, ['respondida_em'])\n"
+        )
+        achados = self._varrer(fonte + controle)
+        contado = {}
+        for linha, entidade, op, expr in achados:
+            if op != 'save' or not classe.lineno <= linha <= classe.end_lineno:
+                continue
+            dono = min(
+                (no for no in metodos if no.lineno <= linha <= no.end_lineno),
+                key=lambda no: no.end_lineno - no.lineno,
+                default=classe,
+            )
+            contado.setdefault(dono.name, []).append((entidade, expr))
+        self.assertEqual(contado, {
+            '_salvar_a_projecao': [(None, 'instancia.save()')],
+            'registrar': [(None, 'projecao[0].save()')],
+        })
+        self.assertIn(
+            (linha_externa, 'PerguntaDisputa', 'save', 'DecisaoPergunta._salvar_a_projecao() [projecao]'),
+            achados,
+        )
+```
+
+O controle externo mata também **`M1-ignora-helper`**, com a troca de contagem **1** acima. `app/core/censo_escritas.py:432`
+
+**`M1-reclassifica`**, contagem **1**. Os dois saves internos passam a trazer `'PerguntaDisputa'` no lugar de `None`. `app/core/censo_escritas.py:484–485`
+
+```diff
+-        if not silencioso:
+-            self._anotar(no, None, op, '%s.%s()' % (_texto(rec), op))
++        if not silencioso:
++            entidade = 'PerguntaDisputa' if op == 'save' and self._classe == ['DecisaoPergunta'] else None
++            self._anotar(no, entidade, op, '%s.%s()' % (_texto(rec), op))
+```
+
+**`M1-terceiro-save`**, contagem **1**. O `registrar` real ganha um terceiro save no total da classe, atribuído a `PerguntaDisputa`. `app/core/censo_escritas.py:430–432` · `app/chamados/models.py:4823–4824`
+
+```diff
+-            if (op == '_salvar_a_projecao' and (dono or classe_de_cls) == 'DecisaoPergunta'
+-                    and not self._no_registrar_da_decisao()):
++            if op == '_salvar_a_projecao' and (dono or classe_de_cls) == 'DecisaoPergunta':
+```
+
+### `test_RED_registrar_com_projecao_anotada_ou_nomeada_e_acusado`
+
+Insira em `CensoLeAProjecaoTest`, antes de `test_os_dois_saves_da_porta_ficam_visiveis`, contagem **1**. **Hash vermelho** nos casos anotado com valor, `:=` antes da chamada e `:=` no argumento. **`censo_base` esperado vermelho [nao verificado]. Com a cura abaixo, verde.** A anotação sem valor testa a preservação de uma tupla já atribuída. `app/chamados/tests/test_e4c_f5_c4_red.py:1557–1562,1576` · `app/core/censo_escritas.py:308–313,426–429,442–454`
+
+```python
+    def test_RED_registrar_com_projecao_anotada_ou_nomeada_e_acusado(self):
+        tupla = "(p, ['respondida_em'])"
+        cabecalho = 'from chamados.models import DecisaoPergunta as DP\ndef f(p, linhas):\n'
+        casos = (
+            ('anotada', f'    proj: tuple = {tupla}\n    DP.registrar(linhas, projecao=proj)\n', 4),
+            ('anotacao sem valor preserva a tupla',
+             f'    proj = {tupla}\n    proj: tuple\n    DP.registrar(linhas, projecao=proj)\n', 5),
+            ('nomeada antes da chamada',
+             f'    (proj := {tupla})\n    DP.registrar(linhas, projecao=proj)\n', 4),
+            ('nomeada no argumento', f'    DP.registrar(linhas, projecao=(proj := {tupla}))\n', 3),
+        )
+        for caso, corpo, linha in casos:
+            with self.subTest(caso=caso):
+                self.assertEqual(self._varrer(cabecalho + corpo), [
+                    (linha, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]'),
+                ])
+```
+
+#### Diff de produção
+
+As duas âncoras têm contagem **1** no hash, em `visit_Assign` e no início de `_projecao`. O primeiro trecho registra os vínculos no escopo corrente. O segundo lê o valor de `:=` quando a expressão é o próprio argumento de projeção. `app/core/censo_escritas.py:300–315,426–433,442–454` · `CLAUDE.md:28–31`
+
+```diff
+--- a/app/core/censo_escritas.py
++++ b/app/core/censo_escritas.py
+@@ -308,8 +308,14 @@
+     def visit_Assign(self, no):
+         self.generic_visit(no)
++        if no.value is None:
++            return
+         _, atribuicoes = self._escopos_da_projecao[-1]
+-        for alvo in no.targets:
++        alvos = no.targets if isinstance(no, ast.Assign) else (no.target,)
++        for alvo in alvos:
+             if isinstance(alvo, ast.Name):
+                 atribuicoes[alvo.id] = no.value
++
++    visit_AnnAssign = visit_Assign
++    visit_NamedExpr = visit_Assign
+ 
+     def visit_ClassDef(self, no):
+@@ -442,4 +448,6 @@
+     def _projecao(self, no, valor):
+         """`projecao=(inst, campos)` = `inst.save(update_fields=campos)` neste sitio (`ESCRITA_POR_PROJECAO`)."""
++        if isinstance(valor, ast.NamedExpr):
++            valor = valor.value
+         if isinstance(valor, ast.Name):
+             _, atribuicoes = self._escopos_da_projecao[-1]
+```
+
+O RED novo mata também **`M1-tupla`** na cópia curada. As âncoras a seguir são do arquivo com apenas o diff de produção aplicado. `app/core/censo_escritas.py:308–319,450–455` após o diff.
+
+**`M1-sem-AnnAssign`**, contagem **1**. Cai a anotação com valor. `app/core/censo_escritas.py:318` após o diff.
+
+```diff
+-    visit_AnnAssign = visit_Assign
+-    visit_NamedExpr = visit_Assign
++    visit_NamedExpr = visit_Assign
+```
+
+**`M1-sem-NamedExpr`**, contagem **1**. Cai o `:=` anterior à chamada. `app/core/censo_escritas.py:318` após o diff.
+
+```diff
+-    visit_AnnAssign = visit_Assign
+-    visit_NamedExpr = visit_Assign
++    visit_AnnAssign = visit_Assign
+```
+
+**`M1-sem-NamedExpr-no-argumento`**, contagem **1**. Cai o `:=` no argumento. `app/core/censo_escritas.py:450` após o diff.
+
+```diff
+-        if isinstance(valor, ast.NamedExpr):
+-            valor = valor.value
+-        if isinstance(valor, ast.Name):
+-            _, atribuicoes = self._escopos_da_projecao[-1]
++        if isinstance(valor, ast.Name):
++            _, atribuicoes = self._escopos_da_projecao[-1]
+```
+
+**`M1-apaga-anotacao-anterior`**, contagem **1**. A anotação sem valor passa a sobrescrever a tupla e o achado some. `app/core/censo_escritas.py:309` após o diff.
+
+```diff
+-        self.generic_visit(no)
+-        if no.value is None:
+-            return
+-        _, atribuicoes = self._escopos_da_projecao[-1]
++        self.generic_visit(no)
++        _, atribuicoes = self._escopos_da_projecao[-1]
+```
+
+## 2. Selos por arquivo
+
+As fixtures colocam `g` na linha 3, antes do religamento. Cada teste exige por `assertIn` o achado no sítio afetado e em `g`. O `dict` religado alcança todo o arquivo, e cada nome de trilha religado perde sua dispensa em todos os usos desse nome no arquivo. É a mesma abrangência do controle existente com import legítimo e `def evento`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112,309–331` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30,163`
+
+Insira as duas fixtures no nível do módulo, antes da declaração `class SeloEscritorUnicoDoCarimbo(SimpleTestCase):`, contagem **1**. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:263`
+
+```python
+def _casos_trilha_dict_religado(campo):
+    chamada = f'evento(depois=dict({campo}=None))\n'
+    inicio = f'from core.observ import evento\ndef g():\n    {chamada}'
+    return (
+        ('modulo', inicio + f'dict = gravar\ndef f():\n    {chamada}', ('f', 6)),
+        ('closure', inicio + 'def f():\n    dict = gravar\n    def interna():\n'
+         + f'        {chamada}', ('f.interna', 7)),
+        ('parametro', inicio + f'def f(dict):\n    {chamada}', ('f', 5)),
+    )
+
+
+def _casos_trilha_evento_religado(campo):
+    chamada = f'evento(depois=dict({campo}=None))\n'
+    inicio = f'from core.observ import evento\ndef g():\n    {chamada}'
+    chamada_ev = f'ev(depois=dict({campo}=None))\n'
+    inicio_ev = f'from core.observ import evento as ev\ndef g():\n    {chamada_ev}'
+    chamada_observ = f'observ.evento(depois=dict({campo}=None))\n'
+    inicio_observ = f'from core import observ\ndef g():\n    {chamada_observ}'
+    return (
+        ('import local', inicio + 'def f():\n    import core.outro as evento\n'
+         + f'    {chamada}', ('f', 6)),
+        ('from local com alias', inicio_ev + 'def f():\n    from core.outro import escritor as ev\n'
+         + f'    {chamada_ev}', ('f', 6)),
+        ('modulo observ', inicio_observ + 'def f():\n    from core.outro import observ\n'
+         + f'    {chamada_observ}', ('f', 6)),
+        ('parametro', inicio + f'def f(evento):\n    {chamada}', ('f', 5)),
+    )
+```
+
+No módulo do par, estenda o import compartilhado, contagem **1**. `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30`
+
+```diff
+-from chamados.tests.test_o261e_f2_porta_carimbo import APP, _atribuicoes, _dicts_da_trilha
++from chamados.tests.test_o261e_f2_porta_carimbo import (
++    APP,
++    _atribuicoes,
++    _casos_trilha_dict_religado,
++    _casos_trilha_evento_religado,
++    _dicts_da_trilha,
++)
+```
+
+### Carimbo · `test_RED_trilha_acusa_dict_religado`
+
+Insira em `SeloEscritorUnicoDoCarimbo`, antes de `test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel`, contagem **1**. **Hash vermelho. `censo_base` esperado vermelho. Cura do selo verde.** Mata `M2-grafia-dict` e `M2-sem-parametro`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,154–156,222–225,263,333`
+
+```python
+    def test_RED_trilha_acusa_dict_religado(self):
+        for caso, fonte, alvo in _casos_trilha_dict_religado('materializada_em'):
+            achados = escritas_do_carimbo(fonte)
+            for nome, linha in (alvo, ('g', 3)):
+                with self.subTest(caso=caso, nome=nome):
+                    self.assertIn((nome, linha, 'dict(materializada_em=)'), achados)
+```
+
+### Carimbo · `test_RED_trilha_acusa_import_local_homonimo`
+
+Insira em `SeloEscritorUnicoDoCarimbo`, antes de `test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel`, contagem **1**. **Hash vermelho. `censo_base` esperado vermelho. Cura do selo verde.** Mata `M2-import-global` e `M2-sem-parametro`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,154–156,222–225,263,333`
+
+```python
+    def test_RED_trilha_acusa_import_local_homonimo(self):
+        for caso, fonte, alvo in _casos_trilha_evento_religado('materializada_em'):
+            achados = escritas_do_carimbo(fonte)
+            for nome, linha in (alvo, ('g', 3)):
+                with self.subTest(caso=caso, nome=nome):
+                    self.assertIn((nome, linha, 'dict(materializada_em=)'), achados)
+```
+
+### Par · `test_RED_trilha_acusa_dict_religado`
+
+Insira em `SeloEscritorUnicoDoParMordeTest`, antes de `test_MORDE_repasse_de_param_na_classe_do_modelo`, contagem **1**. **Hash vermelho. `censo_base` esperado vermelho. Cura do selo verde.** Mata `M2-grafia-dict` e `M2-sem-parametro`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30,144–165,247,269`
+
+```python
+    def test_RED_trilha_acusa_dict_religado(self):
+        for caso, fonte, alvo in _casos_trilha_dict_religado('respondida_em'):
+            achados = escritas_do_par(fonte)
+            for nome, linha in (alvo, ('g', 3)):
+                with self.subTest(caso=caso, nome=nome):
+                    self.assertIn((nome, linha, 'dict(respondida_em=)'), achados)
+```
+
+### Par · `test_RED_trilha_acusa_import_local_homonimo`
+
+Insira em `SeloEscritorUnicoDoParMordeTest`, antes de `test_MORDE_repasse_de_param_na_classe_do_modelo`, contagem **1**. **Hash vermelho. `censo_base` esperado vermelho. Cura do selo verde.** Mata `M2-import-global` e `M2-sem-parametro`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30,144–165,247,269`
+
+```python
+    def test_RED_trilha_acusa_import_local_homonimo(self):
+        for caso, fonte, alvo in _casos_trilha_evento_religado('respondida_em'):
+            achados = escritas_do_par(fonte)
+            for nome, linha in (alvo, ('g', 3)):
+                with self.subTest(caso=caso, nome=nome):
+                    self.assertIn((nome, linha, 'dict(respondida_em=)'), achados)
+```
+
+### Texto de referência da cura do selo para o Opus
+
+Âncora de contagem **1** na cópia, dentro de `_dicts_da_trilha`. Com este texto, passaram os quatro REDs e os dois controles existentes de trilha legítima. Os três originais dos mutantes M2 têm contagem **0** na cópia e **1** neste texto curado. As linhas dos mutantes abaixo contam o diff aplicado antes das inserções de fixtures e testes. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112,309–331` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:289–299`
+
+```diff
+--- a/app/chamados/tests/test_o261e_f2_porta_carimbo.py
++++ b/app/chamados/tests/test_o261e_f2_porta_carimbo.py
+@@ -85,15 +85,27 @@
+     funcs, mods, religados, core_inteiro = set(), set(), set(), False
+     for n in ast.walk(arv):
+-        if isinstance(n, ast.ImportFrom) and n.module == 'core.observ' and not n.level:
+-            funcs |= {a.asname or a.name for a in n.names if a.name == 'evento'}
+-        elif isinstance(n, ast.ImportFrom) and n.module == 'core' and not n.level:
+-            mods |= {a.asname or a.name for a in n.names if a.name == 'observ'}
+-        elif isinstance(n, ast.Import):
+-            mods |= {a.asname for a in n.names if a.name == 'core.observ' and a.asname}
+-            core_inteiro |= any(a.nam
+
+[truncado em 20000 de 24071 caracteres]
 
 ## 28/11 10:58 · sessao 393a45b4bcf1 · FDS-FERIAS-COM-BATIDA-PORTA · sonda · origem=Code
 
@@ -2255,20 +2631,4 @@ Conferi as bordas do item 7 sem editar arquivos.
 - O selo C12 mora na pasta de testes. Para o opus, identificar cada chamada permitida por arquivo, escopo e AST, exigir uma ocorrência e manter a linha para diagnóstico. Os mutantes devem deslocar o corpo, duplicar uma chamada autorizada e introduzir um escritor em outro escopo. `chamados/tests/e4b_c12_ast.py:16,224`.
 - 5a e 5b já constam do HEAD. Os controles devem remover a entrada de desligamento no mapa de recusas, remover a autoria do payload e aceitar indevidamente uma assinatura ausente, inválida ou divergente da FK. O histórico ainda traduz o carimbo por desligamento como fato registrado. `chamados/services/materializacao.py:868,893`, `core/observ.py:105`, `chamados/services/trilha_reabertura.py:14`, `chamados/management/commands/auditar_invariantes_chamados.py:673`, `chamados/services/historico.py:104`.
 
-## 28/11 10:05 · sessao 02117846da0a · - · - · origem=Ronald (tmux)
-
-As guardas diretas de `abrir` já estão no HEAD. Justificativa para antes de criar ou atualizar a pendente, mensagem rápida para antes de nota e push, e adesão pula a recusa antes de reagrupar. A emissão comum e a âncora devolvem `None` antes dos efeitos. O repasse usa `REPASSE_RECUSADO` e desfaz o complemento anterior dos filhos. `api/views.py:1985-2023`, `chamados/views.py:998-1021`, `chamados/services/adesao.py:76-125`, `chamados/services/disputa_emissao.py:582-619`, `chamados/services/disputa_emissao.py:1080-1155`, `chamados/services/disputa_emissao.py:1320-1326`, `chamados/services/disputa_emissao.py:1366-1411`.
-
-Os dois kernels descartam o retorno da emissão e respondem `em_disputa=True` mesmo quando ela devolve `None`. O RED de cada kernel deve preservar a batida gravada e seu ID, esperar `em_disputa=False` e `motivos_disputa=[]` na recusa e incluir o controle de emissão aceita. O mutante reinstala a flag incondicional. `api/views.py:758-771`, `api/views.py:813-824`, `api/views_core.py:752-765`, `api/views_core.py:807-818`, `chamados/services/disputa_emissao.py:678-689`.
-
-O RED de repasse deve induzir a recusa na abertura com um filho elegível a complemento e outro que ainda exija pai. O esperado é rollback do complemento, preservação dos estados e perguntas, ausência de push e a trilha `repasse_recusado`. O mutante devolve antecipadamente o resultado, deixando o complemento persistir. `chamados/services/disputa_emissao.py:1084-1146`, `chamados/services/disputa_emissao.py:1316-1326`.
-
-O lote novo já evita qualquer escrita de lote ou item se `criar` recusar, e as duas bordas refletem esse retorno. O dedup de `abrir_lote` ainda pode devolver um lote legado antes da porta. A âncora já interrompe os efeitos na recusa, mas seu toast hoje confunde recusa com solicitação anterior ou resolução. `chamados/services/regularizacao_ext.py:231-259`, `chamados/services/regularizacao_ext.py:310-320`, `chamados/views_regularizacao.py:54-59`, `colaboradores/views.py:3049-3054`, `chamados/services/acoes_disputa.py:217-233`.
-
-A mensagem do formulário já é entregue por `resposta_render` e pelo bloco `messages` do template. A reancoragem C12 fica em arquivo de teste proibido nesta volta. `chamados/views.py:141-148`, `chamados/views.py:217-224`, `core/respostas.py:74-86`, `templates/chamados/form_abertura.html:12-16`, `chamados/tests/e4b_c12_ast.py:17-31`.
-
-As duas curas 5a e 5b estão no HEAD. A testemunha classifica a via de pergunta como recusa antes do atalho `aplicada`. A auditoria lê a identificação gravada pelo escritor antes da autoria da requisição, com suporte a FK apagada. `chamados/services/materializacao.py:868-907`, `core/observ.py:105-125`, `core/models.py:295`, `chamados/services/trilha_reabertura.py:5-22`, `chamados/management/commands/auditar_invariantes_chamados.py:671-679`.
-
-Comportamento dinâmico e REDs [nao verificado].
-
-_8900 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8901 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
