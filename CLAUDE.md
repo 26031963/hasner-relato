@@ -97,7 +97,7 @@ bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus <OBRA>"
 A FORMA DEIXOU DE SER PROSA E VIROU ARQUIVO (O182, corte pela lei existente 04/10 05:5x). (historia: LAPIDES.md#lap-03) Agora `bin/suite.sh` compoe recursos + `teste_envfile` + LABELS lido da regua + montagem +
 trava, e nao ha como rodar a suite inteira destravada sem escrever um comando novo A MAO.
 `--only "ponto core"` recorta (na arvore viva SEGUE pela trava, de proposito), `--dir <copia>` roda contra COPIA
-(com recorte -- `--only` ou `--volta` -- ou com a INTEIRA `--motivo "pre-opus <OBRA>"` VAI A PISTA 2 sozinho, `ROTA PISTA: job=<id> sha=<40>`; pista fora ou fila
+(com recorte -- `--only` ou `--volta` -- ou com a INTEIRA `--motivo "pre-opus <OBRA>"` VAI A PISTA3 sozinho (pista 2 so por pedido direto, reserva -- ROTA-PISTA3-2811-1625), `ROTA PISTA: job=<id> sha=<40>`; pista fora ou fila
 acima de 30 min = `ROTA VM: <motivo>` pela trava; depois do aceite nunca cai na VM: falha de transporte = `ERRO-INFRA PISTA`
 rc 71; a inteira `pouso`, `--seco`, chamada sem `--dir`, `REGUA_DB`, flag depois de `--`, pre-push e sombra ficam na VM; selo `bin/tests/test_suite_rota_pista.sh`),
 `--parallel N` (1 a 8; teto do aval PISTA-2-CERTIFICA-EM-8, `auto` recusado) e `--espera <segundos>` repassam, `-- <resto>` leva so flag da lista fechada de `bin/suite.sh`.
