@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 02:46:12.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (303.0 MB). Acoes na janela: **1904**.
+**Medido em 28/11/2026 02:53:06.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (303.0 MB). Acoes na janela: **1892**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:50:58 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 02:50:55 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b3bhiouz9.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
 | 02:45:50 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 02:45:46 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bxgl3fx9v.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
 | 02:40:42 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
@@ -1900,17 +1902,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:53:13 | Bash | Cancela o job c1v12 na pista | `cd ~/saas-hasner; ssh -o BatchMode=yes -o ConnectTimeout=5 pista cancela 1127142737_74b4f071; echo rc=$?` |
 | 14:53:10 | Bash | Contrato da pista no suite.sh | `cd ~/saas-hasner; sed -n 320,345p bin/suite.sh; /bin/grep -rn -E "pista (cancela\|mata\|para\|stop\|kill)" bin app/docs logs/*.md 2>/dev/null \| head -5` |
 | 14:53:07 | Bash | Comandos da pista | `cd ~/saas-hasner; /bin/grep -n -E "ssh pista [a-z]+" bin/suite.sh \| head; /bin/grep -rn -i "cancel" app/docs/INFRA.md app/docs/PISTA.md \| head -5` |
-| 14:53:04 | Bash | Procura a porta de cancelar job da pista | `cd ~/saas-hasner; /bin/grep -rn -E "cancela\|cancel" bin/pista*.sh bin/suite.sh 2>/dev/null \| head; ls bin \| /bin/grep -i pista` |
-| 14:49:50 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 14:49:32 | Bash | Recorte da PAR na pista e colheita no RELATO | `cd ~/saas-hasner; D=logs/PAR-PELO-TURNO/c1v13/g; mkdir -p $D; setsid bash -c "PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh --dir /home/ronald/wt-codex-par-pelo-turno-111717 --only 'ponto relatorios escala colaboradores' --parallel 4 > $D/g.log 2>&1; echo \"rc=\$? \$(date +%H:%M:%S)\" > $D/g.rc" </dev/null >/dev/null 2>&1 & sleep 15; /bin/grep -E "ROTA" ~/saas-hasner/logs/PAR-PELO-TURNO/c1v13/g/g.lo ...` |
-| 14:49:23 | Bash | Commita a c1v13 na wt | `W=/home/ronald/wt-codex-par-pelo-turno-111717; cd $W; git status --porcelain \| /bin/grep '^??'; git add $(git diff --name-only) $(git status --porcelain \| /bin/grep '^??' \| cut -c4-); git status --porcelain \| cut -c1-2 \| sort \| uniq -c; git commit -q -F - <<'EOF' PAR-PELO-TURNO c1v13: um ate=agora em toda apuracao do documento, sem leitura extra de relogio em turno_aberto_de, datas_saida_orf ...` |
-| 14:49:15 | Bash | Fim do recibo c1v13 | `sed -n 160,200p /home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v13_recibo.txt` |
-| 14:49:12 | Bash | Guarda RELATO da wt e lê o heredoc do recibo | `W=/home/ronald/wt-codex-par-pelo-turno-111717; cd $W; git diff app/docs/RELATO.md > ~/saas-hasner/logs/PAR-PELO-TURNO/c1v13/relato_da_wt.patch; git checkout -- app/docs/RELATO.md; find . -name __pycache__ -not -path './.git/*' \| wc -l; sed -n '/heredoc/,$p' app/ponto/tests/par_pelo_turno_c1v13_recibo.txt \| sed -n 1,40p` |
-| 14:49:00 | Bash | Diff do PDF | `cd /home/ronald/wt-codex-par-pelo-turno-111717; git diff app/relatorios/pdf_espelho.py app/relatorios/tests/test_pdf_nao_calcula.py` |
-| 14:48:56 | Bash | Selo vizinho vermelho e diff | `cd /home/ronald/wt-codex-par-pelo-turno-111717; sed -n 150,200p app/relatorios/tests/test_falta_um_significado.py; git diff --stat; git diff app/docs/RELATO.md \| head -20` |
-| 14:48:50 | Bash | Lê a entrega da PAR c1v13 | `cd ~/saas-hasner; tail -c 5000 logs/PAR-PELO-TURNO/c1v13/r.md; W=/home/ronald/wt-codex-par-pelo-turno-111717; git -C $W status --porcelain \| head; git -C $W log --oneline -2` |
-| 14:48:46 | Bash | Vê o que chegou | `cd ~/saas-hasner; tail -n 3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b32kz6899.output; python3 bin/rc_sem_colher.py \| /bin/grep "SEM COLHER"; for f in logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2v/r7_suite.rcx logs/RAZAO-DA-SOBRA/reds1/pista/red.rc logs/FERIADO-BOTAO-CORTADO/s7/s.rc logs/PAR-PELO-TURNO/c1v13/r.rc logs/INVENTARIO/C1/r.rc; do echo "$f: $(cat $f 2>/ ...` |
-| 14:46:43 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 14:46:40 | Bash | Escreve mapa_volta.md e colhe no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); cat > logs/E4C-F5-INSTANTE/mapa_volta.md <<EOF # E4C-F5-INSTANTE -- mapa da volta (aval E4C-MAPA-DA-VOLTA-2711-1500) [nome]: mapa Codex leitura logs/E4C-F5-INSTANTE/mapa/r.md (hash 59600163c + delta da cura5); sonda Codex na SOMBRA logs/E4C-F5-INSTANTE/mapa/sonda/r.md (rc 0, 14:46). Nada construido. ## 1. Quem acorda a celula (cura5; contagem = EventoCelula sobr ...` |
-| 14:46:18 | Bash | Lê resultado da sonda | `cd ~/saas-hasner; cat logs/E4C-F5-INSTANTE/mapa/sonda/r.md \| head -c 6000` |
-| 14:46:15 | Bash | Vê o que chegou | `cd ~/saas-hasner; python3 bin/rc_sem_colher.py \| /bin/grep "SEM COLHER"; for f in logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2v/r7_suite.rcx logs/RAZAO-DA-SOBRA/reds1/pista/red.rc logs/FERIADO-BOTAO-CORTADO/s7/s.rc logs/PAR-PELO-TURNO/c1v13/r.rc logs/E4C-F5-INSTANTE/mapa/sonda/r.rc logs/INVENTARIO/C1/r.rc; do echo "$f: $(cat $f 2>/dev/null)"; done` |
