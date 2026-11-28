@@ -14941,6 +14941,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 05:12 colhido CUSTO-DE-COORDENACAO f1v2/v3/green_censo.rc (05:12 rc 2): passo intermediario do opus volta 3 (green_borda/green_censo ainda em iteracao); veredito na entrega.
 - 05:14 colhido CUSTO-DE-COORDENACAO f1v2/v3/red_8_leitura_stop_handoff.rc (05:14 rc 1): RED esperado do achado 8 (opus volta 3).
 - 05:15 colhido CUSTO-DE-COORDENACAO f1v2/v3/red_8_leitura_censo.rc (05:15 rc 1): RED esperado do achado 8 no CENSO (opus volta 3).
+- 05:19 colhido CUSTO-DE-COORDENACAO f1v2/v3/green_borda.rc (05:18 rc 2): iteracao do opus volta 3; veredito na entrega.
 - 02:59 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO c3 (arquivo de teste e so do opus, CCM-OPCAO-A; Codex nao escreve teste): PUXADA CODIGO-DOMINIO-VALIDO c3 -> vaga opus construtor (wt-codex-codigo-dominio-valido-013223), mordidas P1/P2/rescisao+VIGIA do opus final logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md item 2
 - 02:26 PUXADA CODIGO-DOMINIO-VALIDO c2 -> vaga Codex construtor: so docstrings (citacao O256 restaurada com a excecao do `codigo` gravado; docstring do codigo_dominio_e_numerico sem o 'apos strip') -> logs/CODIGO-DOMINIO-VALIDO/c2/r.rc
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
