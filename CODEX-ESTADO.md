@@ -1,7 +1,242 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 10:37** · publicado em **28/11/2026 10:38** (UTC-3)
+> Ultima resposta processada: **28/11/2026 10:45** · publicado em **28/11/2026 10:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 10:45 · sessao 6fc1c6f8c2b1 · E4C-F5-INSTANTE · leitura · origem=Code
+
+# r.md
+
+Os sete métodos abaixo estão prontos para colar nas classes indicadas. Os três do censo passam na cópia, e os quatro dos selos falham com `[]` na asserção. A prova em memória executou os métodos com `unittest.TestCase` e os analisadores AST da cópia. Suíte Django, Ruff e identidade Git [nao verificado]. `app/chamados/tests/test_e4c_f5_c4_red.py:1551–1591` · `app/core/censo_escritas.py:421–454` · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
+
+Nos diffs, retire o primeiro caractere de cada linha e junte as linhas de cada lado com `\n`, sem acrescentar `\n` ao fim. Aplique cada troca isoladamente com `fonte.replace(original, mutado, 1)`, após conferir `fonte.count(original) == 1`. Os cinco mutantes do censo foram conferidos na cópia. Os dois dos selos foram conferidos sobre a base de contraprova ao fim do item 2. `app/core/censo_escritas.py:430–485` · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112`
+
+## 1 · Variável
+
+Cole em `CensoLeAProjecaoTest`, imediatamente antes de `def test_os_dois_saves_da_porta_ficam_visiveis(self):`. Usa `SimpleTestCase` e a fixture `_varrer` existentes, sem imports novos. **VERDE**. `app/chamados/tests/test_e4c_f5_c4_red.py:21,1551–1562,1576`
+
+```python
+    def test_RED_registrar_com_projecao_por_variavel_e_acusado(self):
+        fonte = (
+            'from chamados.models import DecisaoPergunta as DP\n'
+            'def f(p, linhas):\n'
+            "    proj = (p, ['respondida_em'])\n"
+            '    DP.registrar(linhas, projecao=proj)\n'
+        )
+        self.assertEqual(self._varrer(fonte), [(4, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]')])
+```
+
+**`M1-tupla`** · `app/core/censo_escritas.py:444–447` · âncora **1**. Cai o `assertEqual` porque o achado da linha 4 vira `[]`. `app/core/censo_escritas.py:442–454`
+
+```diff
+-        if isinstance(valor, ast.Name):
+-            _, atribuicoes = self._escopos_da_projecao[-1]
+-            valor = atribuicoes.get(valor.id)
+-        if not isinstance(valor, ast.Tuple) or len(valor.elts) != 2:
++        if not isinstance(valor, ast.Tuple) or len(valor.elts) != 2:
+```
+
+## 1 · Helper
+
+Cole em `CensoLeAProjecaoTest`, depois do método do item anterior e antes de `def test_os_dois_saves_da_porta_ficam_visiveis(self):`. Usa a mesma fixture, sem imports novos. **VERDE**. `app/chamados/tests/test_e4c_f5_c4_red.py:21,1551–1562,1576` · `app/core/censo_escritas.py:430–440`
+
+```python
+    def test_RED_salvar_a_projecao_direto_fora_da_porta_e_acusado(self):
+        fonte = (
+            'from chamados.models import DecisaoPergunta as DP\n'
+            'def registrar(p):\n'
+            "    DP._salvar_a_projecao(p, ['respondida_em'])\n"
+        )
+        self.assertEqual(
+            self._varrer(fonte),
+            [(3, 'PerguntaDisputa', 'save', 'DP._salvar_a_projecao() [projecao]')],
+        )
+```
+
+**`M1-ignora-helper`** · `app/core/censo_escritas.py:432` · âncora **1**. Cai o `assertEqual` porque o achado da linha 3 vira `[]`. `app/core/censo_escritas.py:430–433`
+
+```diff
+-                self._anotar(no, 'PerguntaDisputa', 'save', '%s() [projecao]' % _texto(f))
++                pass
+```
+
+**`M1-nome-registrar`** · `app/core/censo_escritas.py:436–440` · âncora **1**. Cai o mesmo `assertEqual` porque a função avulsa chamada `registrar` ganha a dispensa e o censo devolve `[]`. `app/core/censo_escritas.py:430–440`
+
+```diff
+-        if len(self._escopos_da_projecao) != 3:
+-            return False
+-        _, (classe, _), (metodo, _) = self._escopos_da_projecao
+-        return (isinstance(classe, ast.ClassDef) and classe.name == 'DecisaoPergunta'
+-                and isinstance(metodo, ast.FunctionDef) and metodo.name == 'registrar')
++        metodo, _ = self._escopos_da_projecao[-1]
++        return isinstance(metodo, ast.FunctionDef) and metodo.name == 'registrar'
+```
+
+## 1 · Controle interno
+
+Substitua o método inteiro ancorado em `def test_os_dois_saves_da_porta_ficam_visiveis(self):`, em `CensoLeAProjecaoTest`. O teste lê o `models.py` inteiro com a fixture `_varrer` e confere todos os saves da classe `DecisaoPergunta`, inclusive os atribuídos. Usa `os` do módulo e importa `ast` no método. **VERDE**. `app/chamados/tests/test_e4c_f5_c4_red.py:5,1551–1562,1576–1591` · `app/chamados/models.py:4780–4786,4797–4803,4821–4824`
+
+```python
+    def test_os_dois_saves_da_porta_ficam_visiveis(self):
+        import ast
+
+        with open(os.path.join(self.APP, 'chamados/models.py'), encoding='utf-8') as arquivo:
+            fonte = arquivo.read()
+        classe, = (
+            no for no in ast.parse(fonte).body
+            if isinstance(no, ast.ClassDef) and no.name == 'DecisaoPergunta'
+        )
+        metodos = [no for no in ast.walk(classe) if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef))]
+        contado = {}
+        for linha, entidade, op, expr in self._varrer(fonte):
+            if op != 'save' or not classe.lineno <= linha <= classe.end_lineno:
+                continue
+            dono = min(
+                (no for no in metodos if no.lineno <= linha <= no.end_lineno),
+                key=lambda no: no.end_lineno - no.lineno,
+                default=classe,
+            )
+            contado.setdefault(dono.name, []).append((entidade, expr))
+        self.assertEqual(contado, {
+            '_salvar_a_projecao': [(None, 'instancia.save()')],
+            'registrar': [(None, 'projecao[0].save()')],
+        })
+```
+
+**`M1-reclassifica`** · `app/core/censo_escritas.py:484–485` · âncora **1**. Cai `assertEqual(contado, ...)` porque os dois pares passam a trazer `'PerguntaDisputa'` no lugar de `None`. `app/core/censo_escritas.py:475–485`
+
+```diff
+-        if not silencioso:
+-            self._anotar(no, None, op, '%s.%s()' % (_texto(rec), op))
++        if not silencioso:
++            entidade = 'PerguntaDisputa' if op == 'save' and self._classe == ['DecisaoPergunta'] else None
++            self._anotar(no, entidade, op, '%s.%s()' % (_texto(rec), op))
+```
+
+**`M1-terceiro-save`** · `app/core/censo_escritas.py:430–431` · âncora **1**. Cai `assertEqual(contado, ...)` porque `registrar` ganha `('PerguntaDisputa', 'cls._salvar_a_projecao() [projecao]')`. `app/core/censo_escritas.py:430–432` · `app/chamados/models.py:4823–4824`
+
+```diff
+-            if (op == '_salvar_a_projecao' and (dono or classe_de_cls) == 'DecisaoPergunta'
+-                    and not self._no_registrar_da_decisao()):
++            if op == '_salvar_a_projecao' and (dono or classe_de_cls) == 'DecisaoPergunta':
+```
+
+## 2 · `dict` religado
+
+**Carimbo.** Cole em `SeloEscritorUnicoDoCarimbo`, antes de `def test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel(self):`. Usa `SimpleTestCase` e `escritas_do_carimbo` do módulo, sem imports novos. **VERMELHO**. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:30,110–112,156,222–225,263,333`
+
+```python
+    def test_RED_trilha_acusa_dict_religado(self):
+        fonte = (
+            'from core.observ import evento\n'
+            'def f(pk):\n'
+            '    dict = PerguntaDisputa.objects.filter(pk=pk).update\n'
+            '    evento(depois=dict(materializada_em=None))\n'
+            'def g():\n'
+            '    evento(depois=dict(materializada_em=None))\n'
+        )
+        self.assertEqual(escritas_do_carimbo(fonte), [('f', 4, 'dict(materializada_em=)')])
+```
+
+**Par.** Cole em `SeloEscritorUnicoDoParMordeTest`, antes de `def test_MORDE_repasse_de_param_na_classe_do_modelo(self):`. Usa `SimpleTestCase` e `escritas_do_par` do módulo, sem imports novos. **VERMELHO**. `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:28–30,144–165,247,269`
+
+```python
+    def test_RED_trilha_acusa_dict_religado(self):
+        fonte = (
+            'from core.observ import evento\n'
+            'def f(pk):\n'
+            '    dict = PerguntaDisputa.objects.filter(pk=pk).update\n'
+            '    evento(depois=dict(respondida_em=None))\n'
+            'def g():\n'
+            '    evento(depois=dict(respondida_em=None))\n'
+        )
+        self.assertEqual(escritas_do_par(fonte), [('f', 4, 'dict(respondida_em=)')])
+```
+
+**`M2-grafia-dict`** · alvo compartilhado em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112` · âncora **1** na base de contraprova abaixo. Caem os dois `assertEqual` com `[]`. A cópia já dispensa pela grafia de `dict`. O alvo fica em `tests/` e é importado pelo selo do par. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112,156` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30,163`
+
+```diff
+-            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'
+-            and (escopos[c], 'dict') not in nomes_locais}
++            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'}
+```
+
+## 2 · Import homônimo
+
+**Carimbo.** Cole em `SeloEscritorUnicoDoCarimbo`, depois do método anterior e antes de `def test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel(self):`. Mesmos imports. **VERMELHO**. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:30,85–112,156,263,333`
+
+```python
+    def test_RED_trilha_acusa_import_local_homonimo(self):
+        fonte = (
+            'from core.observ import evento\n'
+            'def f():\n'
+            '    from core.outro import evento\n'
+            '    evento(depois=dict(materializada_em=None))\n'
+            'def g():\n'
+            '    evento(depois=dict(materializada_em=None))\n'
+        )
+        self.assertEqual(escritas_do_carimbo(fonte), [('f', 4, 'dict(materializada_em=)')])
+```
+
+**Par.** Cole em `SeloEscritorUnicoDoParMordeTest`, depois do método anterior e antes de `def test_MORDE_repasse_de_param_na_classe_do_modelo(self):`. Mesmos imports. **VERMELHO**. `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:28–30,144–165,247,269`
+
+```python
+    def test_RED_trilha_acusa_import_local_homonimo(self):
+        fonte = (
+            'from core.observ import evento as ev\n'
+            'def f():\n'
+            '    from core.outro import escritor as ev\n'
+            '    ev(depois=dict(respondida_em=None))\n'
+            'def g():\n'
+            '    ev(depois=dict(respondida_em=None))\n'
+        )
+        self.assertEqual(escritas_do_par(fonte), [('f', 4, 'dict(respondida_em=)')])
+```
+
+**`M2-import-global`** · mesmo alvo compartilhado · âncora **1** na base de contraprova. Caem os dois `assertEqual` com `[]` porque o nome local herda a dispensa do conjunto global. A cópia já apresenta esse efeito. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30,163`
+
+```diff
+-    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
+-            and (escopos[c], getattr(c.func, 'id', None)) not in imports_alheios
++    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
+```
+
+**Base de contraprova dos dois mutantes.** Aplique este diff em memória em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112`, com âncora **1** na cópia. A base passou nos quatro métodos novos e nos dois controles existentes de trilha legítima. Cada mutante derrubou por asserção apenas os dois métodos do seu item. A base foi verificada nesse recorte. Cobertura geral da resolução de nomes [nao verificado]. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112,309–331` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:289–299`
+
+```diff
+-    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
+-            for a in (*c.args, *(k.value for k in c.keywords))
+-            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'}
++    escopos = {}
++
++    def _indexar(no, escopo):
++        if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
++            escopo = no
++        escopos[no] = escopo
++        for filho in ast.iter_child_nodes(no):
++            _indexar(filho, escopo)
++
++    _indexar(arv, arv)
++    nomes_locais = {(escopos[n], n.id) for n in escopos if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)}
++    imports_alheios = {(escopos[n], a.asname or a.name)
++                       for n in escopos if isinstance(n, ast.ImportFrom) and (n.module != 'core.observ' or n.level)
++                       for a in n.names}
++    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
++            and (escopos[c], getattr(c.func, 'id', None)) not in imports_alheios
++            for a in (*c.args, *(k.value for k in c.keywords))
++            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'
++            and (escopos[c], 'dict') not in nomes_locais}
+```
+
+| Item | Teste | Mutantes | Esperado na cópia | [nao verificado]
+|---|---|---|---|
+| 1 · Variável | `test_RED_registrar_com_projecao_por_variavel_e_acusado` | `M1-tupla` | **VERDE** · `app/core/censo_escritas.py:442–454` |
+| 1 · Helper | `test_RED_salvar_a_projecao_direto_fora_da_porta_e_acusado` | `M1-ignora-helper`, `M1-nome-registrar` | **VERDE** · `app/core/censo_escritas.py:430–440` |
+| 1 · Controle interno | `test_os_dois_saves_da_porta_ficam_visiveis` | `M1-reclassifica`, `M1-terceiro-save` | **VERDE** · `app/core/censo_escritas.py:430–440,475–485` |
+| 2 · `dict` religado | `test_RED_trilha_acusa_dict_religado` nos dois selos | `M2-grafia-dict` | **VERMELHO** · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112` |
+| 2 · Import homônimo | `test_RED_trilha_acusa_import_local_homonimo` nos dois selos | `M2-import-global` | **VERMELHO** · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` |
+
+**Total de mutantes distintos: 7.** `app/core/censo_escritas.py:430–485` · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112`
 
 ## 28/11 10:37 · sessao f785008300d3 · E4C-F5-INSTANTE · construtor · origem=Code
 
@@ -980,44 +1215,4 @@ ARQUIVOS: **OPUS** — `app/chamados/models.py`, `app/chamados/catalogo/motor.py
 
 ARQUIVOS: **CODEX** — `app/colaboradores/services/{desligamento,colaborador,vinculo}.py`, `app/colaboradores/views.py`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py`, `app/chamados/services/{acoes_disputa,fio,adesao,historico,tarefa_do_dia,trilha_reabertura,disputa_emissao,regularizacao_ext}.py`, `app/chamados/management/commands/{reparar_passivo_desligamento,auditar_invariantes_chamados}.py`, `app/chamados/views_regularizacao.py`, `app/ponto/services/{cartorio,vigia_de_hora,triagem_batida}.py`, `app/ponto/portas/celula.py`, `app/api/{views,views_core}.py`, `app/templates/ponto/triagem/fora_horario.html`. Escopo proposto acima.
 
-## 28/11 09:11 · sessao 1792e5234a22 · E4D-CONTRATO-ROTA-B · verificador · origem=Code
-
-**REPROVADO.** A classe de apresentação pelo cru sobrevive no cartão do admin. O delta também deixa vermelha a catraca do fio e introduz no POST uma consulta fora da trava que pode devolver o carimbo de outra resposta. `app/templates/chamados/partials/_pergunta_card.html:21,24,45` · `app/chamados/services/fio.py:213–226` · `app/chamados/tests/test_e4c_f5_selo_catraca.py:237–250,338–349` · `app/api/views.py:2653–2665` · `app/chamados/services/disputa_emissao.py:1487–1494,1562–1568`
-
-1. **Cada leitor usa a autoridade da guarda ou do estado? Sobrou apresentação pelo cru?**
-
-   - **`_pergunta_card`, parcialmente.** A presença da resposta usa `perg.respondida`, que delega ao C21 sobre a composta, e a hora exibida vem da composta. A opacidade, o selo com a hora de validação e a abertura do bloco de ações ainda dependem de `perg.validada_em` cru. Com uma `DEVOLUCAO` posterior e carimbo residual, a composta perde a validação, mas o cartão conserva o selo e esconde as ações. O GET filtra pelo C6. O retorno HTMX também renderiza esse parcial após buscar a pergunta por PK, sem esse filtro. `app/templates/chamados/partials/_pergunta_card.html:20–45` · `app/chamados/models.py:3958–3965,4493–4504` · `app/chamados/services/validacao.py:755–765` · `app/chamados/services/acoes_chamado.py:345–358` · `app/chamados/views.py:394–405,484–502`
-   - **`montar_chamados_fio`, `espera_o_texto_do_colaborador` e `_card_atendimento`, sim.** O montador passa a mesma composta para o veredito de envio e para o carimbo. A regra existente do helper equivale ao inverso do C21. A confirmação, a linha junto ao campo de hora e a etiqueta “Enviado” usam o carimbo do contexto. `app/chamados/services/fio.py:213–226,442–446` · `app/chamados/juizes.py:1626–1634,1644–1653` · `app/templates/chamados/partials/_card_atendimento.html:94–106,141–144,393–395`
-   - **`modal_fio` e `api_disputa_responder`, sim quanto à fonte.** No modal, os dois selos usam a validação vigente da composta, como `estado`. O autor exibido no histórico vem de `DecisaoPergunta.validada_original_por`, uma foto histórica. No POST, a guarda anterior à escrita usa C21 sobre a composta e o sucesso relê a composta. Nos cinco arquivos, os usos ativos de apresentação de `respondida_em`, `validada_em` ou `validada_por` pela coluna da pergunta ficaram concentrados nos três pontos do cartão do admin. `app/templates/chamados/partials/modal_fio.html:204–230,346–351` · `app/chamados/models.py:3358–3367,4350–4353` · `app/api/views.py:1133–1150,2567–2582,2646–2665` · `app/chamados/services/fio.py:213–226,442–446` · `app/templates/chamados/partials/_card_atendimento.html:100–106,141–144,393–395` · `app/templates/chamados/partials/_pergunta_card.html:21–45`
-
-2. **Quem escreve e lê os quatro valores? Há mudança de unidade, fuso ou sentido?**
-
-   | Valor | Escrita e leitura |
-   |---|---|
-   | `resposta_enviada` | `montar_chamados_fio` atribui o booleano em memória. `_card_atendimento` o lê para confirmação, seleção e preenchimento, Enviar/Reenviar e a etiqueta de envio. `app/chamados/services/fio.py:442–446` · `app/templates/chamados/partials/_card_atendimento.html:100–114,141–164,393–395` |
-   | `resposta_enviada_em` | O mesmo montador copia `composta.respondida_em`, um `datetime` ou `None`. Os três usos na cópia formatam data e hora. `app/chamados/services/fio.py:442–446` · `app/chamados/models.py:4344–4346,4493–4515` · `app/templates/chamados/partials/_card_atendimento.html:106,143,394` |
-   | `composta.respondida_em` | A porta humana, a automática e a da trilha alimentam `RESPOSTA`. Nascimento e carimbo alimentam a projeção que o redutor incorpora quando falta a linha correspondente. `RECUSA` e `REABERTURA` retiram a resposta vigente. Leem o valor o C21, a projeção temporal do C6, o fio, os cartões, o modal e as APIs. `app/chamados/services/disputa_emissao.py:1529–1567,1757–1763,1785–1797` · `app/chamados/models.py:3330–3336,3473–3482,4429–4456,4486–4515` · `app/chamados/juizes.py:1476–1503,1644–1653` · `app/chamados/services/fio.py:442–446` · `app/templates/chamados/partials/_pergunta_card.html:30–36` · `app/templates/chamados/partials/modal_fio.html:217–221` · `app/api/views.py:1150,2582,2665` |
-   | `composta.validada_em` | `_carimbar_validacao` grava as colunas e fornece `VALIDACAO` a `registrar`, que insere os atos. O redutor incorpora o legado e aplica as compensações. Leem o instante `estado`, C6, as guardas de validar e recusar e o modal. `app/chamados/services/validacao.py:164–178,755–765,948–958` · `app/chamados/models.py:3358–3367,4443–4456,4493–4515,4590–4609` · `app/chamados/juizes.py:1499–1504` · `app/templates/chamados/partials/modal_fio.html:229–230,346–347` |
-
-   Os consumidores conferidos tratam os dois carimbos como instantes. O C6 compara com `agora`, as telas formatam data e hora com `USE_TZ=True` e fuso padrão `America/Sao_Paulo`, e o JSON serializa em ISO. A mudança semântica está no **recibo do POST**. A coluna da instância guardava o instante da resposta deste pedido. A nova leitura pode observar uma resposta posterior ou uma reabertura já gravada depois da saída da transação. Reproduzi em memória, com o redutor da cópia, `T2` e `None` para um pedido que gravou `T1`. A corrida no endpoint integrado fica [nao verificado]. `app/chamados/juizes.py:1476–1494` · `app/config/settings/base.py:92–95` · `app/chamados/services/disputa_emissao.py:1487–1494,1529–1532,1562–1568,1591–1614` · `app/chamados/models.py:4486–4515` · `app/api/views.py:2653–2665`
-
-3. **O delta reincide nas classes de reprovação?**
-
-   - **Catraca vermelha.** Executei a checagem AST existente em memória, usando `unittest.TestCase` no lugar de `SimpleTestCase`. O trecho anterior do anexo passou isoladamente. A cópia acusa `fio.py:226`: a catraca exige que a origem de `leitura` seja composta nos dois ramos, e a assinatura nova permite recebê-la sem essa garantia local. O chamador novo efetivamente passa a composta. `app/chamados/tests/test_e4c_f5_selo_catraca.py:17–22,237–250,338–349` · `app/chamados/services/fio.py:213–226,442–446`
-   - **Consultas.** Fio e modal reutilizam o prefetch em lote. O modal passa a fazer uma redução adicional em memória para perguntas sem resposta. O GET do detalhe também tem prefetch. No HTMX, a busca da pergunta vem sem prefetch e a composição acrescenta um `SELECT` quando a pergunta respondida tem validação crua. No POST da API, a composição pós-sucesso acrescenta um `SELECT` de decisões sem prefetch. São contagens por inspeção. Medição com Django [nao verificado]. `app/chamados/services/fio.py:295–311,442–446` · `app/templates/chamados/partials/modal_fio.html:217–229,346–351` · `app/chamados/services/acoes_chamado.py:350–358` · `app/chamados/views.py:394–405` · `app/templates/chamados/partials/_pergunta_card.html:20–36` · `app/api/views.py:2637–2647,2653–2665` · `app/chamados/models.py:4482–4492`
-   - **Demais classes.** Zero novo juiz, escritor persistente, leitura de relógio, derivação paralela, `except` ou fallback direto ao cru. O legado continua no redutor comum. O carimbo cru residual do cartão e a mudança de sentido do recibo são os desvios identificados. `app/chamados/services/fio.py:213–226,442–446` · `app/chamados/models.py:4429–4448,4486–4515` · `app/templates/chamados/partials/_pergunta_card.html:21–45` · `app/api/views.py:2653–2665`
-
-4. **Os REDs descritos mordem cada mutante?** Pelo desenho, mordem os mutantes nomeados abaixo quando a fixture alcança o ramo e a asserção isola o trecho. Execução dos REDs e mutantes em Django [nao verificado]. `app/chamados/tests/e4d_matriz_mutantes.py:598–612,687–694`
-
-   | Leitor | Mordida |
-   |---|---|
-   | Cartão do admin | A hora no bloco “Resposta do colab” distingue ato de coluna nula. O RED descrito deixa sobreviver os três usos de `validada_em` cru. `app/templates/chamados/partials/_pergunta_card.html:21–45` |
-   | Fio e Meu Atendimento | A hora afere o mutante do montador. Para morder também a troca crua em cada ponto do HTML, é preciso afirmar cada trecho separadamente. A etiqueta exige um furo com o formulário de declaração visível. O teste existente verifica presença da caixa e do botão, sem afirmar a hora. `app/chamados/services/fio.py:442–446` · `app/templates/chamados/partials/_card_atendimento.html:100–106,141–144,212–228,393–395` · `app/chamados/tests/test_e3_item1b.py:150–171` |
-   | Modal | `VALIDACAO` vigente com coluna nula e `DEVOLUCAO` com resíduo distinguem os dois sentidos da troca, com e sem resposta vigente. O teste F7 existente usa validação legada que o cru também mostra. O caso 30 afirma a hora da resposta, sem testar o selo. `app/templates/chamados/partials/modal_fio.html:217–230,346–351` · `app/chamados/models.py:4443–4447,4493–4504` · `app/chamados/tests/test_f7_validada_conservada.py:44–53` · `app/chamados/tests/test_e4d_matriz_reds.py:1659–1660` |
-   | POST | Injetar `T0` só na instância após a porta gravar `T1` distingue os retornos. Confirmei essa divergência no redutor em memória. A asserção existente de `AGORA` aceita o mutante porque a porta grava o mesmo instante na coluna e no ato. O RED descrito cobre a fonte do carimbo e deixa a corrida sem cobertura. `app/api/views.py:2653–2665` · `app/chamados/services/disputa_emissao.py:1529–1532,1562–1567` · `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:83–97` |
-
-**Achados 1 e 2:** sem agravamento pelo delta. O pré-filtro do fio, `q_vivas`, a seleção e ordenação da fila SQL e a serialização da mensageria conservam os mesmos caminhos. `app/chamados/services/fio.py:306–317` · `app/chamados/models.py:3770–3789` · `app/chamados/juizes.py:1855–1868` · `app/api/views_mensageria.py:539–547,555–575`
-
-Os cinco blobs da cópia conferem com os lados novos de `cura3.diff`. Identidade do commit e do pai, suíte Django e efeitos em produção [nao verificado]. [nao verificado]
-
-_8889 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8890 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
