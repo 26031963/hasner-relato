@@ -14712,3 +14712,9 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 22:15 brief logs/FERIADO-L097-MOTOR/brief_c2.md com CENSO (fonte ver1 Codex); construtor c2 opus abre
 - 22:15 FERIADO-L097-MOTOR c2: construtor opus aberto e encerrado no ato (teto 1 opus construtor; CCM c2 tem a vaga, prioridade da nota CCM-PRIMEIRO); c2 abre quando o CCM c2 entregar, brief pronto logs/FERIADO-L097-MOTOR/brief_c2.md -- travada por: vaga opus
 - 22:16 colhido CODEX-CONSTROI-MOTOR c2/red.rc (22:16 rc 1): RED do construtor opus em curso (esperado vermelho contra 23c7758e4)
+- 22:16 colhido CODEX-CONSTROI-MOTOR c2/red_agente.rc (22:16 rc 2): RED do construtor em curso (selo do disjuntor, esperado vermelho)
+- 22:18 colhido CODEX-CONSTROI-MOTOR c2/agente.rc (22:18 rc 0): GREEN do test_agente_no_modelo com rc gravado (achado opus 2) -- construtor segue
+- 22:21 colhido CODEX-CONSTROI-MOTOR c2/codex.rc (22:21 rc 0): GREEN do test_codex_pergunta na c2 -- construtor segue
+- 22:22 colhido CODEX-CONSTROI-MOTOR c2/claude_md_regras_preservadas.rc (22:22 rc 0): selo vizinho verde na c2
+- 22:22 colhido CODEX-CONSTROI-MOTOR c2/censo.rc (22:22 rc 0): selo vizinho verde na c2
+- 22:23 colhido CODEX-CONSTROI-MOTOR c2/selo_proporcao.rc (22:22 rc 0): selo vizinho verde na c2
