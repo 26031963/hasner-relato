@@ -1,7 +1,428 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 11:24** · publicado em **28/11/2026 11:27** (UTC-3)
+> Ultima resposta processada: **28/11/2026 11:32** · publicado em **28/11/2026 11:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 11:32 · sessao 5209f6acefbe · E4C-F5-INSTANTE · leitura · origem=Code
+
+## 1. Selo `core.observ` com outro import de `core`
+
+As âncoras abaixo têm contagem **1** na a2 reconstruída em memória. `V` e `R` indicam os vereditos na cópia fornecida, na a2 reconstruída e com a cura. A equivalência Git da cópia com `486a1ffc4`, a execução de `486a1ffc4~1`, a suíte Django, o Ruff e a conferência pela sessão estão [nao verificado]. Rodei os métodos selecionados com `unittest.TestCase` e os analisadores reais. Os vermelhos foram `AssertionError`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165` · `app/chamados/tests/test_e4c_f5_c4_red.py:1557–1562` · `app/ruff.toml:4–6`
+
+Em `_dicts_da_trilha`, substitua o bloco `else` de dois versos da a2 pelo trecho abaixo. Um `import core.X` sem alias mantém o vínculo com o pacote `core`. Um alias explícito continua sujeito à regra de religamento. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–109`
+
+```diff
+-                else:
++                elif not (isinstance(n, ast.Import) and not a.asname and a.name.startswith('core.')):
+                     religados.add(nome)
+```
+
+Insira antes de `class SeloEscritorUnicoDoCarimbo(SimpleTestCase):`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:263`
+
+```python
+def _fonte_trilha_com_dois_imports_core(campo):
+    return (
+        'import core.observ\n'
+        'import core.models\n'
+        'def f():\n'
+        f'    core.observ.evento(depois=dict({campo}=None))\n'
+    )
+
+
+```
+
+No par, substitua o fecho do import da a2. `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30`
+
+```diff
+     _dicts_da_trilha,
++    _fonte_trilha_com_dois_imports_core,
+ )
+```
+
+No carimbo, insira antes de `def test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel(self):`. No par, insira antes de `def test_MORDE_repasse_de_param_na_classe_do_modelo(self):`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:333` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:269`
+
+```python
+    def test_CONTROLE_trilha_com_dois_imports_core(self):
+        self.assertEqual(escritas_do_carimbo(_fonte_trilha_com_dois_imports_core('materializada_em')), [])
+
+```
+
+```python
+    def test_CONTROLE_trilha_com_dois_imports_core(self):
+        self.assertEqual(escritas_do_par(_fonte_trilha_com_dois_imports_core('respondida_em')), [])
+
+```
+
+Nos dois selos, `test_CONTROLE_trilha_com_dois_imports_core` dá **486 V · base V esperada [nao verificado] · a2 R · cura V**. O mutante **M2-core** produz um achado onde cada teste exige `[]`. Original e mutado, contagem **1** na cura. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
+
+```diff
+-                elif not (isinstance(n, ast.Import) and not a.asname and a.name.startswith('core.')):
++                else:
+                     religados.add(nome)
+```
+
+## 2. Ligações em campos `str` nos dois selos
+
+Em `_dicts_da_trilha`, insira imediatamente antes de `    if 'dict' in religados:` da a2. Incluí os três campos `name` de parâmetros de tipo. A imagem da aplicação usa Python 3.13. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/Dockerfile:1`
+
+```python
+        elif isinstance(n, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)) and n.name is not None:
+            religados.add(n.name)
+        elif isinstance(n, ast.MatchMapping) and n.rest is not None:
+            religados.add(n.rest)
+        elif isinstance(n, (ast.Global, ast.Nonlocal)):
+            religados.update(n.names)
+        elif isinstance(n, (ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)):
+            religados.add(n.name)
+```
+
+Insira antes de `def _fonte_trilha_com_dois_imports_core(campo):`, introduzido no item 1. No par, insira `    _casos_trilha_ligacao_em_campo_str,` imediatamente depois de `    _casos_trilha_evento_religado,` do import da a2. O `nonlocal` usa um import legítimo na função externa, de modo que retirar a regra de `Nonlocal` derruba o teste mesmo com a regra de parâmetros ativa. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,263` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30`
+
+```python
+def _casos_trilha_ligacao_em_campo_str(campo):
+    for nome in ('evento', 'dict'):
+        inicio = (
+            'from core.observ import evento\n'
+            f'def g():\n    evento(depois=dict({campo}=None))\n'
+        )
+        chamada = f'evento(depois=dict({campo}=None))'
+        casos = (
+            ('ExceptHandler.name', f'def f():\n    try:\n        pass\n    except E as {nome}:\n', 8, '        '),
+            ('MatchAs.name', f'def f(x):\n    match x:\n        case {nome}:\n', 7, '            '),
+            ('MatchStar.name', f'def f(x):\n    match x:\n        case [*{nome}]:\n', 7, '            '),
+            ('MatchMapping.rest', f'def f(x):\n    match x:\n        case {{**{nome}}}:\n', 7, '            '),
+            ('Global.names', f'def f():\n    global {nome}\n', 6, '    '),
+            ('Nonlocal.names',
+             f'def f():\n    from core.observ import evento as {nome}\n'
+             f'    def interna():\n        nonlocal {nome}\n', 8, '        '),
+            ('TypeVar.name', f'def f[{nome}]():\n', 5, '    '),
+            ('ParamSpec.name', f'def f[**{nome}]():\n', 5, '    '),
+            ('TypeVarTuple.name', f'def f[*{nome}]():\n', 5, '    '),
+        )
+        for caso, corpo, linha, recuo in casos:
+            yield caso, nome, inicio + corpo + recuo + chamada + '\n', linha
+
+
+```
+
+Insira os métodos nas mesmas âncoras de classe do item 1, carimbo e par respectivamente. Cada teste exige o achado no sítio afetado e em `g`, antes do religamento. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:222–225,333` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165,269`
+
+```python
+    def test_RED_trilha_acusa_ligacao_em_campo_str(self):
+        for caso, nome, fonte, linha in _casos_trilha_ligacao_em_campo_str('materializada_em'):
+            achados = escritas_do_carimbo(fonte)
+            alvo = 'f.interna' if caso == 'Nonlocal.names' else 'f'
+            for funcao, numero in ((alvo, linha), ('g', 3)):
+                with self.subTest(caso=caso, nome=nome, funcao=funcao):
+                    self.assertIn((funcao, numero, 'dict(materializada_em=)'), achados)
+
+```
+
+```python
+    def test_RED_trilha_acusa_ligacao_em_campo_str(self):
+        for caso, nome, fonte, linha in _casos_trilha_ligacao_em_campo_str('respondida_em'):
+            achados = escritas_do_par(fonte)
+            alvo = 'f.interna' if caso == 'Nonlocal.names' else 'f'
+            for funcao, numero in ((alvo, linha), ('g', 3)):
+                with self.subTest(caso=caso, nome=nome, funcao=funcao):
+                    self.assertIn((funcao, numero, 'dict(respondida_em=)'), achados)
+
+```
+
+Nos dois selos, `test_RED_trilha_acusa_ligacao_em_campo_str` dá **486 R · base R esperada [nao verificado] · a2 R · cura V**. Cada mutante abaixo tem original de contagem **1** na cura e derruba quatro asserções por selo. `\n` indica uma quebra literal. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,222–225` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
+
+| Mutante | Original exato | Mutado exato |
+|---|---|---|
+| `ExceptHandler.name` | `(ast.ExceptHandler, ast.MatchAs, ast.MatchStar)` | `(ast.MatchAs, ast.MatchStar)` |
+| `MatchAs.name` | `(ast.ExceptHandler, ast.MatchAs, ast.MatchStar)` | `(ast.ExceptHandler, ast.MatchStar)` |
+| `MatchStar.name` | `(ast.ExceptHandler, ast.MatchAs, ast.MatchStar)` | `(ast.ExceptHandler, ast.MatchAs)` |
+| `MatchMapping.rest` | `"        elif isinstance(n, ast.MatchMapping) and n.rest is not None:\n            religados.add(n.rest)\n"` | `""` |
+| `Global.names` | `(ast.Global, ast.Nonlocal)` | `ast.Nonlocal` |
+| `Nonlocal.names` | `(ast.Global, ast.Nonlocal)` | `ast.Global` |
+| `TypeVar.name` | `(ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)` | `(ast.ParamSpec, ast.TypeVarTuple)` |
+| `ParamSpec.name` | `(ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)` | `(ast.TypeVar, ast.TypeVarTuple)` |
+| `TypeVarTuple.name` | `(ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)` | `(ast.TypeVar, ast.ParamSpec)` |
+
+Atualize os dois mutantes da a2 cujas âncoras mudaram. `M2-import-global` mata `test_RED_trilha_acusa_import_local_homonimo` e `M2-sem-parametro` mata esse teste e `test_RED_trilha_acusa_dict_religado`. Em ambos os selos, esses dois testes dão **486 R · base R esperada [nao verificado] · a2 V · cura V**. `M2-grafia-dict` conserva o bloco exato da a2 e mata também o novo RED nos casos de `dict`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,222–225` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
+
+```diff
+@@ M2-import-global
+                 elif not (isinstance(n, ast.Import) and not a.asname and a.name.startswith('core.')):
+-                    religados.add(nome)
++                    pass
+```
+
+`M2-sem-parametro` troca `"        elif isinstance(n, ast.arg):\n            religados.add(n.arg)\n"` por `""`, com contagem **1**. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:94–99`
+
+## 3. Censo com uma tabela de ligações e registro de projeção não resolvida
+
+Cada escopo passa a ter uma tabela `ligacoes`. A coleta registra uma vez os vínculos sintáticos. A inferência legada de modelo escreve a origem nas mesmas entradas, e a projeção lê os vínculos lexicais dessas entradas. A resolução segue atribuições diretas, aliases e desempacotamento literal. Para `for` e `with`, a ligação local encobre a externa e o valor projetado fica indeterminado. Projeção indeterminada gera `save` com `entidade=None`, no balde existente, e `projecao=?` na expressão. Isso inclui `projecao=None` explícita. O delta de produção acrescenta zero `except`. `app/core/censo_escritas.py:200–217,300–377,421–485,561–565` · `app/chamados/models.py:4789–4803`
+
+Em `app/core/censo_escritas.py`, insira `from collections import deque` imediatamente depois de `import os`. Insira o bloco abaixo imediatamente antes de `class _Varredor(ast.NodeVisitor):`. Cada âncora tem contagem **1**. `app/core/censo_escritas.py:58–59,199–211`
+
+```python
+_NOS_DE_ESCOPO = (
+    ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda,
+    ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp,
+)
+
+
+class _Ligacao:
+    def __init__(self):
+        self.vinculos = []  # (ordem, local, valor da projecao, evidencia do modelo)
+        self.campos = set()
+        self.origem = None
+
+
+```
+
+No `__init__` de `_Varredor`, substitua o intervalo de `        self._funcao = []` até antes de `        # E3-CENSO-APELIDO` por esta linha. Substitua depois o intervalo de `    # -- escopos` até antes de `    def visit_ClassDef(self, no):` pelo bloco completo. Cada delimitador tem contagem **1**. `app/core/censo_escritas.py:209–217,300–319`
+
+```python
+        self._escopos = []  # pilha de (no do escopo, ligacoes)
+```
+
+```python
+    # -- escopos
+    def _ligar_alvo(self, ligacoes, alvo, valor, origem, local, ordem):
+        if isinstance(alvo, ast.Name):
+            ligacoes.setdefault(alvo.id, _Ligacao()).vinculos.append((ordem, local, valor, origem))
+        elif isinstance(alvo, ast.Starred):
+            self._ligar_alvo(ligacoes, alvo.value, None, None, local, ordem)
+        elif isinstance(alvo, (ast.Tuple, ast.List)):
+            elts = ()
+            if (isinstance(valor, (ast.Tuple, ast.List)) and len(alvo.elts) == len(valor.elts)
+                    and not any(isinstance(e, ast.Starred) for e in (*alvo.elts, *valor.elts))):
+                elts = valor.elts
+            for i, item in enumerate(alvo.elts):
+                evid = origem if i == 0 and isinstance(alvo, ast.Tuple) and isinstance(item, ast.Name) else None
+                self._ligar_alvo(ligacoes, item, elts[i] if elts else None, evid, local, ordem)
+
+    def _colher_ligacoes(self, no, inferir):
+        # A origem do modelo usa a ordem em largura e pode ler escopos filhos,
+        # como antes. A tupla usa apenas os vinculos lexicais do escopo.
+        ligacoes = {}
+        fila = deque((sub, True, True) for sub in ast.iter_child_nodes(no))
+        ordem = 0
+        while fila:
+            sub, local, direta = fila.popleft()
+            ordem += 1
+            if not local and not inferir:
+                continue
+            filhos_locais = local and not isinstance(sub, _NOS_DE_ESCOPO)
+            fila.extend((filho, filhos_locais, direta and isinstance(sub, ast.Expr))
+                        for filho in ast.iter_child_nodes(sub))
+            alvos, valor, origem = (), None, None
+            if isinstance(sub, ast.Assign):
+                alvos, valor, origem = sub.targets, sub.value, sub.value
+                for alvo in alvos:
+                    if (inferir and isinstance(alvo, ast.Attribute) and isinstance(alvo.value, ast.Name)
+                            and alvo.attr in self.unicos):
+                        ligacoes.setdefault(alvo.value.id, _Ligacao()).campos.add(self.unicos[alvo.attr])
+            elif isinstance(sub, ast.AnnAssign) and sub.value is None:
+                if local and isinstance(sub.target, ast.Name):
+                    self._ligar_alvo(ligacoes, sub.target, sub, None, local, ordem)
+            elif isinstance(sub, (ast.AnnAssign, ast.NamedExpr)):
+                alvos, valor, origem = (sub.target,), sub.value, sub.value
+            elif isinstance(sub, ast.AugAssign):
+                alvos, origem = (sub.target,), sub.value
+            elif isinstance(sub, (ast.For, ast.AsyncFor, ast.comprehension)):
+                alvos, origem = (sub.target,), sub.iter
+            elif isinstance(sub, ast.withitem) and sub.optional_vars is not None:
+                alvos, origem = (sub.optional_vars,), sub.context_expr
+            elif isinstance(sub, (ast.Delete, ast.TypeAlias)):
+                alvos = sub.targets if isinstance(sub, ast.Delete) else (sub.name,)
+            for alvo in alvos:
+                self._ligar_alvo(ligacoes, alvo, valor if direta else None, origem, local, ordem)
+            if not local:
+                continue
+            nomes = ()
+            if isinstance(sub, (ast.Import, ast.ImportFrom)):
+                nomes = (a.asname or a.name.split('.')[0] for a in sub.names)
+            elif isinstance(sub, (ast.Global, ast.Nonlocal)):
+                nomes = sub.names
+            elif isinstance(sub, ast.arg):
+                nomes = (sub.arg,)
+            elif isinstance(sub, ast.MatchMapping):
+                nomes = (sub.rest,) if sub.rest is not None else ()
+            elif isinstance(sub, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.ExceptHandler,
+                                  ast.MatchAs, ast.MatchStar, ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)):
+                nomes = (sub.name,) if sub.name is not None else ()
+            for nome in nomes:
+                ligacoes.setdefault(nome, _Ligacao()).vinculos.append((ordem, True, None, None))
+        return ligacoes
+
+    def _inferir_amarras(self, ligacoes):
+        # Ponto fixo sobre os mesmos vinculos: qs = X.objects.filter(); for b in qs: b.save().
+        evidencias = sorted(
+            ((ordem, nome, valor) for nome, ligacao in ligacoes.items()
+             for ordem, _, _, valor in ligacao.vinculos if valor is not None),
+            key=lambda item: item[0],
+        )
+        mudou = True
+        while mudou:
+            mudou = False
+            for _, nome, valor in evidencias:
+                ligacao = ligacoes[nome]
+                if ligacao.origem:
+                    continue
+                origem = self._origem(valor)
+                if not origem and isinstance(valor, ast.Name) and valor.id in ligacoes:
+                    origem = ligacoes[valor.id].origem
+                    origem = None if origem == '__nova__' else origem
+                if origem:
+                    ligacao.origem = origem
+                    mudou = True
+        for ligacao in ligacoes.values():
+            if not ligacao.origem and len(ligacao.campos) == 1:
+                ligacao.origem = ('campo', next(iter(ligacao.campos)))
+
+    def _visitar_escopo(self, no, inferir=False):
+        ligacoes = self._colher_ligacoes(no, inferir)
+        if inferir:
+            self._inferir_amarras(ligacoes)
+        self._escopos.append((no, ligacoes))
+        self.generic_visit(no)
+        self._escopos.pop()
+
+    visit_Module = visit_Lambda = _visitar_escopo
+    visit_ListComp = visit_SetComp = visit_DictComp = visit_GeneratorExp = _visitar_escopo
+
+```
+
+Em `visit_ClassDef`, aplique a primeira troca abaixo. Em `_visit_funcao`, substitua o intervalo de `        self._imports_locais.append(locais)` até antes de `        self._imports_locais.pop()` pelas duas linhas indicadas. Aplique também as trocas em `_no_registrar_da_decisao` e `_variavel`. Cada bloco ou delimitador tem contagem **1**. `app/core/censo_escritas.py:315–377,435–440,460–474`
+
+```diff
+@@ visit_ClassDef
+-        self._visitar_escopo_da_projecao(no)
++        self._visitar_escopo(no)
+         self._classe.pop()
+@@ _no_registrar_da_decisao
+-        if len(self._escopos_da_projecao) != 3:
++        if len(self._escopos) != 3:
+             return False
+-        _, (classe, _), (metodo, _) = self._escopos_da_projecao
++        _, (classe, _), (metodo, _) = self._escopos
+@@ _variavel
+-            for amarras in reversed(self._funcao):
+-                origem = amarras.get(rec.id)
++            for _, ligacoes in reversed(self._escopos):
++                ligacao = ligacoes.get(rec.id)
++                origem = ligacao.origem if ligacao is not None else None
+```
+
+```python
+        self._imports_locais.append(locais)
+        self._visitar_escopo(no, inferir=True)
+```
+
+Substitua o intervalo de `    def _projecao(self, no, valor):` até antes de `        inst, campos = valor.elts` por este bloco. Cada delimitador tem contagem **1**. `app/core/censo_escritas.py:442–454`
+
+```python
+    def _valor_da_projecao(self, valor):
+        limite = len(self._escopos) - 1
+        while isinstance(valor, (ast.Name, ast.NamedExpr)):
+            if isinstance(valor, ast.NamedExpr):
+                valor = valor.value
+                continue
+            for i in range(limite, -1, -1):
+                escopo, ligacoes = self._escopos[i]
+                if isinstance(escopo, ast.ClassDef) and i != limite:
+                    continue
+                ligacao = ligacoes.get(valor.id)
+                if ligacao is not None:
+                    locais = [v for _, local, v, _ in ligacao.vinculos if local]
+                    if locais:
+                        break
+            else:
+                return None
+            locais = [v for v in locais if not isinstance(v, ast.AnnAssign)]
+            if len(locais) != 1 or locais[0] is None:
+                return None
+            ligado = locais[0]
+            if (ligado.end_lineno, ligado.end_col_offset) > (valor.lineno, valor.col_offset):
+                return None
+            valor, limite = ligado, i
+        return valor
+
+    def _projecao(self, no, valor):
+        """`projecao=(inst, campos)` = `inst.save(update_fields=campos)` neste sitio (`ESCRITA_POR_PROJECAO`)."""
+        valor = self._valor_da_projecao(valor)
+        if (not isinstance(valor, ast.Tuple) or len(valor.elts) != 2
+                or any(isinstance(e, ast.Starred) for e in valor.elts)):
+            self._anotar(no, None, 'save', '%s(projecao=?) [projecao]' % _texto(no.func))
+            return
+```
+
+Insira os dois REDs em `CensoLeAProjecaoTest`, antes de `    def test_os_dois_saves_da_porta_ficam_visiveis(self):`, contagem **1**. `for` e `with` incluem uma tupla externa válida para que apagar a ligação local produza uma classificação errada e derrube a asserção. `app/chamados/tests/test_e4c_f5_c4_red.py:1557–1562,1576` · `app/core/censo_escritas.py:308–313,333–356,442–454`
+
+```python
+    def test_RED_projecao_resolve_ligacoes_lexicais(self):
+        inicio = 'from chamados.models import DecisaoPergunta as DP\n'
+        tupla = "(p, ['respon
+
+[truncado em 20000 de 29418 caracteres]
+
+## 28/11 11:30 · sessao 20970be2aa1e · C7-TELA-ADMIN-ENCERRA · leitura · origem=Code
+
+A porta atual **encerra a disputa inteira**. Ela pode carimbar, no mesmo ato, perguntas que a célula ainda sustenta e perguntas que perderam o marco previsto. Para a obra que pede encerramento seletivo, falta uma decisão de escopo antes de ligar o botão. `app/chamados/models.py:2122`, `app/chamados/models.py:2184`, `app/chamados/services/disputa_emissao.py:1110`, `app/chamados/services/disputa_emissao.py:1167`
+
+### 1. Porta e caso 40588
+
+- `admin_encerra(user, motivo)` aplica `strip()`, rejeita motivo vazio com `ValueError` e chama `fechar` com `resolucao=texto` e `motivo_fechamento='admin_encerra'`. Para uma disputa aberta, `fechar` exige `user`. A permissão de staff/admin precisa ser aplicada na borda HTTP. `app/chamados/models.py:2094`, `app/chamados/models.py:2210`, `app/chamados/services/acoes_disputa.py:284`
+- A guarda lê **todas** as perguntas da disputa. Uma resposta com instante e texto, sem validação nem materialização e fora de dia trancado, barra o ato inteiro. O `ValueError` nomeia as perguntas e manda validar ou recusar as respostas na mesa. A porta relê a disputa e repete a guarda sob trava. `app/chamados/juizes.py:1644`, `app/chamados/models.py:2041`, `app/chamados/models.py:2122`, `app/chamados/models.py:2151`, `app/chamados/models.py:2163`
+- Para cada pergunta que o C6 considera viva, a porta tenta gravar `via_resolucao='admin_decidiu'`, `materializada_em` e `materializada_por`. Quando o carimbo grava, registra `DecisaoPergunta.SILENCIO` com autor, instante do carimbo, foto da resposta e motivo limitado a 240 caracteres, além de `pergunta_encerrada_com_a_disputa`. Depois grava `fechada_em`, `fechada_por`, `resolucao` e `motivo_fechamento` na disputa, emite `disputa_fechada` e retorna `True`. Os eventos de `LogAuditoria` são best-effort. O carimbo de identidade tem guardas próprias e pode devolver `False`, caso em que aquele `SILENCIO` e evento da pergunta são pulados. `app/chamados/models.py:2132`, `app/chamados/models.py:2184`, `app/chamados/models.py:2199`, `app/chamados/models.py:3372`, `app/chamados/models.py:3544`, `app/core/observ.py:94`, `app/core/observ.py:133`
+- Mesma disputa, mesmo autor, mesmo motivo após `strip()` e mesmo código de fechamento devolvem `False` sem nova escrita ou trilha. Entrada diferente sobre disputa já fechada levanta `ValueError`. Se o fechamento concorrente só aparece na releitura sob a trava, devolve `False` sem regravar. `app/chamados/models.py:2094`, `app/chamados/models.py:2168`, `app/chamados/tests/test_e4_expand_orm.py:64`
+- **61520/61521** entram no carimbo se estiverem vivas pelo C6 nas respectivas disputas abertas no instante do ato, se nenhuma irmã barrar o fechamento e se o carimbo gravar. A sonda do enunciado informa 88 vivas na comp. 11, 68 da emp2 e 20 da emp3, e descreve a emissão às 12:36 e a regeneração da célula 122468 às 12:42. PKs das disputas, lista integral de irmãs e estado atual das guardas **[nao verificado]**. `app/chamados/models.py:2122`, `app/chamados/models.py:2175`, `app/chamados/models.py:2184`
+- **Disputa mista é possível.** O emissor reaproveita uma disputa aberta do colaborador e agrega nela perguntas de intervalo e de outros marcos ou chamados. O laço de encerramento usa o C6 sobre a disputa inteira. A falta de intervalo no DNA atual, por si só, não seleciona o que será carimbado. `app/chamados/services/disputa_emissao.py:1110`, `app/chamados/services/disputa_emissao.py:1167`, `app/chamados/services/disputa_emissao.py:1180`, `app/chamados/juizes.py:1551`, `app/chamados/models.py:2184`
+
+**lei:** O aval permite encerrar a disputa inteira, inclusive uma irmã viva ainda sustentada pela célula, ou a irmã sustentada deve permanecer aberta? Se deve permanecer, qual porta existente o aval autoriza para o ato seletivo? `admin_encerra` recebe a disputa e o motivo, sem alvo por pergunta. `app/chamados/models.py:2184`, `app/chamados/models.py:2210`
+
+### 2. Chamado 40588 e retenção do dia
+
+- **Chamado.** O fechamento da disputa dispara `reconciliar()` para o chamado-pai vinculado. O chamado-destino da pergunta pode ser outro. O motor, a premissa, a conversa do pai e as perguntas vivas participam da decisão de fechar o chamado. O carimbo também emite evento da célula quando ela é localizada. O consumidor consulta o lastro de marcos **acesos**, e o cartório tem um ramo próprio para marcos **inexistentes** que também passa por `reconciliar()`. Se 40588 é pai ou destino e se de fato fecha após o clique **[nao verificado]**. `app/chamados/signals.py:19`, `app/chamados/signals.py:244`, `app/chamados/models.py:691`, `app/chamados/models.py:3600`, `app/chamados/services/fio.py:97`, `app/ponto/services/lastro.py:394`, `app/ponto/services/cartorio.py:1600`
+- **Dia e folha.** `motivos_retencao_celula` lê o veredito e os protestos da `CelulaDia`. Considera dia passado sem decisão, vínculo e janela, isenção de ponto, desligamento, protestos integralmente não cobráveis e a exceção de furo só de pausa. Mudança de estado do chamado pode provocar nova lavra pelo cartório. `classificar_export` decide o TXT para a competência inteira, lê a retenção do espelho e aplica os demais crivos. Veredito e protestos da 122468 após o ato, outros dias retidos e resultado do TXT **[nao verificado]**. `app/folha/export.py:774`, `app/folha/export.py:984`, `app/folha/export.py:1189`, `app/folha/export.py:1221`, `app/folha/export.py:1267`, `app/folha/export.py:1292`, `app/folha/export.py:1329`, `app/chamados/signals.py:189`
+
+**Texto ao admin** — “A disputa foi encerrada e o motivo ficou registrado. Confira no espelho se o dia ainda tem pendência para a folha.” `app/chamados/models.py:2199`, `app/folha/export.py:1192`
+
+### 3. Mesa atual e desenho mínimo
+
+| Casca | Caminho na cópia |
+|---|---|
+| `base.html` | A mesa de validação está na Central, `/chamados/painel/`. O painel carrega `/chamados/modal/<colaborador_id>/`, `modal_fio_colaborador`, com `chamados/partials/modal_fio.html`, onde ficam Validar e Rejeitar. A Central liga também à ficha completa `/chamados/colaborador/<colaborador_id>/`, `fio_colaborador`, com `chamados/fio_colaborador.html`. Há ainda ações no detalhe `/chamados/local/<chamado_id>/`, `detalhe_chamado_local`. `app/config/urls.py:28`, `app/chamados/urls.py:14`, `app/chamados/urls.py:21`, `app/chamados/urls.py:39`, `app/chamados/views.py:698`, `app/chamados/views.py:928`, `app/templates/chamados/painel_gestao.html:1`, `app/templates/chamados/painel_gestao.html:490`, `app/templates/chamados/painel_gestao.html:528`, `app/templates/chamados/partials/modal_fio.html:306`, `app/templates/chamados/detalhe_local.html:310` |
+| `base_app.html` | `/chamados/meu-atendimento/`, `meu_atendimento`, renderiza `chamados/meu_atendimento.html` com `base_tpl`. É o fio do colaborador logado e passa `is_admin_ti=False`. Os templates do painel e do fio administrativo fixam `base.html`. Na cópia, a mesa administrativa fica nessa casca. `app/chamados/urls.py:16`, `app/chamados/views.py:559`, `app/chamados/views.py:633`, `app/chamados/views.py:650`, `app/templates/chamados/meu_atendimento.html:1`, `app/templates/chamados/fio_colaborador.html:1`, `app/templates/chamados/painel_gestao.html:1`, `app/core/context_processors.py:194` |
+
+**Desenho proposto, condicionado ao aval de disputa inteira.** Link “Disputas” na ficha completa para uma página administrativa do colaborador, com um formulário simples por disputa aberta. A página usa `base_tpl`, identifica a disputa e mostra suas perguntas antes do envio. Isso cobre também disputas que compartilham um chamado-destino, pois o cartão do fio elege uma única disputa por chamado. Campo `motivo` com rótulo e `required`, botão **Encerrar disputa com motivo**, `{% csrf_token %}` e POST dedicado com `disputa_pk` explícito. GET e POST exigem sessão e `is_staff` ou grupo `admin_ti`, seguindo a ação administrativa vizinha. O POST carrega a disputa pelo PK e pelo colaborador da rota e chama a porta uma vez, inclusive no reenvio de disputa fechada. `app/chamados/services/fio.py:136`, `app/chamados/views.py:708`, `app/chamados/services/acoes_disputa.py:274`, `app/core/context_processors.py:194`, `app/config/settings/base.py:59`, `app/chamados/models.py:2094`
+
+**lei:** O veto a `except` abrange a tradução de `ValueError` na borda HTTP? A porta levanta `ValueError` para motivo vazio, resposta sem veredito e fechamento anterior divergente. `resposta_acao` e `resposta_render` recebem uma mensagem pronta. O precedente da reabertura administrativa captura `ValueError` ao redor da chamada. Com o veto literal, a exibição da recusa precisa de um contrato autorizado antes de implementar o POST. `app/chamados/models.py:2094`, `app/chamados/models.py:2124`, `app/chamados/models.py:2214`, `app/core/respostas.py:20`, `app/core/respostas.py:74`, `app/chamados/services/acoes_disputa.py:299`
+
+### 4. Censo
+
+- **`admin_encerra`** tem zero chamadores diretos de produção na busca estática da cópia. Há chamadas de teste para motivo vazio, carimbo e trilha, repetição, corrida e cascata. `app/docs/BACKLOG.md:1640`, `app/chamados/tests/test_c7_red_minimos.py:250`, `app/chamados/tests/test_e4_expand_orm.py:64`, `app/chamados/tests/test_f5_contrato_v1_guarda_sob_trava.py:198`, `app/chamados/tests/test_guarda_disputa_status.py:69`
+- **`DisputaSupervisao.fechar`**, chamadas diretas de produção. No modelo, `admin_encerra` e `remover_motivo`. Nas exceções, desligamento e competência trancada. No fluxo ordinário, becos, emissão e saída registrada, materialização de ausência e validação, três caminhos do reconciliador, foto recebida, entrada sincronizada e o comando de perguntas com fato. `app/chamados/models.py:2217`, `app/chamados/models.py:2342`, `app/colaboradores/services/desligamento.py:167`, `app/chamados/services/competencia_trancada.py:232`, `app/chamados/services/becos.py:61`, `app/chamados/services/disputa_emissao.py:1298`, `app/chamados/services/disputa_emissao.py:2224`, `app/chamados/services/materializacao.py:1159`, `app/chamados/services/materializacao.py:2160`, `app/chamados/reconciliador.py:415`, `app/chamados/reconciliador.py:719`, `app/chamados/reconciliador.py:1314`, `app/api/foto_recebida.py:126`, `app/ponto/services/entrada_sincronizada.py:60`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:89`
+- **`motivo_fechamento`** é lido pelo próprio `fechar` na idempotência e pelo contador `disputa_vazia`, que filtra `FECHOU_VAZIA`. O inventário da sombra classifica a coluna como código de choices. Nenhum leitor de template apareceu na busca estática. `app/chamados/models.py:2094`, `app/chamados/services/vigia_fio.py:736`, `bin/sombra_regras_pessoais.py:175`
+- **Selos de front.** Modal nasce oculto e preenchido, alcançável pelas duas cascas. A varredura de templates verifica também que o overlay tem um único dono. O selo de popover varre todos os `.html` e pega `<details>` de ação com lado fixo sem os atributos do componente. O smoke Chromium das duas cascas mede overlay e console, e há selo de toast nas duas. O smoke B8 procura POST em teste por heurística, cujo padrão atual de escrita não inclui `.admin_encerra(`. O smoke de clique desta obra precisa exercitar o botão explicitamente. `app/core/tests/test_selo_modal_nao_nasce_vazio.py:40`, `app/core/tests/test_selo_modal_nao_nasce_vazio.py:98`, `app/core/tests/test_selo_modal_nao_nasce_vazio.py:121`, `app/core/tests/test_selo_popover_acao.py:46`, `app/core/tests/test_selo_popover_acao.py:63`, `app/core/tests/test_selo_popover_acao.py:97`, `app/core/tests/test_smoke_chromium.py:172`, `app/core/tests/test_toast_le_o_motivo.py:100`, `app/core/tests/test_contract_smoke_porta.py:22`, `app/core/tests/test_contract_smoke_porta.py:64`, `app/docs/GRADE-MESTRA.md:650`
+
+### 5. Arquivos em voo
+
+- **Zero interseção com o anexo fornecido** para a proposta de quatro arquivos. Editar `app/chamados/urls.py` e `app/templates/chamados/fio_colaborador.html`. Criar `app/chamados/views_disputa_admin.py` e `app/templates/chamados/disputa_admin.html`. A Central já chega à ficha completa pelo botão “Ficha completa”. `app/chamados/urls.py:21`, `app/templates/chamados/fio_colaborador.html:1`, `app/templates/chamados/painel_gestao.html:257`, `app/templates/chamados/painel_gestao.html:490`
+- Editar a porta no modelo conflita com as listas `486a1ffc4` e `c9fded10a` do anexo. Plugar o botão diretamente pelo modal, seu roteador ou seus cards toca `views.py`, `services/fio.py`, `modal_fio.html`, `_pergunta_card.html` ou `_card_atendimento.html`, listados em `f300431af`. Ponta atual das ramas e hash Git da cópia **[nao verificado]**. `app/chamados/models.py:2210`, `app/chamados/views.py:870`, `app/chamados/services/fio.py:657`, `app/templates/chamados/partials/modal_fio.html:306`, `app/templates/chamados/detalhe_local.html:310`, `app/templates/chamados/meu_atendimento.html:127`
+
+### 6. RED para o Opus
+
+| Caso | Asserção |
+|---|---|
+| Acesso e CSRF | POST de usuário autenticado sem staff/admin recebe `403`, com zero chamadas à porta. POST autorizado sem token recebe `403` com CSRF habilitado no cliente de teste. O endpoint de escrita só aceita POST. `app/chamados/services/acoes_disputa.py:284`, `app/chamados/views.py:960`, `app/config/settings/base.py:59` |
+| Motivo vazio e resposta sem veredito | Enviar campo ausente, vazio e só com espaços. Ver a recusa, com zero fechamento, carimbo, decisões novas e eventos do ato. Repetir com uma irmã respondida sem veredito e conferir que o texto da porta aparece e identifica a pergunta. `app/chamados/models.py:2041`, `app/chamados/models.py:2124`, `app/chamados/models.py:2214`, `app/chamados/tests/test_c7_red_minimos.py:250` |
+| POST válido e repetição | Espionar a porta real e provar uma chamada por POST com a disputa e o usuário corretos. No primeiro, verificar campos da disputa, carimbo, `SILENCIO` e eventos. Repetir com o mesmo ator e motivo, passando de novo pela porta, e provar `False`, mesmos carimbos e mesmas contagens. `app/chamados/models.py:2094`, `app/chamados/models.py:2184`, `app/chamados/tests/test_c7_red_minimos.py:261`, `app/chamados/tests/test_e4_expand_orm.py:64` |
+| Duas cascas | Renderizar e submeter como admin em sessão comum e em sessão `via_app`. Conferir a casca efetiva, o mesmo formulário e o feedback. Colaborador comum fica sem a ação. `app/core/tests/test_casca_telas_colab.py:35`, `app/core/context_processors.py:194`, `app/templates/base.html:334`, `app/templates/base_app.html:92` |
+| Nenhuma regra na view | Reusar os AST C7 que verificam juiz paralelo e escrita fora da entidade. No RED da nova view, provar a delegação única e vedar decisão sobre DNA, C6 ou retenção, escrita de estado e relógio. O AST existente de exceções verifica captura ampla que engole defeito, com alcance menor que o veto literal desta obra. `app/chamados/tests/test_c7_red_minimos.py:525`, `app/chamados/tests/test_c7_red_minimos.py:563`, `app/chamados/tests/test_c7_red_minimos.py:593`, `app/core/tests/test_contract_excecoes_engolidas.py:64` |
+
+### 7. Brief para o construtor
+
+Após os dois cortes de `lei:`, implementar somente código de `app/`, nos quatro caminhos da seção 5. Na ficha completa, acrescentar o acesso administrativo à lista de disputas do colaborador. Na página com `base_tpl`, identificar o alcance do ato e enviar `motivo` por POST com CSRF e PK explícito. A view fina autentica, autoriza, busca a disputa e chama `disputa.admin_encerra(request.user, motivo)` uma vez. Exibir a recusa pelo contrato autorizado e tratar `False` como nenhuma alteração. A trilha vem da porta. **Proibido** regra na view ou no template, `except`, relógio solto e juiz novo. Testes ficam com o Opus. `app/chamados/views.py:698`, `app/core/context_processors.py:194`, `app/chamados/models.py:2094`, `app/chamados/models.py:2184`, `app/chamados/models.py:2210`, `app/chamados/tests/test_c7_red_minimos.py:593`
+
+Auditoria somente por leitura da cópia e do anexo. Execução dos REDs, smoke e efeitos em produção **[nao verificado]**.
 
 ## 28/11 11:24 · sessao 108fb1930b64 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
 
@@ -2830,97 +3251,4 @@ PY
 
 Suite, execução dos mutantes e produção [nao verificado]. [nao verificado]
 
-## 28/11 10:20 · sessao 292486b76990 · FDS-FERIAS-COM-BATIDA-PORTA · construtor · origem=Code
-
-Alterei apenas `folha/retrato_folha.py`. O Calendário abre um link por dia de turno publicado. **Na lavra atual de férias, falta `acoes[].dia_do_turno`**, pois a linha recebe `acoes=[]` e guarda as datas civis em `datas`. Nesse caso, o drawer oferece apenas a correção do lançamento de férias. [retrato_folha.py:1049](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1049) · [retrato_folha.py:1302](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1302) · [retrato_folha.py:1316](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1316) · [fora_da_folha.py:156](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:156)
-
-| Campo | Quem escreve | Quem lê |
-|---|---|---|
-| `acoes[].dia_do_turno` | A tarefa recebe o dia do turno, `porta_da_tarefa` o publica em `resolver_dia`, `fora_da_folha` copia em ISO e `montar_linhas` leva as ações ao retrato. [tarefa_do_dia.py:214](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/chamados/services/tarefa_do_dia.py:214) · [tarefa_do_dia.py:820](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/chamados/services/tarefa_do_dia.py:820) · [fora_da_folha.py:231](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:231) · [retrato_folha.py:1316](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1316) | Férias e Resolver dia usam a mesma função de leitura do campo. Cada botão de férias mostra a data ISO do turno. [retrato_folha.py:1042](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1042) · [retrato_folha.py:1087](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1087) · [retrato_folha.py:1111](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1111) |
-| `motivo` e `tipo` | `classificar_export` escreve o motivo. `montar_linhas` o copia e grava o tipo calculado por `_tipo_cru` via `TIPO_POR_MOTIVO`. [export.py:894](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/export.py:894) · [retrato_folha.py:252](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:252) · [retrato_folha.py:1308](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1308) · [retrato_folha.py:1317](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1317) | `tipo_da_linha` lê o tipo gravado e consulta o motivo quando precisa recuperar o tipo. As opções de férias são selecionadas pelo tipo, com a correção em `PORTA_DO_TIPO['ferias']`. Atualizei o comentário e a docstring. [retrato_folha.py:530](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:530) · [retrato_folha.py:990](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:990) · [retrato_folha.py:1015](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1015) · [retrato_folha.py:1072](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1072) |
-| Texto de “O que destrava” | `o_que_fazer` compõe o texto com os rótulos das mesmas opções usadas pelos botões. Para os demais tipos, lê `DESTRAVA` pelo fio. [retrato_folha.py:1146](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1146) · [retrato_folha.py:1170](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1170) · [fora_da_folha.py:47](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:47) | O painel passa texto e portas ao template. `o_que_segura` também lê `portas_da_linha` com uma linha própria de tipo `falta`. [colaboradores/views.py:1006](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/colaboradores/views.py:1006) · [_retrato_o_que_fazer.html:33](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/templates/folha/_retrato_o_que_fazer.html:33) · [_retrato_o_que_fazer.html:73](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/templates/folha/_retrato_o_que_fazer.html:73) · [fora_da_folha.py:297](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:297) |
-
-**Casos RED e mutantes para o Opus**
-
-1. **Virada no primeiro dia de férias.** Batida às 07h de `01/11`, com `dia_do_turno` publicado em `31/10`. Exigir `modo=custom`, ambos os limites em `31/10`, `mes=10` e a porta de Férias. Repetir com `acoes=[]` e exigir somente Férias. Mutante a matar: usar `datas[0]` para montar o link. [retrato_folha.py:1060](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1060) · [retrato_folha.py:1091](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1091) [nao verificado]
-2. **Mais de um dia.** Publicar dois dias de turno distintos e repetir um deles. Exigir dois links de Calendário, cada um com o próprio dia, e uma porta de Férias. Mutantes a matar: usar só a primeira ação ou emitir um link repetido. [retrato_folha.py:1060](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1060)
-3. **Drawer e portas.** Com turno publicado, exigir as duas opções no texto. Sem turno publicado, exigir só a correção de férias. Alterar o rótulo de `PORTA_DO_TIPO['ferias']` durante o teste e exigir a alteração no botão e no texto. Mutantes a matar: ler a frase do fio admin em férias ou manter uma frase independente dos botões. [retrato_folha.py:1028](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1028) · [retrato_folha.py:1170](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1170) [nao verificado]
-4. **Controle de tipo.** Verificar uma linha de `falta` com fio admin e `acoes=[]`, que conserva “Validar no fio” e a frase de `DESTRAVA['admin']`. Verificar também férias sem `tipo` gravado, recuperado pelo mapa, e férias com `tipo='ferias'` gravado e outro motivo na fixture. Mutantes a matar: decidir as portas olhando diretamente o motivo ou aplicar as portas de férias a `falta`. [retrato_folha.py:530](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:530) · [retrato_folha.py:1055](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1055) · [retrato_folha.py:1123](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1123)
-
-`git diff --check` e a compilação em memória passaram. Os testes existentes ainda esperam um link pela data civil e precisam da revisão do Opus. Suíte e produção [nao verificado]. [retrato_folha.py:1072](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1072) · [test_retrato_portas_ferias_com_batida.py:60](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/tests/test_retrato_portas_ferias_com_batida.py:60) [nao verificado]
-
-## 28/11 10:11 · sessao 6e7e9bd87fa6 · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
-
-Implementei a c5 em 10 arquivos de produção. O diff passou em `git diff --check`, os módulos Python alterados passaram na leitura por AST e a contagem de `except` permaneceu igual. Suíte, REDs, concorrência real e comportamento em produção [nao verificado]. [nao verificado]
-
-## Mudanças por item
-
-| Item | Arquivo e função | O que ficou na cópia |
-|---|---|---|
-| 1 e 6 | `colaboradores/services/desligamento.py:90` `executar_desligamento` | Trava o cadastro, relê a instância e reaplica `julgar_desligamento` no mesmo `atomic` da escrita. Usa a situação relida no S89. Na efetivação agendada, recusa se a data ou o motivo mudaram depois da seleção. `colaboradores/services/desligamento.py:100`, `colaboradores/services/desligamento.py:180`. |
-| 1 e 6 | `colaboradores/views.py:1474` `desligar_colaborador` e `colaboradores/management/commands/efetivar_desligamentos_agendados.py:31` `Command._rodar` | Cada borda captura `timezone.localdate()` uma vez e passa o mesmo dia ao juiz e ao executor. O POST distingue recusa, agendamento e efetivação. A CLI só soma a efetivação aceita. `colaboradores/views.py:1482`, `colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`, `colaboradores/management/commands/efetivar_desligamentos_agendados.py:51`, `config/settings/base.py:93`. |
-| 2 | `chamados/services/acoes_disputa.py:274` `acao_reabrir_disputa_admin` | Trava também as disputas ligadas por pergunta-destino antes do chamado. Para cadastro não desligado, exige `ch.reabrir() is True` antes de reabrir a disputa, criar pergunta, anotar ou notificar. A recusa desfaz inclusive a migração que `reabrir` pode tentar quando há irmão vivo. A eleição da disputa continua compartilhada com o fio e a condição vigente para pai vivo de desligado segue sob LU-12. `chamados/services/acoes_disputa.py:302`, `chamados/services/acoes_disputa.py:315`, `chamados/services/acoes_disputa.py:335`, `chamados/services/fio.py:160`, `chamados/models.py:1598`. |
-| 5a e 5b | `chamados/services/historico.py:69` `_eventos_dos_chamados` e `chamados/services/trilha_reabertura.py:14` `reabertura_assinada` | O histórico mostra encerramento da pergunta por desligamento e conserva seus eventos de resposta e validação. Identifica autoria assinada com FK nula. A testemunha `recusada_desligamento` e a classificação I5 pela última travessia assinada já estavam na base. `chamados/services/historico.py:92`, `chamados/services/historico.py:101`, `chamados/services/materializacao.py:868`, `chamados/management/commands/auditar_invariantes_chamados.py:673`. |
-| 7 | `api/views.py:388` e `api/views_core.py:374` `api_bater_ponto` | Os dois kernels mantêm o sucesso e o ID da batida. Se a emissão devolve `None`, respondem `em_disputa=False` e `motivos_disputa=[]`. Os motivos ainda alimentam o aviso da batida. `api/views.py:768`, `api/views.py:811`, `api/views_core.py:762`, `api/views_core.py:805`. |
-| 7 | `chamados/services/regularizacao_ext.py:310` `abrir_lote` | O dedup roda sob a trava do cadastro e só devolve lote com chamado vinculado. No desligado, a recusa passa pela porta de criação e chega às duas bordas antes de gravar lote ou itens. Um lote legado sem chamado fica fora do dedup. `chamados/services/regularizacao_ext.py:237`, `chamados/services/regularizacao_ext.py:319`, `chamados/views_regularizacao.py:54`, `colaboradores/views.py:3049`. |
-| 7 | `chamados/services/acoes_disputa.py:217` `nucleo_pedir_confirmacao_ancora` e `templates/ponto/triagem/fora_horario.html:13` | O aviso de âncora informa que nenhuma nova pergunta foi enviada. O formulário de anuência exibe a recusa já produzida pelo serviço. O formulário de abertura de chamado já exibia a mensagem na base. `chamados/services/acoes_disputa.py:228`, `ponto/services/triagem_batida.py:349`, `templates/chamados/form_abertura.html:12`. |
-
-No detalhe e no fio rápido, o `ValueError` de `transicionar` já chega ao envelope como `str(_ve)`. O detalhe usa `resposta_acao`, que envia o texto no toast HTMX. O desarquivamento usa o booleano de `reabrir` e devolve a recusa no JSON. `chamados/services/acoes_chamado.py:326`, `chamados/services/acoes_chamado.py:336`, `chamados/services/fio.py:873`, `chamados/views.py:426`, `core/respostas.py:63`, `chamados/views_arquivar.py:65`.
-
-## Item 7 por chamador e selos para o opus
-
-Nos sítios abaixo, a guarda indicada já existia no HEAD. Para cada um, o opus pode usar a chave existente com cadastro desligado e o controle com cadastro ativo. Quando um filtro anterior impedir chegar à porta, a costura deve devolver `(None, False)` no ponto da chamada. Esses casos são caracterizações da guarda, com mutantes próprios. Os controles de chave ausente e veto O261 continuam no roteiro de verificação. `chamados/models.py:940`, `chamados/tests/test_desligado_porta_do_chamado.py:479`, `ponto/management/commands/reconciliar_grade.py:527`.
-
-| Chamador | `None` no HEAD e na c5 | Caso e mutante |
-|---|---|---|
-| API justificativa | HTTP 403 antes de buscar ou atualizar pendente e associar o chamado. `api/views.py:1984`, `api/views.py:1999`. | Plante pendente e preserve seus campos. Mutante deixa seguir para `find-or-answer`. |
-| Reconciliador C2 | Retorna `False` antes de ler o status ou costurar a pergunta. `chamados/reconciliador.py:1032`, `chamados/reconciliador.py:1055`. | Preserve destino e disputa. Mutante lê `ch_novo.status_local`. |
-| Adesão | Pula antes dos contadores, notas e agrupamento. `chamados/services/adesao.py:76`, `chamados/services/adesao.py:89`. | Preserve pai, filhos e placar. Mutante usa o pai ausente ou conta `reabrir=False`. |
-| Emissão comum | Retorna `(None, False, [])` antes de nota ou criação da disputa. `chamados/services/disputa_emissao.py:582`, `chamados/services/disputa_emissao.py:598`. | Espere zero disputa, pergunta e push. Mutante cai na recorrência. |
-| Repasse de órfãos | Desfaz a tentativa e devolve `REPASSE_RECUSADO`. `chamados/services/disputa_emissao.py:1128`, `chamados/services/disputa_emissao.py:1144`, `chamados/services/disputa_emissao.py:1320`. | Induza recusa com um filho já complementado e outro ainda sem pai. Mutante retorna de dentro do `atomic` e deixa persistir o complemento. |
-| Emissão de âncora | Devolve `None` antes da nota, pergunta, `analisar` e push. A c5 ajusta o aviso da borda. `chamados/services/disputa_emissao.py:1366`, `chamados/services/disputa_emissao.py:1382`, `chamados/services/acoes_disputa.py:229`. | Espere zero efeitos e aviso coerente. Mutante cai no reuso ou anuncia envio. |
-| Mensagem rápida | Renderiza a recusa antes da nota, push e atualização do fio. `chamados/views.py:998`, `chamados/views.py:1011`. | Espere o alerta com zero nota e push. Mutante remove a guarda. |
-| Régua degenerada | Descarta o retorno acessório e mantém `True` para o veto. `escala/regua_defesa.py:51`, `escala/regua_defesa.py:80`. | Mutante faz o veto depender de `criado`. |
-| Ausências, limbo de folgas | `criado=False` impede a sugestão. `ponto/management/commands/detectar_ausencias.py:191`, `ponto/management/commands/detectar_ausencias.py:235`. | Mutante chama `aplicar_sugestao` com `None`. |
-| Ausências, limbo de âncora | Pula antes de `_ch.status_local`. `ponto/management/commands/detectar_ausencias.py:272`, `ponto/management/commands/detectar_ausencias.py:301`. | Mutante lê o status ou tenta reabrir. |
-| Ausências, dia sem grade | Suprime a nota de recorrência. `ponto/management/commands/detectar_ausencias.py:513`, `ponto/management/commands/detectar_ausencias.py:538`. | Mutante guarda apenas `not _cr`. |
-| Ausências, emissão de furo | Retorna `VETO_NA_PORTA` antes do status, espelho dos marcos e fio. `ponto/management/commands/detectar_ausencias.py:696`, `ponto/management/commands/detectar_ausencias.py:740`. | Mutante deixa a recusa chegar ao espelho ou à emissão como sucesso. |
-| Retroativo | Classifica a recusa e deixa o contador de emitidos intacto. `ponto/management/commands/emitir_turno_aberto_retroativo.py:151`, `ponto/management/commands/emitir_turno_aberto_retroativo.py:170`. | Cubra recusa genérica, célula, veto e emissão. Mutante conta antes do retorno. |
-| Alerta crítico de turno | `criado=False` suprime o push de emissão. O chamador também barra alerta e justificativa. `ponto/management/commands/processar_alertas_turno.py:317`, `ponto/management/commands/processar_alertas_turno.py:335`, `ponto/management/commands/processar_alertas_turno.py:355`. | Mutante retira a guarda no marco pós-20. |
-| Reconciliação de grade | Retorna `VETO_NA_PORTA` antes do status ou reabertura. `ponto/management/commands/reconciliar_grade.py:507`, `ponto/management/commands/reconciliar_grade.py:527`. | Mutante remove a guarda ou contabiliza como emissão. |
-| Aviso de ausência | Devolve `None` e suprime o push condicionado a `criado`. `ponto/services/ausencia.py:805`, `ponto/services/ausencia.py:826`. | Mutante envia push mesmo com recusa. |
-| Cluster espúrio | `criado=False` deixa o contador de abertos intacto. `ponto/services/cluster_espurio.py:196`, `ponto/services/cluster_espurio.py:214`. | Mutante incrementa na tentativa. |
-| Ping geo | Preserva resposta de geofence e suprime push. `ponto/views.py:3191`, `ponto/views.py:3203`. | Mutante dispara o push sem chamado. |
-
-Os complementos de `criar` também pedem selos por borda. No próprio e no DP, recusa sem push, GLPI, trilha de sucesso ou redirect ao PK. Na API, sem nota, push ou link. No benefício, sem solicitação. Na agenda, rascunhos preservados. No vínculo, sem substituição do aceite anterior. Os mutantes removem a guarda de cada porta. `chamados/services/abertura.py:66`, `chamados/services/abertura.py:174`, `chamados/services/abertura.py:200`, `chamados/views.py:141`, `chamados/views.py:217`, `api/views.py:2202`, `colaboradores/views.py:2045`, `colaboradores/views.py:2439`, `colaboradores/services/vinculo.py:423`.
-
-Na anuência, preserve sessão e confira a mensagem renderizada. Na triagem de horário, preserve a batida sem PK de chamado nem sessão vinculada. Em posto e férias, preserve o diagnóstico sem push de chamado. Na entrada com turno aberto, preserve a batida sem anunciar primeira emissão. Na rejeição de justificativa, preserve a decisão e seu push próprio mesmo quando o chamado acessório recusar. No smoke, identifique a recusa antes das arestas. Mutantes retiram a guarda ou vinculam à recusa um efeito reservado à emissão. `ponto/services/triagem_batida.py:349`, `ponto/services/triagem_batida.py:488`, `templates/ponto/triagem/fora_horario.html:13`, `ponto/utils.py:58`, `ponto/utils.py:130`, `ponto/views.py:322`, `ponto/services/justificativa.py:402`, `ponto/services/justificativa.py:429`, `chamados/management/commands/smoke_chamados.py:124`.
-
-## REDs da c5 para o opus
-
-- **1 e 6.** Com duas conexões, faça o executor receber uma instância anterior a outro desligamento. Confira recusa, data e motivo preservados, uma cascata e um S89 efetivo. Repita com agendamento vencido reagendado enquanto a CLI espera a trava. Congele um instante em que São Paulo e UTC estejam em datas diferentes e confira a mesma decisão no POST e na CLI. Mutantes usam instância anterior, honram o agendamento velho, releem o relógio ou contam a recusa. `colaboradores/services/desligamento.py:100`, `colaboradores/services/desligamento.py:172`, `colaboradores/views.py:1482`, `colaboradores/management/commands/efetivar_desligamentos_agendados.py:51`.
-- **2.** Cubra pai vivo, pai terminal aceito, recusa por irmão vivo e limite de quota. Na recusa, compare fecho, quota, perguntas, notas e pushes. Na corrida, B segura outra disputa fechada ligada por destino. Quando A estiver esperando essa disputa, B tenta travar o chamado com `NOWAIT` em savepoint. O mutante omite a outra disputa da trava inicial e já segura o chamado nesse ponto. Preserve o controle c4 da própria disputa ressuscitada com uma quota. `chamados/services/acoes_disputa.py:309`, `chamados/models.py:1768`, `chamados/tests/test_desligado_porta_do_chamado.py:545`.
-- **5a e 5b.** Compare o carimbo de desligamento com uma aplicação efetiva e preserve resposta e validação no histórico. Apague o usuário de uma reabertura assinada e cubra chave ausente com FK nula, ID inválido, ID divergente e travessia automática posterior. Mutantes retiram a via do mapa, tratam todo carimbo como fato ou aceitam assinatura sem prova. `chamados/services/historico.py:92`, `chamados/services/historico.py:118`, `chamados/services/materializacao.py:869`, `core/observ.py:106`, `chamados/services/trilha_reabertura.py:5`.
-- **7.** Em cada kernel, preserve ID e sucesso da batida na recusa, com flag falsa e lista vazia. No lote, teste recusa com dedup existente, controle ativo com fio e dois POSTs concorrentes. Mutantes forçam a flag, devolvem dedup antes da trava ou criam lote antes do chamado. Para o C12, o opus pode ancorar por arquivo, escopo e chamada no AST, exigindo uma ocorrência e deixando a linha para diagnóstico. Mutantes deslocam a chamada, duplicam a chamada autorizada e introduzem um escritor externo. `api/views.py:768`, `api/views_core.py:762`, `chamados/services/regularizacao_ext.py:319`, `chamados/tests/e4b_c12_ast.py:17`, `chamados/tests/e4b_c12_ast.py:224`.
-
-## Quem escreve e quem lê
-
-| Campos | Escritor | Leitor nesta volta |
-|---|---|---|
-| `Colaborador.situacao`, `data_demissao`, `motivo_desligamento` | Executor chama `gravar` no agendamento e `salvar_inteiro` na efetivação. `colaboradores/services/desligamento.py:131`, `colaboradores/services/desligamento.py:150`. | Juiz, executor após a trava e seleção da CLI. Lote e reabertura administrativa consultam `esta_desligado`. `colaboradores/services/desligamento.py:29`, `colaboradores/services/desligamento.py:101`, `colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`, `chamados/services/regularizacao_ext.py:320`, `chamados/services/acoes_disputa.py:303`. |
-| S89 e agendamento, `valor_antes`, `valor_depois`, autoria e instante | Executor monta o payload. `core.observ.evento` insere. `colaboradores/services/desligamento.py:141`, `colaboradores/services/desligamento.py:173`, `core/observ.py:143`. | Auditoria geral e sua tela. `core/views.py:705`, `templates/core/log_auditoria.html:59`. |
-| Acesso, histórico de vínculo e vigência | `definir_acesso` lê e grava `is_active`. Executor encaminha histórico e data de fim pelas portas existentes. `core/credenciais.py:107`, `colaboradores/services/desligamento.py:156`, `colaboradores/services/desligamento.py:159`, `colaboradores/services/desligamento.py:168`. | A própria porta evita regravar o acesso idêntico. `fechar_vinculos_ativos` lê os vínculos ativos. `core/credenciais.py:110`, `colaboradores/services/vinculo.py:865`. |
-| Estado, via e instante do chamado, motivo e autor da reabertura | `_gravar_estado` persiste o estado e emite a trilha. `core.observ.evento` carimba `autor_reabertura_id`. `chamados/models.py:274`, `chamados/models.py:340`, `core/observ.py:105`. | `reabrir` consulta o estado e o histórico e o I5 leem a assinatura. `chamados/models.py:1543`, `chamados/services/historico.py:92`, `chamados/management/commands/auditar_invariantes_chamados.py:673`. |
-| Fecho, resolução, quota e motivos da disputa, pergunta e nota | `reabrir_admin` grava a disputa. `abrir_conversa` e `anexar_ocorrencia` escrevem pergunta e nota. `chamados/models.py:2561`, `chamados/models.py:3260`, `chamados/services/nota.py:102`. | A ação e o fio elegem a disputa por `fechada_em`. O histórico lê a nota. `chamados/services/acoes_disputa.py:304`, `chamados/services/fio.py:160`, `chamados/services/historico.py:81`. |
-| `materializada_em`, `materializada_por`, `via_resolucao`, resposta e validação | `fechar_por_desligamento` usa `carimbar` e `_escrever_carimbo`. A sequência de decisões fornece a leitura de resposta e validação. `chamados/models.py:3526`, `chamados/models.py:3593`, `chamados/services/historico.py:101`. | Testemunha de aplicação e histórico. `chamados/services/materializacao.py:893`, `chamados/services/historico.py:105`. |
-| Vínculo do lote e campos de resposta | `criar_regularizacao_externa` grava lote, `chamado` e itens. Os kernels montam `em_disputa` e `motivos_disputa`. A triagem preenche `anuencia_erro`. `chamados/services/regularizacao_ext.py:249`, `api/views.py:820`, `api/views_core.py:814`, `ponto/services/triagem_batida.py:350`. | Dedup do lote, consumidores da resposta HTTP [nao verificado] e template de anuência. `chamados/services/regularizacao_ext.py:321`, `templates/ponto/triagem/fora_horario.html:13`. |
-
-## Perguntas de lei
-
-1. **Q1/I5f.** Uma reabertura humana assinada anterior à efetivação deve permanecer viva no passivo ou entrar na cascata? `chamados/management/commands/auditar_invariantes_chamados.py:673`, `colaboradores/services/desligamento.py:196`.
-2. **LU-12.** Qual autorização, se houver, permite reabrir a disputa administrativa de desligado e criar nova pergunta? `chamados/services/acoes_disputa.py:314`, `chamados/models.py:1679`.
-3. **Pai vivo de cadastro ativo.** Apliquei a exigência de aceite explícito da c5. O motor só aceita `REABRIR` de terminal, enquanto dois controles c3c esperam sucesso com pai aberto. Deve a lei manter a recusa aplicada nesta volta ou permitir reabrir exclusivamente a disputa nesse caso? Resultado da suíte [nao verificado]. `chamados/services/acoes_disputa.py:315`, `chamados/catalogo/motor.py:113`, `chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:139`, `chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:178`.
-4. **Via nominal do chamado.** Qual evidência autoriza atribuir `cascade` legado a desligamento? A via nominal depende de pouso conjunto do escritor, do catálogo, do guarda de renascimento e dos leitores. O rito único do item 4 também segue com o opus na origem do fecho. `chamados/catalogo/motor.py:88`, `chamados/models.py:1132`, `chamados/models.py:1918`, `colaboradores/services/desligamento.py:253`, `chamados/models.py:2180`.
-5. **Instância humana anterior ao fecho.** A matriz deve aceitar a reabertura quando a instância via o chamado vivo e o estado relido sob trava já é terminal? `chamados/models.py:148`, `chamados/models.py:802`.
-
-_8902 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8904 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
