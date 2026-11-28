@@ -1,7 +1,141 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 11:46** · publicado em **28/11/2026 11:51** (UTC-3)
+> Ultima resposta processada: **28/11/2026 12:09** · publicado em **28/11/2026 12:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 12:09 · sessao 15877447f162 · CUSTO-DE-COORDENACAO-OBRA-PRONTA-ACORDA · leitura · origem=Code
+
+**Resumo.** `ESPERA_UNICA` consulta `rc_sem_colher.py` na entrada. Um `.rc` sem colher já acorda a espera, com retorno `3` do leitor. O laço só detecta `.rc` novo. `bin/rc_sem_colher.py:86–107` `bin/disjuntor.py:1964–1971`  
+**ORDEM VIVA.** `_item_da_ordem_viva` julga o item em curso pelo marcador, hoje `ORDEM-VIVA-2811-1200`. Lista estruturada de membros e próximo passo por obra [nao verificado]. `app/docs/BACKLOG.md:8,1926` `bin/hook_stop_fila1.py:188–249`  
+**Job vivo e `PAREI`.** Há prova de PID e censo, lease via `flock`, estado da pista e leitura de agentes. Juiz unificado de job vivo por obra [nao verificado]. O Stop valida `PAREI` do item em curso. Validação para qualquer obra da ordem [nao verificado]. `bin/hook_stop_fila1.py:599–626,725–765,1358–1423` `bin/codex_admissao.py:188–193` `bin/suite.sh:383–391` `bin/disjuntor.py:469–485`  
+**Última atividade e lei.** O leitor mede `mtime` para julgar colheita. Juiz de última atividade por obra [nao verificado]. **0 perguntas de lei identificadas**. Semântica conjunta do limiar e do prazo de despertar, ano e desempate da recência [nao verificado]. `bin/rc_sem_colher.py:25–36,50–83` `app/docs/BACKLOG.md:1926–1927,2249` `aval_ordem.txt:1`  
+**Próximo passo do Opus.** Depois da F1 v7, conferir sobreposição (diff exato [nao verificado]), provar os REDs com relógio injetado e estender o leitor existente e o selo do marcador. `app/docs/BACKLOG.md:1926,2249` `app/docs/RELATO.md:15212` `app/docs/PROMPTS.md:3225,3233` `app/docs/PLANO-PADROES.md:97–103`
+
+- **Encaixe** `bin/rc_sem_colher.py:main/sem_colher`, `bin/tests/test_rc_sem_colher.sh:caso_espera` e `bin/tests/test_hook_nao_cobra_congelado.sh:_julga`. Reusar o juiz do hook e conferir `bin/disjuntor.py:ESPERA_UNICA` se mudar a forma da espera. `app/docs/BACKLOG.md:2249` `bin/tests/test_rc_sem_colher.sh:75–106` `bin/tests/test_hook_nao_cobra_congelado.sh:105–152` `bin/tests/test_agente_no_modelo.sh:291–297`
+- **9 min / 600 s / 11 min** `bin/rc_sem_colher.py:main/sem_colher`. Sem `.rc` que acorde a espera, silêncio aos 9 min e aos 600 s, aviso com ID e próximo passo aos 11 min. Mutantes `>= 600`, limite removido, só `.rc` novo e aviso sem próximo passo. `app/docs/BACKLOG.md:2249` `bin/disjuntor.py:1965–1971`
+- **Limiar durante a espera** `bin/disjuntor.py:ESPERA_UNICA`. Entrar aos 9 min e cruzar o limiar sem `.rc` novo. Mutante que consulta o leitor só na entrada. Prazo exato [nao verificado]. `app/docs/BACKLOG.md:2249` `bin/disjuntor.py:1964–1971`
+- **`PAREI`** `bin/hook_stop_fila1.py:_topo/_parei_do_em_curso`. Aos 11 min, `PAREI` válido da própria obra suprime o aviso e o de outra obra deixa o aviso sair. Mutantes sem guarda e guarda global. `app/docs/BACKLOG.md:2249` `bin/hook_stop_fila1.py:462–484,1358–1423`
+- **Job vivo** `bin/rc_sem_colher.py:main`. Aos 11 min, prova viva da própria obra suprime o aviso e produtor morto restaura o aviso. Mutantes sem prova e aceitação de PID declarado ou JSON residual. `app/docs/BACKLOG.md:2249` `bin/hook_stop_fila1.py:599–626` `bin/codex_admissao.py:188–193` `bin/codex_pergunta.sh:52–56`
+- **Fora da ORDEM VIVA** `bin/hook_stop_fila1.py:_item_da_ordem_viva`. Obra andável com pasta em `logs/`, ociosa há 11 min e fora da ordem declarada fica sem aviso. Mutantes que aceitam qualquer pasta viva ou qualquer item andável. `app/docs/BACKLOG.md:2249` `bin/rc_sem_colher.py:55–60` `bin/hook_stop_fila1.py:205–249`
+- **Marcador na mais nova** `bin/tests/test_hook_nao_cobra_congelado.sh:_julga`. Duas ordens abertas, marcador na mais nova, selo verde. Mutantes `>=` na comparação e reprovação sempre que há duas ordens. `aval_ordem.txt:1` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132`
+- **Marcador na mais velha** `bin/tests/test_hook_nao_cobra_congelado.sh:_julga`. Selo vermelho identifica o alvo e a ordem mais nova, inclusive quando a mais nova está fisicamente abaixo. Mutantes sem comparação de recência, só existência/estado e escolha pela posição da linha. `aval_ordem.txt:1` `app/docs/BACKLOG.md:1936,2666` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132`
+
+## 28/11 12:07 · sessao 0ce98f2df43e · CUSTO-DE-COORDENACAO-OBRA-PRONTA-ACORDA · censo · origem=Code
+
+## 1. Mapa de `rc_sem_colher.py`
+
+O leitor abre `app/docs/RELATO.md` e percorre `logs/<OBRA>`. Aceita `--raiz`, `--relato` e `--min-idade`. Considera pastas com ID em maiúsculas, dígitos e hífen e `mtime` de até 24 h. Dentro delas, percorre subpastas e arquivos na mesma janela, ignora arquivos que sejam links simbólicos e escolhe o `.rc` de maior `mtime`. Um arquivo de outro tipo mais de 5 s posterior ao `.rc`, ou uma marca correspondente no RELATO, tira o resultado da lista. O leitor atual só abre essas duas fontes. `bin/rc_sem_colher.py:21–36,50–83,86–107`
+
+| Saída do leitor | Significado |
+|---|---|
+| `0` | Nenhum resultado, saída vazia. `bin/rc_sem_colher.py:104–107` |
+| `3` | Um ou mais resultados. Imprime `RC SEM COLHER <OBRA> <caminho relativo> <HH:MM> rc=<valor>`, dos mais antigos aos mais novos. O `rc=<valor>` vem do conteúdo do arquivo, com `?` se não houver número. `bin/rc_sem_colher.py:23,39–43,78–83,104–107` |
+| `1` | Argumento desconhecido ou exceção de leitura que chega ao processo. Erro na caminhada de diretórios é propagado. `bin/rc_sem_colher.py:13–14,46–47,62,90–111` |
+
+- **`disjuntor.ESPERA_UNICA`** chama o leitor uma vez, antes do laço. Com `0`, espera até 300 s pelo primeiro `.rc` com `ctime` posterior à marca, consultando a cada 5 s. Com `3`, pula o laço e a lista já está na saída. Em ambos, faz o `find` final e sai `0`, inclusive se o `timeout` venceu. Com `1` ou outro código, pula o laço, ainda faz o `find` final e sai `1`. O `-cnewer` permite acordar com publicação por `rename` mesmo quando o `mtime` do temporário é anterior à espera. `bin/disjuntor.py:1964–1971`
+- **`logs/espera_unica.sh`** aparece no RELATO como forma da espera pelo primeiro `.rc` novo ou 5 min. O script, a chamada ao leitor e o tratamento de cada código estão **[nao verificado]**. `app/docs/RELATO.md:13865`
+- **Hooks**. O disjuntor usa `ESPERA_UNICA` como comando sugerido nas recusas de espera e polling. O `Stop` executa `hook_stop_fila1.py`, que decide pelo painel do RELATO e pelo BACKLOG. Na cópia, esses caminhos do hook não consomem `0`/`3`/`1` do leitor. `.claude/settings.json:3–9` `bin/disjuntor.py:2174–2209,2243` `bin/hook_stop_fila1.py:1489–1528`
+- **Vercodex** é citado como leitor com `--min-idade 900`. O filtro atual exige idade estritamente maior que 900 s quando recebe essa opção. O tratamento de cada código no executável está **[nao verificado]**. Há registro de que uma tentativa anterior fez o vercodex contar outra classe como `RC SEM COLHER`. `bin/rc_sem_colher.py:2–4,76,96–97` `app/docs/RELATO.md:13907,14450`
+
+## 2. Autoridades que já existem
+
+| Pergunta | Juiz e alcance |
+|---|---|
+| **Quais obras estão na ORDEM VIVA?** | `_item_da_ordem_viva(texto)` responde **qual é o item em curso**. Na cópia, o marcador aponta `ORDEM-VIVA-2811-1200`, cuja linha declara em prosa as sequências por vaga e pista. `_itens_andaveis` e `disjuntor._pertence_fila1` respondem perguntas sobre o bloco OBRAS e a fila 1 do censo. A lista estruturada dos membros e dos próximos passos da ORDEM VIVA está **[nao verificado]**. A tentativa anterior de arquivo de IDs está registrada como estacionada. `app/docs/BACKLOG.md:8,1926,3047–3049` `bin/hook_stop_fila1.py:188–249,272–283` `bin/disjuntor.py:1797–1808,1846–1869` |
+| **`pid=` e `ESPERANDO`** | `hook_stop_fila1._esperando_com_prova` lê o painel e valida os campos declarados. `_prova_pid` confere `/proc`, identidade do produtor, ausência de estado morto/zumbi e estabilidade do processo durante a leitura. `arquivo=` prova avanço de `mtime` entre avaliações e grava memória. A forma de `ESPERANDO` carrega produtor e prova, sem campo de obra. Para **censo**, `_prova_censo(obra)` já casa o wrapper vivo com `CODEX_OBRA` exato e papel `censo` ou `leitura`. `bin/hook_stop_fila1.py:599–626,639–647,725–765,783–833` |
+| **Lease de vaga** | O `flock` do kernel em `logs/vagas/vaga.k` decide ocupação de vaga Codex. `codex_admissao._ocupada` faz a sondagem. `vaga.k.json` contém a projeção da chamada, incluindo a obra. PID no JSON e trilha de abriu/fechou são diagnósticos. O executor pode continuar segurando a lease depois da morte do titular. `bin/codex_admissao.py:188–193` `bin/codex_pergunta.sh:52–70,507–510,552–555` `bin/codex_vagas_estado.py:4–9` |
+| **Pista e agentes** | Na pista, `suite.sh` lê `pista estado` e distingue `rodando`, `na fila` e `fim`; o estado traz ID de job, e o despacho registra ID e SHA. Para agentes de fundo, `disjuntor.agentes_sem_entrega` cruza lançamento e notificação de fim no transcript da sessão. Um juiz único de **job vivo por obra** cobrindo essas fontes e as leases está **[nao verificado]**. `bin/suite.sh:379–391,447–461` `bin/disjuntor.py:469–485` |
+| **`PAREI` no topo** | `hook_stop_fila1._topo` recorta a faixa do censo e a janela do painel. `_parei_do_em_curso` verifica `PAREI:`, `!` e ID inteiro do item em curso, com as exclusões do Stop. `_relato_parou` ainda exige que nenhum outro item ande para devolver o turno. O alarme de sessão tem um leitor próprio de 40 linhas, para a parada da sessão. Um juiz que devolva `PAREI` legítimo **por qualquer obra da ORDEM VIVA** está **[nao verificado]**. `bin/hook_stop_fila1.py:408–416,462–484,1342–1424` `bin/alarme_sessao_ociosa.py:119–145` |
+| **Última atividade** | `rc_sem_colher.sem_colher` já mede o maior `mtime` de `.rc` e o maior `mtime` de outro arquivo da obra para decidir **colheita**. `marcas()` casa `(obra, caminho relativo do rc, HH:MM do mtime do rc)` quando `colhido` ou `superado` é a primeira palavra depois de `- HH:MM `. Esse conjunto guarda a identidade do `.rc`, sem guardar o horário da ação de colheita. Um juiz de **última atividade da obra** que reúna esses sinais, jobs e `PAREI`, inclusive para obra sem `.rc`, está **[nao verificado]**. `bin/rc_sem_colher.py:25–36,50–83` |
+
+O `PROXIMO PASSO` do handoff já aponta o item do marcador e remete ao BACKLOG e ao RELATO. A fonte de um próximo passo executável para **cada** obra da lista está **[nao verificado]**. `bin/handoff_sessao.sh:313–326` `bin/hook_stop_fila1.py:272–283,308–318`
+
+## 3. Censo do marcador e das linhas
+
+- **Escrita da ordem.** O marcador e o bloco OBRAS são mantidos à mão. A linha `ORDEM-VIVA-2811-1200` registra que a inclusão da ordem e a troca do marcador ocorreram no mesmo commit. O item B exige esse mesmo ato para todo aval de ordem. `gerar_backlog.py` relê e repõe a janela inteira ao regenerar o arquivo, com uma guarda para impedir que o marcador desapareça. `backlog_estado.py` regrava a célula `c[3]` do ID solicitado e consulta o hook antes e depois. `app/docs/BACKLOG.md:8,1926` `aval_ordem.txt:1` `bin/gerar_backlog.py:102–140` `bin/backlog_estado.py:29–68`
+- **Leitura semântica.** O parser do marcador é `_item_da_ordem_viva`. O Stop e `_proximo_da_fila` o chamam. O handoff, `backlog_estado.py` e `interrompidas_estado.py` chegam ao mesmo juiz, diretamente ou por `_proximo_da_fila`. `gerar_estado.py` publica a projeção de interrompidas. O disjuntor lê linhas andáveis do bloco para o censo. `relato.sh` publica o BACKLOG inteiro, e `gerar_backlog_topo.py` seleciona IDs `O` seguidos de dígitos. Um leitor que enumere `ORDEM-VIVA-*` para julgar sua recência está **[nao verificado]**. `bin/hook_stop_fila1.py:188–224,308–318,1499–1512` `bin/handoff_sessao.sh:54–78` `bin/backlog_estado.py:56–63` `bin/interrompidas_estado.py:85–100` `bin/gerar_estado.py:231–243` `bin/disjuntor.py:1797–1808` `bin/relato.sh:135–147` `bin/gerar_backlog_topo.py:11–21`
+- **Selos de host.** `test_hook_nao_cobra_congelado.sh` já abre o BACKLOG da árvore, chama o juiz e fica vermelho para marcador ausente, alvo inexistente ou parado. `test_hook_le_o_marcador.sh` usa BACKLOGs de teste e passa pelo Stop para provar que o marcador escolhe o item e que fila vazia libera. `test_hook_estado_e_a_coluna.sh`, `test_hook_parei_com_andavel.sh`, `test_hook_parei_trava_o_item_em_curso.sh`, `test_handoff_sessao.sh` e `test_interrompidas_estado.sh` também exercitam esse caminho. `bin/tests/test_hook_nao_cobra_congelado.sh:105–152` `bin/tests/test_hook_le_o_marcador.sh:38–103` `bin/tests/test_hook_estado_e_a_coluna.sh:41–65` `bin/tests/test_hook_parei_com_andavel.sh:27–49` `bin/tests/test_hook_parei_trava_o_item_em_curso.sh:22–42` `bin/tests/test_handoff_sessao.sh:122–145` `bin/tests/test_interrompidas_estado.sh:37–44,60–65`
+- **Encaixe do item B.** A extensão cabe em `test_hook_nao_cobra_congelado.sh`, junto à checagem do BACKLOG da árvore. Usa o alvo devolvido pelo juiz atual e o reconhecedor de linha do hook. A comparação de recência é a asserção nova do selo. A régua já transforma falha desse selo em VERMELHO. `bin/tests/test_hook_nao_cobra_congelado.sh:78–83,105–152` `bin/hook_stop_fila1.py:116–129,205–224` `bin/regua.sh:134–145` `aval_ordem.txt:1`
+
+## 4. Esmeril de «mais nova»
+
+| ID na cópia | Data e hora disponíveis |
+|---|---|
+| `ORDEM-VIVA-2811-1200` | `DDMM-HHMM` no ID, `28/11 12:00` no texto do aval e `28/11` na última célula. `app/docs/BACKLOG.md:1926` |
+| `ORDEM-VIVA-1511-NOITE` | Dia no ID, `20:1x` no texto e `15/11` na última célula. `app/docs/BACKLOG.md:1927` |
+| `ORDEM-VIVA-0811` | Dia no ID, `08:5x` no texto e `08/11` na última célula. `app/docs/BACKLOG.md:1936` |
+| `ORDEM-VIVA-1811-MANHA` | Dia no ID, `18/11 08:55` na descrição e última célula com caminho de log. A linha de 18/11 aparece fisicamente depois da de 08/11. `app/docs/BACKLOG.md:1936,2666` |
+
+O hook percorre o bloco OBRAS e procura a primeira célula **igual ao alvo do marcador**. Não compara datas. A ordem física é usada por `_itens_andaveis` para devolver a lista da tabela. No caso dado, a comparação de 28/11 12:00 com 15/11 é inequívoca, e a cópia já aponta 28/11 12:00. Um contrato geral de ano, empate e precedência entre ID, coluna e prosa está **[nao verificado]**. `bin/hook_stop_fila1.py:205–249` `app/docs/BACKLOG.md:8,1926–1927` `backlog.txt:1926` `aval_ordem.txt:1`
+
+## 5. Casos RED descritos
+
+Para o primeiro grupo, usar relógio injetado e uma árvore sem `.rc` novo ou `RC SEM COLHER` capaz de acordar a espera pelo caminho antigo. O positivo precisa falhar na cópia pela ausência do novo aviso. Os negativos protegem as exclusões e precisam derrubar seus mutantes. `app/docs/PLANO-PADROES.md:97–103` `app/docs/PROMPTS.md:3225` `bin/tests/test_rc_sem_colher.sh:71–103,124–137`
+
+| Caso | Asserção e mutante que deve cair |
+|---|---|
+| **Ociosa há 9 min × 11 min** | Mesma obra da ordem, sem job e sem `PAREI`. Aos 9 min, nenhum aviso de ociosidade. Aos 11 min, a espera retorna com o ID da obra **e** o próximo passo declarado. Mata o mutante que elimina o limite, o que só espera `.rc` novo e o que omite o próximo passo. Um controle em 600 s distingue `> 600` de `>= 600`. `backlog.txt:2249` `bin/disjuntor.py:1965–1971` |
+| **Com `PAREI`** | Aos 11 min, `PAREI` válido no topo para a própria obra suprime o aviso. Uma trava de outra obra deixa passar o aviso da primeira. Mata a remoção da guarda e a guarda global por qualquer `PAREI`. `backlog.txt:2249` `bin/hook_stop_fila1.py:1358–1424` |
+| **Com job vivo** | Aos 11 min, prova do job da própria obra suprime o aviso. Com a mesma declaração e produtor morto, o aviso volta. Mata a remoção da prova e a aceitação de PID escrito ou JSON residual como prova suficiente. `backlog.txt:2249` `bin/hook_stop_fila1.py:599–626` `bin/codex_pergunta.sh:52–56` |
+| **Fora da ORDEM VIVA** | Obra andável no bloco OBRAS, com pasta em `logs/`, ociosa há 11 min e ausente da ordem declarada. Nenhum aviso. Mata a troca da pertinência à ORDEM VIVA por «qualquer pasta viva» ou «qualquer item andável». `backlog.txt:2249` `bin/rc_sem_colher.py:55–60` `bin/hook_stop_fila1.py:227–249` |
+| **Marcador igual à linha mais nova** | Duas ordens de teste abertas, marcador na mais nova. Selo verde. Mata `>=` no lugar de `>` e o selo que fica vermelho sempre que há duas ordens. `aval_ordem.txt:1` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132` |
+| **Marcador mais velho** | Mesmas ordens abertas, marcador na mais velha. Selo VERMELHO pela recência, indicando o alvo e a linha posterior. Repetir com a mais nova fisicamente abaixo da anterior. Mata a remoção da comparação, o selo que só valida existência/estado e a escolha pela posição da linha. `aval_ordem.txt:1` `app/docs/BACKLOG.md:1936,2666` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132` |
+
+Há uma diferença entre o limiar e o prazo de despertar. Com a forma atual, uma obra com 9 min de ociosidade na entrada pode chegar a 14 min antes de o comando devolver o controle. O `find` dentro do laço só vê `.rc` novo. Assim, o par 9/11 cobre a decisão **na entrada**, e o requisito de acordar durante a mesma espera exige um caso com passagem do limiar e nenhum `.rc` novo. O BACKLOG registra tanto «mais de 10 min» quanto «acordando em até 10 min»; a semântica conjunta desse prazo está **[nao verificado]**. `bin/disjuntor.py:1964–1971` `backlog.txt:2249`
+
+## 6. Arquivos da cura e cruzamento com F1 v7
+
+| Arquivo | Toque previsto pelo encaixe |
+|---|---|
+| `bin/rc_sem_colher.py` e `bin/tests/test_rc_sem_colher.sh` | Leitor existente para o caso novo e selo da entrada normal da espera. O teste atual já exerce retorno imediato, timeout, publicação por `rename` e falha do leitor. `backlog.txt:2249` `bin/tests/test_rc_sem_colher.sh:75–106` |
+| `bin/tests/test_hook_nao_cobra_congelado.sh` | Selo de recência junto ao veredito do marcador. `aval_ordem.txt:1` `bin/tests/test_hook_nao_cobra_congelado.sh:105–152` |
+| `bin/hook_stop_fila1.py` | Dependência de leitura do marcador e do painel. O selo B pode usar as funções existentes. Uma edição para generalizar a prova de `PAREI` por obra cruzaria a F1. `bin/hook_stop_fila1.py:188–224,462–484,1358–1424` `app/docs/RELATO.md:15074,15160,15212` |
+| `bin/disjuntor.py` | Dependência da entrada `ESPERA_UNICA`. O `3` já acorda quando o caso é detectado ao entrar. Se a cura alterar a forma da espera para tratar a passagem do prazo durante o bloqueio, há cruzamento com F1 e com o selo da forma publicada em `CLAUDE.md`. `bin/disjuntor.py:1964–1971` `bin/tests/test_agente_no_modelo.sh:292–297` `app/docs/RELATO.md:15074,15155,15212` |
+| `bin/backlog_estado.py` | O selo B pode consultar o juiz sem editar esse escritor de célula. A v5 registrou o arquivo fora de `ARQUIVOS`; a entrega v7 registra seis arquivos sem enumerá-los. A presença dele no diff exato da v7 está **[nao verificado]**. `bin/backlog_estado.py:56–68` `app/docs/RELATO.md:15047,15212` |
+
+A fila das 12:00 põe **CUSTO F1 v7 → OBRA-PRONTA-ACORDA** na vaga de opus construtor. O RELATO registra commit da v7 **na cópia**. O hash informado e o diff exato da v7 estão **[nao verificado]**. `backlog.txt:1926,2249` `app/docs/RELATO.md:15212`
+
+**Padrão.** `Single Source of Truth` para as autoridades reaproveitadas, `Clock Injection` para o limiar e `Fitness Function` para o selo de recência. `app/docs/PLANO-PADROES.md:53–62,97–103`
+
+## 28/11 12:06 · sessao 33722f5a8a31 · FERIADO-BOTAO-FAIXA · leitura · origem=Code
+
+## 1. Mapa da faixa
+
+A faixa roxa é o `<div>` que imprime `badge.label` sobre `background:{{ badge.cor }}`. O serviço entrega `label='Feriado'` e `cor='#7c3aed'`. A faixa tem estilo inline e sai do laço `dia.badges`. O ícone de bandeira e a amostra da legenda são elementos separados. [calendario.py:711](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/services/calendario.py:711) [_calendario_grade.html:142](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:142) [_calendario_grade.html:115](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:115) [_calendario_legenda.html:17](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_legenda.html:17)
+
+**O mecanismo de corte na cópia é o limite de altura combinado com `overflow`.** Em `layout='mes'`, a célula tem `height:132px`, `min-height:132px` e `overflow:hidden`. Quando a ação é oferecida a quem pode editar, a célula vira uma coluna flex. A faixa fica dentro da região `flex:1;min-height:0;overflow-y:auto`, que recebe o espaço restante. Se a faixa cruza a borda dessa região, só a parte dentro dela aparece até a rolagem. O `z-index` ordena a pintura do botão e da região. O smoke registra o corte. Qual borda cortou a faixa no navegador do smoke e quantos pixels ficaram ocultos estão [nao verificado]. [backlog.txt:2047] [_calendario_grade.html:68](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:68) [_calendario_grade.html:95](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:95) [_calendario_grade.html:142](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:142)
+
+| Casca | Caminho até a faixa |
+|---|---|
+| `base.html` | **A ficha de página inteira aparece aqui.** O bloco `content` recebe `detalhe.html`, que estende `base.html` literalmente. No `load`, a ficha busca `/colaboradores/<cid>/calendario/` por HTMX. A view devolve `calendario_partial.html`, que inclui `_calendario_grade.html` com `layout='mes'` e chega a `dia.badges`. [base.html:336](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/base.html:336) [detalhe.html:1](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/detalhe.html:1) [detalhe.html:215](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/detalhe.html:215) [views.py:2020](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/views.py:2020) [calendario_partial.html:67](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/calendario_partial.html:67) |
+| `base_app.html` | **A ficha de página inteira é exclusiva de `base.html`.** Nas duas cascas, a ficha lateral pode carregar a mesma faixa. As duas incluem `_drawer_generico.html`, que busca `/colaboradores/<cid>/painel/`. A view renderiza `painel_colaborador.html`. A aba **Espelho** busca a mesma rota de calendário, que chega ao mesmo laço de badges. As rotas do painel e do calendário exigem `ver_cadastro`. [detalhe.html:1](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/detalhe.html:1) [base_app.html:154](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/base_app.html:154) [base.html:399](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/base.html:399) [_drawer_generico.html:91](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/core/_drawer_generico.html:91) [_drawer_generico.html:134](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/core/_drawer_generico.html:134) [painel_colaborador.html:182](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/painel_colaborador.html:182) [views.py:935](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/views.py:935) [views.py:1010](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/views.py:1010) [views.py:1986](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/views.py:1986) |
+
+## 2. Censo e alcance
+
+| Include direto da grade | Alcance da mudança |
+|---|---|
+| `calendario_partial.html` | Ficha inteira, aba Espelho do drawer e abertura direta do calendário pelo **Resolver dia** do Retrato da Folha. Mês, Quinzena, Semana e Competência passam pelo mesmo `layout='mes'` do template. Uma cura limitada ao ramo mensal com oferta alcança esses caminhos. [calendario_partial.html:49](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/calendario_partial.html:49) [calendario_partial.html:67](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/calendario_partial.html:67) [retrato_folha.py:1053](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/folha/retrato_folha.py:1053) [_retrato_o_que_fazer.html:74](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/folha/_retrato_o_que_fazer.html:74) |
+| `_drawer_diagnostico.html` | **Escala × batidas** do Painel Situacional usa `layout='fita'`. Consome o estilo comum dos badges e fica fora do ramo mensal. [_drawer_diagnostico.html:33](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_drawer_diagnostico.html:33) [_calendario_grade.html:68](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:68) |
+| `relatorios/furos.html` | **Auditoria de espelhos** em HTML passa apenas `dias` e `resumo`, com `only`. Consome o estilo comum dos badges e fica fora do ramo mensal. O PDF segue por um gerador próprio. [furos.html:42](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/relatorios/furos.html:42) [relatorios/views.py:1628](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/relatorios/views.py:1628) |
+
+O CSS relevante está todo inline na grade. Uma edição geral no `<div>` do badge alcança também Extra 50%, Extra 100%, Atraso e Antecipada nos três includes. A classe `.icone-dia` do CSS compartilhado dimensiona a bandeira SVG. A legenda tem seu próprio estilo inline. [_calendario_grade.html:68](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:68) [_calendario_grade.html:99](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:99) [_calendario_grade.html:142](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:142) [calendario.py:714](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/services/calendario.py:714) [hasner-ponto.css:578](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/static/css/hasner-ponto.css:578) [_calendario_legenda.html:17](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_legenda.html:17)
+
+## 3. Sobreposição com FERIADO-BOTAO-CORTADO
+
+**Sim, a sobreposição é na mesma célula da mesma grade.** O anexo localiza o corte antigo no `overflow:hidden` da célula e no include do botão, então na linha 131. Na cópia, o include do botão está na linha 97, acima da região rolável da linha 99. A faixa continua dentro dessa região, nas linhas 142–144. O diff exato do pouso `627303c71` está [nao verificado]. [backlog.txt:2046] [backlog.txt:2047] [_calendario_grade.html:68](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:68) [_calendario_grade.html:97](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:97) [_calendario_grade.html:142](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:142)
+
+## 4. Teste de tela e RED [nao verificado]
+
+**Teste existente** — `SmokeCliqueFeriadoViraTrabalhoTest.test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas`. A fixture cria o feriado de 20/11/2026 com quatro batidas. O cenário de página `base.html` abre a rota real da ficha e carrega o calendário. A página `base_app.html` do teste é um hospedeiro montado para o ensaio. O drawer usa o painel real nas duas cascas. As asserções cobram botão, popover e acesso à última batida por rolagem. O teste estrutural `test_feriado_botao_cortado.py` usa `badges=[]`. [test_smoke_clique_feriado_vira_trabalho.py:26](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:26) [test_smoke_clique_feriado_vira_trabalho.py:536](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:536) [test_smoke_clique_feriado_vira_trabalho.py:588](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:588) [test_smoke_clique_feriado_vira_trabalho.py:669](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:669) [test_smoke_clique_feriado_vira_trabalho.py:700](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:700) [test_smoke_clique_feriado_vira_trabalho.py:731](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:731) [test_feriado_botao_cortado.py:39](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/tests/test_feriado_botao_cortado.py:39)
+
+**RED proposto** — Reusar essa fixture no Chromium, na ficha real e na aba Espelho das duas cascas. Selecionar o badge textual dentro da célula do dia 20. Manter a célula em 132 px e preparar conteúdo suficiente **antes** da posição atual do badge para cruzar o limite da região rolável. As quatro batidas, sozinhas, podem caber no cenário existente. Cobrar exatamente uma faixa, com os quatro lados visíveis já com `scrollTop=0`, e repetir a medição após rolar até a última batida. Cobrar também que o botão siga visível e clicável. **Mutante a matar:** devolver a faixa ao laço dentro da região rolável, preservando texto, cor, botão e batidas. A falha esperada é de recorte da faixa. RED e mutante executados [nao verificado]. [_calendario_grade.html:99](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:99) [_calendario_grade.html:142](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:142) [test_smoke_clique_feriado_vira_trabalho.py:329](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:329) [test_smoke_clique_feriado_vira_trabalho.py:469](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:469)
+
+## 5. Arquivos para conferir colisão
+
+- **Cura proposta** — `app/templates/colaboradores/partials/_calendario_grade.html` para colocar a faixa acima da região rolável no ramo mensal com oferta. Para reaproveitar o mesmo HTML nos dois locais, extrair o `<div>` atual para um novo `_calendario_badge.html` na mesma pasta. A seleção pode usar `dia.feriado` e o primeiro badge. Isso depende do contrato atual do produtor, que insere Feriado primeiro quando `dia.feriado` é verdadeiro. [_calendario_grade.html:95](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:95) [_calendario_grade.html:142](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/templates/colaboradores/partials/_calendario_grade.html:142) [calendario.py:711](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/services/calendario.py:711) [calendario.py:784](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/colaboradores/services/calendario.py:784)
+- **Selo proposto** — `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py`, onde já ficam a sonda de geometria e os mutantes. A colisão com outras obras em voo está [nao verificado]. [test_smoke_clique_feriado_vira_trabalho.py:71](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:71) [test_smoke_clique_feriado_vira_trabalho.py:329](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:329)
+
+**`padrao=fitness function / selo`** para a cura com o RED. O invariante é a faixa inteira à vista enquanto o conteúdo do dia continua rolável. A asserção é de geometria no navegador. [PLANO-PADROES.md:53](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/PLANO-PADROES.md:53) [GLOSSARIO.md:14](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/GLOSSARIO.md:14)
 
 ## 28/11 11:46 · sessao 35e63e4b2e65 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
 
@@ -2694,255 +2828,4 @@ Cada trecho original abaixo tem uma ocorrência na árvore. M1 e M3 incluem cont
 
 **Cura.** O ramo dedicado em `disputa_emissao.py:1149–1170` deve receber o dia do turno e ler `_ata_do_dia`/`_marcos_faltantes`, emitindo apenas o marco intermediário existente e apagado no próprio dia. A mesma leitura já atende a fábrica, o repasse pela ata, a declaração do colaborador e a proposta administrativa. `CelulaDia.marcos_presentes(cls, marcos)` lê a representação própria da célula, incluindo duas pausas, e `EC.pausas_do_dia(self, data, celulas=None)` reconhece pares completos do DNA. A correção realiza **Single Source of Truth / Aggregate Root**, conforme L-123. `app/chamados/services/disputa_emissao.py:864–927,1149–1190` · `app/chamados/services/declaracao_texto.py:87–144,343,643–657` · `app/chamados/services/fabrica_da_celula.py:52–74` · `app/escala/models.py:1177–1219,1663–1690` · `app/docs/GLOSSARIO.md:11` · `app/docs/PLANO-PADROES.md:53–67`
 
-## 28/11 10:47 · sessao 299eff72d329 · - · - · origem=Ronald (tmux)
-
-A sonda pode usar `pausas_de_celulas(colab_id, ini, fim, celulas=None)` sobre a célula carregada por `(colaborador_id, data_evento)`. Esse leitor consulta os dois pares do DNA e não consulta template quando recebe o mapa. O retorno sem a data, com célula confirmada, corresponde a zero pausas declaradas pela lei da R4. `EscalaColaborador.marcos_do_dia(self, data: datetime.date, celulas=None)` retorna quatro posições e pode consultar o template quando o DNA está vazio. [app/escala/utils.py:111](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/escala/utils.py:111) [app/escala/models.py:1109](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/escala/models.py:1109) [app/escala/models.py:1193](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/escala/models.py:1193)
-
-O universo são os motivos `MOTIVOS_DE_INTERVALO`, com `conversa=False`, pelo dia do turno em `data_evento` e pelo vínculo da disputa ao colaborador. O estado vivo é `pergunta_viva(p, hoje=None, *, carga=None, agora=None)`. Para o caso literal, `CelulaDia.marcos_presentes(cls, marcos)` sobre `dna.marcos`, `PerguntaDisputa.estado(self)` e `DecisaoPergunta.composta(cls, p)` mostram marcos, rótulo e carimbos sem expor o texto da resposta. [app/chamados/juizes.py:339](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/juizes.py:339) [app/chamados/juizes.py:911](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/juizes.py:911) [app/chamados/juizes.py:1875](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/juizes.py:1875) [app/escala/models.py:1683](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/escala/models.py:1683) [app/chamados/models.py:3351](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:3351) [app/chamados/models.py:4507](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:4507)
-
-O esqueleto completo foi transmitido ao agente principal. A proteção usa transação PostgreSQL `REPEATABLE READ, READ ONLY`, seguindo a sonda CEF. Os resultados de produção e o HEAD permanecem [nao verificado]. [app/chamados/tests/cef_c3_sonda.py:16](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/tests/cef_c3_sonda.py:16)
-
-## 28/11 10:47 · sessao 594be9fb352e · - · - · origem=Ronald (tmux)
-
-**#40588 não tem clique de encerramento aplicável na árvore entregue.** O serviço `DisputaSupervisao.admin_encerra(self, user, motivo)` encerra as perguntas mudas da disputa, com usuário, horário e motivo, e barra resposta sem veredito. A ligação à tela está registrada como pendente em `C7-TELA-ADMIN-ENCERRA`. O **Rejeitar resposta** devolve a pergunta ao colaborador e recusa quando ela já está pendente. **Regularizar disputa e fechar** exige resposta às perguntas vivas. **Resolver dia** fecha o fio mediante decisão de mérito sobre o dia, mas a medição registrada do #40588 diz que o D4 não ofereceu esse botão. [chamados/models.py:2122](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:2122), [chamados/models.py:2184](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:2184), [BACKLOG.md:1640](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/docs/BACKLOG.md:1640), [chamados/services/validacao.py:955](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/services/validacao.py:955), [modal_fio.html:363](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/templates/chamados/partials/modal_fio.html:363), [RELATO.md:596](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/docs/RELATO.md:596).
-
-O cartório usa `fio_vivo` nas perguntas que resolvem chamados vivos. Sem outros protestos, um chamado com fio vivo que ainda protesta produz `cobrado`. Marco inexistente na ata resulta em `marcos_acesos=None`, mesmo com todas as lâmpadas que existem acesas. O lastro autoriza a premissa de fechamento, mas a guarda do chamado barra o encerramento se deixar pergunta viva ancorada. Se as duas perguntas forem as últimas desse fio e não houver outro protesto, a próxima relavra resulta em `concorde` e o dia deixa de reter por `espelho_cobrado`. O Retrato precisa da nova lavra. Outras retenções na competência continuam possíveis, e o estado atual no banco está [não verificado]. [ponto/services/cartorio.py:1418](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/ponto/services/cartorio.py:1418), [ponto/services/cartorio.py:1498](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/ponto/services/cartorio.py:1498), [ponto/services/cartorio.py:1544](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/ponto/services/cartorio.py:1544), [ponto/services/lastro.py:170](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/ponto/services/lastro.py:170), [chamados/models.py:1352](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:1352), [chamados/models.py:429](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:429), [folha/export.py:1301](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/folha/export.py:1301), [folha/fora_da_folha.py:115](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/folha/fora_da_folha.py:115), [lavrar_retrato_folha.py:65](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/folha/management/commands/lavrar_retrato_folha.py:65).
-
-Texto para o admin: “Abra o Painel de Chamados em `/chamados/painel/?colab_id=549`, clique no chamado **#40588** e confira no fio as cobranças de 11:00 e 12:00, perguntas **#61520** e **#61521**. Confira 20/11 no Espelho em `/ponto/espelho/?colab=549&mes=11&ano=2026`. Encaminhe o chamado com este motivo: ‘A célula **#122468** prevê 07:00–19:00 sem intervalo. As cobranças de 11:00 e 12:00 precisam ser retiradas pela correção CHAMADO-PRESO-CLASSE. Depois da relavra, conferir se 20/11 saiu dos dias que seguram o Retrato.’” [painel_gestao.html:451](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/templates/chamados/painel_gestao.html:451), [_lista_chamados.html:42](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/templates/chamados/partials/_lista_chamados.html:42), [ponto/views.py:98](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/ponto/views.py:98), [RELATO.md:595](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/docs/RELATO.md:595). IDs e horários da célula vêm do enunciado [não verificado].
-
-## 28/11 10:45 · sessao 6fc1c6f8c2b1 · E4C-F5-INSTANTE · leitura · origem=Code
-
-# r.md
-
-Os sete métodos abaixo estão prontos para colar nas classes indicadas. Os três do censo passam na cópia, e os quatro dos selos falham com `[]` na asserção. A prova em memória executou os métodos com `unittest.TestCase` e os analisadores AST da cópia. Suíte Django, Ruff e identidade Git [nao verificado]. `app/chamados/tests/test_e4c_f5_c4_red.py:1551–1591` · `app/core/censo_escritas.py:421–454` · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
-
-Nos diffs, retire o primeiro caractere de cada linha e junte as linhas de cada lado com `\n`, sem acrescentar `\n` ao fim. Aplique cada troca isoladamente com `fonte.replace(original, mutado, 1)`, após conferir `fonte.count(original) == 1`. Os cinco mutantes do censo foram conferidos na cópia. Os dois dos selos foram conferidos sobre a base de contraprova ao fim do item 2. `app/core/censo_escritas.py:430–485` · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112`
-
-## 1 · Variável
-
-Cole em `CensoLeAProjecaoTest`, imediatamente antes de `def test_os_dois_saves_da_porta_ficam_visiveis(self):`. Usa `SimpleTestCase` e a fixture `_varrer` existentes, sem imports novos. **VERDE**. `app/chamados/tests/test_e4c_f5_c4_red.py:21,1551–1562,1576`
-
-```python
-    def test_RED_registrar_com_projecao_por_variavel_e_acusado(self):
-        fonte = (
-            'from chamados.models import DecisaoPergunta as DP\n'
-            'def f(p, linhas):\n'
-            "    proj = (p, ['respondida_em'])\n"
-            '    DP.registrar(linhas, projecao=proj)\n'
-        )
-        self.assertEqual(self._varrer(fonte), [(4, 'PerguntaDisputa', 'save', 'p.save() [update_fields] [projecao]')])
-```
-
-**`M1-tupla`** · `app/core/censo_escritas.py:444–447` · âncora **1**. Cai o `assertEqual` porque o achado da linha 4 vira `[]`. `app/core/censo_escritas.py:442–454`
-
-```diff
--        if isinstance(valor, ast.Name):
--            _, atribuicoes = self._escopos_da_projecao[-1]
--            valor = atribuicoes.get(valor.id)
--        if not isinstance(valor, ast.Tuple) or len(valor.elts) != 2:
-+        if not isinstance(valor, ast.Tuple) or len(valor.elts) != 2:
-```
-
-## 1 · Helper
-
-Cole em `CensoLeAProjecaoTest`, depois do método do item anterior e antes de `def test_os_dois_saves_da_porta_ficam_visiveis(self):`. Usa a mesma fixture, sem imports novos. **VERDE**. `app/chamados/tests/test_e4c_f5_c4_red.py:21,1551–1562,1576` · `app/core/censo_escritas.py:430–440`
-
-```python
-    def test_RED_salvar_a_projecao_direto_fora_da_porta_e_acusado(self):
-        fonte = (
-            'from chamados.models import DecisaoPergunta as DP\n'
-            'def registrar(p):\n'
-            "    DP._salvar_a_projecao(p, ['respondida_em'])\n"
-        )
-        self.assertEqual(
-            self._varrer(fonte),
-            [(3, 'PerguntaDisputa', 'save', 'DP._salvar_a_projecao() [projecao]')],
-        )
-```
-
-**`M1-ignora-helper`** · `app/core/censo_escritas.py:432` · âncora **1**. Cai o `assertEqual` porque o achado da linha 3 vira `[]`. `app/core/censo_escritas.py:430–433`
-
-```diff
--                self._anotar(no, 'PerguntaDisputa', 'save', '%s() [projecao]' % _texto(f))
-+                pass
-```
-
-**`M1-nome-registrar`** · `app/core/censo_escritas.py:436–440` · âncora **1**. Cai o mesmo `assertEqual` porque a função avulsa chamada `registrar` ganha a dispensa e o censo devolve `[]`. `app/core/censo_escritas.py:430–440`
-
-```diff
--        if len(self._escopos_da_projecao) != 3:
--            return False
--        _, (classe, _), (metodo, _) = self._escopos_da_projecao
--        return (isinstance(classe, ast.ClassDef) and classe.name == 'DecisaoPergunta'
--                and isinstance(metodo, ast.FunctionDef) and metodo.name == 'registrar')
-+        metodo, _ = self._escopos_da_projecao[-1]
-+        return isinstance(metodo, ast.FunctionDef) and metodo.name == 'registrar'
-```
-
-## 1 · Controle interno
-
-Substitua o método inteiro ancorado em `def test_os_dois_saves_da_porta_ficam_visiveis(self):`, em `CensoLeAProjecaoTest`. O teste lê o `models.py` inteiro com a fixture `_varrer` e confere todos os saves da classe `DecisaoPergunta`, inclusive os atribuídos. Usa `os` do módulo e importa `ast` no método. **VERDE**. `app/chamados/tests/test_e4c_f5_c4_red.py:5,1551–1562,1576–1591` · `app/chamados/models.py:4780–4786,4797–4803,4821–4824`
-
-```python
-    def test_os_dois_saves_da_porta_ficam_visiveis(self):
-        import ast
-
-        with open(os.path.join(self.APP, 'chamados/models.py'), encoding='utf-8') as arquivo:
-            fonte = arquivo.read()
-        classe, = (
-            no for no in ast.parse(fonte).body
-            if isinstance(no, ast.ClassDef) and no.name == 'DecisaoPergunta'
-        )
-        metodos = [no for no in ast.walk(classe) if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef))]
-        contado = {}
-        for linha, entidade, op, expr in self._varrer(fonte):
-            if op != 'save' or not classe.lineno <= linha <= classe.end_lineno:
-                continue
-            dono = min(
-                (no for no in metodos if no.lineno <= linha <= no.end_lineno),
-                key=lambda no: no.end_lineno - no.lineno,
-                default=classe,
-            )
-            contado.setdefault(dono.name, []).append((entidade, expr))
-        self.assertEqual(contado, {
-            '_salvar_a_projecao': [(None, 'instancia.save()')],
-            'registrar': [(None, 'projecao[0].save()')],
-        })
-```
-
-**`M1-reclassifica`** · `app/core/censo_escritas.py:484–485` · âncora **1**. Cai `assertEqual(contado, ...)` porque os dois pares passam a trazer `'PerguntaDisputa'` no lugar de `None`. `app/core/censo_escritas.py:475–485`
-
-```diff
--        if not silencioso:
--            self._anotar(no, None, op, '%s.%s()' % (_texto(rec), op))
-+        if not silencioso:
-+            entidade = 'PerguntaDisputa' if op == 'save' and self._classe == ['DecisaoPergunta'] else None
-+            self._anotar(no, entidade, op, '%s.%s()' % (_texto(rec), op))
-```
-
-**`M1-terceiro-save`** · `app/core/censo_escritas.py:430–431` · âncora **1**. Cai `assertEqual(contado, ...)` porque `registrar` ganha `('PerguntaDisputa', 'cls._salvar_a_projecao() [projecao]')`. `app/core/censo_escritas.py:430–432` · `app/chamados/models.py:4823–4824`
-
-```diff
--            if (op == '_salvar_a_projecao' and (dono or classe_de_cls) == 'DecisaoPergunta'
--                    and not self._no_registrar_da_decisao()):
-+            if op == '_salvar_a_projecao' and (dono or classe_de_cls) == 'DecisaoPergunta':
-```
-
-## 2 · `dict` religado
-
-**Carimbo.** Cole em `SeloEscritorUnicoDoCarimbo`, antes de `def test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel(self):`. Usa `SimpleTestCase` e `escritas_do_carimbo` do módulo, sem imports novos. **VERMELHO**. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:30,110–112,156,222–225,263,333`
-
-```python
-    def test_RED_trilha_acusa_dict_religado(self):
-        fonte = (
-            'from core.observ import evento\n'
-            'def f(pk):\n'
-            '    dict = PerguntaDisputa.objects.filter(pk=pk).update\n'
-            '    evento(depois=dict(materializada_em=None))\n'
-            'def g():\n'
-            '    evento(depois=dict(materializada_em=None))\n'
-        )
-        self.assertEqual(escritas_do_carimbo(fonte), [('f', 4, 'dict(materializada_em=)')])
-```
-
-**Par.** Cole em `SeloEscritorUnicoDoParMordeTest`, antes de `def test_MORDE_repasse_de_param_na_classe_do_modelo(self):`. Usa `SimpleTestCase` e `escritas_do_par` do módulo, sem imports novos. **VERMELHO**. `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:28–30,144–165,247,269`
-
-```python
-    def test_RED_trilha_acusa_dict_religado(self):
-        fonte = (
-            'from core.observ import evento\n'
-            'def f(pk):\n'
-            '    dict = PerguntaDisputa.objects.filter(pk=pk).update\n'
-            '    evento(depois=dict(respondida_em=None))\n'
-            'def g():\n'
-            '    evento(depois=dict(respondida_em=None))\n'
-        )
-        self.assertEqual(escritas_do_par(fonte), [('f', 4, 'dict(respondida_em=)')])
-```
-
-**`M2-grafia-dict`** · alvo compartilhado em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112` · âncora **1** na base de contraprova abaixo. Caem os dois `assertEqual` com `[]`. A cópia já dispensa pela grafia de `dict`. O alvo fica em `tests/` e é importado pelo selo do par. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112,156` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30,163`
-
-```diff
--            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'
--            and (escopos[c], 'dict') not in nomes_locais}
-+            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'}
-```
-
-## 2 · Import homônimo
-
-**Carimbo.** Cole em `SeloEscritorUnicoDoCarimbo`, depois do método anterior e antes de `def test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel(self):`. Mesmos imports. **VERMELHO**. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:30,85–112,156,263,333`
-
-```python
-    def test_RED_trilha_acusa_import_local_homonimo(self):
-        fonte = (
-            'from core.observ import evento\n'
-            'def f():\n'
-            '    from core.outro import evento\n'
-            '    evento(depois=dict(materializada_em=None))\n'
-            'def g():\n'
-            '    evento(depois=dict(materializada_em=None))\n'
-        )
-        self.assertEqual(escritas_do_carimbo(fonte), [('f', 4, 'dict(materializada_em=)')])
-```
-
-**Par.** Cole em `SeloEscritorUnicoDoParMordeTest`, depois do método anterior e antes de `def test_MORDE_repasse_de_param_na_classe_do_modelo(self):`. Mesmos imports. **VERMELHO**. `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:28–30,144–165,247,269`
-
-```python
-    def test_RED_trilha_acusa_import_local_homonimo(self):
-        fonte = (
-            'from core.observ import evento as ev\n'
-            'def f():\n'
-            '    from core.outro import escritor as ev\n'
-            '    ev(depois=dict(respondida_em=None))\n'
-            'def g():\n'
-            '    ev(depois=dict(respondida_em=None))\n'
-        )
-        self.assertEqual(escritas_do_par(fonte), [('f', 4, 'dict(respondida_em=)')])
-```
-
-**`M2-import-global`** · mesmo alvo compartilhado · âncora **1** na base de contraprova. Caem os dois `assertEqual` com `[]` porque o nome local herda a dispensa do conjunto global. A cópia já apresenta esse efeito. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30,163`
-
-```diff
--    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
--            and (escopos[c], getattr(c.func, 'id', None)) not in imports_alheios
-+    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
-```
-
-**Base de contraprova dos dois mutantes.** Aplique este diff em memória em `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112`, com âncora **1** na cópia. A base passou nos quatro métodos novos e nos dois controles existentes de trilha legítima. Cada mutante derrubou por asserção apenas os dois métodos do seu item. A base foi verificada nesse recorte. Cobertura geral da resolução de nomes [nao verificado]. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112,309–331` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:289–299`
-
-```diff
--    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
--            for a in (*c.args, *(k.value for k in c.keywords))
--            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'}
-+    escopos = {}
-+
-+    def _indexar(no, escopo):
-+        if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
-+            escopo = no
-+        escopos[no] = escopo
-+        for filho in ast.iter_child_nodes(no):
-+            _indexar(filho, escopo)
-+
-+    _indexar(arv, arv)
-+    nomes_locais = {(escopos[n], n.id) for n in escopos if isinstance(n, ast.Name) and isinstance(n.ctx, ast.Store)}
-+    imports_alheios = {(escopos[n], a.asname or a.name)
-+                       for n in escopos if isinstance(n, ast.ImportFrom) and (n.module != 'core.observ' or n.level)
-+                       for a in n.names}
-+    return {id(a) for c in ast.walk(arv) if isinstance(c, ast.Call) and _eh_evento(c.func)
-+            and (escopos[c], getattr(c.func, 'id', None)) not in imports_alheios
-+            for a in (*c.args, *(k.value for k in c.keywords))
-+            if isinstance(a, ast.Call) and getattr(a.func, 'id', None) == 'dict'
-+            and (escopos[c], 'dict') not in nomes_locais}
-```
-
-| Item | Teste | Mutantes | Esperado na cópia | [nao verificado]
-|---|---|---|---|
-| 1 · Variável | `test_RED_registrar_com_projecao_por_variavel_e_acusado` | `M1-tupla` | **VERDE** · `app/core/censo_escritas.py:442–454` |
-| 1 · Helper | `test_RED_salvar_a_projecao_direto_fora_da_porta_e_acusado` | `M1-ignora-helper`, `M1-nome-registrar` | **VERDE** · `app/core/censo_escritas.py:430–440` |
-| 1 · Controle interno | `test_os_dois_saves_da_porta_ficam_visiveis` | `M1-reclassifica`, `M1-terceiro-save` | **VERDE** · `app/core/censo_escritas.py:430–440,475–485` |
-| 2 · `dict` religado | `test_RED_trilha_acusa_dict_religado` nos dois selos | `M2-grafia-dict` | **VERMELHO** · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:110–112` |
-| 2 · Import homônimo | `test_RED_trilha_acusa_import_local_homonimo` nos dois selos | `M2-import-global` | **VERMELHO** · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` |
-
-**Total de mutantes distintos: 7.** `app/core/censo_escritas.py:430–485` · `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112`
-
-_8909 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8912 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
