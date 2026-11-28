@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 04:23:13.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (307.0 MB). Acoes na janela: **1714**.
+**Medido em 28/11/2026 04:30:06.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (307.0 MB). Acoes na janela: **1705**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:27:10 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 04:27:07 | Bash | Lê a espera e confere a sombra | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bfv2e3i70.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; bash bin/sombra.sh --conferir; echo sombra=$?` |
 | 04:22:03 | Bash | Marca o nvagas da base e reabre a espera | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') i=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado) ',l)) L.insert(i+1,f"- {h} colhido CUSTO-DE-COORDENACAO f1v2/base/nvagas.rc (04:21 rc 124): test_codex_n_vagas.sh tambem estoura o teto de 40 min na BASE 93e305860 -> o timeout da wt ...` |
 | 04:21:56 | Bash | Lê a espera e confere a sombra | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b1h37g4oh.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; bash bin/sombra.sh --conferir; echo sombra=$?` |
 | 04:16:53 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
@@ -1713,14 +1715,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:36:52 | Bash | Confere vagas Codex, o brief do P4 e a wt do CCM | `cd ~/saas-hasner; python3 bin/codex_vagas_estado.py 2>&1 \| tail -5; ls logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md; wc -l logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md; git -C /home/ronald/wt-ccm-recusa-090424 log --oneline -2; git -C /home/ronald/wt-ccm-recusa-090424 status --porcelain \| head` |
 | 16:35:14 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 16:35:10 | Bash | Lê a espera e os resultados dos mutantes | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bch8wqk3f.output; cd ~/saas-hasner/logs/FERIADO-BOTAO-CORTADO/m12/; for f in *.r; do echo "$f $(cat $f)"; done` |
-| 16:30:05 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 16:30:01 | Bash | Lê o resultado do primeiro mutante | `cat ~/saas-hasner/logs/FERIADO-BOTAO-CORTADO/m12/historico-sem-guarda.r` |
-| 16:29:58 | Bash | Lê o fim da espera e o estado dos mutantes | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bcqr6lr7q.output; ls ~/saas-hasner/logs/FERIADO-BOTAO-CORTADO/m12/` |
-| 16:24:52 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 16:24:51 | Bash | Registra a colheita do s12 | `cd ~/saas-hasner; echo "- $(date +%H:%M) colhido FERIADO-BOTAO-CORTADO s12/s.rc (16:24 rc 0): Found 22 / Ran 22 / OK -- drawer 1366 das duas cascas volta a passar com a pagina da c10; mutantes m12 seguem na VM -> m12/m12.rc" >> app/docs/RELATO.md` |
-| 16:24:44 | Bash | Lê o veredito do s12 | `cd ~/saas-hasner; /bin/grep -E '^(OK\|FAILED)($\| \()\|^Ran ' logs/FERIADO-BOTAO-CORTADO/s12/s.log \| tail -2; /bin/grep -m1 '^Found' logs/FERIADO-BOTAO-CORTADO/s12/s.log` |
-| 16:24:41 | Bash | Lê o fim da espera | `tail -5 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/brhjxn12q.output` |
-| 16:23:48 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 16:23:41 | Bash | Commita a c11 e lança o s12 e os 7 mutantes | `W=/home/ronald/wt-codex-feriado-botao-cortado-112417; cd $W; git add app/core/tests/test_smoke_clique_feriado_vira_trabalho.py app/templates/colaboradores/partials/_calendario_grade.html; git commit -q -F - <<'EOF' FERIADO-BOTAO-CORTADO c11: gatilho do feriado acima da regiao rolavel na ordem de pintura (isolation + z-index) -- drawer volta a receber o clique OBRA: FERIADO-BOTAO-CORTADO Volta c11  ...` |
-| 16:23:28 | Bash | Lê a resposta da c11 | `cd ~/saas-hasner; cat logs/FERIADO-BOTAO-CORTADO/c11/r.md \| head -60; W=/home/ronald/wt-codex-feriado-botao-cortado-112417; git -C $W status --porcelain; git -C $W diff \| /bin/grep -cE '^\+.*\b(except\|catch)\b'` |
-| 16:23:24 | Bash | Lê o fim da espera | `tail -6 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bdw2onwxr.output` |
