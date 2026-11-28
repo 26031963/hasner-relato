@@ -1,7 +1,337 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 14:52** · publicado em **28/11/2026 14:53** (UTC-3)
+> Ultima resposta processada: **28/11/2026 14:56** · publicado em **28/11/2026 15:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 14:56 · sessao a93a8f4909b4 · FERIADO-L097-MOTOR · leitura · origem=Code
+
+**RESUMO**  
+**Feito.** Conferi o corpo inteiro do motor na cópia e o hunk c3. A sonda está abaixo. `app/ponto/motor_calculo_v2.py:1536–1602`  
+**Veredito.** Totais A/B, universos, erros e `g4=0` na sombra [nao verificado].  
+**Próximo.** Rodar `bin/sonda_leitura.sh --sombra <arquivo.py>` e conferir a última linha `IMPACTO|rc=...`. `bin/sonda_leitura.sh:54–59,235–251`
+
+O corpo de `motor_c3` vem das linhas **1536–1602** da cópia indicada como HEAD, com as 17 linhas do anexo inseridas após **1584**. O blob local começa com `891199180` e a aplicação em memória reproduziu o prefixo `65f7046b2` do anexo. Hash do commit pela metadata Git [nao verificado]. `app/ponto/motor_calculo_v2.py:1536–1602`
+
+A sonda usa o universo real e faz duas passadas na mesma transação de leitura. As 24 somas mensais usam os campos numéricos que o escritor persiste. As somas incluem os valores conhecidos e `mudou_nulo` mostra transições de disponibilidade. Para o detalhe diário, a sonda usa a partição efetiva e intercepta em memória as duas operações finais de `DiaPago`. `g3` pode acompanhar outro grupo no mesmo dia e informa se a recusa registrada está vigente. `g4` inclui o resíduo diário e diferenças mensais sem delta diário comparável. `app/ponto/services/fechamento.py:619–622,995–1021,1124–1136,1152–1173,1199–1222,1237–1267` · `app/ponto/services/dia_pago.py:344–373` · `app/ponto/models.py:1265–1288,1335–1339`
+
+O Python opera em leitura. O launcher seleciona a sombra e o schema `juliani` e tem operações próprias de credencial, temporário e trilha no host. Execução pelo launcher nesta sessão [nao verificado]. `bin/sonda_leitura.sh:93–96,126–143,216–218,235–250`
+
+### Quem regrava a competência 10 por evento
+
+- **Batida.** `registrar_batida` chama `_fechamento_por_evento` após criar a batida. A retratação usa a mesma porta, e o ajuste retroativo que materializa uma saída entra por `registrar_batida`. A aprovação de justificativa por si só chama `invalidar_fechamento`. `app/ponto/registro_batida.py:170–198,287–302` · `app/ponto/services/justificativa.py:187–216,478–488`
+- **Ajuste de célula ou validação.** A edição e a regeneração da célula passam por `_o_chao_do_dia_mudou`, que aciona o recálculo por competência atingida. A validação de pergunta chama a porta com `data_evento`, e o aceite de folga usa o dia da folga. `app/ponto/portas/celula.py:392,490–503,682` · `app/chamados/services/validacao.py:627–628,787–799`
+- **Decisão de HE.** `decidir_he` grava a decisão e chama `recalcular_por_evento` pela data decidida. O caminho idempotente retorna antes dessa chamada. `app/ponto/portas/he.py:198–208,225–231`
+- **Escrita mensal.** `recalcular_por_evento` agenda em `on_commit`, resolve a competência pela janela da empresa que contém a data do fato e chama `recalcular_fechamento_mes` para um PK em modo de escrita. Se o fato cair na competência 10, o escritor usa `save()` ou `update()` conforme o status. A guarda da cópia lista apenas 09/2026. Quais eventos ocorreram e quais valores já foram regravados em produção [nao verificado]. `app/ponto/services/fechamento.py:37–51,510–513,623–630,1174–1227,1634–1644,1838–1864` · `app/ponto/services/dia_pago.py:714–731`
+
+```python
+if getattr(__import__("django.conf", fromlist=["settings"]).settings, "HASNER_SOMBRA", False) is not True:
+    print("IMPACTO|rc=1|erros=1|escopos=0|motivo=settings_sombra", flush=True)
+    raise SystemExit(1)
+
+import inspect
+import logging
+from collections import Counter
+from contextlib import redirect_stderr, redirect_stdout
+from decimal import Decimal
+from hashlib import sha256
+from io import StringIO
+from sys import _getframe
+from unittest.mock import patch
+
+from ponto.motor_calculo_v2 import CICLOS_FERIADO_SIMPLES, MotorBase, localizar
+
+
+def motor_c3(self, dia, entrada, periodo):
+    """L-097 BLOQUEIO TOTAL NO DIA SEM PREVISTO (aval `!` Ronald 26/10 22:1x -- zona inviolavel, UMA mudanca). -> None
+
+    A REGRA, nas palavras dele: *"dia sem previsto inteiro = ponta fora da janela"*. No dia cujo previsto e 0
+    PELO JUIZ (`_previsto_do_dia`: folga, feriado, sem escala vigente), com a empresa na janela, o par inteiro
+    e minuto fora do marco -- nao ha marco nenhum dentro do qual contar --, e pela L-097 *"nenhuma HE nasce
+    sozinha"*: conta ZERO e vira pendencia ate o admin Autorizar. Caso nominal: col841 17/10, folga, 12h02
+    pagas como HE sem decisao nenhuma (cartao 12h02 x Gestao de HE 0,00 h).
+
+    INVERTE O O263-FT (aval 13/10 19:0x: "na folga trabalhada nao ha marco, entao a janela nao recorta"):
+    la a ausencia de marco SOLTAVA o par; aqui ela o PRENDE inteiro. O selo de la troca a assercao.
+
+    O PAR SE CALCULA INTEIRO ANTES (duracao, intervalo, noturno), e o que ele PAGARIA muda de lugar: e esse o
+    numero que vira pendencia, o mesmo que Autorizar paga -- nunca o vao bruto com o intervalo dentro.
+    Autorizado (B2), previsto que nao e 0, `None` (sem juiz) ou empresa fora da janela: nada muda.
+    ALCANCE (aval Ronald 27/10 01:3x HE100-ALCANCE-A-PREMISSA (a); L-007, `ponto/calculador/regras.py`): folga SEM
+    escala certa (`escala_certa_no_dia` False) fica fora -- a hora segue em trabalhadas, sem o 100%.
+    """
+    if entrada is None or not float(periodo.minutos_trabalhados or 0):
+        return
+    # O DIA SEM PREVISTO DO AVAL E A FOLGA E O FERIADO -- os dois casos nominais (col841 17/10 folga, col43 12/10
+    # feriado) e o universo do laudo (35 dias, 34 em feriado). `previsto 0` SOZINHO e mais largo e foi MEDIDO
+    # (DIFF da 10 na sombra, 26/10 22:5x): pegava o INTERMITENTE (previsto DERIVA do realizado -- excecao declarada)
+    # e o dia de trabalho que o cadastro nao descreve, -1.693,83 h de trabalhadas em 32 colabs. A pergunta "e folga?"
+    # e o MESMO juizo que classifica a FT neste laco (`_folga_do_par`); "e feriado?" e `eh_feriado`, o juiz de
+    # feriado deste motor. Nenhum predicado novo: so os dois que ja decidem o dia.
+    _por_folga = bool(getattr(self, '_folga_do_par', {}).get(localizar(entrada)))
+    if not (_por_folga or self.eh_feriado(dia)):
+        return
+    if self._empresa_da_janela_do_dia(dia) is None:
+        return
+    if self._previsto_do_dia(dia) != 0:
+        return
+    self._carregar_decisoes_he()
+    if (getattr(self, '_he_decisoes', None) or {}).get(dia) == 'autorizado':
+        return
+    # ALCANCE (aval Ronald 27/10 01:3x HE100-ALCANCE-A-PREMISSA (a)): a folga SEM escala certa fica FORA do
+    # HE100 (nao zera, nao vira pendencia) -- o MESMO juiz `escala_certa_no_dia` que a L-007 (`ponto/calculador/regras.py`) ja usa para essa
+    # hora: entra em trabalhadas sem o 100%. Vale quando o par e folga (mesmo se tambem for feriado: ele esta em
+    # `periodos_ft` e `fechamento.py` aplica a `_certa` a todo `periodos_ft` antes de separar o feriado). Feriado
+    # SO por `eh_feriado` (nao-folga) segue bloqueado como antes. O juiz e o caro, por isso vai por ultimo; o
+    # cache e por calculo (nasce onde `_sem_previsto_fora` nasce). Sem colaborador conhecido (None) a regra se
+    # aplica como antes. `assinaturas_do_colab(so_escala=True)` volta antes de chamar o motor: sem recursao.
+    if _por_folga:
+        _cid = getattr(self, '_colab_do_calculo', None) or getattr(getattr(self, '_ec', None), 'colaborador_id', None)
+        if _cid is not None:
+            from escala.services.escala_certa import escala_certa_no_dia
+            if not escala_certa_no_dia(_cid, dia, getattr(self, '_escala_certa_cache', None)):
+                return
+            # FERIADO-L097-MOTOR (aval `!` Ronald 27/11 21:06, corte: *"feriado trabalhado e lei, paga direto pelo
+            # ciclo, nao entra no filtro de autorizar HE"*): com escala CERTA, a folga que e FERIADO sai daqui com
+            # o par intacto -- a rubrica e da particao de FT (`calculador/regras.py::particionar_ft`), que ja le a
+            # certeza e a dobra do ciclo; o mesmo total da incerta, que retorna logo acima. Folga comum segue
+            # pendente. O 12x36 segue pelos cortes vigentes (bloqueado): a pergunta e o CICLO, a mesma constante da
+            # fabrica (`CICLOS_FERIADO_SIMPLES`), nunca `feriado_em_dobra`, que a CCT pode ligar no 12x36. Feriado
+            # que nao e folga (so `eh_feriado`) e o colab desconhecido seguem bloqueados: leitura mais restritiva,
+            # perguntas (0) e (1) no topo do RELATO.
+            # c2 (reprovacao ver1 #1): o dia e o da PARTICAO que paga o par. `particionar_ft` pergunta
+            # `_dia_do_turno_do_par` e, quando ele difere do dia HERDADO que chega aqui (vao de 6 h do laco),
+            # leva o par ao dia do turno e ao vinculo DELE (`fechamento.py::contexto_por_dia`, de outra fatia),
+            # que esta guarda nao ve. So se libera o par cujo dia do turno E este dia: ai a particao nao remapeia
+            # e paga aqui, com o vinculo desta fatia. O par herdado segue bloqueado (`!` ao Ronald, sitio: a
+            # heranca do dia no laco do MotorBase).
+            if (self._dia_do_turno_do_par(entrada)[0] == dia and self.eh_feriado(dia)
+                    and getattr(self.escala, 'tipo_ciclo', None) not in CICLOS_FERIADO_SIMPLES):
+                return
+    _m = float(periodo.minutos_trabalhados)
+    periodo.minutos_fora_janela = float(periodo.minutos_fora_janela or 0) + _m
+    for _f in ('minutos_trabalhados', 'minutos_noturnos_relogio', 'minutos_noturnos_legais', 'minutos_extra',
+               'minutos_extra_50', 'minutos_extra_100', 'minutos_extra_100_feriado', 'minutos_extra_50_noturna',
+               'minutos_extra_100_noturna', 'minutos_intrajornada_indenizada'):
+        setattr(periodo, _f, 0.0)
+    # A TESTEMUNHA LE O MESMO PAR (L-099, LEI-AKITA 2): o oraculo (`alimentacao.py::segmentos_do_motor`) monta os
+    # segmentos de `efetivo_entrada/efetivo_saida`, nao de `minutos_*` -- MEDIDO na sombra: ele pagava o dia que
+    # o motor bloqueou (col300 22/09 folga 12,0 h; col365 12/10 feriado 12,0 h). O par bloqueado sai COLAPSADO
+    # (`efetivo_saida = efetivo_entrada`): a mesma familia do par invertido pela janela, que o leitor ja conta em
+    # `par_invertido_pela_janela` e nao paga. A decisao segue AQUI; o calculador nao ganha regra.
+    if periodo.efetivo_entrada is not None:
+        periodo.efetivo_saida = periodo.efetivo_entrada
+    periodo.alertas.append(
+        'DIA SEM JORNADA PREVISTA -- %d min fora da janela de HE (L-097, bloqueio total): pendencia na Gestao '
+        'de HE ate Autorizar.' % round(_m))
+    self._sem_previsto_fora.append({'dia': dia, 'minutos': int(round(_m)),
+                                    'hora': localizar(entrada).strftime('%H:%M')})
+
+
+ZERO = Decimal(0)
+EPS = Decimal("0.000000001")
+FERIADO = "horas_extras_100_feriado"
+FOLGA = "horas_folga_trabalhada"
+METODO = "_dia_sem_previsto_fora_da_janela"
+BASE = "a95c3432bc77f1094433e6aac3947460cb85b6d08419a15319a863c06821ebab"
+
+
+def decimal(valor):
+    return None if valor is None else Decimal(str(valor))
+
+
+def fmt(valor):
+    return "NA" if valor is None else format(valor, "f")
+
+
+def detalhe(valores):
+    return ",".join(f"{campo}:{valor:.9f}" for campo, valor in sorted(valores.items()))
+
+
+def delta_dia(a, b):
+    deltas = {campo: b.get(campo, ZERO) - a.get(campo, ZERO) for campo in a.keys() | b.keys()}
+    return {campo: delta for campo, delta in deltas.items() if abs(delta) > EPS}
+
+
+def parar_em_log_de_erro(_logger, registro):
+    if registro.levelno >= logging.ERROR:
+        raise SystemExit(1)
+
+
+def medir(estado):
+    from django.db import connection, transaction
+    from django.utils import timezone
+
+    from colaboradores.models import Empresa
+    from escala.servico_jornada import escala_vigente
+    from folha.export import _FERIADO_CLASSIFICADO_NO_MENSAL
+    from ponto.janelas import janela_fechamento
+    from ponto.management.commands.aplicar_09_corte_b import CAMPOS
+    from ponto.models import DecisaoHE, DiaPago
+    from ponto.services import dia_pago, fechamento
+
+    campos = tuple(c for c in CAMPOS if c not in ("mes", "ano"))
+    recalcular = fechamento.recalcular_fechamento_mes
+    original = getattr(MotorBase, METODO)
+
+    def simular_lavra(colab, mes, ano, **dados):
+        # app/ponto/services/dia_pago.py:370-373
+        class Memoria:
+            def filter(self, **filtro):
+                return self
+
+            def delete(self):
+                return None
+
+            def bulk_create(self, novas):
+                linhas.extend(novas)
+
+        linhas = []
+        with patch.object(DiaPago, "objects", Memoria()):
+            quantidade = dia_pago.lavrar(colab, mes, ano, **dados)
+        if quantidade != len(linhas) or not linhas or len({linha.data for linha in linhas}) != quantidade:
+            raise RuntimeError("captura_dia_pago")
+        por_dia = {}
+        for linha in linhas:
+            valores = {c: decimal(getattr(linha, c)) for c in dia_pago.CAMPOS}
+            valores["horas_extras"] = valores["horas_extras_50"] + valores["horas_extras_100"]
+            por_dia[linha.data] = valores
+        return por_dia
+
+    def passada(empresa_id, mes, ano, janela, ids, metodo, anterior=None):
+        marcas = {}
+
+        def observar(motor, dia, entrada, periodo):
+            antes = len(motor._sem_previsto_fora)
+            metodo(motor, dia, entrada, periodo)
+            marcas[id(periodo)] = (periodo, dia, len(motor._sem_previsto_fora) > antes)
+
+        class Coleta(dict):
+            def __setitem__(self, pk, furos):
+                # app/ponto/services/fechamento.py:1152-1173,1237-1267
+                chamador = _getframe(1)
+                if chamador.f_code is not recalcular.__code__ or pk in self:
+                    raise RuntimeError("origem_da_coleta")
+                v = chamador.f_locals
+                del chamador
+                colab = v["colab"]
+                if (colab.pk != pk or colab.empresa_id != empresa_id
+                        or (v["_data_ini"], v["_data_fim"]) != janela):
+                    raise RuntimeError("escopo_da_coleta")
+                r = v["resultado"]
+                certo, feriado, comum = v["_particao_ft"]
+                dias = simular_lavra(
+                    colab, mes, ano, periodos=r.periodos,
+                    ft_certa=certo, ft_feriado=feriado, ft_sem_escala=comum,
+                    orfaos_por_dia=v["_orfaos_por_dia"], faltas_por_dia=v["_faltas_por_dia"],
+                    atraso_por_dia=v["_atrasos_dia"], credito_por_dia=v["_creditos_dia"],
+                    reflexo_dsr=v["fechamento"].horas_reflexo_dsr,
+                    banco=v["fechamento"].saldo_banco_horas, abono_por_dia=v["_abono_dia"],
+                    previsto_por_dia=v["_prev_dia_m"], realizado_por_dia=v["_real_dia_m"],
+                    dia_da_jornada=r.dia_da_jornada, furos_do_motor=furos,
+                    versao_motor=v["_carimbo_regua"], regua_por_dia=v["_regua_por_dia"],
+                    evento_origem="recalcular_fechamento_mes",
+                )
+                contexto = v["_ap"].contexto_por_periodo_ft
+                bloqueios, pares, ocorrencias = set(), {}, Counter()
+                for p in r.periodos_ft:
+                    _, dia, bloqueado = marcas[id(p)]
+                    _, vinculo = contexto[id(p)]
+                    chave = (vinculo.pk, dia, p.entrada, p.saida)
+                    ocorrencias[chave] += 1
+                    chave += (ocorrencias[chave],)
+                    pares[id(p)] = (chave, dia, bloqueado)
+                    if bloqueado:
+                        bloqueios.add(chave)
+                marcas.clear()
+
+                esperado = {}
+                if anterior is not None:
+                    bloqueios_a = anterior[pk][1]
+
+                    def liberado(p):
+                        chave, dia, bloqueado = pares[id(p)]
+                        if (bloqueado or chave not in bloqueios_a or p.minutos_trabalhados <= 0
+                                or dia_pago._dia_de(p, r.dia_da_jornada) != dia):
+                            return False
+                        motor, _ = contexto[id(p)]
+                        return motor.eh_feriado(dia)
+
+                    def folga_comum(p):
+                        if not liberado(p):
+                            return False
+                        _, dia, _ = pares[id(p)]
+                        _, vinculo = contexto[id(p)]
+                        if (ano, mes) < _FERIADO_CLASSIFICADO_NO_MENSAL:
+                            vinculo = escala_vigente(colab, dia)
+                        return vinculo is not None and vinculo.feriado_vira_folga(dia) is False
+
+                    liberados_feriado = [f for f in feriado if liberado(f.periodo)]
+                    liberados_comum = [p for p in certo if folga_comum(p)]
+                    if liberados_feriado or liberados_comum:
+                        esperado = simular_lavra(
+                            colab, mes, ano, ft_certa=liberados_comum,
+                            ft_feriado=liberados_feriado, dia_da_jornada=r.dia_da_jornada,
+                        )
+                super().__setitem__(pk, (dias, bloqueios, esperado))
+
+        coleta = Coleta()
+        with patch.object(MotorBase, METODO, observar):
+            lidos = recalcular(
+                mes, ano, empresa_id=empresa_id, somente_leitura=True,
+                lavrar_dias_pagos=False, coletar_furos=coleta,
+            )
+        if lidos.keys() != ids or coleta.keys() != ids:
+            raise RuntimeError("universo_incompleto")
+        mensal = {pk: {c: decimal(valores[c]) for c in campos} for pk, valores in lidos.items()}
+        return mensal, coleta
+
+    def comparar(mensal_a, mensal_b, coleta_a, coleta_b, escopo):
+        linhas, grupos = [], Counter()
+        recusa_candidatos = {}
+        for pk in sorted(mensal_a):
+            dias_a = coleta_a[pk][0]
+            dias_b, _, esperados = coleta_b[pk]
+            com_delta = set()
+            for dia in sorted(dias_a.keys() | dias_b.keys() | esperados.keys(), key=lambda d: (d is None, d)):
+                a, b = dias_a.get(dia, {}), dias_b.get(dia, {})
+                mudou = delta_dia(a, b)
+                esperado = esperados.get(dia, {})
+                imprevisto = delta_dia(esperado, mudou)
+                if not mudou and not imprevisto:
+                    continue
+                com_delta.update(mudou)
+                onde = f"{escopo}|colab={pk}|dia={dia.isoformat() if dia is not None else 'NA'}"
+                for grupo, rubrica in (("g1", FERIADO), ("g2", FOLGA)):
+                    horas = esperado.get(rubrica, ZERO)
+                    if horas > EPS:
+                        grupos[grupo] += 1
+                        linhas.append(
+                            f"IMPACTO|GRUPO|{onde}|grupo={grupo}|rubrica={rubrica}"
+                            f"|A={a.get(rubrica, ZERO):.9f}|B={b.get(rubrica, ZERO):.9f}"
+                            f"|delta={mudou.get(rubrica, ZERO):.9f}|horas_liberadas={horas:.9f}"
+                        )
+                if imprevisto:
+                    grupos["g4"] += 1
+                    linhas.append(f"IMPACTO|GRUPO|{onde}|grupo=g4|delta={detalhe(mudou)}"
+                                  f"|delta_sem_explicacao={detalhe(imprevisto)}")
+                pagas = {c: mudou[c] for c in (FOLGA, "horas_extras_50", "horas_extras_100",
+                                               "horas_trabalhadas") if mudou.get(c, ZERO) > EPS}
+                if dia is not None and pagas:
+                    recusa_candidatos[pk, dia] = detalhe(pagas)
+
+            for campo in campos:
+                a, b = mensal_a[pk][campo], mensal_b[pk][campo]
+                if a != b and (a is None or b is None or campo not in com_delta):
+                    delta = None if a is None or b is None else b - a
+                    grupos["g4"] += 1
+                    linhas.append(f"IMPACTO|GRUPO|{escopo}|colab={pk}|dia=NA|grupo=g4"
+                                  f"|rubrica={campo}|A={fmt(a)}|B={fmt(b)}|delta={fmt(delta)}"
+                                  "|motivo=mensal_sem_delta_diario_comparavel")
+
+        if recusa_candidatos:
+         
+
+[truncado em 20000 de 24892 caracteres]
 
 ## 28/11 14:52 · sessao 2f786fab1487 · FERIADO-BOTAO-FAIXA · construtor · origem=Code
 
@@ -1249,62 +1579,4 @@ O pronto é o DIFF da comp. 11 por rubrica no RELATO, limitado aos minutos da ob
 - **Rito de pouso.** DIFF da 10 pela L-113, publicado antes do pouso/ato de frota, com aviso ao DP. A triagem chama a 10 de exportada. O HEAD registra paga à mão, sem TXT e sem guarda. Situação atual em prod [nao verificado]. Preservar a 09 guardada. Lista J.A da 11 por colab, dia e minutos, com reversão antes do apply L-092 da L-097. `app/docs/RELATO.md:25,14872,14876` · `app/ponto/services/fechamento.py:37–50,603–629,1847–1853` · `app/docs/BACKLOG.md:2190`
 - **Padrão.** `Single Writer Principle` / `juiz único`: a guarda decide a efetividade do par e a partição existente decide a rubrica. `app/docs/GLOSSARIO.md:12` · `app/ponto/motor_calculo_v2.py:1585–1602` · `app/ponto/calculador/regras.py:428–432`
 
-## 28/11 12:25 · sessao ca3cc270be5e · TESTE-DO-ESTRANHO · leitura · origem=Code
-
-## RESUMO
-
-**5 resolvidas · 0 parciais · 0 travadas.** A ordem vigente está em `app/docs/BACKLOG.md:1926` e a causa do chamado 40588 em `app/docs/RELATO.md:15208`.  
-**Principal limite:** o handoff é um retrato de 28/11 às 11h58. O estado ao vivo da sessão, das filas e da produção ficou [nao verificado]. `app/docs/HANDOFF-SESSAO.md:3`
-
-## T1. O que está em construção agora, em que ordem e por quê?
-
-**RESPOSTA** — Vale a **ORDEM-VIVA-2811-1200**. A meta é zerar os problemas atribuídos à Hasner na J.A, competência 11, até segunda, com uma sonda no domingo à noite. Codex, pista 2, pista 3 e Opus verificador devem receber trabalho sempre que houver item executável. Pré-requisito pendente herda a vez, e obras que disputam o mesmo arquivo precisam ser sequenciadas. `app/docs/BACKLOG.md:8` · `app/docs/BACKLOG.md:1926` · `CLAUDE.md:318` · `CLAUDE.md:444`
-
-- **Opus construtor:** CUSTO F1 v7 → OBRA-PRONTA-ACORDA → FERIADO-L097-MOTOR c2 → DESLIGADO c4/c5 → CUSTO F2/F3. A F1 v7 já tinha commit em cópia e aguardava a coleta dos resultados de testes e mutantes. `app/docs/BACKLOG.md:1926` · `app/docs/RELATO.md:15212`
-- **Codex e pistas:** canário E4C a3/c4 e E4D v4 → C7-TELA-ADMIN-ENCERRA, para os 88 casos → RETRATO-PORTA-PELO-MOTIVO, depois da OS6 → RAMO2-B e RAMO2-HERANCA-VAO → PAR → ORFAS-FOLHA-E-ALARME itens 2 e 3 → E4d → faixa do BOTAO → RAZAO-DA-SOBRA → CRON-15-SOMBRA-CABE → SONDA-ESPURIAS/CASO-LITERAL-14 → E1C. No último registro, a E4C a3 estava em aceite, a E4D v4 tinha entrega para aceite e a C7 tinha código em cópia, com testes, verificação e smoke pela frente. `app/docs/BACKLOG.md:1926` · `app/docs/RELATO.md:15234` · `app/docs/RELATO.md:15237` · `app/docs/RELATO.md:15241`
-- **FERIADO-UM-JUIZ** já estava no ar às 11h36, com o apply da competência 11 registrado como concluído e o pacote ao Fernando preparado. O envio ficou com Ronald. `app/docs/RELATO.md:15231` · `app/docs/RELATO.md:15266` · `app/docs/RELATO.md:15270`
-
-**AUTO-AVALIAÇÃO** — resolvi. **ONDE TRAVOU** — a ordem e o andamento estão no BACKLOG e no RELATO. A ocupação das vagas após o retrato ficou [nao verificado]. `app/docs/HANDOFF-SESSAO.md:18` · `app/docs/BACKLOG.md:1926` **TEMPO** — ~1 min e 30 s [nao verificado].
-
-## T2. Chamado 40588, de 20/11
-
-**RESPOSTA** — As perguntas **61520 e 61521** foram emitidas em **23/11 às 12h36**, quando a célula **122468** previa os marcos de **11h e 12h**. Às **12h42**, a célula foi regenerada para **07h–19h sem intervalo**, e as duas perguntas continuaram pendentes. A causa é **órfã de regeneração**. `app/docs/PROMPTS.md:3223` · `app/docs/RELATO.md:15208`
-
-A correção da classe pertence à fatia **CHAMADO-PRESO** da obra **ESCRITOR-UNICO-DE-CHAMADO**, no **E2 `retirar_contexto`**, após o pouso da E4C. **INTERVALO-SEM-PREVISTO**, da RAIA-INTERVALO, encontrou a causa. **C7-TELA-ADMIN-ENCERRA** é a via manual para o admin encerrar esses casos com motivo e trilha. `app/docs/BACKLOG.md:835` · `app/docs/BACKLOG.md:2654` · `app/docs/PROMPTS.md:3229`
-
-**AUTO-AVALIAÇÃO** — resolvi. **ONDE TRAVOU** — busquei `40588` no PROMPTS, RELATO e BACKLOG. O log bruto da sonda ficou [nao verificado]. `app/docs/RELATO.md:15208` **TEMPO** — ~1 min [nao verificado].
-
-## T3. Feriado trabalhado em folga no 6x1
-
-**RESPOSTA** — Na classificação mensal vigente desde a competência **11/2026**, os minutos apurados de feriado trabalhado em folga no **6x1** entram uma vez como **HE 100% de feriado**, ou seja, em dobro. O teste de 6x1 sem escala certa confirma **5h30 na rubrica de feriado e zero em horas comuns**. `app/folha/export.py:385` · `app/ponto/services/fechamento.py:1002` · `app/ponto/tests/test_he100_dia_sem_previsto.py:250`
-
-O juiz da dobra é **`MotorBase._feriado_dobra_no_dia`**, que usa o feriado do **dia de início do plantão** e a regra do ciclo. Só o `12x36` consta da lista padrão de ciclos com feriado simples. **`rubrica_da_folga`** escolhe a rubrica, e **`feriado_vira_folga`** verifica se o feriado causou a folga daquele vínculo. `app/ponto/motor_calculo_v2.py:941` · `app/ponto/motor_calculo_v2.py:961` · `app/ponto/motor_calculo_v2.py:3740` · `app/ponto/calculador/regras.py:371` · `app/escala/models.py:1384`
-
-A janela **L-097** ainda pode zerar o par antes da classificação. No apply registrado, os **13 dias de 10 colaboradores 6x1** do pacote seguiram com os mesmos valores. A cura para pagar o feriado diretamente pelo ciclo pertence à **FERIADO-L097-MOTOR**, que estava fora do HEAD registrado. `app/ponto/motor_calculo_v2.py:1562` · `app/ponto/motor_calculo_v2.py:1585` · `app/docs/PROMPTS.md:3176` · `app/docs/RELATO.md:15270`
-
-**AUTO-AVALIAÇÃO** — resolvi. **ONDE TRAVOU** — conferi motor, calculador, fechamento e testes. O pagamento efetivo ficou [nao verificado]. `app/ponto/calculador/regras.py:428` · `app/docs/RELATO.md:15270` **TEMPO** — ~1 min [nao verificado].
-
-## T4. Como pousar uma obra com reversão
-
-**RESPOSTA**
-
-1. **Prepare em cópia.** Confirme escopo, `!` e B3. Faça RED antes da cura. Para mão única, concorrência, schema ou multi-tenant, passe por censo, mutantes, revisão do Codex e Opus final após a suíte. `CLAUDE.md:28` · `CLAUDE.md:255` · `CLAUDE.md:274` · `CLAUDE.md:423` [nao verificado]
-2. **Certifique a árvore que vai pousar.** Exija suíte inteira verde. Se rodar na pista, exija `bin/pista_certifica.sh` com rc 0 ou rode na VM. Confira os arquivos com `cmp` contra a cópia certificada e registre a prova no commit. `CLAUDE.md:104` · `CLAUDE.md:129` · `CLAUDE.md:347`
-3. **Prepare a reversão antes do ato.** Registre no RELATO `git revert -m 1 <commit-do-merge>` seguido de `bin/deploy.sh`. Para apply de folha, grave antes o snapshot dos campos por colaborador e prove depois a integridade das competências exportadas por hash, com prova de frota no mesmo marco. Para alterar gravado de competência guardada, exija `!`, DIFF prévio e a porta staff. `app/docs/PROMPTS.md:3202` · `app/docs/RELATO.md:351` · `CLAUDE.md:455`
-4. **Pouse e publique no mesmo ato.** Faça `git merge --no-ff --no-commit` → resolva → commit com `OBRA: <id>` → `bin/deploy.sh`. Produto pousa primeiro e instrumento tem pouso próprio. O deploy confere os portões, migra quando aplicável, recarrega as três cascas e prova as rotas. `CLAUDE.md:284` · `CLAUDE.md:352` · `app/docs/INFRA.md:38` · `bin/deploy.sh:416`
-5. **Faça o smoke e registre o resultado.** Se reprovar, execute o revert previsto, republique e repita as provas. Se houve escrita de dados, siga também a reversão específica pela porta, restaurando só os campos-alvo do snapshot. `CLAUDE.md:477` · `app/docs/RELATO.md:4575` · `app/docs/RELATO-ARQUIVO.md:32867`
-
-**AUTO-AVALIAÇÃO** — resolvi. **ONDE TRAVOU** — conferi o procedimento no CLAUDE, no deploy e em exemplos de reversão no RELATO. A execução ficou [nao verificado]. `CLAUDE.md:347` · `bin/deploy.sh:308` · `app/docs/RELATO.md:4575` **TEMPO** — ~2 min [nao verificado].
-
-## T5. O Code parou e a esteira está vazia
-
-**RESPOSTA** — Eu conferiria nesta ordem:
-
-1. **Ordem e parada declarada.** Abra o `HANDOFF-SESSAO.md`, o topo do `RELATO.md` e o bloco `OBRAS` do BACKLOG. Confira se `ORDEM-VIVA-TOPO` aponta para um item aberto e a qual obra pertence o `PAREI: !` ou `ESPERANDO:`. Marcador ausente ou apontando para obra fechada pode dar a impressão de fila vazia. O hook de Stop hoje pode encerrar com item aberto e emitir só um aviso. `app/docs/HANDOFF-SESSAO.md:18` · `CLAUDE.md:272` · `bin/hook_stop_fila1.py:286` · `bin/hook_stop_fila1.py:1499`
-2. **Sessão e trabalho em voo.** Veja o painel tmux e a última atividade do transcript. Para `ESPERANDO`, confira produtor, PID e arquivo de sinal. Confira também as travas de teste e sombra e os `.rc` concluídos ainda sem registro de coleta. Se houver recusa, leia o motivo na trilha do disjuntor ou do wrapper Codex. `bin/alarme_sessao_ociosa.py:18` · `CLAUDE.md:272` · `bin/handoff_sessao.sh:252` · `bin/rc_sem_colher.py:6` · `bin/disjuntor.py:4` · `bin/codex_pergunta.sh:517`
-3. **Filas e portões da esteira.** Use o relatório `bin/esteira_status.sh --lista` para conferir a fila de fatias e a de integração. Veja se há fatia pronta e livre fora da integração, pronta com portão ou já no ar aguardando smoke. Confira `esteira.pausada` pelo dono, motivo e condição de saída, além de árvore vermelha, quarentena e controlador de teto. `bin/esteira_status.sh:3` · `bin/esteira_status.sh:41` · `bin/esteira_status.sh:63` · `bin/fabrica_estado.py:24` · `bin/esteira.sh:53`
-4. **Descubra por que a vaga ficou vazia.** Se a fábrica estiver habilitada, confira o timer e o fim de `logs/fabricante.log`. A mensagem `registro sem item livre com alvo vivo` indica que o fabricante rodou e ficou sem alvo elegível. Se a sessão estiver tocando a fila, confira o próximo item da ordem, seu dossiê, pré-requisito e vaga. Uma trava de lei ou `!` de uma obra deixa seguir a próxima independente. `bin/hasner-fabricante.timer:7` · `bin/trava_a_vazia.sh:46` · `CLAUDE.md:278` · `CLAUDE.md:412` · `CLAUDE.md:444`
-
-**AUTO-AVALIAÇÃO** — resolvi. **ONDE TRAVOU** — o handoff registra `esteira.pausada` na árvore do host e indica que havia item executável na fila 1. O motivo da pausa e o estado ao vivo do tmux e dos timers ficaram [nao verificado]. `app/docs/HANDOFF-SESSAO.md:14` · `app/docs/HANDOFF-SESSAO.md:27` **TEMPO** — ~2 min [nao verificado].
-
-_8935 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8936 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
