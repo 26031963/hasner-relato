@@ -256,11 +256,15 @@ Todo cron e IDEMPOTENTE por requisito - pode ser adiantado na mao.
 PRINCIPIO (corte Ronald SIMPLIFICA-V3-2211-1726, 22/11 17:26, substitui o V2; "menos e mais"). Manda sobre toda regra abaixo.
   MAO UNICA bloqueia o pouso: grava dinheiro errado, mexe em competencia exportada, corrompe ou mistura dado em silencio, nao
   tem volta. MAO DUPLA pousa com a lista do que falta; a rede e `bin/deploy.sh` + `git revert`. CLASSIFICACAO PADRAO: todo
-  diff que toca `ponto/`, `folha/`, fechamento, celula, export ou holerite e MAO UNICA; mao dupla so fora desses caminhos.
+  diff que toca `ponto/`, `folha/`, fechamento, celula, export ou holerite e MAO UNICA; mao dupla so fora desses caminhos
+  (juiz unico `bin/mao_unica.py::mao_unica`, com motor, migrations e apagar arquivo que prod usa; diff ilegivel = mao unica).
   FICA: nucleo da LEI-AKITA (origem, RED primeiro, escopo literal, construir em copia), DINHEIRO, exportada, zonas
   inviolaveis, os `!`, um run por banco, suite verde antes de todo pouso, deploy so pelo `bin/deploy.sh`. PROPORCIONAL:
   revisao do Codex, opus final, mutante e censo obrigatorios em mao unica, concorrencia, schema ou multi-tenant; nos demais,
-  a criterio. VIRA AVISO: hook de Stop (fila pendente nao impede encerrar); B3 segura so o MERGE (PARADA 4). PISTA 2 so
+  a criterio. VIRA AVISO: hook de Stop (fila pendente nao impede encerrar), cada aviso UMA vez por mudanca de estado
+  (borda: tipo + obra + impressao, `logs/hook_stop_borda.tsv`; B1 a cada Stop; item SUPERADO/POUSADO/RESPONDIDO sai do
+  topo); B3 segura so o MERGE de MAO UNICA (PARADA 4); cota 7d e orcamento Codex so no ESTADO, sem freio (ESCADA so
+  pela palavra) -- CUSTO-DE-COORDENACAO-F1 v2. PISTA 2 so
   certifica a suite de pouso com `bin/pista_certifica.sh` rc 0 (secao 3). SAI o que esta "SUSPENSA por
   SIMPLIFICA-V3-2211-1726" no CORTES.md (historia na LAPIDES); a LEI-AKITA fica no commit, nao no aval.
 PARADA E AUTONOMIA (31/10; funde PAREI-DE-LEI-NAO-DEVOLVE-TURNO, PAREI-SO-LEI, AUTONOMIA-DE-CODIGO, ACELERAR-PELA-LEI (1)(3),
@@ -284,7 +288,8 @@ PARADA E AUTONOMIA (31/10; funde PAREI-DE-LEI-NAO-DEVOLVE-TURNO, PAREI-SO-LEI, A
   4. PERGUNTA DE DESENHO IDEM. Classe de bug NOVA que muda o DESENHO (um padrao, nao um caso) e reprovacao do verificador
      final (DISJUNTOR B3) vao ao TOPO do RELATO como PERGUNTA DE DESENHO com numeros; o B3 segura so o MERGE da obra
      (todo merge declara `OBRA: <id>` no commit; sem a linha ou com a obra armada, `bin/commit_msg.sh` recusa), nao o turno nem
-     as voltas; libera `DESENHO <obra>`/`ERRO-BOBO <obra>`.
+     as voltas; libera `DESENHO <obra>`/`ERRO-BOBO <obra>`. So MAO UNICA (`bin/mao_unica.py::mao_unica` sobre o diff do
+     proprio merge): mao dupla passa com `AVISO B3 mao dupla <obra>: reprovacoes vao a lista` na trilha.
   5. DECISAO TECNICA E DO CODE, em UMA linha no RELATO, sem aval: horario de cron, desenho de encaixe, caminho de codigo;
      ordem e encaixe na fila por DEPENDENCIA DE CODIGO; qual raia ou agente pega qual obra e quando uma obra registrada entra
      como COMPLEMENTO de outra; destino de achado de esmeril (cura no marco, complemento, linha de fila); a frase `corte
@@ -440,7 +445,9 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
      obras o Code publica a tabela; falha do Codex = 0 -> PROPOE o corte de rebaixar o opus final a amostra (so por corte);
      VERMELHO se houver falha do Codex sem a tabela.
 MODO-COMUM: achado que Codex E opus deixaram passar = classe (d): linha `MODO-COMUM:` no topo do RELATO e obra ESTRUTURA na frente da fila 1, fechada com juiz + MAPA + selo que morde mutante. (PISTA.md#modo-comum)
-DOSSIE-ANTES-DO-CONSTRUTOR (aval 26/11 00:4x, conduta, amplia CENSO-ANTES-DA-VAGA; sem wrapper/hook/selo que cobre): construtor (Claude ou Codex) de obra MAO UNICA so abre com `logs/<OBRA>/DOSSIE/` -- mapa curto (ja faz? atravessa o que? quanto se usa, pela funcao real), censo de escritores e leitores fechado, leis herdadas com arquivo:linha, contrato de entrada (fonte/unidade/universo/exclusoes/escala), matriz de transicoes com cada caso como RED, padrao nomeado, arquivos tocados x obra em voo, perguntas de lei numeradas (0 = abre); MAO DUPLA so mapa + censo. Dossie = Codex leitura/censo, amostra conferida pela sessao; construtor decide so o como. Obra ja em voo nao refaz; vaga nao espera dossie de outra obra. Medida 03/12: reprovacoes por desenho antes x depois.
+DOSSIE-ANTES-DO-CONSTRUTOR (aval 26/11 00:4x, conduta, amplia CENSO-ANTES-DA-VAGA -- que julga CONTEUDO desde a
+CUSTO-DE-COORDENACAO-F1 v2: brief por glob em `logs/<OBRA>/`, BRIEF VIVO = o mais novo, que herda leitores/escritores do
+anterior, obra lida do caminho; selo `bin/tests/test_censo_antes_da_vaga.sh`; o DOSSIE em si segue sem wrapper/hook/selo): construtor (Claude ou Codex) de obra MAO UNICA so abre com `logs/<OBRA>/DOSSIE/` -- mapa curto (ja faz? atravessa o que? quanto se usa, pela funcao real), censo de escritores e leitores fechado, leis herdadas com arquivo:linha, contrato de entrada (fonte/unidade/universo/exclusoes/escala), matriz de transicoes com cada caso como RED, padrao nomeado, arquivos tocados x obra em voo, perguntas de lei numeradas (0 = abre); MAO DUPLA so mapa + censo. Dossie = Codex leitura/censo, amostra conferida pela sessao; construtor decide so o como. Obra ja em voo nao refaz; vaga nao espera dossie de outra obra. Medida 03/12: reprovacoes por desenho antes x depois.
 DEPENDENCIA-PUXA (aval 26/11 08:5x, conduta, sem instrumento; PARADA item 5): obra da ORDEM VIVA travada por pre-requisito NAO e pulada -- o pre-requisito herda o lugar dela na hora, linha no RELATO `PUXA <obra> -> <pre-requisito>: <por que>`, e abre dossie (DOSSIE-ANTES-DO-CONSTRUTOR) se nao tiver; toda conferencia de vaga lista por obra da ordem `travada por: <pre-requisito | lei | vaga | nada>`. PROIBIDO pular obra sem a linha PUXA ou tirar vaga de obra em voo.
 CONTRATO-DE-INSTRUMENTO: instrumento, hook, wrapper, cron ou regra de pista novos so depois de CONTRATO de 5 linhas no RELATO (quem chama, quem espera, falha/limite, medida, quem desliga), mandado UMA vez ao Codex. (PISTA.md#contrato-de-instrumento)
 PLACAR-DA-S3-CONTA-EXERCICIO (corte Ronald 29/09 ~15:1x). O-DIA-PAGO S3: EXERCICIO, nao CAMINHO; **0** com os 2 verdes:
