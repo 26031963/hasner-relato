@@ -1,7 +1,166 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 21:13** · publicado em **27/11/2026 21:14** (UTC-3)
+> Ultima resposta processada: **27/11/2026 21:24** · publicado em **27/11/2026 21:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 21:24 · sessao e7f54b76e2c7 · FERIADO-L097-MOTOR · leitura · origem=Code
+
+1. `janela_fechamento` define a janela da empresa 2. O universo inclui colaboradores com qualquer batida registrada na janela. `colabs` conta os colaboradores distintos com entradas em a–d. [app/ponto/janelas.py:54](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/janelas.py:54) [app/ponto/models.py:22](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/models.py:22)
+2. `recalcular_fechamento_mes` em modo leitura monta os motores do fechamento e chama `apurar_por_fatia`, que executa `motor.calcular_mes` com o vínculo da fatia. [app/ponto/services/fechamento.py:744](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:744) [app/ponto/services/fechamento.py:774](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:774) [app/ponto/services/fechamento.py:306](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:306)
+3. A classificação usa a resposta de certeza observada no próprio bloqueio e os minutos publicados pelo motor. A associação por identidade segue as entradas do resultado composto. [app/ponto/motor_calculo_v2.py:1579](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/motor_calculo_v2.py:1579) [app/ponto/motor_calculo_v2.py:1601](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/motor_calculo_v2.py:1601) [app/ponto/services/fechamento.py:314](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:314)
+4. O ramo de leitura monta um `FechamentoMensal` em memória e retorna os campos calculados. `lavrar_dias_pagos=False` deixa a lavratura desativada, e a sonda força `READ ONLY` com rollback. [app/ponto/services/fechamento.py:896](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:896) [app/ponto/services/fechamento.py:1152](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1152) [app/ponto/services/fechamento.py:1215](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1215)
+5. O runner usa o schema `juliani` e tem escritas próprias de credencial, permissões e trilha. Entradas e totais reais da sombra [nao verificado]. [bin/sonda_leitura.sh:126](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:126) [bin/sonda_leitura.sh:153](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:153) [bin/sonda_leitura.sh:239](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:239) [bin/sonda_leitura.sh:249](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:249)
+
+```python
+if getattr(__import__("django.conf", fromlist=["settings"]).settings, "HASNER_SOMBRA", False) is not True:
+    print("L097|PAREI|universo_colabs=NA|erros=1|motivo=settings_sombra", flush=True)
+    raise SystemExit(1)
+
+import logging
+from collections import Counter
+from contextlib import redirect_stderr, redirect_stdout
+from datetime import datetime, time, timedelta
+from functools import wraps
+from io import StringIO
+from unittest.mock import patch
+
+
+def parar_em_log_de_erro(_logger, registro):
+    # O fechamento registra nome e segue no erro (app/ponto/services/fechamento.py:1327).
+    if registro.levelno >= logging.ERROR:
+        raise SystemExit(1)
+
+
+def medir(estado):
+    from django.db import connection, transaction
+    from django.utils import timezone
+
+    from colaboradores.models import Colaborador, Empresa
+    from escala.services import escala_certa
+    from ponto.janelas import janela_fechamento
+    from ponto.models import Batida
+    from ponto.motor_calculo_v2 import CICLOS_FERIADO_SIMPLES, MotorBase, localizar
+    from ponto.services import fechamento
+
+    compor = fechamento.apurar_por_fatia
+    bloquear = MotorBase._dia_sem_previsto_fora_da_janela
+    consultar_certeza = escala_certa.escala_certa_no_dia
+    contagem = Counter()
+    minutos = Counter()
+    colabs_com_bloqueio = set()
+    apurados = set()
+    linhas = []
+
+    @wraps(compor)
+    def observar_composicao(colab, *args, **kwargs):
+        capturas = {}
+        certezas = {}
+
+        @wraps(consultar_certeza)
+        def observar_certeza(colab_id, dia, cache=None):
+            certa = consultar_certeza(colab_id, dia, cache)
+            certezas[(colab_id, dia, id(cache))] = certa
+            return certa
+
+        @wraps(bloquear)
+        def observar_bloqueio(motor, dia, entrada, periodo):
+            # O motor anexa o dict com os minutos já arredondados (app/ponto/motor_calculo_v2.py:1601).
+            antes = len(motor._sem_previsto_fora)
+            retorno = bloquear(motor, dia, entrada, periodo)
+            novos = motor._sem_previsto_fora[antes:]
+            if novos:
+                folga = bool(motor._folga_do_par.get(localizar(entrada)))
+                feriado = motor.eh_feriado(dia)
+                ciclo = getattr(motor.escala, "tipo_ciclo", None)
+                chave = (colab.pk, dia, id(motor._escala_certa_cache))
+
+                grupo = "d"
+                if folga and feriado and certezas[chave] is True:
+                    grupo = "b" if ciclo in CICLOS_FERIADO_SIMPLES else "a"
+                elif feriado and not folga:
+                    grupo = "c"
+
+                for item in novos:
+                    capturas[id(item)] = (item, grupo, ciclo)
+            return retorno
+
+        with (
+            patch.object(MotorBase, "_dia_sem_previsto_fora_da_janela", observar_bloqueio),
+            patch.object(escala_certa, "escala_certa_no_dia", observar_certeza),
+        ):
+            apuracao = compor(colab, *args, **kwargs)
+
+        # A composição preserva cada dict publicado pela fatia (app/ponto/services/fechamento.py:314).
+        for item in apuracao.resultado.dias_sem_previsto_fora_da_janela:
+            _, grupo, ciclo = capturas[id(item)]
+            colabs_com_bloqueio.add(colab.pk)
+            contagem[grupo] += 1
+            if grupo != "d":
+                valor = item["minutos"]
+                minutos[grupo] += valor
+                linhas.append(
+                    f"L097|grupo={grupo}|colab=col{colab.pk}|dia={item['dia'].isoformat()}"
+                    f"|minutos={valor}|ciclo={ciclo}"
+                )
+        apurados.add(colab.pk)
+        return apuracao
+
+    with transaction.atomic(durable=True):
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cursor.execute("SELECT current_database(), current_schema()")
+            if cursor.fetchone() != ("sombra", "juliani"):
+                raise RuntimeError("banco_ou_schema")
+
+        empresa = Empresa.objects.get(pk=2)
+        ini, fim = janela_fechamento(11, 2026, empresa)
+        inicio = timezone.make_aware(datetime.combine(ini, time.min))
+        limite = timezone.make_aware(datetime.combine(fim + timedelta(days=1), time.min))
+        ids = set(Batida.objects.filter(
+            colaborador__empresa_id=empresa.pk, timestamp__gte=inicio, timestamp__lt=limite,
+        ).order_by().values_list("colaborador_id", flat=True).distinct())
+        estado["universo"] = len(ids)
+
+        # O universo da sonda substitui só a seleção de colaboradores (app/ponto/services/fechamento.py:574).
+        universo = Colaborador.objects.filter(empresa=empresa, pk__in=ids).order_by("pk")
+        if ids:
+            with (
+                patch.object(fechamento, "universo_da_competencia", return_value=universo),
+                patch.object(fechamento, "apurar_por_fatia", observar_composicao),
+            ):
+                lidos = fechamento.recalcular_fechamento_mes(
+                    11, 2026, empresa_id=empresa.pk, colaborador_ids=sorted(ids),
+                    somente_leitura=True, lavrar_dias_pagos=False,
+                )
+            if apurados != ids or lidos.keys() != ids:
+                raise RuntimeError("universo_incompleto")
+        transaction.set_rollback(True)
+
+    total = (
+        f"L097|TOTAL|a={contagem['a']}|a_min={minutos['a']}"
+        f"|b={contagem['b']}|b_min={minutos['b']}|c={contagem['c']}|c_min={minutos['c']}"
+        f"|d={contagem['d']}|colabs={len(colabs_com_bloqueio)}|universo_colabs={len(ids)}"
+    )
+    return [f"L097|UNIVERSO|universo_colabs={len(ids)}|erros=0", *linhas, total]
+
+
+estado = {"universo": "NA"}
+sucesso = False
+try:
+    with (
+        patch.object(logging.Logger, "handle", parar_em_log_de_erro),
+        redirect_stdout(StringIO()),
+        redirect_stderr(StringIO()),
+    ):
+        saida = medir(estado)
+    sucesso = True
+finally:
+    if not sucesso:
+        print(f"L097|PAREI|universo_colabs={estado['universo']}|erros=1", flush=True)
+        raise SystemExit(1) from None
+
+print("\n".join(saida), flush=True)
+```
 
 ## 27/11 21:13 · sessao 682dadce1e1b · FIM-DE-SEMANA-JA · leitura · origem=Code
 
@@ -2245,14 +2404,4 @@ C5 deve ler `_plano_pergunta_viva('fechado')` para distinguir uma guarda de um c
 - **C5.** Use a guarda seca `ch._gate_pergunta_viva('fechado', registrar=False)` e, quando ela recusar, os PKs de `ch._plano_pergunta_viva('fechado')`. Cruze só esses PKs com `DisputaSupervisao.sem_veredito_entre(...)` e com as portas de DP. A conversa do pai recusa `reconciliar()`, enquanto o `encerrar()` da cascata chama a guarda da pergunta viva. Uma resposta sem veredito sem porta de DP é uma guarda real. A incidência dessa combinação fica [nao verificado] e a partição em três rótulos precisa explicitar como lida com ela. `app/chamados/models.py:393–450,705–708,1779–1794,2019–2045`, `app/colaboradores/services/desligamento.py:164–190`.
 - **S89 e data.** Prefira `contexto_json.executado_em`. Para o antes/depois sem S89, `HistoricoVinculo.criado_em` da linha efetiva é um candidato quando coincide com a data civil e exclui o agendamento. Por auditoria, compare todos os chamados `NAO_FECHADOS` e disputas ainda abertas do colaborador criados antes do instante da cascata, fora inclusive da janela S0. Separe contagens de auditorias com chamado, disputa e qualquer um dos dois. O estado presente, mesmo com guarda seca, deixa causalidade histórica [nao verificado] quando o item pode ter fechado e reaberto. `app/colaboradores/services/desligamento.py:112–117,138–155,182–217,235–259`, `app/colaboradores/models.py:577–584`, `app/chamados/catalogo/motor.py:24–32`, `app/chamados/models.py:2414–2450`.
 
-## 27/11 19:59 · sessao 05af44278a51 · - · - · origem=Ronald (tmux)
-
-C1 deve preservar a seleção da S0 e ler `protestos` pelo `celula_id` do retentor. Use `tarefa_do_dia(..., carga=carga)` com `porta_da_tarefa` e `_fio_da_porta`. A razão aparece também em `instancias[*].razao`, portanto a saída precisa incluir as duas origens. `app/folha/export.py:1268`, `app/escala/models.py:1786`, `app/chamados/services/tarefa_do_dia.py:292,809,830`, `app/folha/fora_da_folha.py:86`.
-
-Para complementar, use `ListaDoAdmin` e `dono_fora_do_fio` com todas as perguntas da célula. O segundo retorna o primeiro encaminhamento reconhecido. `dia_na_lista`, `dia_do_admin` e `destino_fora_da_mesa` permitem registrar o que a mesma lista publicou para o dia. A oferta do calendário vem de `resolver_dia_oferecido_nas_datas`, com permissão de tela à parte. `app/chamados/services/vigia_fio.py:166,202,210,228,252,607`, `app/colaboradores/services/calendario.py:97,125`, `app/templates/colaboradores/partials/_calendario_grade.html:134`.
-
-Para o agregado sem marca, `PORTA_DO_TIPO` com `tipo_da_linha` distingue a porta publicada de Cadastro da ausência de link próprio de férias. `portas_da_linha` pode oferecer o legado “Validar no fio” por padrão em motivos não-espelho, inclusive férias. Uma porta oferecida e o primeiro carimbo verdadeiro do papel da tarefa sustentam a classificação da sonda. Sua eficácia para resolver o caso e a atribuição ao Hasner ficam [nao verificado]. `app/folha/retrato_folha.py:361,436,496,1003,1066`, `app/chamados/services/tarefa_do_dia.py:762`.
-
-Enviei também ao agente principal as referências de C3 para a união anterior aos descartes, registro dos eventos e leitura das guardas secas. `app/ponto/services/lastro.py:185,238,316`, `app/chamados/reconciliador.py:440,1140,1344,1389,1550`, `app/chamados/models.py:677,683`.
-
-_8793 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8794 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
