@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 15:51** · publicado em **28/11/2026 15:52** (UTC-3)
+> Ultima resposta processada: **28/11/2026 16:02** · publicado em **28/11/2026 16:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 16:02 · sessao 729e01640cb8 · E4C-F5-INSTANTE · verificador · origem=Code
+
+**REPROVADO por escopo.** O diff também altera dois dublês do vigia para corrigir um contrato que já existia na a4. `brief.md:8`, `app/chamados/tests/test_e4a2_c5_memoria.py:132`, `app/core/tests/test_fio_mudo_placar.py:128`  
+`CargaDaTarefa.tarefa` publica `chamados_do_colab` consultando `fio_pelos_verbos` por PK. `_destinos_da_retencao` lê a tupla. `app/chamados/services/tarefa_do_dia.py:695`, `app/chamados/juizes.py:1792`, `app/folha/fora_da_folha.py:125`  
+**Mesmos PKs e mesma ordem com a escada vigente.** A equivalência vale para todo mapa publicado pela carga. PKs reais de produção [nao verificado]. `app/chamados/juizes.py:1787`, `app/chamados/services/tarefa_do_dia.py:702`, `app/chamados/services/tarefa_do_dia.py:759`  
+Os outros consumidores de `verbos` em código operacional são `porta_da_tarefa`, que projeta o mapa, e `diff_e3_sombra`, que o resume. A ficha mantém uma tradução paralela sobre o mapa do painel. `app/chamados/services/tarefa_do_dia.py:831`, `app/chamados/management/commands/diff_e3_sombra.py:71`, `app/colaboradores/services/ficha.py:155`  
+Os cinco REDs passaram em memória na a5 e falharam contra a a4. Sobreviveu o mutante que suprime os PKs em dias **com** rota. `app/chamados/tests/test_e4c_f5_instante_chamados_do_colab.py:47`, `app/folha/tests/test_e4c_f5_instante_destinos_da_retencao.py:27`
+
+### Bloqueante
+
+- **Dois ajustes alheios ao recorte.** Os dublês C5 e do placar trocam `estoque` por `indeterminado` e completam os metadados dos contadores. A correção tem fundamento: o vigia da própria a4 já indexava `indeterminado`, portanto o retorno antigo causaria `KeyError` ao chegar a essa linha. É um reparo de testes herdado e independente da troca do leitor da Folha. Além dos dois testes novos, o diff traz **quatro** alterações em arquivos de teste existentes, contando o stub e o golden. `brief.md:8`, `app/chamados/tests/test_e4a2_c5_memoria.py:132`, `app/core/tests/test_fio_mudo_placar.py:128`, `a4/app/chamados/management/commands/vigiar_fio_morto.py:241`, `app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:79`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:7`
+
+### Equivalência, escritores e leitores
+
+- **PKs da tela.** A a4 selecionava `verbo == 'cobrar'`. Na escada vigente, `cobrar` é o único verbo que dá `colab` quando julgado isoladamente. As duas versões percorrem o mesmo mapa na mesma ordem. Conferi também 400 mapas sintéticos em memória. Com a escada remapeada do teste, o mesmo mapa dá `(41,)` na a4 e `(20, 7)` na a5. Esse é um contraexemplo sob **outra escada**, a dependência do juiz que o brief pede. A tela usa esses destinos quando há célula, o motivo é `espelho_cobranca_indevida` e a tarefa está sem rota. `a4/app/folha/fora_da_folha.py:132`, `app/chamados/juizes.py:1787`, `app/chamados/juizes.py:1799`, `app/chamados/services/tarefa_do_dia.py:697`, `app/chamados/tests/test_e4c_f5_instante_chamados_do_colab.py:19`, `app/folha/fora_da_folha.py:125`, `app/folha/fora_da_folha.py:243`
+- **`chamados_do_colab`.** Um escritor em memória, `CargaDaTarefa.tarefa`, e um leitor direto em produção, `_destinos_da_retencao`. O significado é o mesmo nos dois pontos: PKs do mapa do dia cujo **fio individual** é `colab`. O fio agregado do dia e a fila do dono são campos distintos. A ordem é observável: o mapa real nasce em PK crescente, a Folha preserva a sequência e o drawer renderiza os links nessa ordem. A segunda passagem de Resolver Dia conserva o mapa porque a única ação que ela acrescenta tem `porta=None`, fora da seleção de portas por PK. `app/chamados/services/tarefa_do_dia.py:136`, `app/chamados/services/tarefa_do_dia.py:697`, `app/chamados/services/tarefa_do_dia.py:727`, `app/chamados/services/tarefa_do_dia.py:747`, `app/chamados/services/tarefa_do_dia.py:759`, `app/chamados/services/tarefa_do_dia.py:795`, `app/folha/fora_da_folha.py:131`, `app/folha/retrato_folha.py:1122`, `app/templates/folha/_retrato_o_que_fazer.html:73`
+- **`verbos`.** `alimentar_fila` traz a partição do painel e registra `None` para membro da fila sem verbo. `_portas_da_tarefa` monta e escreve o mapa da tarefa e usa os valores para o julgamento residual. A carga lê a chave para publicar a tupla. `porta_da_tarefa` repassa o mapa. A sombra lê os valores para a assinatura comparativa. Vigia, furo, beco e Folha usam outros campos da projeção. O golden normaliza as chaves do mapa como PKs de chamado. `app/chamados/juizes.py:1703`, `app/chamados/services/tarefa_do_dia.py:759`, `app/chamados/services/tarefa_do_dia.py:774`, `app/chamados/services/tarefa_do_dia.py:817`, `app/chamados/services/tarefa_do_dia.py:831`, `app/chamados/management/commands/diff_e3_sombra.py:77`, `app/chamados/services/vigia_fio.py:640`, `app/chamados/services/furo_sem_canal.py:98`, `app/escala/services/cadastro_realidade.py:557`, `app/folha/fora_da_folha.py:86`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:33`
+
+### Os cinco REDs
+
+| Teste | Mutantes que matou em memória | [nao verificado]
+|---|---|
+| Escada remapeada e ordem do mapa | Literal `cobrar`, juiz chamado com o mapa inteiro, seleção de `admin`, primeiro PK apenas e ordenação extra. `app/chamados/tests/test_e4c_f5_instante_chamados_do_colab.py:62` |
+| Escada vigente | Mapa inteiro e seleção de `admin`. `app/chamados/tests/test_e4c_f5_instante_chamados_do_colab.py:68` |
+| Mapa vazio | Omitir a chave quando o mapa está vazio. `app/chamados/tests/test_e4c_f5_instante_chamados_do_colab.py:73` |
+| Folha lê na ordem publicada | Voltar ao literal da a4 ou ordenar os PKs na Folha. `app/folha/tests/test_e4c_f5_instante_destinos_da_retencao.py:37` |
+| Tupla vazia na Folha | Voltar ao literal da a4 ou recorrer ao mapa `verbos` quando a tupla vier vazia. `app/folha/tests/test_e4c_f5_instante_destinos_da_retencao.py:42` |
+
+O selo Haiku detectou o literal da a4 e passou na a5. A catraca L-129 também passou na a5. A execução foi em memória, com infraestrutura simulada e o corpo do juiz extraído da fonte. Suite Django completa [nao verificado]. `app/folha/tests/test_haiku_fora_da_folha.py:227`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:78`, `app/chamados/juizes.py:1792`
+
+### Fila e demais classes de reprovação
+
+- **Derivação paralela preexistente.** `ficha_do_colab` lê a partição do painel e traduz `VERBOS_DO_ADMIN` e o literal `cobrar` em dono. A divergência sob remapeamento já está registrada na fila. `_portas_da_tarefa` também conserva o literal `cobrar` para excluir cobrança residual da **seleção de rota**. Para traduzir o residual em fio, ela consulta o juiz. `app/colaboradores/services/ficha.py:153`, `app/chamados/services/verbos.py:22`, `app/docs/BACKLOG.md:1016`, `app/chamados/services/tarefa_do_dia.py:774`
+- **Lacuna de teste.** Os cinco REDs sobrevivem se a carga publicar a tupla vazia em dias com rota: o dublê fixa `rota=None` e só substitui o mapa. A lacuna é do contrato público da carga. O recorte da tela só consome destinos em dias sem rota. `app/chamados/tests/test_e4c_f5_instante_chamados_do_colab.py:47`, `app/folha/fora_da_folha.py:243`
+- **Golden.** `[]` decorre da regra nos dois lados: os mapas gravados só têm `validar` e `decidir`, ambos de `admin`, e o normalizador transforma `()` em `[]`. A origem material da edição, se manual ou copiada de uma execução, fica [nao verificado]. O normalizador ainda não rotula PKs da chave nova, o que só aparece com tupla não vazia. `app/chamados/tests/f2_ressuscitar_tarefa_main.json:7`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:67`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:83`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:143`, `app/chamados/juizes.py:1787`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:30`
+- **Stub.** O símbolo importado pela carga existe no módulo real. O dublê extrai a função e os literais da fonte e injeta o módulo em `sys.modules`. Isso resolve a ausência do símbolo no dublê e deixa a inicialização completa do módulo fora desse teste. O erro local de `django.db` no teste de C6 se repetiu na a4 e na a5, pelo caminho da estampa da trava. Importação no ambiente de produção [nao verificado]. `app/chamados/services/tarefa_do_dia.py:700`, `app/chamados/juizes.py:1792`, `app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:79`, `app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:102`, `app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:212`, `app/chamados/services/trava_do_colaborador.py:9`
+- **Juiz, escrita, trava e pré-requisito.** O delta chama a escada existente e só escreve no dicionário em memória. C17 segue no comparador. O caminho de escrita existente confere os donos antes de gravar e, no estoque, confere a trava da empresa antes da do dono. A cópia contém essas guardas e o relato registra o pouso da `PORTA-CONFERE-TRAVA` antes da abertura da F5. Pouso efetivo em produção [nao verificado]. `app/chamados/services/tarefa_do_dia.py:695`, `app/chamados/management/commands/diff_e3_sombra.py:143`, `app/chamados/models.py:4815`, `app/chamados/models.py:4915`, `app/docs/RELATO.md:98`, `app/docs/RELATO.md:105`
+- **Relógio, `except` e fallback.** Os trechos novos têm zero `except`, fallback de leitura ou chamada ao relógio. A Folha passa o `agora` à carga e a carga o repassa à fila e à partição. O caminho antigo que decide **quem** ficou retido ainda chama `classificar_export` sem esse instante e pode chegar ao `localdate()` interno, enquanto a lista de **quais dias** usa o instante da borda. É a divergência de meia-noite já documentada. `app/folha/fora_da_folha.py:131`, `app/folha/fora_da_folha.py:153`, `app/folha/fora_da_folha.py:220`, `app/chamados/services/tarefa_do_dia.py:688`, `app/chamados/juizes.py:1706`, `app/folha/export.py:1042`, `app/folha/export.py:1324`
 
 ## 28/11 15:51 · sessao 82560315f659 · CUSTO-DE-COORDENACAO-OBRA-PRONTA-ACORDA · leitura · origem=Code
 
@@ -1125,392 +1164,4 @@ Na cópia, `tabela` recolhe `entidade=None` e o comando imprime esses achados co
 
 [truncado em 20000 de 24782 caracteres]
 
-## 28/11 14:12 · sessao d7103919d556 · C7-TELA-ADMIN-ENCERRA · leitura · origem=Code
-
-**Resumo** — Módulo completo abaixo, com 7 testes e 6 mutantes de um hunk. `app/chamados/urls.py:22`, `app/chamados/models.py:2210`  
-Os seis diffs passaram em `git apply --check`. O selo AST passou na cópia e acusou o pai, a chamada removida e a escrita direta. `app/chamados/views_disputa_admin.py:49`, `app/chamados/views_disputa_admin.py:57`  
-Próximo na sessão: rodar o módulo em `b82a5ef08`, em `d04973b65` e com cada mutante isolado. HTTP, ORM e trilha em execução seguem [nao verificado].
-
-## 1. `app/chamados/tests/test_c7_tela_admin_encerra.py`
-
-Copiei o molde de `TestCase` com `Empresa`, `Praca`, `Posto` e `Colaborador` da base C7, o usuário `sistema` do teste de reabertura vizinho e o relógio de `2026-10-22 15:00:00` congelado com `freezegun` da C7. A sessão `via_app` segue o teste das cascas. `app/chamados/tests/test_c7_red_minimos.py:88`, `app/chamados/tests/test_c7_red_minimos.py:92`, `app/chamados/tests/test_c7_red_minimos.py:127`, `app/chamados/tests/test_reabrir_disputa_admin_sem_aberta.py:9`, `app/core/tests/test_casca_telas_colab.py:35`
-
-A recusa de `fechar` e o POST válido exercitam a mesma disputa muda. No pai, a recusa já existe e o RED esperado é a asserção de que o POST delegou à porta. As URLs literais deixam o teste do link chegar ao HTML da ficha. No teste de permissão, o controle positivo com staff impede que o 404 de rota ausente satisfaça o teste inteiro. `b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:2141`, `b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/urls.py:21`, `b82a5ef08988438256b90c5d0b9d94f4552156e5/app/templates/chamados/fio_colaborador.html:9`, `app/chamados/views_disputa_admin.py:36`
-
-```python
-import ast
-import re
-from datetime import date, datetime, timezone
-from pathlib import Path
-from unittest.mock import patch
-
-from django.conf import settings
-from django.contrib.auth.models import Group, User
-from django.test import TestCase
-from freezegun import freeze_time
-
-from chamados.models import DecisaoPergunta, DisputaSupervisao, PerguntaDisputa
-from colaboradores.models import Colaborador, Empresa, Posto, Praca
-from core.models import LogAuditoria
-
-
-RELOGIO = '2026-10-22 15:00:00'
-INSTANTE = datetime.fromisoformat(RELOGIO).replace(tzinfo=timezone.utc)
-MOTIVO = 'Plantão conferido com a supervisão'
-SUCESSO = 'A disputa foi encerrada e o motivo ficou registrado.'
-
-
-@freeze_time(RELOGIO)
-class C7TelaAdminEncerraTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.get_or_create(username='sistema')
-        empresa = Empresa.objects.create(
-            razao_social='C7 TELA LTDA', cnpj='19131243000197', ativa=True,
-        )
-        praca = Praca.objects.create(nome='Praça C7', cidade='Londrina', estado='PR')
-        posto = Posto.objects.create(nome='Posto C7', empresa=empresa, praca=praca)
-        cls.staff = User.objects.create_user('c7_tela_staff', is_staff=True)
-        cls.admin = User.objects.create_user('c7_tela_admin')
-        cls.gestor = User.objects.create_user('c7_tela_gestor')
-        cls.admin.groups.add(Group.objects.get_or_create(name='admin_ti')[0])
-        cls.gestor.groups.add(Group.objects.get_or_create(name='gestor')[0])
-        cls.colab = Colaborador.objects.create(
-            nome='Colaborador C7 Tela', cpf='[cpf]', empresa=empresa,
-            posto=posto, situacao='ativo', data_admissao=date(2026, 1, 1),
-        )
-
-    def setUp(self):
-        self.ficha_url = f'/chamados/colaborador/{self.colab.pk}/'
-        self.lista_url = f'{self.ficha_url}disputas/'
-        self.encerrar_url = f'{self.lista_url}encerrar/'
-        self.disputa = DisputaSupervisao.objects.create(
-            colaborador=self.colab, motivos=['orfao_14h', 'intervalo_volta'],
-        )
-        self.pergunta = PerguntaDisputa.objects.create(
-            disputa=self.disputa, motivo='orfao_14h', data_evento=date(2026, 10, 20),
-            pergunta='A que horas terminou o plantão?', tipo_resposta='hora',
-        )
-
-    def _estado(self):
-        self.disputa.refresh_from_db()
-        return (
-            self.disputa.fechada_em, self.disputa.fechada_por_id,
-            self.disputa.resolucao, self.disputa.motivo_fechamento,
-        )
-
-    def _trilha(self):
-        return LogAuditoria.objects.filter(
-            modelo='DisputaSupervisao', objeto_id=self.disputa.pk, acao='disputa_fechada',
-        )
-
-    def _assert_aberta_sem_trilha(self):
-        self.assertEqual(self._estado(), (None, None, '', ''))
-        self.pergunta.refresh_from_db()
-        self.assertIsNone(self.pergunta.materializada_em)
-        self.assertIsNone(self.pergunta.materializada_por_id)
-        self.assertEqual(self.pergunta.via_resolucao, '')
-        self.assertFalse(self.pergunta.decisoes.exists())
-        self.assertFalse(self._trilha().exists())
-
-    def _login_app(self, ator):
-        self.client.force_login(ator)
-        sessao = self.client.session
-        sessao['via_app'] = True
-        sessao['plataforma_sessao'] = 'app'
-        sessao.save()
-
-    def test_ficha_mostra_link_so_para_staff_ou_admin_ti(self):
-        link = rf'<a\b[^>]*\bhref="{re.escape(self.lista_url)}"[^>]*>\s*Disputas\s*</a>'
-        for ator in (self.staff, self.admin):
-            with self.subTest(ator=ator.username):
-                self.client.force_login(ator)
-                resposta = self.client.get(self.ficha_url)
-                self.assertEqual(resposta.status_code, 200)
-                self.assertRegex(resposta.content.decode(), link)
-        self.client.force_login(self.gestor)
-        resposta = self.client.get(self.ficha_url)
-        self.assertEqual(resposta.status_code, 200)
-        self.assertNotRegex(resposta.content.decode(), link)
-
-    def test_lista_todas_as_perguntas_antes_do_form(self):
-        irma = PerguntaDisputa.objects.create(
-            disputa=self.disputa, motivo='intervalo_volta', data_evento=date(2026, 10, 19),
-            pergunta='A que horas voltou do intervalo?', tipo_resposta='hora',
-            resposta_colab='13:00', respondida_em=INSTANTE,
-        )
-        esperadas = ((self.pergunta, 'Pendente'), (irma, 'Respondida'))
-        self._login_app(self.admin)
-        resposta = self.client.get(self.lista_url)
-        self.assertContains(resposta, f'id="disputa-{self.disputa.pk}"')
-        self.assertTemplateUsed(resposta, 'base_app.html')
-
-        antes, inicio_form, formulario = resposta.content.decode().partition(
-            f'<form method="post" action="{self.encerrar_url}">',
-        )
-        self.assertTrue(inicio_form, 'O formulário precisa apontar para a porta HTTP.')
-        secao = antes.split(f'id="disputa-{self.disputa.pk}"', 1)[1]
-        itens = re.findall(
-            r'<li\b[^>]*>\s*<strong>Pergunta #(\d+)</strong>(.*?)</li>', secao, re.S,
-        )
-        self.assertCountEqual([pk for pk, _ in itens], [str(p.pk) for p, _ in esperadas])
-        por_pk = dict(itens)
-        for pergunta, estado in esperadas:
-            item = por_pk[str(pergunta.pk)]
-            self.assertIn(estado, item)
-            self.assertIn(f'Marco: {pergunta.instancia_marco}', item)
-            self.assertIn(f'Dia: {pergunta.data_evento:%d/%m/%Y}', item)
-            self.assertIn(pergunta.pergunta, item)
-
-        formulario = formulario.split('</form>', 1)[0]
-        self.assertIn(f'name="disputa_pk" value="{self.disputa.pk}"', formulario)
-        self.assertIn('name="csrfmiddlewaretoken"', formulario)
-        self.assertRegex(formulario, r'<textarea\b[^>]*\bname="motivo"[^>]*\brequired\b')
-        self.assertIn('Encerrar disputa com motivo', formulario)
-
-    def test_fechar_recusa_muda_e_post_com_motivo_delega(self):
-        with self.assertRaisesRegex(ValueError, 'Encerrar com motivo'):
-            self.disputa.fechar(self.staff)
-        self._assert_aberta_sem_trilha()
-
-        self.client.force_login(self.staff)
-        motivo_postado = f'  {MOTIVO}  '
-        porta_real = DisputaSupervisao.admin_encerra
-        with patch.object(DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=porta_real) as porta:
-            resposta = self.client.post(self.encerrar_url, {
-                'disputa_pk': self.disputa.pk, 'motivo': motivo_postado,
-            })
-        porta.assert_called_once_with(self.disputa, self.staff, motivo_postado)
-        self.assertContains(resposta, SUCESSO)
-        self.assertTemplateUsed(resposta, 'base.html')
-        self.assertEqual(
-            self._estado(),
-            (INSTANTE, self.staff.pk, MOTIVO, DisputaSupervisao.FECHOU_ADMIN_ENCERRA),
-        )
-        self.pergunta.refresh_from_db()
-        self.assertEqual(self.pergunta.via_resolucao, PerguntaDisputa.VIA_ADMIN_DECIDIU)
-        self.assertEqual(self.pergunta.materializada_por_id, self.staff.pk)
-        self.assertEqual(self.pergunta.materializada_em, INSTANTE)
-        self.assertEqual(list(self.pergunta.decisoes.values_list('ato', 'ato_por_id', 'ato_motivo')), [
-            (DecisaoPergunta.SILENCIO, self.staff.pk, f'admin_encerra: {MOTIVO}'),
-        ])
-        self.assertEqual(list(self._trilha().values_list('usuario_id', 'valor_depois')), [
-            (self.staff.pk, {'motivo_fechamento': 'admin_encerra', 'resolucao': MOTIVO}),
-        ])
-
-    def test_post_sem_motivo_mostra_recusa_e_preserva_disputa(self):
-        self.client.force_login(self.staff)
-        porta_real = DisputaSupervisao.admin_encerra
-        for vazio in (None, '', ' \t  '):
-            with self.subTest(motivo=vazio):
-                dados = {'disputa_pk': self.disputa.pk}
-                if vazio is not None:
-                    dados['motivo'] = vazio
-                with patch.object(
-                    DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=porta_real,
-                ) as porta:
-                    resposta = self.client.post(self.encerrar_url, dados)
-                porta.assert_called_once_with(self.disputa, self.staff, vazio)
-                self._assert_aberta_sem_trilha()
-                self.assertContains(resposta, 'exige o MOTIVO escrito')
-
-    def test_reenvio_delega_e_preserva_uma_linha_de_trilha(self):
-        self.assertIs(self.disputa.admin_encerra(self.admin, MOTIVO), True)
-        estado = self._estado()
-        trilha = list(self._trilha().values_list('pk', flat=True))
-        decisoes = self.pergunta.decisoes.values_list('pk', 'ato', 'ato_em', 'ato_motivo')
-        antes = list(decisoes.all())
-        self.assertEqual(len(trilha), 1)
-        self.assertEqual([linha[1] for linha in antes], [DecisaoPergunta.SILENCIO])
-
-        retornos = []
-        porta_real = DisputaSupervisao.admin_encerra
-
-        def observar(disputa, ator, motivo):
-            retorno = porta_real(disputa, ator, motivo)
-            retornos.append(retorno)
-            return retorno
-
-        self._login_app(self.admin)
-        motivo_postado = f'  {MOTIVO}  '
-        with freeze_time('2026-10-22 16:00:00'), patch.object(
-            DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=observar,
-        ) as porta:
-            resposta = self.client.post(self.encerrar_url, {
-                'disputa_pk': self.disputa.pk, 'motivo': motivo_postado,
-            })
-        porta.assert_called_once_with(self.disputa, self.admin, motivo_postado)
-        self.assertEqual(retornos, [False])
-        self.assertContains(resposta, 'Nada mudou: a disputa já estava encerrada com este motivo.')
-        self.assertTemplateUsed(resposta, 'base_app.html')
-        self.assertEqual(self._estado(), estado)
-        self.assertEqual(list(self._trilha().values_list('pk', flat=True)), trilha)
-        self.assertEqual(list(decisoes.all()), antes)
-        self.pergunta.refresh_from_db()
-        self.assertEqual(self.pergunta.materializada_em, INSTANTE)
-
-    def test_sem_permissao_recusa_get_e_post_sem_tocar_na_disputa(self):
-        dados = {'disputa_pk': self.disputa.pk, 'motivo': MOTIVO}
-        self.client.force_login(self.gestor)
-        porta_real = DisputaSupervisao.admin_encerra
-        with patch.object(DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=porta_real) as porta:
-            lista = self.client.get(self.lista_url)
-            escrita = self.client.post(self.encerrar_url, dados)
-        self.assertIn(lista.status_code, (403, 404))
-        self.assertIn(escrita.status_code, (403, 404))
-        porta.assert_not_called()
-        self._assert_aberta_sem_trilha()
-
-        self.client.force_login(self.staff)
-        self.assertEqual(self.client.get(self.encerrar_url).status_code, 405)
-        self.assertEqual(
-            self.client.post(self.encerrar_url, dados).status_code, 200,
-            'O mesmo POST precisa estar disponível ao staff.',
-        )
-
-    def test_ast_view_so_delega_a_decisao_de_fechamento(self):
-        fonte = Path(settings.BASE_DIR) / 'chamados' / 'views_disputa_admin.py'
-        self.assertTrue(fonte.is_file(), 'Falta a view que delega o encerramento à porta.')
-        nos = list(ast.walk(ast.parse(fonte.read_text(encoding='utf-8'))))
-        chamadas = [no for no in nos if isinstance(no, ast.Call)]
-        self.assertEqual([
-            ast.unparse(no) for no in chamadas
-            if isinstance(no.func, ast.Attribute) and no.func.attr == 'admin_encerra'
-        ], ['disputa.admin_encerra(request.user, motivo)'])
-
-        funcoes_http = {'_exigir_admin', '_renderizar_disputas', 'get_object_or_404', 'render', 'str'}
-        self.assertEqual([
-            (no.lineno, no.func.id) for no in chamadas
-            if isinstance(no.func, ast.Name) and no.func.id not in funcoes_http
-        ], [])
-        atributos_http = {
-            'user.is_staff', 'user.groups', "user.groups.filter(name='admin_ti').exists",
-            'user.groups.filter', 'colaborador.disputas', 'colaborador.disputas.filter',
-            'colaborador.disputas.filter(fechada_em__isnull=True).prefetch_related',
-            'request.user', 'request.POST', 'request.POST.get', 're.fullmatch',
-            'DisputaSupervisao.objects', 'DisputaSupervisao.objects.select_related',
-            'disputa.admin_encerra', 'disputa.colaborador',
-        }
-        self.assertEqual([
-            (no.lineno, ast.unparse(no)) for no in nos if isinstance(no, ast.Attribute)
-            if not isinstance(no.ctx, ast.Load) or ast.unparse(no) not in atributos_http
-        ], [])
-        self.assertCountEqual(
-            [ast.unparse(no.test) for no in nos if isinstance(no, ast.If)],
-            [
-                "not (user.is_staff or user.groups.filter(name='admin_ti').exists())",
-                "disputa_pk is None or not re.fullmatch('[0-9]{1,19}', disputa_pk)",
-                'encerrou',
-            ],
-        )
-        self.assertEqual(
-            [no.lineno for no in nos if isinstance(no, (ast.IfExp, ast.Match, ast.While))], [],
-        )
-```
-
-## 2. Mutantes
-
-**M1 — Remover a chamada à porta.** Devem falhar `test_fechar_recusa_muda_e_post_com_motivo_delega`, `test_post_sem_motivo_mostra_recusa_e_preserva_disputa`, `test_reenvio_delega_e_preserva_uma_linha_de_trilha` e `test_ast_view_so_delega_a_decisao_de_fechamento`. As três falhas HTTP são esperadas [nao verificado]. `app/chamados/views_disputa_admin.py:52`
-
-```diff
---- a/app/chamados/views_disputa_admin.py
-+++ b/app/chamados/views_disputa_admin.py
-@@ -49,7 +49,7 @@
-     motivo = request.POST.get('motivo')
-     # A recusa de negócio da porta precisa chegar ao admin com o motivo original.
-     try:
--        encerrou = disputa.admin_encerra(request.user, motivo)
-+        encerrou = True
-     except ValueError as e:
-         tipo_mensagem = 'error'
-         mensagem = str(e)
-```
-
-**M2 — Aceitar motivo ausente, vazio ou em branco.** Deve falhar `test_post_sem_motivo_mostra_recusa_e_preserva_disputa` na asserção de disputa aberta [nao verificado]. `app/chamados/models.py:2214`
-
-```diff
---- a/app/chamados/models.py
-+++ b/app/chamados/models.py
-@@ -2212,8 +2212,6 @@
-         OBRIGATORIO -- *"a opcao coerente que o admin nao tinha"*. As mudas saem com `admin_decidiu` e trilha
-         (quem, quando, motivo). Resposta sem veredito continua recusando: a porta e para o silencio. -> bool"""
-         texto = (motivo or '').strip()
--        if not texto:
--            raise ValueError('Encerrar a disputa #%s exige o MOTIVO escrito (auditoria CLT).' % self.pk)
-         return self.fechar(user, resolucao=texto, motivo=self.FECHOU_ADMIN_ENCERRA)
- 
-     def aparar_motivo_respondido(self, motivo):
-```
-
-**M3 — Abrir a permissão ao usuário autenticado.** Deve falhar `test_sem_permissao_recusa_get_e_post_sem_tocar_na_disputa` no status da lista do gestor [nao verificado]. `app/chamados/views_disputa_admin.py:13`, `app/chamados/views_disputa_admin.py:28`, `app/chamados/views_disputa_admin.py:36`
-
-```diff
---- a/app/chamados/views_disputa_admin.py
-+++ b/app/chamados/views_disputa_admin.py
-@@ -12,7 +12,7 @@
- 
- def _exigir_admin(user):
-     if not (user.is_staff or user.groups.filter(name='admin_ti').exists()):
--        raise PermissionDenied
-+        return
- 
- 
- def _renderizar_disputas(request, colaborador, *, mensagem=None, tipo_mensagem=None):
-```
-
-**M4 — Remover o link da ficha.** Deve falhar `test_ficha_mostra_link_so_para_staff_ou_admin_ti` na asserção do link renderizado [nao verificado]. `app/templates/chamados/fio_colaborador.html:11`
-
-```diff
---- a/app/templates/chamados/fio_colaborador.html
-+++ b/app/templates/chamados/fio_colaborador.html
-@@ -8,9 +8,6 @@
- 
- <div class="mb-4">
-   {% include "core/_voltar.html" with voltar_url=voltar_url voltar_rotulo="Voltar" %}
--  {% if is_admin_ti %}
--  <a class="hx-btn" href="{% url 'chamados:disputas_admin_colaborador' colaborador.pk %}{% if request.GET.app == '1' %}?app=1{% endif %}">Disputas</a>
--  {% endif %}
- </div>
- <div class="painel-acompanhamento" style="border:1px solid #e0e6ef;border-radius:10px;padding:16px;margin-bottom:16px;background:#fafcff;">
-   <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-```
-
-**M5 — Mostrar só a primeira pergunta.** Deve falhar `test_lista_todas_as_perguntas_antes_do_form` na comparação dos PKs visíveis antes do formulário [nao verificado]. `app/templates/chamados/disputa_admin.html:18`
-
-```diff
---- a/app/templates/chamados/disputa_admin.html
-+++ b/app/templates/chamados/disputa_admin.html
-@@ -15,7 +15,7 @@
-     <h2 id="disputa-{{ disputa.pk|unlocalize }}">Disputa #{{ disputa.pk|unlocalize }}</h2>
-     <p>O encerramento vale para a disputa inteira, incluindo todas as perguntas abaixo.</p>
-     <ul>
--      {% for pergunta in disputa.perguntas.all %}
-+      {% for pergunta in disputa.perguntas.all|slice:":1" %}
-       <li class="mb-2">
-         <strong>Pergunta #{{ pergunta.pk|unlocalize }}</strong> · {{ pergunta.estado|capfirst }}<br>
-         Marco: {% if pergunta.instancia_marco %}{{ pergunta.instancia_marco }}{% else %}Sem marco registrado{% endif %} ·
-```
-
-**M6 — Gravar estado diretamente na view.** `test_ast_view_so_delega_a_decisao_de_fechamento` falhou na checagem em memória. O mutante mantém a chamada à porta e repete uma gravação com o mesmo valor para exercitar o selo de escrita independentemente do valor final. `app/chamados/views_disputa_admin.py:52`, `app/chamados/views_disputa_admin.py:57`, `app/chamados/models.py:2199`
-
-```diff
---- a/app/chamados/views_disputa_admin.py
-+++ b/app/chamados/views_disputa_admin.py
-@@ -55,6 +55,8 @@
-         mensagem = str(e)
-     else:
-         if encerrou:
-+            disputa.motivo_fechamento = DisputaSupervisao.FECHOU_ADMIN_ENCERRA
-+            disputa.save(update_fields=['motivo_fechamento'])
-             tipo_mensagem = 'success'
-             mensagem = (
-                 'A disputa foi encerrada e o motivo ficou registrado. '
-```
-
-## 3. Quem escreve e quem lê
-
-O registro de autoridades aponta `DisputaSupervisao.pode_fechar` para C7 e `pergunta_respondida` para C21. Na tela, a view lê `fechada_em` para listar abertas e consome o retorno de `admin_encerra` no POST. A escrita persistente do fechamento está em `DisputaSupervisao.fechar`. `app/docs/JUIZES.md:62`, `app/docs/JUIZES.md:102`
-
-[truncado em 20000 de 26212 caracteres]
-
-_8946 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8947 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
