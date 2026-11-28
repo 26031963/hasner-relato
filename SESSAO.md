@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 06:19:33.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (316.1 MB). Acoes na janela: **1648**.
+**Medido em 28/11/2026 06:26:24.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (316.3 MB). Acoes na janela: **1646**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:26:09 | Bash | Cria a cópia do construtor Codex sobre o RED | `cd ~/saas-hasner; S=$(date +%H%M%S); WT=/home/ronald/wt-codex-retrato-pdf-corta-por-que-$S; git worktree add -b raia-codex-retrato-item2-$S $WT 2e1d60c7a 2>&1 \| tail -1; git -C $WT log --oneline -1; echo $WT > logs/RETRATO-PDF-CORTA-POR-QUE/item2/c2_wt.txt` |
+| 06:26:05 | Bash | Localiza lavrador, retentor e produtor | `cd /home/ronald/wt-red-retrato-item2-055540/app; git grep -n "def montar_linhas\\|def _dias_que_retem\\|def motivos_retencao_celula\\|def _dias_sem_decisao\\|def fora_da_folha\\|def _retem" -- '*.py' \| /bin/grep -v tests` |
+| 06:25:59 | Bash | Lê o lançador do construtor da c1 | `cd ~/saas-hasner; cat logs/RETRATO-PDF-CORTA-POR-QUE/c1/lanca.sh; echo ---; head -40 logs/RETRATO-PDF-CORTA-POR-QUE/c1/q.md 2>/dev/null \|\| ls logs/RETRATO-PDF-CORTA-POR-QUE/c1` |
+| 06:25:56 | Bash | Confere o recibo e acha o lançador do construtor da c1 | `cd ~/saas-hasner; cat logs/RETRATO-PDF-CORTA-POR-QUE/item2/red/volta_c3.espera \| head -5; ls logs/RETRATO-PDF-CORTA-POR-QUE/; find logs/RETRATO-PDF-CORTA-POR-QUE -name lanca.sh \| head;` |
+| 06:24:23 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 06:24:22 | Bash | Marca o rc 124 do opus como colhido | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') i=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado) ',l)) L.insert(i+1,f"- {h} colhido RETRATO-PDF-CORTA-POR-QUE item2/red/volta_c3.rc (06:24 rc 124): timeout de rodada do proprio opus de RED (em curso, job dele); o veredito vem na en ...` |
+| 06:24:16 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b8ysnms8c.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
+| 06:20:24 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 06:20:20 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b04ar04n7.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?` |
 | 06:15:15 | Bash | Reabre a espera única | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 06:15:12 | Bash | Escreve o brief da volta 4 da F1 | `cd ~/saas-hasner; D=logs/CUSTO-DE-COORDENACAO/f1v2/v4; mkdir -p $D; cat > $D/brief.md <<'EOF' PAPEL: construir OBRA: CUSTO-DE-COORDENACAO (F1 v2, volta 4) COPIA: /home/ronald/wt-custo-de-coordenacao-f1-013201 (HEAD 7ce2048c4, base 3bf4b6858). Commit na copia, nunca na arvore viva. ARQUIVOS: bin/disjuntor.py bin/codex_pergunta.sh bin/hook_stop_fila1.py bin/mao_unica.py bin/commit_msg.sh bin/tests/t ...` |
 | 06:14:49 | Bash | Lê o laudo ver3 da F1 para montar a volta 4 | `cd ~/saas-hasner; sed -n 1,36p logs/CUSTO-DE-COORDENACAO/f1v2/ver3/r.md \| cut -c1-600` |
@@ -1647,14 +1656,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:32:18 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bqblh44s6.output; date +%H:%M` |
 | 18:27:13 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 18:27:10 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/brtnziqm1.output; date +%H:%M` |
-| 18:22:05 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 18:21:59 | Bash | Religa a coleta do GREEN2 e registra | `cd ~/saas-hasner; D=logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x; cat > $D/coleta_green2.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner; D=logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x ssh -o BatchMode=yes -o ConnectTimeout=5 -o ServerAliveInterval=30 -o ServerAliveCountMax=6 pista espera 1127171915_fa236b21 > $D/green2_espera.txt 2>&1 < /dev/null echo "rc=$? $(date +%H:%M:%S)" > $D/green2.rc EOF setsid bash $D/ ...` |
-| 18:21:50 | Bash | Lista processos de suíte e pista vivos | `pgrep -af 'suite.sh\|pista' \| /bin/grep -v pgrep \| cut -c1-160` |
-| 18:21:46 | Bash | Vê quais esperas da pista estão vivas | `pgrep -af 'ssh pista espera' \| cut -c1-150; cd ~/saas-hasner; for d in logs/CODEX-CONSTROI-MOTOR/g15 logs/PAR-PELO-TURNO/c1v15/g logs/FERIADO-BOTAO-CORTADO/g12; do echo "$d: $(ls $d)"; tail -1 $d/*.log \| cut -c1-120; done` |
-| 18:21:36 | Bash | Vê o log dos outros jobs da pista | `cd ~/saas-hasner; for f in logs/CODEX-CONSTROI-MOTOR/g15/g.log logs/PAR-PELO-TURNO/c1v15/g/g.log logs/FERIADO-BOTAO-CORTADO/g12/g.log; do ls $f >/dev/null 2>&1 \|\| f=$(ls $(dirname $f)/*.log \| head -1); id=$(/bin/grep -o 'job=[0-9_a-f]*' $f \| tail -1 \| cut -d= -f2); echo "$f job=$id"; [ -n "$id" ] && timeout 20 ssh pista log $id 3 2>&1 \| cut -c1-160; done` |
-| 18:21:28 | Bash | Pergunta à pista se está viva | `timeout 20 ssh pista ping 2>&1 \| head -5; echo "rc=${PIPESTATUS[0]}"` |
-| 18:21:23 | Bash | Lê as últimas linhas do job na pista | `cd ~/saas-hasner; timeout 30 ssh pista log 1127171915_fa236b21 8 2>&1 \| cut -c1-200; echo "rc=${PIPESTATUS[0]}"` |
-| 18:21:19 | Bash | Testa se a pista responde | `timeout 15 ssh -o ConnectTimeout=8 pista true; echo "rc=$?"; uptime` |
-| 18:20:16 | Bash | Busca o resultado do job na pista | `cd ~/saas-hasner; D=logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x; timeout 60 ssh pista espera 1127171915_fa236b21 > $D/green2_espera.txt 2>&1; echo "rc=$?"; tail -5 $D/green2_espera.txt \| cut -c1-200` |
-| 18:20:10 | Bash | Lê o fim do log do GREEN2 uma vez | `cd ~/saas-hasner; tail -6 logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x/green2.log \| cut -c1-200; ps -p 3626944 -o pid=,etime=` |
-| 18:20:06 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bmopx763g.output; date +%H:%M` |
