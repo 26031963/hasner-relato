@@ -1,7 +1,138 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 10:52** · publicado em **28/11/2026 10:52** (UTC-3)
+> Ultima resposta processada: **28/11/2026 10:58** · publicado em **28/11/2026 10:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 10:58 · sessao 393a45b4bcf1 · FDS-FERIAS-COM-BATIDA-PORTA · sonda · origem=Code
+
+A sonda informa **475 colaboradores e 1.025 dias-colaborador retidos**, com **228 colaboradores com dia retido**. A matriz fecha os **1.025 dias**. A contagem declarada também fecha os **475 colaboradores**, mas os PKs impressos identificam **474**. A diferença está na linha `(sem motivo)`, que declara **217** colaboradores e lista **216** PKs distintos. `sonda:4–5,8–49`
+
+As referências `sonda:N` contam as linhas do bloco raspado desde `sonda_leitura`, incluindo a linha em branco. As referências `r.md:N` contam desde o primeiro título do anexo.
+
+## Matriz de portas oferecidas hoje
+
+| Motivo | Escopo | Porta | Dias | Colabs | Saída |
+|---|---|---|---:|---:|---|
+| `(sem motivo)` | sem dia | sem porta | 0 | 217 declarados | `sonda:5` |
+| `codigo_dominio_invalido` | sem dia | Cadastro do colaborador | 0 | 1 | `sonda:6` |
+| `codigo_dominio_invalido` | sem dia | Validar no fio | 0 | 1 | `sonda:7` |
+| `espelho_cobrado` | dia | Resolver dia no calendário | 7 | 5 | `sonda:8` |
+| `espelho_cobrado` | dia | sem porta datada | 420 | 110 | `sonda:9` |
+| `espelho_cobrado` | linha | Cobrar no fio | 339 | 75 | `sonda:10` |
+| `espelho_cobrado` | linha | Decidir ausência | 5 | 3 | `sonda:11` |
+| `espelho_cobrado` | linha | Decidir no fio | 3 | 3 | `sonda:12` |
+| `espelho_cobrado` | linha | Validar no fio | 49 | 23 | `sonda:13` |
+| `espelho_cobrado` | linha | Vínculo da escala | 194 | 45 | `sonda:14` |
+| `espelho_cobranca_indevida` | dia | sem porta datada | 8 | 5 | `sonda:15` |
+| `espelho_cobranca_indevida` | linha | Cobrar no fio | 1 | 1 | `sonda:16` |
+| `espelho_cobranca_indevida` | linha | Validar no fio | 6 | 3 | `sonda:17` |
+| `espelho_cobranca_indevida` | linha | Vínculo da escala | 1 | 1 | `sonda:18` |
+| `espelho_discordante` | dia | Resolver dia no calendário | 7 | 4 | `sonda:19` |
+| `espelho_discordante` | dia | sem porta datada | 5 | 5 | `sonda:20` |
+| `espelho_discordante` | linha | Cobrar no fio | 4 | 4 | `sonda:21` |
+| `espelho_discordante` | linha | Decidir no fio | 1 | 1 | `sonda:22` |
+| `espelho_discordante` | linha | Vínculo da escala | 3 | 3 | `sonda:23` |
+| `espelho_fato_em_ausencia` | dia | Resolver dia no calendário | 7 | 6 | `sonda:24` |
+| `espelho_fato_em_ausencia` | dia | sem porta datada | 6 | 4 | `sonda:25` |
+| `espelho_fato_em_ausencia` | linha | Decidir no fio | 3 | 1 | `sonda:26` |
+| `espelho_fato_em_ausencia` | linha | Validar no fio | 3 | 3 | `sonda:27` |
+| `espelho_fato_em_ausencia` | linha | Vínculo da escala | 2 | 2 | `sonda:28` |
+| `espelho_furo` | dia | Resolver dia no calendário | 8 | 7 | `sonda:29` |
+| `espelho_furo` | dia | sem porta datada | 200 | 102 | `sonda:30` |
+| `espelho_furo` | linha | Cobrar no fio | 138 | 69 | `sonda:31` |
+| `espelho_furo` | linha | Decidir ausência | 2 | 2 | `sonda:32` |
+| `espelho_furo` | linha | Decidir no fio | 15 | 8 | `sonda:33` |
+| `espelho_furo` | linha | Validar no fio | 35 | 19 | `sonda:34` |
+| `espelho_furo` | linha | Vínculo da escala | 94 | 42 | `sonda:35` |
+| `espelho_indefinida` | dia | Resolver dia no calendário | 1 | 1 | `sonda:36` |
+| `espelho_indefinida` | dia | sem porta datada | 228 | 54 | `sonda:37` |
+| `espelho_indefinida` | linha | Cobrar no fio | 208 | 45 | `sonda:38` |
+| `espelho_indefinida` | linha | Validar no fio | 3 | 2 | `sonda:39` |
+| `espelho_indefinida` | linha | Vínculo da escala | 200 | 44 | `sonda:40` |
+| `espelho_nunca_bateu` | dia | Resolver dia no calendário | 61 | 9 | `sonda:41` |
+| `espelho_nunca_bateu` | dia | sem porta datada | 52 | 8 | `sonda:42` |
+| `espelho_nunca_bateu` | linha | Decidir no fio | 8 | 1 | `sonda:43` |
+| `espelho_nunca_bateu` | linha | Vínculo da escala | 60 | 4 | `sonda:44` |
+| `ferias_com_batida` | dia | sem porta datada | 15 | 2 | `sonda:45` |
+| `ferias_com_batida` | linha | Validar no fio | 15 | 2 | `sonda:46` |
+| `rescisao_modulo_proprio` | sem dia | sem porta | 0 | 28 | `sonda:47` |
+| `sem_codigo_dominio` | sem dia | Cadastro do colaborador | 0 | 1 | `sonda:48` |
+| `sem_codigo_dominio` | sem dia | Validar no fio | 0 | 1 | `sonda:49` |
+
+- **Dias.** No escopo `dia`, **91 com porta datada + 934 sem porta datada = 1.025**. As portas de `linha` podem repetir os mesmos pares de colaborador e data. `sonda:4,8–45` · `r.md:53`
+- **Colaboradores.** A união dos PKs no escopo `dia` dá **228**. No escopo `sem dia`, os contadores declaram **217 + 1 + 28 + 1 = 247**, após contar uma só vez cada PK com dois botões. Isso fecha **228 + 247 = 475** pelos contadores. Pelas listas, são **246** PKs sem dia, sem interseção com os **228** com dia, totalizando **474** PKs visíveis. A identidade do PK faltante é [nao verificado]. `sonda:4–9,15,19–20,24–25,29–30,36–37,41–42,45,47–49`
+
+## Casos do aval
+
+As datas vêm do aval e do material de apoio. A sonda identifica a oferta por PK dentro de cada motivo. `sonda:36–40,45–46` · `r.md:30–33`
+
+| Caso | Porta que aparece hoje | Evidência |
+|---|---|---|
+| `col344` · 07/11 | **Validar no fio**, no escopo `linha`. Sem porta datada para `ferias_com_batida`. | `sonda:45–46` · [RELATO.md:15107](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/docs/RELATO.md:15107) |
+| `col327` · 10/11 | **Nenhuma porta na saída.** O PK aparece em `sem porta datada` e está ausente das portas de `linha` de `espelho_indefinida`. | `sonda:36–40` · [RELATO.md:14897](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/docs/RELATO.md:14897) |
+| `col97` · ímpares de 01 a 19/11 | **Nenhuma porta na saída.** O PK aparece em `sem porta datada` e está ausente das portas de `linha` de `espelho_indefinida`. | `sonda:36–40` · [RELATO.md:14899](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/docs/RELATO.md:14899) |
+| `col476` · 25/10 | **Vínculo da escala**, no escopo `linha`. Sem porta datada para `espelho_indefinida`. | `sonda:36–40` · [RELATO.md:14898](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/docs/RELATO.md:14898) |
+
+O anexo descreve **Conferir ausência** para `col327` e **Vínculo da escala** datado para `col97` pelo OS6c. Essas ofertas estão ausentes da saída. Na cópia, `portas_da_linha` retorna após traduzir ações, fio e tipo, e a montagem copia `motivos_por_dia` sem projetar destinos causais. `r.md:23,31–32` · `sonda:36–40` · [retrato_folha.py:1078–1110](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/folha/retrato_folha.py:1078) · [fora_da_folha.py:218–255](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/folha/fora_da_folha.py:218)
+
+## Dias sem a porta que trata a causa
+
+Os valores exatos abaixo medem a ausência do destino indicado no anexo. Onde o anexo admite mais de uma correção, contei como candidata toda porta oferecida que poderia servir e usei isso para calcular o mínimo sem porta. O vínculo entre o botão e a causa de cada dia permanece [nao verificado] nesses casos. `r.md:7–14,39–49` · `sonda:8–46`
+
+| Motivo | Dias retidos | Dias sem porta causal pelo anexo | Base |
+|---|---:|---|---|
+| `espelho_cobrado` | 427 | **Pelo menos 30.** Calendário e fio cobrem no máximo 397 dias, descontada a sobreposição comprovada. Total exato [nao verificado]. | `sonda:8–14` · `r.md:12` |
+| `espelho_cobranca_indevida` | 8 | **8** sem **Conferir chamado** pelo ID do chamado. | `sonda:15–18` · `r.md:11,41` |
+| `espelho_discordante` | 12 | **Pelo menos 5** sem calendário. Nos 7 com calendário, a saída não identifica a causa da divergência. Total exato [nao verificado]. | `sonda:19–23` · `r.md:9` |
+| `espelho_fato_em_ausencia` | 13 | **Pelo menos 6** sem calendário ou painel da ausência. Nos 7 com calendário, a saída não identifica qual registro precisa de correção. Total exato [nao verificado]. | `sonda:24–28` · `r.md:14` |
+| `espelho_furo` | 208 | **Pelo menos 13.** Calendário e fio cobrem no máximo 195 dias, descontada ao menos uma sobreposição. Total exato [nao verificado]. | `sonda:29–35` · `r.md:8` |
+| `espelho_indefinida` | 229 | **Pelo menos 29.** A saída não traz painel da ausência nem editor da agenda. Os 200 dias com **Vínculo da escala** de linha são candidatos quando a causa é vigência ou fase. Total exato [nao verificado]. | `sonda:36–40` · `r.md:10,42,48` |
+| `espelho_nunca_bateu` | 113 | **113** sem **Cadastro x Realidade, C5**, o destino de triagem do anexo. | `sonda:41–44` · `r.md:13,41` |
+| `ferias_com_batida` | 15 | **15** sem **Férias do colaborador** e sem **Calendário do dia para retratar a marcação**. | `sonda:45–46` · `r.md:16,41` |
+| `sem_celula` | 0 | **0**. O motivo não aparece na saída e os demais fecham o total de dias. | `sonda:4,8–46` · `r.md:7` |
+
+**`espelho_indefinida` por protesto:** os totais de `PARCIAL_SEM_PERIODO`, `FASE_NAO_DECLARADA_COM_PREVISTO` e `PREVISTO_COM_DIA_INDEFINIDO` são [nao verificado]. O código agrupa esses protestos em `indefinida`, e a saída agrega por motivo, escopo e porta, com uma lista de PKs por célula. O rótulo **Vínculo da escala** não identifica qual protesto foi lavrado. `sonda:36–40` · `r.md:42,53` · [models.py:1626](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/escala/models.py:1626) · [export.py:1310–1322](/home/ronald/codex_ws/b82a5ef08988438256b90c5d0b9d94f4552156e5/app/folha/export.py:1310)
+
+## 28/11 10:55 · sessao 9ef8957d8ad1 · INTERVALO-SEM-PREVISTO · sonda · origem=Code
+
+As referências `sonda.py:N` apontam para as linhas da saída raspada fornecida, contando desde `sonda_leitura` e incluindo a linha em branco.
+
+## Competência 11 na sombra
+
+A sonda conta as perguntas vivas pelo juiz C6 e procura a célula pelo colaborador e dia do turno. Em célula encontrada, `sem_intervalo` significa que o leitor do DNA encontrou zero pares completos de pausa. `sonda.py:3–6` · `app/chamados/juizes.py:911–938` · `app/escala/utils.py:111–146`
+
+| Empresa | Vivas | Em célula sem intervalo previsto | Sem célula | Em célula com intervalo, por diferença | Saída |
+|---|---:|---:|---:|---:|---|
+| 2 | 1.978 | 68 | 0 | 1.910 | `sonda.py:3` |
+| 3 | 403 | 20 | 0 | 383 | `sonda.py:4` |
+| 4 | 22 | 0 | 0 | 22 | `sonda.py:5` |
+| **Total** | **2.403** | **88** | **0** | **2.315** | `sonda.py:3–6` |
+
+As empresas somam **1.978 + 403 + 22 = 2.403** vivas, **68 + 20 + 0 = 88** sem intervalo previsto e **0 + 0 + 0 = 0** sem célula. As partes do universo também fecham em **2.315 + 88 + 0 = 2.403**. `sonda.py:3–6`
+
+## Caso literal
+
+- O chamado **40588** está `aberto`, com origem `batida_ausente`. No dump, a célula **122468** de **20/11/2026** tem entrada `hi` às **07:00** e saída `hf` às **19:00**, sem intervalo previsto. O veredito é `cobrado`, com `protestos=[]`, **720 min** previstos e **715 min** realizados. `sonda.py:7–9`
+- O `dna_anterior` tem entrada `hi` às **07:00**, saída para intervalo `hii` às **11:00**, volta `hfi` às **12:00** e saída `hf` às **19:00**. O contador registra **3 regenerações**. O campo guarda a versão imediatamente anterior à última regeneração. `sonda.py:8` · `app/escala/models.py:1725–1741`
+
+| Pergunta | Motivo | Estado no dump | Emissão | Saída |
+|---|---|---|---|---|
+| 61520 | `intervalo_saida` | `pendente`, viva; sem carimbos de resposta, validação ou materialização; via vazia | `2026-11-23 12:36:16.395304+00:00` | `sonda.py:10,12` |
+| 61521 | `intervalo_volta` | `pendente`, viva; sem carimbos de resposta, validação ou materialização; via vazia | `2026-11-23 12:36:16.420428+00:00` | `sonda.py:11,13` |
+
+As duas apontam para a célula **122468**, na disputa **7979**, com chamado-pai **37670** e destino **40588**. **Sim, a última regeneração foi posterior às duas emissões.** O carimbo é `2026-11-23 12:42:47.819535+00:00`. `sonda.py:8,10–13`
+
+A retenção do colaborador retornou um único dia, **20/11/2026**, e um único motivo, `espelho_cobrado`, na célula **122468**, com veredito `cobrado`. O retentor deriva esse motivo do veredito lavrado, inclusive com a lista de protestos vazia neste caso. `sonda.py:7,14` · `app/folha/export.py:1301–1326`
+
+## Origem dos horários
+
+**A fonte usada no nascimento das perguntas está [nao verificado].** A linha `marcos_dna_anterior` comprova que **11:00/12:00** estavam no DNA imediatamente anterior à última regeneração. As linhas `emissao` comprovam a ordem dos eventos. O código grava motivo, dia, disputa e célula no evento `pergunta_emitida`, e os textos do catálogo interpolam a data. O ramo executado e o conteúdo da ata no instante da emissão estão [nao verificado]. `sonda.py:8,12–13` · `app/chamados/models.py:3330–3344` · `app/chamados/catalogo/perguntas.py:123–138`
+
+- **DNA e ata.** A fábrica deriva os motivos dos marcos faltantes na ata da célula. A presença do par no `dna_anterior` é compatível com esse caminho. `sonda.py:8` · `app/chamados/services/fabrica_da_celula.py:52–74` · `app/chamados/services/declaracao_texto.py:87–104,122–144`
+- **Contexto do chamado.** O fio lê a hora prevista em `chamado_destino.contexto_json['marcos_faltantes']`. Na regeneração, `orfa_regeneracao.marcos_na_emissao` copia horas desse contexto. A linha `chamado` mostra origem e status. Os valores do contexto desse chamado e seu uso na emissão estão [nao verificado]. `sonda.py:9–11` · `app/chamados/services/fio.py:446–457` · `app/chamados/juizes.py:572–601` · `app/ponto/management/commands/gerar_celulas.py:255–264`
+- **`TipoEscala`.** O código consulta a escala ativa como fallback na validação da hora. O valor que esse fallback devolveria no caso está [nao verificado]. `app/chamados/juizes.py:1982–2008,2030–2048`
+
+Identidade da cópia com o hash informado [nao verificado].
 
 ## 28/11 10:52 · sessao 9963d98a4a05 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
 
@@ -2140,33 +2271,4 @@ As duas curas 5a e 5b estão no HEAD. A testemunha classifica a via de pergunta 
 
 Comportamento dinâmico e REDs [nao verificado].
 
-## 28/11 10:05 · sessao 5f0462781f73 · - · - · origem=Ronald (tmux)
-
-- **Item 2.** A ação pode travar a disputa-alvo e todas as disputas das perguntas destinadas ao pai antes de travar o chamado. A ressuscitação usa um subconjunto dessas perguntas. Para a corrida, uma conexão mantém a outra disputa fechada travada. Quando a ação esperar por essa disputa, a primeira conexão verifica com `NOWAIT` que ainda consegue travar o chamado. `chamados/services/acoes_disputa.py:300-312`, `chamados/models.py:1768-1780`.
-- **Pai vivo.** `reabrir` aceita `resolvido` e `fechado`. Dois testes c3c esperam sucesso administrativo com pai `aberto`. A exigência de aceite de `ch.reabrir` para o pai vivo conflita com esse contrato de modelo e com os testes existentes. `chamados/catalogo/motor.py:109-115`, `chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:82-86`, `:139-154`, `:178-193`.
-- **Recusa.** O ramo `irmao_vivo` pode migrar perguntas e gravar nota antes de devolver `False`. O RED deve verificar fecho, quota, perguntas, notas e pushes. O controle c4 exige uma quota quando a ressuscitação já reabriu a própria disputa pelo sistema. `chamados/models.py:1598-1623`, `:1872-1874`, `chamados/tests/test_desligado_porta_do_chamado.py:545-572`.
-- **Itens 5a/5b.** A base já distingue `recusada_desligamento` e valida a assinatura explicitamente gravada quando a FK é zerada. O histórico ainda atribui materialização ao carimbo de desligamento e sistema ao registro sem FK. Os REDs devem cobrir o carimbo sem fato, autor excluído, assinatura ausente ou inválida e reabertura automática posterior. `chamados/services/materializacao.py:868-899`, `core/observ.py:106-112`, `chamados/services/trilha_reabertura.py:5-22`, `chamados/management/commands/auditar_invariantes_chamados.py:673-679`, `chamados/services/historico.py:91-116`.
-- **Via nominal do chamado.** `encerrar` tem via fixa e serve à cascata, à regularização e ao vínculo. Um novo valor exige mudar o escritor e o guarda do renascimento juntos, com o rótulo do cluster e o selo que enumera vias literalmente. `chamados/models.py:1123-1132`, `:1904-1919`, `colaboradores/services/desligamento.py:234-236`, `chamados/services/regularizacao_ext.py:206`, `colaboradores/services/vinculo.py:429`, `ponto/tests/test_o169_cluster_encerrado_sem_lastro.py:236-250`.
-- **Itens 1/6.** A função de trava retorna uma instância limitada a PK e situação. O executor deve reler o cadastro inteiro sob a trava e o cron deve passar ao juiz o mesmo `hoje` capturado por `localdate`. O caso concorrente de agendamento tem de cobrir reagendamento para o futuro após a seleção inicial. `chamados/models.py:3127-3133`, `colaboradores/services/desligamento.py:88-137`, `colaboradores/management/commands/efetivar_desligamentos_agendados.py:37-58`.
-
-Verificação por leitura de código. Resultado dos testes [não verificado]. [nao verificado]
-
-## 28/11 09:36 · sessao 095f250de144 · FDS-FERIAS-COM-BATIDA-PORTA · construtor · origem=Code
-
-Ajustei `portas_da_linha` para oferecer **Calendário do dia (retratar marcação)** e **Férias do colaborador (corrigir lançamento)**, nessa ordem. O Calendário abre no primeiro dia gravado. Se a linha vier sem datas, aparece só a porta de Férias. O lavrador já copia `dias_ferias_com_batida` do export para `datas` no Retrato, e o roteamento lê essa lista. `app/folha/retrato_folha.py:1078` · `app/folha/retrato_folha.py:1297` · `app/folha/retrato_folha.py:1305`
-
-### Leitores
-
-- **Painel do colaborador e drawer do Retrato.** O painel chama `portas_da_linha` para a linha gravada, e o template exibe os botões na ordem recebida. O drawer abre esse mesmo painel com a competência selecionada. `app/colaboradores/views.py:1007` · `app/templates/folha/_retrato_o_que_fazer.html:73` · `app/templates/folha/_retrato_lista.html:61`
-- **`fora_da_folha::o_que_segura`.** Continua devolvendo em `dias[].portas` os links da tarefa de cada dia, montados a partir de uma linha de tipo `falta`. `app/folha/fora_da_folha.py:286` · `app/folha/fora_da_folha.py:297`
-- **PDFs.** O PDF do Retrato lê o recorte da barra. O PDF de retidos lê os itens de `classificar_export`. As duas renderizações seguem por essas fontes. `app/folha/views_retrato.py:394` · `app/folha/views_retrato.py:437` · `app/folha/views.py:885`
-
-### Casos RED para o Opus
-
-1. **Férias com batida em 07/11/2026.** Entrada `colab=344`, `motivo='ferias_com_batida'`, `acoes=[]`, `datas=['2026-11-07']`. Esperado, nesta ordem, **Calendário do dia (retratar marcação)** com `/colaboradores/344/calendario/?ano=2026&mes=11&modo=custom&data_ini=2026-11-07&data_fim=2026-11-07` e **Férias do colaborador (corrigir lançamento)** com `/ferias/344/secao/`. Repetir com `2026-11-08` como segunda data e exigir os mesmos links. Mutantes a derrubar incluem manter o fio, inverter a ordem, usar a última data ou abrir o mês inteiro. `app/folha/retrato_folha.py:1078` · `app/colaboradores/urls.py:24` · `app/colaboradores/services/calendario.py:227` · `app/ferias/urls.py:14`
-2. **`furo_espelho`.** Entrada `colab=344`, `dono='admin'`, `tipo='falta'`, `acoes=[]`. Esperado apenas **Validar no fio** com `/chamados/modal/344/`. Mutante a derrubar é aplicar as portas de férias a toda linha com `dono='admin'`. `app/folha/retrato_folha.py:1024` · `app/folha/retrato_folha.py:1118` · `app/chamados/urls.py:39`
-3. **Férias com batida sem datas.** Mesma linha do primeiro caso, com `datas` ausente, `None` ou `[]`. Esperado apenas **Férias do colaborador (corrigir lançamento)** com `/ferias/344/secao/`. Mutantes a derrubar incluem inventar um dia para o Calendário, cair em **Validar no fio** ou devolver uma lista vazia. `app/folha/retrato_folha.py:1080` · `app/folha/retrato_folha.py:1089`
-
-A conferência local foi de sintaxe e `git diff --check`. Suite, RED e navegação no drawer **[nao verificado]**. `app/folha/retrato_folha.py:1058`
-
-_8898 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8900 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
