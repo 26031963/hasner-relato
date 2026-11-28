@@ -1,7 +1,34 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 14:23** · publicado em **28/11/2026 14:25** (UTC-3)
+> Ultima resposta processada: **28/11/2026 14:30** · publicado em **28/11/2026 14:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 14:30 · sessao 7d83c1dc9dbb · C7-TELA-ADMIN-ENCERRA · sonda · origem=Code
+
+**RESUMO — dado raspado fornecido [nao verificado em nova execução]**  
+88 perguntas no alvo, em 7 disputas.  
+7 disputas com irmãs vivas fora do alvo, 420 irmãs vivas fora do alvo e 0 perguntas em disputa já fechada.  
+Motivos: `saida_sem_entrada` 122, `orfao_14h` 106, `intervalo_volta` 95, `intervalo_saida` 91, `sem_posto` 1, `batida_fora_escala_grave` 5.  
+Distribuição: `{53: 1, 21: 1, 46: 1, 70: 1, 17: 1, 210: 1, 3: 1}`. As perguntas `61520` e `61521` estão no alvo, na disputa `7979`, com 3 irmãs vivas fora do alvo cada.
+
+**Saída raspada fornecida, na íntegra** [nao verificado em nova execução]
+
+```text
+sonda_leitura: sonda.py [20704dd2b53e1772] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+alvo 88 disputas 7
+disputas_com_irma_viva_fora_do_alvo 7 irmas_vivas_fora_do_alvo 420 perguntas_em_disputa_ja_fechada 0
+motivos_das_irmas {'saida_sem_entrada': 122, 'orfao_14h': 106, 'intervalo_volta': 95, 'intervalo_saida': 91, 'sem_posto': 1, 'batida_fora_escala_grave': 5}
+distribuicao_irmas_por_disputa {53: 1, 21: 1, 46: 1, 70: 1, 17: 1, 210: 1, 3: 1}
+pergunta 61520 no_alvo True disputa 7979 irmas_vivas_fora_do_alvo 3
+pergunta 61521 no_alvo True disputa 7979 irmas_vivas_fora_do_alvo 3
+```
+
+A tentativa local parou antes de executar a sonda, com código de saída `1` e erro `sonda_leitura: ./sonda.py nao existe`. A tentativa não produziu contagens. `bin/sonda_leitura.sh:71`
+
+**Conferência do critério.** Pelo critério descrito no pedido, sim: o predicado de vida é o mesmo. `admin_encerra` chama `fechar` com `FECHOU_ADMIN_ENCERRA`. `fechar` aplica `chamados.juizes.pergunta_viva(q)` a todas as perguntas da disputa, reavalia a lista sob a trava e chama `fechar_por_admin` para cada viva, inclusive as que estão fora do alvo da sonda. Respostas sem veredito podem bloquear o fechamento antes desse laço. `app/chamados/models.py:2217`, `app/chamados/models.py:2078`, `app/chamados/models.py:2122`, `app/chamados/models.py:2123`, `app/chamados/models.py:2132`, `app/chamados/models.py:2175`, `app/chamados/models.py:2184`, `app/chamados/juizes.py:911`
+
+A implementação do recorte e os argumentos usados em `sonda.py` ficam [nao verificado].
 
 ## 28/11 14:23 · sessao d8f55c0f4fab · E4C-F5-INSTANTE · leitura · origem=Code
 
@@ -1347,257 +1374,4 @@ O CSS relevante está todo inline na grade. Uma edição geral no `<div>` do bad
 
 **`padrao=fitness function / selo`** para a cura com o RED. O invariante é a faixa inteira à vista enquanto o conteúdo do dia continua rolável. A asserção é de geometria no navegador. [PLANO-PADROES.md:53](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/PLANO-PADROES.md:53) [GLOSSARIO.md:14](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/GLOSSARIO.md:14)
 
-## 28/11 11:46 · sessao 35e63e4b2e65 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
-
-**B é um defeito da view HTMX. Os casos 11 e 44 chegam às asserções de negócio e precisam de curas próprias.** No 44, o traceback mostra a lista **obtida** `[]` e a **esperada** `[('resposta', T0, '08:00')]`, na primeira chamada do comando. Nos três mutantes de C, a falha é um `AssertionError` do controle inicial. Nos seis de B, o `VariableDoesNotExist` do teste interno vira `FAIL` na contraprova, que exige `resultado.errors == []`. Em ambos os grupos, o executor para antes de instalar o mutante. `app/chamados/views.py:394–408` · `app/chamados/tests/e4d_matriz_mutantes.py:570–612` · `aceite_v3.txt`, tracebacks de `/app/chamados/tests/test_e4d_matriz_reds.py:603,834`.
-
-## B · Cartão no GET e no POST HTMX
-
-`chamados:detalhe_local` resolve para `detalhe_chamado_local`. No GET, a view chama `montar_contexto_detalhe`, que lista as perguntas vivas da disputa aberta, fornece `pode_agir` e cria `folha_julga_pontualidade` como `SimpleLazyObject`. O template da página inclui o cartão com esse contexto. No POST `recusar_pergunta`, a mesma view passa `_resp_card` à ação. A recusa sem motivo retorna antes de qualquer escrita, e `_resp_card` renderiza o cartão diretamente com `perg` e `pode_agir`. A variável vem da montagem do GET. A guarda fica na linha 43 e o argumento que o Django tenta resolver fica na 44. `app/chamados/urls.py:14` · `app/chamados/views.py:377–408,506–519,550–552` · `app/chamados/services/acoes_chamado.py:337–358,409–423` · `app/chamados/services/acoes_disputa.py:94–102` · `app/chamados/services/validacao.py:934–937` · `app/config/settings/base.py:70–88` · `app/templates/chamados/detalhe_local.html:307–311` · `app/templates/chamados/partials/_pergunta_card.html:43–44`.
-
-A v3 já percorre essas duas entradas com `self.client.get(url)` e `self.client.post(url, ..., HTTP_HX_REQUEST='true')`. Pela ordem do teste, a primeira HTMX tem validação vigente e pula a guarda da linha 43. Depois da `DEVOLUCAO`, o GET tem a chave e a segunda HTMX entra na guarda com o contexto incompleto. O traceback confirma o contexto do fragmento. O ordinal do request no log é [nao verificado]. `r_v3.md`, B[13] · `app/chamados/views.py:394–408` · `app/templates/chamados/partials/_pergunta_card.html:20–44`.
-
-### B.1 · Contexto de produção
-
-Em `app/chamados/views.py:404–405`, substitua as duas linhas que começam em `_r = _render_card(request, 'chamados/partials/_pergunta_card.html',` e terminam em `{'perg': _p, 'pode_agir': True})`. A âncora composta tem contagem 1. A consulta imediatamente acima já traz `disputa__colaborador`. `app/chamados/views.py:399–405` · `app/chamados/services/acoes_chamado.py:420–422`.
-
-```python
-            from django.utils.functional import SimpleLazyObject
-            from chamados.juizes import folha_julga_pontualidade
-
-            _r = _render_card(request, 'chamados/partials/_pergunta_card.html', {
-                'perg': _p,
-                'pode_agir': True,
-                'folha_julga_pontualidade': SimpleLazyObject(
-                    lambda: folha_julga_pontualidade(_p.disputa.colaborador),
-                ),
-            })
-```
-
-### B.2 · Assertos do mesmo teste HTTP [nao verificado]
-
-Em `app/chamados/tests/test_e4d_matriz_reds.py`, no método `test_cura4_cartao_exibe_composta_no_get_e_no_htmx` inserido por B[13], substitua a linha `            self.assertContains(selo, f'✓ validada {validacao_vigente:%d/%m %H:%M}</span>')` pelo primeiro bloco. Substitua de `                    self.assertNotIn('opacity:.55;', abertura)` até imediatamente antes de `        p.refresh_from_db()` **desse método**, usando como âncora final composta `        p.refresh_from_db()\n        self.assertEqual((p.respondida_em, p.validada_em), (None, validacao_residual))`. Cada âncora tem contagem 1 na v3 aplicada. `r_v3.md`, B[13] · `app/chamados/tests/test_e4d_matriz_reds.py:1616` · `app/templates/chamados/partials/_pergunta_card.html:20–44,118–127`.
-
-```python
-            self.assertContains(
-                selo, f'✓ validada {validacao_vigente:%d/%m %H:%M}</span>', msg_prefix='C1 hora do selo',
-            )
-```
-
-```python
-                    self.assertNotIn('opacity:.55;', abertura, 'C1 opacidade')
-                    self.assertNotContains(retorno, '✓ validada ', msg_prefix='C1 selo residual')
-                    self.assertContains(retorno, '⚠ aguardando validacao', msg_prefix='C1 resposta vigente')
-                    self.assertContains(
-                        retorno, f'— {resposta_em:%d/%m %H:%M}</span>', msg_prefix='C1 hora da resposta',
-                    )
-                    self.assertContains(
-                        retorno, 'name="acao" value="recusar_pergunta"', msg_prefix='C1 acao',
-                    )
-
-```
-
-Em `app/chamados/tests/e4d_matriz_mutantes.py`, substitua de `MC1Opacidade = r(` até imediatamente antes de `MC3ApiRele = recibo(`. Cada delimitação tem contagem 1 após B[16]. Os seis continuam ligados a `C1_TESTE`, que é o teste HTTP acima. `falha_em` usa a checagem já inserida por B[12]. `r_v3.md`, B[11–12,15–16] · `app/chamados/tests/e4d_matriz_mutantes.py:602–624`.
-
-```python
-MC1Opacidade = r('MC1Opacidade', 'C1.1', C1_TESTE, falha_em='C1 opacidade')
-MC1Selo = r('MC1Selo', 'C1.2', C1_TESTE, falha_em='C1 selo residual')
-MC1HoraDoSelo = r('MC1HoraDoSelo', 'C1.3', C1_TESTE, falha_em='C1 hora do selo')
-MC1HoraDaResposta = r('MC1HoraDaResposta', 'C1.4', C1_TESTE, falha_em='C1 hora da resposta')
-MC1Acao = r('MC1Acao', 'C1.5', C1_TESTE, falha_em='C1 acao')
-MX3RespondidaCrua = r('MX3RespondidaCrua', 'X3', C1_TESTE, falha_em='C1 resposta vigente')
-```
-
-| Mutante | Mordida esperada com o fragmento renderizável, por leitura do código |
-|---|---|
-| `MC1Opacidade` | A validação residual da coluna esmaece o cartão após a devolução. `app/templates/chamados/partials/_pergunta_card.html:21` |
-| `MC1Selo` | A validação residual da coluna exibe um selo após a devolução. `app/templates/chamados/partials/_pergunta_card.html:24–26` |
-| `MC1HoraDoSelo` | A primeira HTMX exibe a hora residual no selo. `app/templates/chamados/partials/_pergunta_card.html:24` |
-| `MC1HoraDaResposta` | A hora fica vazia porque a coluna `respondida_em` está vazia. `app/templates/chamados/partials/_pergunta_card.html:30–33` |
-| `MC1Acao` | A coluna `validada_em` residual esconde o formulário de recusa. `app/templates/chamados/partials/_pergunta_card.html:43,118–127` |
-| `MX3RespondidaCrua` | A coluna `respondida_em` vazia muda o estado exibido para `aguardando colaborador`. A checagem de estado vem antes das de hora e ação. `app/templates/chamados/partials/_pergunta_card.html:20,24–33` · `r_v3.md`, B[13,15] |
-
-**Escritores e leitores.** `cartao` grava o texto e os carimbos residuais na projeção. A fixture grava `RESPOSTA`, as duas `VALIDACAO` e `DEVOLUCAO` por `registrar_na_fixture` e `DecisaoPergunta.registrar`. Em produção, `responder_pergunta_disputa_core` grava texto, instante e ato de resposta, e `validacao` grava e devolve a validação. `DecisaoPergunta.leitura` ordena os atos, tira a validação na `DEVOLUCAO` e conserva a resposta. `composta` entrega os instantes dessa leitura e o texto da projeção. O template lê os instantes pelo filtro `resposta_composta`, lê o booleano por `PerguntaDisputa.respondida` e o texto exibido por `resposta_display`. O GET lê `perguntas_disputa` pelo juiz de vitalidade. A view HTMX fornece `perg`, `pode_agir` e `HX-Trigger`, com a mensagem da porta de recusa. `app/chamados/tests/test_e4d_matriz_reds.py:166–175,215–229` · `app/chamados/tests/_ato_da_fixture.py:36–44` · `app/chamados/services/disputa_emissao.py:1531–1546,1564–1570` · `app/chamados/services/validacao.py:164–178,304–316,934–937` · `app/chamados/models.py:3958–3965,3985–3991,4450–4456,4486–4515,4590–4623` · `app/chamados/templatetags/chamados_tags.py:144–182` · `app/chamados/services/acoes_chamado.py:350–358,409–423` · `app/chamados/juizes.py:1499–1533,1644–1653,2081–2102` · `app/chamados/views.py:399–408,418–421`.
-
-## C11 · Pedido de reabertura em pergunta vazia
-
-**A regra da v3 está aberta em `f300431af`.** A assinatura carece de `pedido_id`. A porta só monta o ato quando encontra texto, resposta, validação, materialização ou validação vigente só na sequência. A fixture deixa as duas perguntas realmente vazias, e o primeiro `registrar([])` volta cedo. Mesmo que se retire esse filtro, a porta do lote hoje projeta RVM e acorda células, e `registrar` também acorda células. B[5]/B[6] tratam da recusa na passagem da ausência. A cura do 11 entra na reabertura e na persistência da decisão. `app/chamados/tests/test_e4d_matriz_reds.py:166–179,570–606` · `app/chamados/services/disputa_emissao.py:1631,1674–1719` · `app/chamados/models.py:3594–3618,3657–3660,4590–4623` · `apv3.py`, ramo `--cura`.
-
-A proposta usa uma chave opaca opcional de até 128 caracteres, única por pergunta, no ato imutável. A porta consulta essa chave sob a trava existente. O contrato novo começa na chamada do serviço com pedido identificado. Os chamadores atuais de recusa e de reabertura histórica usam a assinatura sem chave, que também é exercitada pelo controle de pendente vazia. A emissão e o transporte da chave pelas telas atuais são [nao verificado]. `app/chamados/services/disputa_emissao.py:1674–1685` · `app/chamados/models.py:4405–4411` · `app/chamados/services/validacao.py:997–1000` · `app/chamados/services/acoes_disputa.py:120–141` · `app/chamados/views.py:1416–1441` · `app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:816–820`.
-
-### C11.1 · Campo, restrições e emissão compartilhada com C44
-
-Em `app/chamados/models.py:4373`, insira logo após `    resposta_mantem_validacao = models.BooleanField(default=False, db_default=False)` (1).
-
-```python
-    pedido_id = models.CharField(max_length=128, null=True, blank=True)
-```
-
-Em `app/chamados/models.py:4395`, insira logo após `                name='decisao_mantem_validacao_so_na_resposta'),` (1).
-
-```python
-            models.CheckConstraint(
-                condition=models.Q(pedido_id__isnull=True) | models.Q(ato='reabertura'),
-                name='decisao_pedido_so_na_reabertura'),
-            models.UniqueConstraint(
-                fields=('pergunta', 'pedido_id'),
-                condition=models.Q(pedido_id__isnull=False),
-                name='decisao_reabertura_pedido_unico'),
-```
-
-Em `app/chamados/models.py:4590`, substitua `    def registrar(cls, linhas):` (1) pela assinatura abaixo. Em `:4622–4623`, substitua `            PerguntaDisputa.acordar_celulas(eventos)\n            return criadas` (1) pelo segundo bloco. A trava, o `bulk_create` e a invalidação do cache continuam na mesma porta. `app/chamados/models.py:4590–4623`.
-
-```python
-    def registrar(cls, linhas, *, acordar=True):
-```
-
-```python
-            if acordar:
-                PerguntaDisputa.acordar_celulas(eventos)
-            return criadas
-```
-
-Texto integral da migração nova `app/chamados/migrations/0057_decisao_pedido_id.py`. O ponto de encadeamento na cópia é a `0056_decisao_resposta_mantem_validacao_historico`. O campo nasce anulável para as linhas existentes. `app/chamados/migrations/0056_decisao_resposta_mantem_validacao_historico.py:17–27` · `app/chamados/models.py:4344–4396`.
-
-```python
-from django.db import migrations, models
-
-
-class Migration(migrations.Migration):
-    dependencies = [
-        ('chamados', '0056_decisao_resposta_mantem_validacao_historico'),
-    ]
-
-    operations = [
-        migrations.AddField(
-            model_name='decisaopergunta',
-            name='pedido_id',
-            field=models.CharField(max_length=128, null=True, blank=True),
-        ),
-        migrations.AddConstraint(
-            model_name='decisaopergunta',
-            constraint=models.CheckConstraint(
-                condition=models.Q(pedido_id__isnull=True) | models.Q(ato='reabertura'),
-                name='decisao_pedido_so_na_reabertura',
-            ),
-        ),
-        migrations.AddConstraint(
-            model_name='decisaopergunta',
-            constraint=models.UniqueConstraint(
-                fields=('pergunta', 'pedido_id'),
-                condition=models.Q(pedido_id__isnull=False),
-                name='decisao_reabertura_pedido_unico',
-            ),
-        ),
-    ]
-```
-
-### C11.2 · Porta de reabertura
-
-Em `app/chamados/services/disputa_emissao.py:1631`, substitua `def reabrir_para_correcao(qs, *, por=None, motivo='', ato='reabertura'):` (1). Em `:1665–1669`, substitua de `    # REABRIR-NAO-DESTROI (aval 21/10 RAIA D):` até antes de `    from django.db import transaction\n    from django.utils import timezone\n    from chamados.models import DecisaoPergunta, PerguntaDisputa\n    from chamados.services.trava_do_colaborador import exigir_colaboradores_travados\n    if ato not in DecisaoPergunta.ATOS_COM_FOTO:` (1 de cada) pelo segundo bloco. Em `:1675`, insira o terceiro bloco logo após `        raise ValueError('reabrir_para_correcao: ato %r nao leva foto (%s)' % (ato, DecisaoPergunta.ATOS_COM_FOTO))` (1). `app/chamados/services/disputa_emissao.py:1631,1664–1682`.
-
-```python
-def reabrir_para_correcao(qs, *, por=None, motivo='', ato='reabertura', pedido_id=None):
-```
-
-```python
-    # A trilha guarda a foto anterior no mesmo atomic. Sem pedido identificado, só
-    # o que há para compensar deixa linha. Um pedido novo identificado também
-    # registra as perguntas vazias. A recusa tem seu próprio ato e a mesma foto.
-```
-
-```python
-    com_pedido = pedido_id is not None
-    if com_pedido and (ato != DecisaoPergunta.REABERTURA or not isinstance(pedido_id, str)
-                       or not pedido_id.strip() or len(pedido_id) > 128):
-        raise ValueError('pedido_id deve identificar uma reabertura (1 a 128 caracteres)')
-```
-
-No mesmo arquivo, substitua de `        # LASTRO-PARTE-3 (O-OUTBOX): o update do lote nao passa pelo post_save. Capture as linhas do evento sob a trava,` até antes de `def responder_automaticamente(p, texto, instante):` (1 de cada). O bloco aproveita `_agora` capturado sob a trava e mantém uma chamada a `DecisaoPergunta.registrar`. `app/chamados/services/disputa_emissao.py:1676–1723` · `app/chamados/models.py:3621–3660` · `app/chamados/tests/test_reabrir_nao_destroi.py:118–130`.
-
-```python
-        if com_pedido:
-            ja_feitas = DecisaoPergunta.objects.filter(
-                ato=DecisaoPergunta.REABERTURA, pedido_id=pedido_id,
-            ).values('pergunta_id')
-            qs = PerguntaDisputa.objects.filter(pk__in=qs.values('pk')).exclude(pk__in=ja_feitas)
-
-        vazias = [
-            pk for pk, texto, resposta, validada, materializada, via in qs.values_list(
-                'pk', 'resposta_colab', 'respondida_em', 'validada_em', 'materializada_em', 'via_resolucao',
-            )
-            if via not in PerguntaDisputa.VIAS_FORA_DO_FATO
-            and not ((texto or '').strip() or resposta is not None or validada is not None or materializada is not None)
-        ]
-        por_ato = {
-            q.pk: DecisaoPergunta.composta(q)
-            for q in (PerguntaDisputa.objects.filter(pk__in=vazias).prefetch_related('decisoes') if vazias else ())
-        }
-        origem = (
-            'pk', 'resposta_colab', 'respondida_em', 'validada_em', 'validada_por_id', 'materializada_em', 'via_resolucao',
-        )
-        if com_pedido:
-            origem += ('materializada_por_id',)
-        atos = []
-        projetar = set()
-        for pk, texto, resposta, validada, autor, materializada, via, *autor_materializacao in qs.values_list(*origem):
-            if via in PerguntaDisputa.VIAS_FORA_DO_FATO:
-                continue
-            lida = por_ato.get(pk)
-            validada_no_ato = lida.validada_em if lida is not None else None
-            tem_foto = any(((texto or '').strip(), resposta, validada, materializada, validada_no_ato))
-            if not com_pedido and not tem_foto:
-                continue
-            linha = dict(
-                pergunta_id=pk, ato=ato, ato_texto=texto or '', respondida_original_em=resposta,
-                validada_original_em=validada if validada is not None else validada_no_ato,
-                validada_original_por_id=autor, ato_em=_agora, ato_por=por, ato_motivo=(motivo or '')[:240],
-            )
-            if com_pedido:
-                linha['pedido_id'] = pedido_id
-                if (tem_foto or texto or via or autor is not None or autor_materializacao[0] is not None
-                        or (lida is not None and lida.respondida_em is not None)):
-                    projetar.add(pk)
-            atos.append(linha)
-
-        alvo_eventos = qs.filter(pk__in=projetar) if com_pedido else qs
-        linhas_eventos = PerguntaDisputa.linhas_do_evento(alvo_eventos)
-        DecisaoPergunta.registrar(atos, **({'acordar': False} if com_pedido else {}))
-        if com_pedido and not projetar:
-            return 0
-        opcoes = {'escrever_so': projetar} if com_pedido else {}
-        n = PerguntaDisputa.descarimbar_em_lote(qs, **opcoes, **campos)
-        PerguntaDisputa.acordar_celulas(linhas_eventos)
-        return n
-
-
-```
-
-### C11.3 · Contraprovas
-
-O teste B[17] já distingue o primeiro pedido, o retry e outro pedido em `T2`. `M11DescartaReaberturaVazia` usa o par B[18], que exclui as vazias antes de `ATOS_COM_FOTO`. `M11RetryGanhaNovoPedido` usa o wrapper existente, que troca a chave na segunda chamada. Após a cura, o primeiro deve falhar na falta do ato inicial e o segundo na presença de uma linha adicional no retry. No aceite, ambos param na falta do primeiro ato do **controle inicial**. `r_v3.md`, B[17–18] · `app/chamados/services/disputa_emissao.py:1674` · `app/chamados/tests/e4d_matriz_mutantes.py:292–302,598–610,650–654` · `aceite_v3.txt`, falhas dos dois M11.
-
-Em `app/chamados/tests/e4d_matriz_mutantes.py:650–654`, substitua de `M11DescartaReaberturaVazia = h(` até antes de `M12AutorDaFotoSetNull = h(` (1 de cada).
-
-```python
-M11DescartaReaberturaVazia = h(
-    'M11DescartaReaberturaVazia', '11_descarta_reabertura_vazia',
-    'test_caso_11_reabertura_vazia_grava_ato_sem_projetar',
-    falha_em='Regra 11: o primeiro pedido deixa ato na pergunta vazia',
-)
-M11RetryGanhaNovoPedido = h(
-    'M11RetryGanhaNovoPedido', '11_retry_ganha_novo_pedido',
-    'test_caso_11_reabertura_vazia_grava_ato_sem_projetar',
-    falha_em='Regra 11: o retry preserva a trilha',
-)
-```
-
-**Escritores e leitores.** A porta de reabertura monta `ato`, `ato_em`, `ato_por`, `ato_motivo`, `ato_texto` e os três campos `*_original_*`; `registrar` aplica o relógio de compensação e insere a linha. A consulta `values_list(*campos_ato)` de B[17] lê esses valores, e `foto_dos_atos` lê a linha inteira, inclusive o PK. `cartao` monta a projeção de entrada. `descarimbar_em_lote` é quem escreve os sete campos RVM na saída, e `foto` os lê. `acordar_celulas` delega a criação de `EventoCelula` ao escritor do outbox, e `eventos` conta as linhas do colaborador. `app/chamados/services/disputa_emissao.py:1664,1682,1689–1719` · `app/chamados/models.py:3594–3618,3657–3660,4344–4353,4552–4586,4590–4623` · `app/chamados/tests/test_e4d_matriz_reds.py:51–54,166–175,208–229` · `app/ponto/portas/celula.py:981–991` · `r_v3.md`, B[17].
-
-## C44 · Apply do estoque e identidade no retry
-
-**A correspondência já existe. A escrita pedida pelo teste está aberta nessa entrada.** `linhas_a_criar` usa a correspondência por pergunta, ato e instante para medir as respostas faltantes. O `--aplicar` da cópia passa colisões e silêncios à porta, conforme o contrato explícito do comando. Por isso a resposta falta já no primeiro apply. A fixture usa dia dentro do horizonte. Seu `marco_do_estoque` tenta alterar o registro de uma migração ausente na cópia, e o comando examinado seleciona por dia do fato e projeção. O backfill de fio morto já registra respostas no recorte que seu juiz seleciona, por outra entrada. `app/chamados/management/commands/backfill_decisoes_pergunta.py:1–13,44–92,193–234,328–377,486–516,628–631` · `app/chamados/models.py:2714,4415–4448` · `app/chamados/tests/cortes_f2_f9_apoio.py:31–43` · `app/chamados/tests/test_e4d_matriz_re
-
-[truncado em 20000 de 30480 caracteres]
-
-_8928 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8929 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
