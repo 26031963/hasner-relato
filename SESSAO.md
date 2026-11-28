@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 09:47:29.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (341.6 MB). Acoes na janela: **1713**.
+**Medido em 28/11/2026 09:54:18.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (343.0 MB). Acoes na janela: **1717**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:53:35 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 09:53:29 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/byqox5h35.output; date +%H:%M; python3 bin/rc_sem_colher.py \| tail -4` |
+| 09:48:23 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 09:48:17 | Bash | Encerra a espera lançada errado | `cd ~/saas-hasner; pkill -f 'bash logs/espera_unica.sh' ; echo rc=$?` |
+| 09:48:12 | Bash | Marca o pouso no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') j=max(k for k,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO) ',l)) L.insert(j+1,f"- {h} NOTA POUSO RETRATO-PDF-CORTA-POR-QUE item 2 NO AR: merge b82a5ef08 (--no-ff de 1e935acde, app/ igual a certificada), bin/ ...` |
+| 09:47:45 | Bash | Faz o deploy do pouso do RETRATO | `cd ~/saas-hasner; git log --oneline -1; ls .git/MERGE_HEAD 2>&1 \| tail -1; bin/deploy.sh --sem-migrate > logs/RETRATO-PDF-CORTA-POR-QUE/item2/final/deploy.out 2>&1; echo rc=$?; tail -8 logs/RETRATO-PDF-CORTA-POR-QUE/item2/final/deploy.out` |
+| 09:47:35 | Bash | Restaura o BACKLOG vivo e commita o pouso | `cd ~/saas-hasner; cp scratchpad/docs_merge_retrato/BACKLOG.vivo app/docs/BACKLOG.md; /bin/grep -c -w recado app/docs/BACKLOG.md; git add app/docs/BACKLOG.md app/docs/RELATO.md app/docs/PROMPTS.md; M=$(mktemp); cat > $M <<'EOF' POUSO RETRATO-PDF-CORTA-POR-QUE item 2 (folha, mao unica): merge --no-ff de 1e935acde Arvore certificada: inteira pista3 1e935acde OK Ran 18229, pista_certifica rc 0 (Found  ...` |
 | 09:47:23 | Bash | Marca e abre o merge do RETRATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') j=max(k for k,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado\|PUXADA\|NOTA\|DECIDIDO\|DESPACHO) ',l)) L.insert(j+1,f"- {h} colhido RETRATO-PDF-CORTA-POR-QUE item2/final/opus.rc (09:46 rc 0): opus final APROVADO (final/opus.md) -- (A) fechado po ...` |
 | 09:47:13 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b6xjx9vij.output; python3 bin/rc_sem_colher.py \| tail -3` |
 | 09:47:07 | Bash | Vê o que o ramo muda no BACKLOG e settings | `cd ~/saas-hasner; git diff 3545ebc07 1e935acde -- app/docs/BACKLOG.md app/config/settings/base.py \| cut -c1-250` |
@@ -1720,6 +1727,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:55:27 | Bash | Regera o diagrama num container montado na cópia | `cd ~/saas-hasner; W=/home/ronald/wt-codex-desligado-porta-do-chamado-170518; source bin/recursos.sh >/dev/null 2>&1; echo "TD=$TESTE_DOCKER"; M=$(bin/arvore_do_push.sh --montagem $W); docker run --rm $TESTE_DOCKER -v $W/app:/app $M saas-hasner-core:latest python manage.py gerar_diagrama --settings=config.settings.ci 2>&1 \| tail -5; git -C $W status --porcelain; git -C $W diff --stat` |
 | 21:55:21 | Bash | Lê como regerar o diagrama numa cópia | `cat ~/.claude/projects/-home-ronald-saas-hasner/memory/gerar-diagrama-escreve-na-arvore-viva.md; sed -n 1,30p ~/saas-hasner/bin/gerar_diagrama.py` |
 | 21:55:17 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/buer5sn7m.output; python3 bin/rc_sem_colher.py; date +%H:%M` |
-| 21:50:12 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh` |
-| 21:50:09 | Bash | Vê a rota do recorte e a fila da VM | `cd ~/saas-hasner; /bin/grep -E "ROTA\|Found" logs/DESLIGADO-PORTA-DO-CHAMADO/c2/rec/rec.log \| tail -2; bash bin/trava_teste.sh --quem 2>&1 \| head -2` |
-| 21:50:05 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b13u1x0md.output; python3 bin/rc_sem_colher.py; date +%H:%M` |
