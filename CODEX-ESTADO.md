@@ -1,7 +1,78 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 12:59** · publicado em **28/11/2026 13:05** (UTC-3)
+> Ultima resposta processada: **28/11/2026 13:12** · publicado em **28/11/2026 13:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 13:12 · sessao 768f1e997dbb · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · leitura · origem=Code
+
+**Resumo**  
+O HEAD ainda paga o trabalhado inteiro nos quatro ramos de dobra do motor e na promoção da folga-feriado. O FERIADO-UM-JUIZ resolveu a classificação, e o K1 segue aberto. `app/ponto/motor_calculo_v2.py:2925,3208,3385,3467` · `app/ponto/services/fechamento.py:995–1012` · `app/docs/BACKLOG.md:2201`  
+Pela regra da obra, a HE100 do col243 em 15/11 é **420,0 min** e a do col1046 em 20/11 é **419,7 min**. `app/docs/BACKLOG.md:2014` · `app/docs/RELATO.md:425`  
+**Veredito (a)** — refazer a diferença numa cópia nova do HEAD. Entregar motor, promoção e vigia com a mesma conta, depois medir a comp. 11. `app/ponto/calculador/regras.py:386–453` · `app/folha/porta_export.py:541–571` · `ordem_viva_2811_1310.txt:1`  
+O selo fornecido registra **emp2 = 2**. Zero pós-apply e DIFF restrito aos dois dias **[nao verificado]**. `ordem_viva_2811_1310.txt:1`
+
+## 1. Cobertura no HEAD
+
+| Sítio | Onde o suprimido entra hoje |
+|---|---|
+| **Motor, 12x36 e plantão** | A dobra por par grava `duracao` inteira em `minutos_extra`, HE100 e HE100 feriado. O caminho de excedente usa `_limite_com_suprimido` quando há previsto. `Motor12x36ComEscala` e plantão passam pelo mesmo corpo. O ciclo 12x36 é simples por padrão e pode ter cláusula de dobra. O intermitente limpa o calendário do motor. `app/ponto/motor_calculo_v2.py:2925–2972,3651–3665,3694–3698,3740,3810–3811` · `app/core/regua_cct.py:473–479` |
+| **Motor, turno partido** | Na via regular, o laço indeniza a pausa curta no par seguinte, mas a dobra grava o trabalhado inteiro de cada par e sai antes do limite diário. O excedente diário usa `_limite_com_suprimido`. A via semanal de 44 h exclui os feriados da soma. Para `periodos_ft` o método preenche o mapa de dia, e a apuração da pausa curta só percorre `resultado.periodos`. `app/ponto/motor_calculo_v2.py:3059–3122,3197–3239,3258–3260,3277–3287` |
+| **Motor, comercial** | `calcular_periodo` grava `duracao` inteira na dobra. `calcular_mes` zera as extras regulares do par e grava de novo o trabalhado inteiro na dobra do dia. O limite com suprimido aparece nos dois caminhos de excedente. No mês, o feriado simples segue para esse limite. `app/ponto/motor_calculo_v2.py:3385–3411,3444–3499,3525–3526` |
+| **`fechamento.py` e `dia_pago.py`** | Na via regular, o mensal e a lavra leem os campos de HE100 do motor. Na promoção, o mensal soma `f.periodo.minutos_trabalhados` e a lavra soma `p.minutos_trabalhados`. Ambos acrescentam o split noturno da partição. A intra viaja em rubrica própria. `app/ponto/services/fechamento.py:988–1012` · `app/ponto/services/dia_pago.py:176–189,217–219,238–251` · `app/ponto/motor_calculo_v2.py:328–344,362–370` |
+| **`calculador/regras.py`** | O excedente usa `previsto + min(S, declarado)`. A dobra avulsa devolve o trabalhado inteiro e a folga classificada avulsamente também atribui o trabalhado inteiro à rubrica escolhida. Na comp. 11, o caminho alimentado recebe a dobra normal do motor e a partição da folga. Nessa projeção, a promoção ainda usa o trabalhado inteiro. `app/ponto/calculador/regras.py:361–364,767–788,843–874` · `app/ponto/calculador/alimentacao.py:353–387,518–523,571–585` · `app/folha/export.py:385` |
+| **`calculador/periodo.py`** | `excesso_do_dia` tem o equivalente ao limite comum. `reler` soma a HE100 feriado já gravada pelos pares regulares e recoloca a soma no último par. O suprimido que calcula entra no excedente. A dobra é herdada do motor. `app/ponto/calculador/periodo.py:387–417,755–775,820–843` |
+| **`folha/porta_export.py`** | O vigia aplica a fórmula do excedente comum também ao feriado em dobra. O teto específico `max(0, T − S)` está ausente. `app/folha/porta_export.py:541–571` |
+
+O **FERIADO-UM-JUIZ** cobriu a decisão de **qual dia e qual rubrica** na promoção, com contexto por fatia, juiz do ciclo, escala certa e corte do intermitente. Também deixou o RED de K1 tagueado. O valor da promoção continua no trabalhado inteiro, e o bloqueio L-097 do motor continua em outro ponto. O pouso `a497c0cce` consta do RELATO. `app/ponto/calculador/regras.py:371–448` · `app/ponto/services/fechamento.py:350–351,995–1012` · `app/ponto/tests/test_feriado_um_juiz_porta.py:380–394` · `app/ponto/motor_calculo_v2.py:1563–1590` · `app/docs/RELATO.md:15239` · `app/docs/BACKLOG.md:2189–2190,2201`
+
+## 2. Hunks de `obra.diff` contra a cópia
+
+Os números `−N` são os inícios dos hunks no anexo. A classificação abaixo é por confronto textual com os sítios atuais. O arquivo veio sem `.git`, portanto hash, ancestralidade e resultado de `git apply --check` ficam **[nao verificado]**.
+
+| Arquivo | Ainda encaixa | Conflita ou perdeu a função |
+|---|---|---|
+| `app/ponto/motor_calculo_v2.py` | **Os dez sítios** mantêm o contexto relevante. `−723` e `−1818` inserem os helpers junto a `:750–755` e `:1916–1918`. `−2578` entra antes do DSR em `:2674–2682`. `−2826/−2871` entram em `:2923–2972`. `−3112` entra em `:3208–3230`. `−3286/−3311` entram em `:3382–3414`. `−3358/−3370/−3461` entram em `:3455–3495,3558–3565`. | **K1 continua faltando ao diff**, mesmo que os dez hunks sejam reaproveitados. O laço atual de intra do partido só escreve na via regular. `app/ponto/motor_calculo_v2.py:3067–3122` |
+| `app/folha/porta_export.py` | `−316` e `−544` encaixam na extração e chamada do vigia. `−335`, `−458` e `−644` também têm âncoras atuais. `app/folha/porta_export.py:316–319,332–341,457–464,544–572,644–650` | Os três últimos hunks citados são de **K2** — importação, tolerância e comentário sobre a soma. O HEAD ainda usa `_TOL_H` nessa comparação. O comentário novo depende da mudança de agregação, e esses hunks por si só deixam o teto do vigia como está. `app/folha/porta_export.py:245,338,457–464,566–568` · `app/ponto/services/dia_pago.py:562–575` |
+| `app/folha/tests/test_porta_do_export.py` | `−131` encaixa no selo que inspeciona a fórmula dentro de `medir`. `app/folha/tests/test_porta_do_export.py:130–142` | A troca de âncora acompanha a extração. A prova dos dois comportamentos passa pela `medir` real. `app/folha/porta_export.py:475–482,541–571,693–701` |
+| `app/ponto/services/dia_pago.py` | `−25`, `−141`, `−162`, `−170`, `−179`, `−291` e `−547` têm âncora. São imports/campos, preparação e soma de parcelas, e agregação de K2. `app/ponto/services/dia_pago.py:23–44,145–189,296–305,558–575` | `−132` conflita com `RecusaDeProcedencia` e introduz a assinatura antiga de promoção. `−241` conflita com a lavra atual de `(p, split_noturno, legais)`. Reaproveitar a conta na partição atual preserva os valores noturnos vindos da fatia. `app/ponto/services/dia_pago.py:132–145,217–219,235–251` |
+| `app/ponto/services/fechamento.py` | `−69`, só a redação da docstring, ainda encaixa. `app/ponto/services/fechamento.py:82–85` | `−77/−207/−298/−327` colidem com os mapas de contexto vigentes. O mapa paralelo `prorrogacao_por_par` ficou obsoleto nesse desenho, pois a partição já recebe motor e vínculo. `−925/−943/−956` conflitam com o recuo e a nova partição, e o filtro antigo `_ft_certa → feriado_vira_folga` foi superado. `−1214/−1227/−1290/−1297` devem ser refeitos nas duas chamadas atuais, com a partição e a transação que o HEAD já usa. A soma do trabalhado inteiro em `:1002` segue sendo a diferença a corrigir. `app/ponto/services/fechamento.py:91–98,249–257,344–383,988–1012,1228–1254,1284–1317` |
+| `app/core/tests/test_medida_turno_do_par.py` | No `−284`, a entrada da porta ainda aponta para `544`, mas o contexto ao redor mudou. `app/core/tests/test_medida_turno_do_par.py:287–293` | `−255/−300/−326/−345` conflitam com coordenadas novas. Os destinos antigos de **todos os cinco hunks** ficaram obsoletos. Exemplos do HEAD são `909/2521` no motor e `1609/257` no fechamento. O brief pede só o mapa de deslocamentos da futura alteração. `app/core/tests/test_medida_turno_do_par.py:253–262,304–315,329–352` · `brief_c4e.md` |
+| `app/ponto/tests/test_motor.py` e `test_s6_intermitente_feriado.py` | Encaixam `−534/−544` e `−166`, respectivamente. Os controles ainda esperam **28 h** nos dois feriados e **12 h** no 12x36 com dobra ligada. `app/ponto/tests/test_motor.py:534–549` · `app/ponto/tests/test_s6_intermitente_feriado.py:168–177` | A diferença a cobrar nas mesmas geometrias é **26 h** e **11 h**, respectivamente, com a intra indenizada em rubrica própria. `app/docs/BACKLOG.md:2014` · `obra.diff` |
+| `app/ponto/tests/test_o280_bateria_da_lei.py` | `−74/−210/−302/−330/−1592/−1726/−1752/−6048` mantêm as âncoras de import, matriz, casos, F10h, F11c e fim da classe. `app/ponto/tests/test_o280_bateria_da_lei.py:73–78,209–215,300–308,328–335,1593–1630,1720–1762,6045–6051` | A expectativa F11c deve ser conferida pela regra no caminho vigente. A fixture antiga usa outubro, enquanto a partição nova começa em novembro. F10h continua sendo caracterização de uma falha de intervalo com obra própria. `app/ponto/tests/test_o280_bateria_da_lei.py:1740–1753` · `app/ponto/calculador/regras.py:393–409` · `app/folha/export.py:385` · `app/docs/BACKLOG.md:2013` |
+| Três arquivos novos em `app/ponto/tests/` | `test_feriado_sem_limite_do_suprimido.py`, `test_feriado_dobra_noturna_g0.py` e `mutantes_feriado_sem_limite_do_suprimido.py` entram como adições, sem arquivo homônimo visível na cópia. `obra.diff` · `app/ponto/tests/test_feriado_um_juiz_porta.py:380–394` | Reaproveitar os cenários. O K1 já tem entrada no HEAD, e os mutantes da cópia velha dependem de nomes, fontes e revisões daquele desenho. Execução desses mutantes no HEAD **[nao verificado]**. `app/ponto/tests/test_feriado_um_juiz_porta.py:380–394` · `commits.txt` · `obra.diff` |
+
+## 3. Valores e REDs
+
+A conta aprovada é **HE100 = HE100 feriado = `max(0, T − S)` no dia da jornada**. Deduz-se todo o `S` indenizado, começando pelos minutos diurnos de todos os pares. Preserva-se a HE100 noturna da dobra cheia até o limite da HE100 restante, e o adicional noturno conserva sua apuração. No comercial, o que sai da dobra continua contado como pago para o banco. O helper de excedente atual soma apenas `min(S, declarado)` ao previsto, portanto chamá-lo com previsto zero ainda produziria uma conta diferente. `app/docs/BACKLOG.md:2014` · `FERIADO-C1-LEIS-2511.txt:1` · `app/ponto/motor_calculo_v2.py:1898–1916,3558–3570`
+
+| RED | Trabalhado no dado | Intra indenizada | HE100 esperada | HE100 inteira relatada |
+|---|---:|---:|---:|---:|
+| **col243 · 15/11** · pausa curta | 436,3 min | 16,3 min | **420,0 min** | 436,3 min |
+| **col1046 · 20/11** · sem pausa | 479,7 min | 60,0 min | **419,7 min** | 479,7 min |
+
+Os valores vêm do relato da obra. O primeiro caso também aparece no diff com 436,33 e 16,33, cuja diferença continua 420,0. O ramo exato, as batidas, o previsto, o declarado e o split noturno de cada um dos dois dias **[nao verificado]**. Se o selo rodou esse mesmo `medir`, a acusação veio de pares em `resultado.periodos`, que é a lista que o vigia percorre. `app/docs/RELATO.md:425` · `obra.diff` · `app/folha/porta_export.py:538–550`
+
+- **Dois REDs do dinheiro.** Cobrar os totais da tabela na HE100 e HE100 feriado, com a intra em sua própria rubrica. Os quatro ramos de dobra do motor hoje escrevem o valor da última coluna. Exercitar também a promoção, que hoje soma o trabalhado inteiro no mensal e no DiaPago. No TXT, conferir as duas rubricas pelos campos do mensal. `app/ponto/motor_calculo_v2.py:2925–2929,3213–3220,3385–3389,3471–3478` · `app/ponto/services/fechamento.py:1001–1008` · `app/ponto/services/dia_pago.py:238–246` · `app/folha/export.py:434–462`
+- **RED K1.** `10:00–14:00` + `14:30–18:20` dá **470 trabalhados**, **30 de intra** com mínimo de 60, e **440 HE100** em ambas as vias. O **440 + 30** da via regular descrito no brief é da c4d. No HEAD, a via regular já apura a intra, mas ainda grava a dobra inteira. A promoção tem o segundo defeito, pois o laço da pausa fica fora de `periodos_ft`. O RED existente cobra **7,33 h de HE100 / 0,50 h de intra**. Os controles do brief cobram gap suficiente com intra zero nas duas vias e dia fora de feriado sem mudança de rubrica. `app/ponto/motor_calculo_v2.py:3067–3122,3197–3220` · `app/ponto/tests/test_feriado_um_juiz_porta.py:380–394` · `app/docs/BACKLOG.md:2201` · `brief_c4e.md`
+- **RED de dia e noturno.** Um par com 400 trabalhados e `S=420`, mais outro com 120, deve dar **100 min** no dia. Se houver diurnos suficientes em outro par, o desconto preserva o split noturno da dobra cheia. F10h tem dono próprio para a pausa entre pares, e o DIFF deve contar os dias desse padrão. `app/ponto/tests/test_o280_bateria_da_lei.py:1587–1630` · `app/docs/BACKLOG.md:2013` · `FERIADO-C1-LEIS-2511.txt:1` · `obra.diff`
+
+## 4. Próxima volta e arquivos
+
+**(a) Refazer no HEAD.** Os hunks do motor ainda servem de referência. A partição da folga, a identificação da fatia, o split de plantão longo e a lavra já têm contratos no HEAD que a cópia antiga antecede. A menor mudança é fazer esses leitores consumirem a conta comum da dobra no contrato atual. `app/ponto/services/fechamento.py:350–383,995–1012` · `app/ponto/calculador/regras.py:410–448` · `app/ponto/tests/test_feriado_um_juiz_porta.py:592–628`
+
+**ARQUIVOS:**
+
+- **Opus, motor e bateria.** `app/ponto/motor_calculo_v2.py` para os quatro escritores, a conta por dia, o congelamento do banco comercial e a extração K1 onde hoje está o laço. `app/ponto/tests/test_o280_bateria_da_lei.py` para S1–S5 e C1–C7, `app/ponto/tests/test_feriado_um_juiz_porta.py` para o RED K1 existente, e os dois controles que fixam a dobra cheia em `app/ponto/tests/test_motor.py` e `app/ponto/tests/test_s6_intermitente_feriado.py`. Entregar o mapa de deslocamentos da catraca para conferência. `app/ponto/motor_calculo_v2.py:2677–2678,2925,3078–3122,3208,3385,3467,3561–3570` · `app/ponto/tests/test_o280_bateria_da_lei.py:209–215` · `app/ponto/tests/test_feriado_um_juiz_porta.py:380–394` · `app/ponto/tests/test_motor.py:534–549` · `app/ponto/tests/test_s6_intermitente_feriado.py:168–177` · `brief_c4e.md`
+- **Codex construtor, app e teste da porta.** `app/ponto/calculador/regras.py` no contrato de `particionar_ft`, para transportar a HE100 apurada junto do split, `app/ponto/services/fechamento.py` e `app/ponto/services/dia_pago.py` para consumir esse valor, e `app/folha/porta_export.py` com `app/folha/tests/test_porta_do_export.py` para o teto e o RED da porta. Para a lavra do oráculo da comp. 11 ler a HE100 **promovida** corrigida, há ainda `app/ponto/calculador/alimentacao.py:353–377`, que hoje projeta o trabalhado cru. Eu trataria esse ponto como adaptação da leitura da partição, com a regra independente do oráculo preservada conforme C1. Se “oráculo intocado” também abranger essa projeção, a paridade ali fica por resolver. `app/ponto/calculador/regras.py:380–448` · `app/ponto/services/fechamento.py:1000–1012,1292–1317` · `app/ponto/services/dia_pago.py:238–251,331–339` · `app/folha/tests/test_porta_do_export.py:130–142` · `FERIADO-C1-LEIS-2511.txt:1`
+- **K2 na verificação.** O arredondamento fracionário já tem controles no FERIADO-UM-JUIZ, mas isso não comprova igualdade centesimal mensal × soma da lavra. O HEAD ainda soma horas gravadas e compara com tolerância de `0,015 h`. Cobrar o centésimo no RED e usar o DIFF para decidir se os hunks de parcelas do c4d são necessários. Resultado dessa prova **[nao verificado]**. `app/ponto/tests/test_feriado_um_juiz_porta.py:396–433` · `app/ponto/services/dia_pago.py:562–575` · `app/folha/porta_export.py:245,457–464`
+
+## 5. Vigia e critério de saída
+
+**Sim.** Para cada data civil de entrada em `resultado.periodos`, `medir` soma HE, intra e trabalhado. Quando HE e intra são positivas, consulta previsto e declarado e acusa se **`HE > max(0, T − previsto − min(S, declarado)) + 1 min`**. O resultado entra na contagem de falhas da porta. A fórmula pode acusar até a dobra já corrigida quando o teto comum fica abaixo de `T − S`. `app/folha/porta_export.py:538–571,693–701`
+
+A volta deve entregar, **no mesmo ato**, a HE100 corrigida no motor e na promoção, e o teto **`max(0, T − S)`** para a dobra no vigia. O RED do vigia precisa rejeitar `HE=T` e aceitar `HE=T−S` com a mesma intra, pela `medir` real e com o colaborador no universo do TXT. Para os dias comuns, a referência segue sendo o teto atual. Se a validação incluir promoção ou cauda após meia-noite, o vigia precisa ler a classificação e o dia já julgados: hoje ele enxerga só `periodos` e agrupa por `_p.entrada.date()`. `ordem_viva_2811_1310.txt:1` · `app/folha/porta_export.py:475–482,538–571` · `app/ponto/calculador/regras.py:410–448`
+
+O pronto é o DIFF da comp. 11 por rubrica no RELATO, limitado aos minutos da obra, e `selo_leitores_no_mesmo_numero --mes 11 --ano 2026` **pós-apply**, com emp2 em zero conforme a ordem e o vigia conferido nas emp2/3/4 conforme o BACKLOG. O `9` da emp4 no selo fornecido é o valor relatado da porta com HE pendente do admin. A contagem isolada desse vigia na emp4 **[nao verificado]**. Sem pouso antes do TXT, a saída registrada para os dois dias é **Pauta DP**. `app/docs/BACKLOG.md:2014` · `app/folha/porta_export.py:693–705` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:218–220` · `ordem_viva_2811_1310.txt:1`
 
 ## 28/11 12:59 · sessao b8bfa6617f2b · PUSH-2811 · verificador · origem=Code
 
@@ -702,364 +773,4 @@ Implementei **Disputas** na ficha completa e o encerramento da disputa inteira p
 
 A checagem estática de sintaxe Python passou. A compilação do template ficou bloqueada porque o ambiente local não disponibilizou `django.template`. Suite, REDs, smoke de clique e efeitos sobre o chamado 40588, a célula 122468 e a folha **[nao verificado]**. [nao verificado]
 
-## 28/11 11:32 · sessao 5209f6acefbe · E4C-F5-INSTANTE · leitura · origem=Code
-
-## 1. Selo `core.observ` com outro import de `core`
-
-As âncoras abaixo têm contagem **1** na a2 reconstruída em memória. `V` e `R` indicam os vereditos na cópia fornecida, na a2 reconstruída e com a cura. A equivalência Git da cópia com `486a1ffc4`, a execução de `486a1ffc4~1`, a suíte Django, o Ruff e a conferência pela sessão estão [nao verificado]. Rodei os métodos selecionados com `unittest.TestCase` e os analisadores reais. Os vermelhos foram `AssertionError`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165` · `app/chamados/tests/test_e4c_f5_c4_red.py:1557–1562` · `app/ruff.toml:4–6`
-
-Em `_dicts_da_trilha`, substitua o bloco `else` de dois versos da a2 pelo trecho abaixo. Um `import core.X` sem alias mantém o vínculo com o pacote `core`. Um alias explícito continua sujeito à regra de religamento. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–109`
-
-```diff
--                else:
-+                elif not (isinstance(n, ast.Import) and not a.asname and a.name.startswith('core.')):
-                     religados.add(nome)
-```
-
-Insira antes de `class SeloEscritorUnicoDoCarimbo(SimpleTestCase):`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:263`
-
-```python
-def _fonte_trilha_com_dois_imports_core(campo):
-    return (
-        'import core.observ\n'
-        'import core.models\n'
-        'def f():\n'
-        f'    core.observ.evento(depois=dict({campo}=None))\n'
-    )
-
-
-```
-
-No par, substitua o fecho do import da a2. `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30`
-
-```diff
-     _dicts_da_trilha,
-+    _fonte_trilha_com_dois_imports_core,
- )
-```
-
-No carimbo, insira antes de `def test_MORDE_dict_em_variavel_defaults_construtor_e_fields_em_variavel(self):`. No par, insira antes de `def test_MORDE_repasse_de_param_na_classe_do_modelo(self):`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:333` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:269`
-
-```python
-    def test_CONTROLE_trilha_com_dois_imports_core(self):
-        self.assertEqual(escritas_do_carimbo(_fonte_trilha_com_dois_imports_core('materializada_em')), [])
-
-```
-
-```python
-    def test_CONTROLE_trilha_com_dois_imports_core(self):
-        self.assertEqual(escritas_do_par(_fonte_trilha_com_dois_imports_core('respondida_em')), [])
-
-```
-
-Nos dois selos, `test_CONTROLE_trilha_com_dois_imports_core` dá **486 V · base V esperada [nao verificado] · a2 R · cura V**. O mutante **M2-core** produz um achado onde cada teste exige `[]`. Original e mutado, contagem **1** na cura. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
-
-```diff
--                elif not (isinstance(n, ast.Import) and not a.asname and a.name.startswith('core.')):
-+                else:
-                     religados.add(nome)
-```
-
-## 2. Ligações em campos `str` nos dois selos
-
-Em `_dicts_da_trilha`, insira imediatamente antes de `    if 'dict' in religados:` da a2. Incluí os três campos `name` de parâmetros de tipo. A imagem da aplicação usa Python 3.13. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112` · `app/Dockerfile:1`
-
-```python
-        elif isinstance(n, (ast.ExceptHandler, ast.MatchAs, ast.MatchStar)) and n.name is not None:
-            religados.add(n.name)
-        elif isinstance(n, ast.MatchMapping) and n.rest is not None:
-            religados.add(n.rest)
-        elif isinstance(n, (ast.Global, ast.Nonlocal)):
-            religados.update(n.names)
-        elif isinstance(n, (ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)):
-            religados.add(n.name)
-```
-
-Insira antes de `def _fonte_trilha_com_dois_imports_core(campo):`, introduzido no item 1. No par, insira `    _casos_trilha_ligacao_em_campo_str,` imediatamente depois de `    _casos_trilha_evento_religado,` do import da a2. O `nonlocal` usa um import legítimo na função externa, de modo que retirar a regra de `Nonlocal` derruba o teste mesmo com a regra de parâmetros ativa. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,263` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:30`
-
-```python
-def _casos_trilha_ligacao_em_campo_str(campo):
-    for nome in ('evento', 'dict'):
-        inicio = (
-            'from core.observ import evento\n'
-            f'def g():\n    evento(depois=dict({campo}=None))\n'
-        )
-        chamada = f'evento(depois=dict({campo}=None))'
-        casos = (
-            ('ExceptHandler.name', f'def f():\n    try:\n        pass\n    except E as {nome}:\n', 8, '        '),
-            ('MatchAs.name', f'def f(x):\n    match x:\n        case {nome}:\n', 7, '            '),
-            ('MatchStar.name', f'def f(x):\n    match x:\n        case [*{nome}]:\n', 7, '            '),
-            ('MatchMapping.rest', f'def f(x):\n    match x:\n        case {{**{nome}}}:\n', 7, '            '),
-            ('Global.names', f'def f():\n    global {nome}\n', 6, '    '),
-            ('Nonlocal.names',
-             f'def f():\n    from core.observ import evento as {nome}\n'
-             f'    def interna():\n        nonlocal {nome}\n', 8, '        '),
-            ('TypeVar.name', f'def f[{nome}]():\n', 5, '    '),
-            ('ParamSpec.name', f'def f[**{nome}]():\n', 5, '    '),
-            ('TypeVarTuple.name', f'def f[*{nome}]():\n', 5, '    '),
-        )
-        for caso, corpo, linha, recuo in casos:
-            yield caso, nome, inicio + corpo + recuo + chamada + '\n', linha
-
-
-```
-
-Insira os métodos nas mesmas âncoras de classe do item 1, carimbo e par respectivamente. Cada teste exige o achado no sítio afetado e em `g`, antes do religamento. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:222–225,333` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165,269`
-
-```python
-    def test_RED_trilha_acusa_ligacao_em_campo_str(self):
-        for caso, nome, fonte, linha in _casos_trilha_ligacao_em_campo_str('materializada_em'):
-            achados = escritas_do_carimbo(fonte)
-            alvo = 'f.interna' if caso == 'Nonlocal.names' else 'f'
-            for funcao, numero in ((alvo, linha), ('g', 3)):
-                with self.subTest(caso=caso, nome=nome, funcao=funcao):
-                    self.assertIn((funcao, numero, 'dict(materializada_em=)'), achados)
-
-```
-
-```python
-    def test_RED_trilha_acusa_ligacao_em_campo_str(self):
-        for caso, nome, fonte, linha in _casos_trilha_ligacao_em_campo_str('respondida_em'):
-            achados = escritas_do_par(fonte)
-            alvo = 'f.interna' if caso == 'Nonlocal.names' else 'f'
-            for funcao, numero in ((alvo, linha), ('g', 3)):
-                with self.subTest(caso=caso, nome=nome, funcao=funcao):
-                    self.assertIn((funcao, numero, 'dict(respondida_em=)'), achados)
-
-```
-
-Nos dois selos, `test_RED_trilha_acusa_ligacao_em_campo_str` dá **486 R · base R esperada [nao verificado] · a2 R · cura V**. Cada mutante abaixo tem original de contagem **1** na cura e derruba quatro asserções por selo. `\n` indica uma quebra literal. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,222–225` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
-
-| Mutante | Original exato | Mutado exato |
-|---|---|---|
-| `ExceptHandler.name` | `(ast.ExceptHandler, ast.MatchAs, ast.MatchStar)` | `(ast.MatchAs, ast.MatchStar)` |
-| `MatchAs.name` | `(ast.ExceptHandler, ast.MatchAs, ast.MatchStar)` | `(ast.ExceptHandler, ast.MatchStar)` |
-| `MatchStar.name` | `(ast.ExceptHandler, ast.MatchAs, ast.MatchStar)` | `(ast.ExceptHandler, ast.MatchAs)` |
-| `MatchMapping.rest` | `"        elif isinstance(n, ast.MatchMapping) and n.rest is not None:\n            religados.add(n.rest)\n"` | `""` |
-| `Global.names` | `(ast.Global, ast.Nonlocal)` | `ast.Nonlocal` |
-| `Nonlocal.names` | `(ast.Global, ast.Nonlocal)` | `ast.Global` |
-| `TypeVar.name` | `(ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)` | `(ast.ParamSpec, ast.TypeVarTuple)` |
-| `ParamSpec.name` | `(ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)` | `(ast.TypeVar, ast.TypeVarTuple)` |
-| `TypeVarTuple.name` | `(ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)` | `(ast.TypeVar, ast.ParamSpec)` |
-
-Atualize os dois mutantes da a2 cujas âncoras mudaram. `M2-import-global` mata `test_RED_trilha_acusa_import_local_homonimo` e `M2-sem-parametro` mata esse teste e `test_RED_trilha_acusa_dict_religado`. Em ambos os selos, esses dois testes dão **486 R · base R esperada [nao verificado] · a2 V · cura V**. `M2-grafia-dict` conserva o bloco exato da a2 e mata também o novo RED nos casos de `dict`. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,222–225` · `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–165`
-
-```diff
-@@ M2-import-global
-                 elif not (isinstance(n, ast.Import) and not a.asname and a.name.startswith('core.')):
--                    religados.add(nome)
-+                    pass
-```
-
-`M2-sem-parametro` troca `"        elif isinstance(n, ast.arg):\n            religados.add(n.arg)\n"` por `""`, com contagem **1**. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:94–99`
-
-## 3. Censo com uma tabela de ligações e registro de projeção não resolvida
-
-Cada escopo passa a ter uma tabela `ligacoes`. A coleta registra uma vez os vínculos sintáticos. A inferência legada de modelo escreve a origem nas mesmas entradas, e a projeção lê os vínculos lexicais dessas entradas. A resolução segue atribuições diretas, aliases e desempacotamento literal. Para `for` e `with`, a ligação local encobre a externa e o valor projetado fica indeterminado. Projeção indeterminada gera `save` com `entidade=None`, no balde existente, e `projecao=?` na expressão. Isso inclui `projecao=None` explícita. O delta de produção acrescenta zero `except`. `app/core/censo_escritas.py:200–217,300–377,421–485,561–565` · `app/chamados/models.py:4789–4803`
-
-Em `app/core/censo_escritas.py`, insira `from collections import deque` imediatamente depois de `import os`. Insira o bloco abaixo imediatamente antes de `class _Varredor(ast.NodeVisitor):`. Cada âncora tem contagem **1**. `app/core/censo_escritas.py:58–59,199–211`
-
-```python
-_NOS_DE_ESCOPO = (
-    ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda,
-    ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp,
-)
-
-
-class _Ligacao:
-    def __init__(self):
-        self.vinculos = []  # (ordem, local, valor da projecao, evidencia do modelo)
-        self.campos = set()
-        self.origem = None
-
-
-```
-
-No `__init__` de `_Varredor`, substitua o intervalo de `        self._funcao = []` até antes de `        # E3-CENSO-APELIDO` por esta linha. Substitua depois o intervalo de `    # -- escopos` até antes de `    def visit_ClassDef(self, no):` pelo bloco completo. Cada delimitador tem contagem **1**. `app/core/censo_escritas.py:209–217,300–319`
-
-```python
-        self._escopos = []  # pilha de (no do escopo, ligacoes)
-```
-
-```python
-    # -- escopos
-    def _ligar_alvo(self, ligacoes, alvo, valor, origem, local, ordem):
-        if isinstance(alvo, ast.Name):
-            ligacoes.setdefault(alvo.id, _Ligacao()).vinculos.append((ordem, local, valor, origem))
-        elif isinstance(alvo, ast.Starred):
-            self._ligar_alvo(ligacoes, alvo.value, None, None, local, ordem)
-        elif isinstance(alvo, (ast.Tuple, ast.List)):
-            elts = ()
-            if (isinstance(valor, (ast.Tuple, ast.List)) and len(alvo.elts) == len(valor.elts)
-                    and not any(isinstance(e, ast.Starred) for e in (*alvo.elts, *valor.elts))):
-                elts = valor.elts
-            for i, item in enumerate(alvo.elts):
-                evid = origem if i == 0 and isinstance(alvo, ast.Tuple) and isinstance(item, ast.Name) else None
-                self._ligar_alvo(ligacoes, item, elts[i] if elts else None, evid, local, ordem)
-
-    def _colher_ligacoes(self, no, inferir):
-        # A origem do modelo usa a ordem em largura e pode ler escopos filhos,
-        # como antes. A tupla usa apenas os vinculos lexicais do escopo.
-        ligacoes = {}
-        fila = deque((sub, True, True) for sub in ast.iter_child_nodes(no))
-        ordem = 0
-        while fila:
-            sub, local, direta = fila.popleft()
-            ordem += 1
-            if not local and not inferir:
-                continue
-            filhos_locais = local and not isinstance(sub, _NOS_DE_ESCOPO)
-            fila.extend((filho, filhos_locais, direta and isinstance(sub, ast.Expr))
-                        for filho in ast.iter_child_nodes(sub))
-            alvos, valor, origem = (), None, None
-            if isinstance(sub, ast.Assign):
-                alvos, valor, origem = sub.targets, sub.value, sub.value
-                for alvo in alvos:
-                    if (inferir and isinstance(alvo, ast.Attribute) and isinstance(alvo.value, ast.Name)
-                            and alvo.attr in self.unicos):
-                        ligacoes.setdefault(alvo.value.id, _Ligacao()).campos.add(self.unicos[alvo.attr])
-            elif isinstance(sub, ast.AnnAssign) and sub.value is None:
-                if local and isinstance(sub.target, ast.Name):
-                    self._ligar_alvo(ligacoes, sub.target, sub, None, local, ordem)
-            elif isinstance(sub, (ast.AnnAssign, ast.NamedExpr)):
-                alvos, valor, origem = (sub.target,), sub.value, sub.value
-            elif isinstance(sub, ast.AugAssign):
-                alvos, origem = (sub.target,), sub.value
-            elif isinstance(sub, (ast.For, ast.AsyncFor, ast.comprehension)):
-                alvos, origem = (sub.target,), sub.iter
-            elif isinstance(sub, ast.withitem) and sub.optional_vars is not None:
-                alvos, origem = (sub.optional_vars,), sub.context_expr
-            elif isinstance(sub, (ast.Delete, ast.TypeAlias)):
-                alvos = sub.targets if isinstance(sub, ast.Delete) else (sub.name,)
-            for alvo in alvos:
-                self._ligar_alvo(ligacoes, alvo, valor if direta else None, origem, local, ordem)
-            if not local:
-                continue
-            nomes = ()
-            if isinstance(sub, (ast.Import, ast.ImportFrom)):
-                nomes = (a.asname or a.name.split('.')[0] for a in sub.names)
-            elif isinstance(sub, (ast.Global, ast.Nonlocal)):
-                nomes = sub.names
-            elif isinstance(sub, ast.arg):
-                nomes = (sub.arg,)
-            elif isinstance(sub, ast.MatchMapping):
-                nomes = (sub.rest,) if sub.rest is not None else ()
-            elif isinstance(sub, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.ExceptHandler,
-                                  ast.MatchAs, ast.MatchStar, ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)):
-                nomes = (sub.name,) if sub.name is not None else ()
-            for nome in nomes:
-                ligacoes.setdefault(nome, _Ligacao()).vinculos.append((ordem, True, None, None))
-        return ligacoes
-
-    def _inferir_amarras(self, ligacoes):
-        # Ponto fixo sobre os mesmos vinculos: qs = X.objects.filter(); for b in qs: b.save().
-        evidencias = sorted(
-            ((ordem, nome, valor) for nome, ligacao in ligacoes.items()
-             for ordem, _, _, valor in ligacao.vinculos if valor is not None),
-            key=lambda item: item[0],
-        )
-        mudou = True
-        while mudou:
-            mudou = False
-            for _, nome, valor in evidencias:
-                ligacao = ligacoes[nome]
-                if ligacao.origem:
-                    continue
-                origem = self._origem(valor)
-                if not origem and isinstance(valor, ast.Name) and valor.id in ligacoes:
-                    origem = ligacoes[valor.id].origem
-                    origem = None if origem == '__nova__' else origem
-                if origem:
-                    ligacao.origem = origem
-                    mudou = True
-        for ligacao in ligacoes.values():
-            if not ligacao.origem and len(ligacao.campos) == 1:
-                ligacao.origem = ('campo', next(iter(ligacao.campos)))
-
-    def _visitar_escopo(self, no, inferir=False):
-        ligacoes = self._colher_ligacoes(no, inferir)
-        if inferir:
-            self._inferir_amarras(ligacoes)
-        self._escopos.append((no, ligacoes))
-        self.generic_visit(no)
-        self._escopos.pop()
-
-    visit_Module = visit_Lambda = _visitar_escopo
-    visit_ListComp = visit_SetComp = visit_DictComp = visit_GeneratorExp = _visitar_escopo
-
-```
-
-Em `visit_ClassDef`, aplique a primeira troca abaixo. Em `_visit_funcao`, substitua o intervalo de `        self._imports_locais.append(locais)` até antes de `        self._imports_locais.pop()` pelas duas linhas indicadas. Aplique também as trocas em `_no_registrar_da_decisao` e `_variavel`. Cada bloco ou delimitador tem contagem **1**. `app/core/censo_escritas.py:315–377,435–440,460–474`
-
-```diff
-@@ visit_ClassDef
--        self._visitar_escopo_da_projecao(no)
-+        self._visitar_escopo(no)
-         self._classe.pop()
-@@ _no_registrar_da_decisao
--        if len(self._escopos_da_projecao) != 3:
-+        if len(self._escopos) != 3:
-             return False
--        _, (classe, _), (metodo, _) = self._escopos_da_projecao
-+        _, (classe, _), (metodo, _) = self._escopos
-@@ _variavel
--            for amarras in reversed(self._funcao):
--                origem = amarras.get(rec.id)
-+            for _, ligacoes in reversed(self._escopos):
-+                ligacao = ligacoes.get(rec.id)
-+                origem = ligacao.origem if ligacao is not None else None
-```
-
-```python
-        self._imports_locais.append(locais)
-        self._visitar_escopo(no, inferir=True)
-```
-
-Substitua o intervalo de `    def _projecao(self, no, valor):` até antes de `        inst, campos = valor.elts` por este bloco. Cada delimitador tem contagem **1**. `app/core/censo_escritas.py:442–454`
-
-```python
-    def _valor_da_projecao(self, valor):
-        limite = len(self._escopos) - 1
-        while isinstance(valor, (ast.Name, ast.NamedExpr)):
-            if isinstance(valor, ast.NamedExpr):
-                valor = valor.value
-                continue
-            for i in range(limite, -1, -1):
-                escopo, ligacoes = self._escopos[i]
-                if isinstance(escopo, ast.ClassDef) and i != limite:
-                    continue
-                ligacao = ligacoes.get(valor.id)
-                if ligacao is not None:
-                    locais = [v for _, local, v, _ in ligacao.vinculos if local]
-                    if locais:
-                        break
-            else:
-                return None
-            locais = [v for v in locais if not isinstance(v, ast.AnnAssign)]
-            if len(locais) != 1 or locais[0] is None:
-                return None
-            ligado = locais[0]
-            if (ligado.end_lineno, ligado.end_col_offset) > (valor.lineno, valor.col_offset):
-                return None
-            valor, limite = ligado, i
-        return valor
-
-    def _projecao(self, no, valor):
-        """`projecao=(inst, campos)` = `inst.save(update_fields=campos)` neste sitio (`ESCRITA_POR_PROJECAO`)."""
-        valor = self._valor_da_projecao(valor)
-        if (not isinstance(valor, ast.Tuple) or len(valor.elts) != 2
-                or any(isinstance(e, ast.Starred) for e in valor.elts)):
-            self._anotar(no, None, 'save', '%s(projecao=?) [projecao]' % _texto(no.func))
-            return
-```
-
-Insira os dois REDs em `CensoLeAProjecaoTest`, antes de `    def test_os_dois_saves_da_porta_ficam_visiveis(self):`, contagem **1**. `for` e `with` incluem uma tupla externa válida para que apagar a ligação local produza uma classificação errada e derrube a asserção. `app/chamados/tests/test_e4c_f5_c4_red.py:1557–1562,1576` · `app/core/censo_escritas.py:308–313,333–356,442–454`
-
-```python
-    def test_RED_projecao_resolve_ligacoes_lexicais(self):
-        inicio = 'from chamados.models import DecisaoPergunta as DP\n'
-        tupla = "(p, ['respon
-
-[truncado em 20000 de 29418 caracteres]
-
-_8923 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8924 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
