@@ -1,7 +1,77 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 10:11** · publicado em **28/11/2026 10:14** (UTC-3)
+> Ultima resposta processada: **28/11/2026 10:20** · publicado em **28/11/2026 10:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 10:20 · sessao 1cfdeddb2690 · E4C-F5-INSTANTE · construtor · origem=Code
+
+A cura ficou em `app/core/censo_escritas.py`. O censo resolve `projecao=proj` quando `proj` recebeu uma tupla de dois elementos por atribuição simples anterior no mesmo escopo. O achado usa a linha da chamada e a mesma inferência da tupla literal. `DP._salvar_a_projecao(...)` gera um `save` de `PerguntaDisputa` fora de `DecisaoPergunta.registrar`, inclusive em função avulsa chamada `registrar`. `DP` é resolvido pela tabela de símbolos existente. `app/core/censo_escritas.py:221`, `app/core/censo_escritas.py:301`, `app/core/censo_escritas.py:422`, `app/core/censo_escritas.py:435`, `app/core/censo_escritas.py:442`
+
+**Leitores e medição**
+
+- O comando `censo_escritas` usa `entidade` e `arquivo` para filtrar e `expr` para exibir. A `tabela` também lê `op` para contar `delete`. Na cópia, o total ficou em **543 → 543**, com **137 → 137** sem entidade e **68 → 68** na família `chamado`. A comparação dos achados completos deu zero adições e zero remoções. `app/core/management/commands/censo_escritas.py:23`, `app/core/censo_escritas.py:525`, `app/core/censo_escritas.py:561`
+- O gate de chamados filtra por `entidade` e `arquivo` e usa `expr` no diagnóstico. A contagem de sítios fora da porta ficou em **0 → 0**. Os dois `save()` físicos da porta continuaram visíveis com `entidade=None`. `app/chamados/tests/test_chokepoint_chamado_gate.py:316`, `app/chamados/tests/test_chokepoint_chamado_gate.py:349`, `app/chamados/models.py:4784`, `app/chamados/models.py:4802`
+
+**REDs e mutantes para o Opus**
+
+| Caso | Asserção | Mutante |
+|---|---|---|
+| Projeção por variável com `as DP` | Exatamente um `(4, 'PerguntaDisputa', 'save')` na chamada. Manter os controles da tupla literal e do `registrar` sem projeção. | Voltar a exigir `ast.Tuple` diretamente no argumento. A lista fica vazia. `app/core/censo_escritas.py:427`, `app/core/censo_escritas.py:442`, `app/chamados/tests/test_e4c_f5_c4_red.py:1564` |
+| Helper direto em função avulsa `registrar` | Exatamente um `(3, 'PerguntaDisputa', 'save')` para `DP._salvar_a_projecao(p, ['respondida_em'])`. | Omitir o reconhecimento do helper ou dispensar pelo nome `registrar` sozinho. Em ambos os casos, a lista fica vazia. `app/core/censo_escritas.py:430`, `app/core/censo_escritas.py:435` |
+| Controle dos dois saves da porta | Conferir todos os achados `save` da classe, com ou sem entidade. Exigir exatamente `instancia.save()` e `projecao[0].save()`, ambos com `entidade=None`. | Reclassificar um dos saves físicos ou contar a delegação interna como terceiro `save`. A igualdade da lista falha. `app/chamados/models.py:4784`, `app/chamados/models.py:4802`, `app/chamados/models.py:4824` |
+
+**Script para o Code**
+
+Execute a partir de `app/`. O script compara o censo da base com o da cópia atual e aplica o filtro do gate, cuja allowlist é vazia. `app/core/censo_escritas.py:525`, `app/chamados/tests/test_chokepoint_chamado_gate.py:56`, `app/chamados/tests/test_chokepoint_chamado_gate.py:316`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from collections import Counter
+from subprocess import check_output
+from core import censo_escritas as atual, portas
+
+caminho = 'app/core/censo_escritas.py'
+ref = '63680b06e97b766895151a423f771215528cd721'
+base = {}
+fonte = check_output(['git', 'show', f'{ref}:{caminho}'], text=True)
+exec(compile(fonte, caminho, 'exec'), base)
+
+def medir(rotulo, varrer, tabela):
+    achados = varrer('.')
+    familias, _, numeros = tabela(achados)
+    gate = Counter(x['entidade'] for x in achados
+                   if x['entidade'] and portas.familia_de(x['entidade']) == 'chamado'
+                   and x['arquivo'] not in (portas.porta_de(x['entidade']) or ()))
+    campos = ('arquivo', 'linha', 'entidade', 'op', 'expr')
+    print(rotulo, len(achados), numeros, familias['chamado']['sitios'], dict(gate))
+    return Counter(tuple(x[k] for k in campos) for x in achados)
+
+antes = medir('antes', base['varrer_arvore'], base['tabela'])
+depois = medir('depois', atual.varrer_arvore, atual.tabela)
+print('removidos', antes - depois, 'adicionados', depois - antes)
+PY
+```
+
+Suite, execução dos mutantes e produção [nao verificado]. [nao verificado]
+
+## 28/11 10:20 · sessao 292486b76990 · FDS-FERIAS-COM-BATIDA-PORTA · construtor · origem=Code
+
+Alterei apenas `folha/retrato_folha.py`. O Calendário abre um link por dia de turno publicado. **Na lavra atual de férias, falta `acoes[].dia_do_turno`**, pois a linha recebe `acoes=[]` e guarda as datas civis em `datas`. Nesse caso, o drawer oferece apenas a correção do lançamento de férias. [retrato_folha.py:1049](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1049) · [retrato_folha.py:1302](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1302) · [retrato_folha.py:1316](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1316) · [fora_da_folha.py:156](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:156)
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `acoes[].dia_do_turno` | A tarefa recebe o dia do turno, `porta_da_tarefa` o publica em `resolver_dia`, `fora_da_folha` copia em ISO e `montar_linhas` leva as ações ao retrato. [tarefa_do_dia.py:214](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/chamados/services/tarefa_do_dia.py:214) · [tarefa_do_dia.py:820](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/chamados/services/tarefa_do_dia.py:820) · [fora_da_folha.py:231](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:231) · [retrato_folha.py:1316](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1316) | Férias e Resolver dia usam a mesma função de leitura do campo. Cada botão de férias mostra a data ISO do turno. [retrato_folha.py:1042](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1042) · [retrato_folha.py:1087](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1087) · [retrato_folha.py:1111](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1111) |
+| `motivo` e `tipo` | `classificar_export` escreve o motivo. `montar_linhas` o copia e grava o tipo calculado por `_tipo_cru` via `TIPO_POR_MOTIVO`. [export.py:894](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/export.py:894) · [retrato_folha.py:252](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:252) · [retrato_folha.py:1308](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1308) · [retrato_folha.py:1317](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1317) | `tipo_da_linha` lê o tipo gravado e consulta o motivo quando precisa recuperar o tipo. As opções de férias são selecionadas pelo tipo, com a correção em `PORTA_DO_TIPO['ferias']`. Atualizei o comentário e a docstring. [retrato_folha.py:530](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:530) · [retrato_folha.py:990](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:990) · [retrato_folha.py:1015](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1015) · [retrato_folha.py:1072](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1072) |
+| Texto de “O que destrava” | `o_que_fazer` compõe o texto com os rótulos das mesmas opções usadas pelos botões. Para os demais tipos, lê `DESTRAVA` pelo fio. [retrato_folha.py:1146](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1146) · [retrato_folha.py:1170](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1170) · [fora_da_folha.py:47](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:47) | O painel passa texto e portas ao template. `o_que_segura` também lê `portas_da_linha` com uma linha própria de tipo `falta`. [colaboradores/views.py:1006](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/colaboradores/views.py:1006) · [_retrato_o_que_fazer.html:33](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/templates/folha/_retrato_o_que_fazer.html:33) · [_retrato_o_que_fazer.html:73](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/templates/folha/_retrato_o_que_fazer.html:73) · [fora_da_folha.py:297](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/fora_da_folha.py:297) |
+
+**Casos RED e mutantes para o Opus**
+
+1. **Virada no primeiro dia de férias.** Batida às 07h de `01/11`, com `dia_do_turno` publicado em `31/10`. Exigir `modo=custom`, ambos os limites em `31/10`, `mes=10` e a porta de Férias. Repetir com `acoes=[]` e exigir somente Férias. Mutante a matar: usar `datas[0]` para montar o link. [retrato_folha.py:1060](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1060) · [retrato_folha.py:1091](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1091) [nao verificado]
+2. **Mais de um dia.** Publicar dois dias de turno distintos e repetir um deles. Exigir dois links de Calendário, cada um com o próprio dia, e uma porta de Férias. Mutantes a matar: usar só a primeira ação ou emitir um link repetido. [retrato_folha.py:1060](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1060)
+3. **Drawer e portas.** Com turno publicado, exigir as duas opções no texto. Sem turno publicado, exigir só a correção de férias. Alterar o rótulo de `PORTA_DO_TIPO['ferias']` durante o teste e exigir a alteração no botão e no texto. Mutantes a matar: ler a frase do fio admin em férias ou manter uma frase independente dos botões. [retrato_folha.py:1028](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1028) · [retrato_folha.py:1170](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1170) [nao verificado]
+4. **Controle de tipo.** Verificar uma linha de `falta` com fio admin e `acoes=[]`, que conserva “Validar no fio” e a frase de `DESTRAVA['admin']`. Verificar também férias sem `tipo` gravado, recuperado pelo mapa, e férias com `tipo='ferias'` gravado e outro motivo na fixture. Mutantes a matar: decidir as portas olhando diretamente o motivo ou aplicar as portas de férias a `falta`. [retrato_folha.py:530](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:530) · [retrato_folha.py:1055](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1055) · [retrato_folha.py:1123](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1123)
+
+`git diff --check` e a compilação em memória passaram. Os testes existentes ainda esperam um link pela data civil e precisam da revisão do Opus. Suíte e produção [nao verificado]. [retrato_folha.py:1072](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/retrato_folha.py:1072) · [test_retrato_portas_ferias_com_batida.py:60](/home/ronald/wt-codex-fds-ferias-com-batida-porta-101539/app/folha/tests/test_retrato_portas_ferias_com_batida.py:60) [nao verificado]
 
 ## 28/11 10:11 · sessao 6e7e9bd87fa6 · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
 
@@ -448,43 +518,4 @@ As portas humana e automática gravam o par de resposta, e a porta pela trilha c
 
 O anexo registra 106 testes verdes no recorte e 1.086 em folha. Reexecução da suíte Django, resultado da suíte completa com as variantes vizinhas, gravação no banco e efeito em produção [nao verificado]. `mutantes.md:10` [nao verificado]
 
-## 28/11 09:05 · sessao 500bcef5f328 · - · - · origem=Ronald (tmux)
-
-**REPROVADO.** Os 25 blobs da cópia conferem com os destinos do `c3.diff` fornecido. Hash do commit e do pai, execução Django, concorrência real e produção [nao verificado]. [nao verificado]
-
-1. **Decisão antes da trava.** `criar` lê o cadastro em consulta comum antes do atomic do INSERT. `transicionar` decide pela instância e lê o cadastro antes da trava do escritor. A porta de transição também deixa de consultar `admin_sem_fato_novo`, guarda já usada por `reabrir`. `app/chamados/models.py:146–159,224,305–327,1159–1161,1197–1202,1312–1325,1487–1492`.
-2. **Dedup anterior à porta.** `abrir` trava o cadastro e devolve igual antes de perguntar ao juiz, inclusive quando a tentativa de renascer foi recusada. O DP fecha sua cópia específica do dedup, mas justificativa API usa chamado vivo de turno sem chamar a porta, e emissão agrega em disputa aberta antes de chegar a `abrir`. `app/chamados/models.py:988–1017`; `app/chamados/services/abertura.py:166–176`; `app/api/views.py:1974–1985,2006–2023`; `app/chamados/services/disputa_emissao.py:539–582,684–692`.
-3. **Dia civil corrigido na view, relógio duplicado no cron.** `TIME_ZONE` é São Paulo. A view injeta `hoje` no juiz e no executor. O cron lê uma vez para filtrar e executar, mas o juiz faz uma segunda leitura local porque o cron omite `hoje`. A cascata também chama C6 sem instante e o juiz pode ler novamente `timezone.localdate()` para vitalidade. `app/config/settings/base.py:93–95`; `app/colaboradores/views.py:1472–1476`; `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37–57`; `app/colaboradores/services/desligamento.py:40–47,241–250`; `app/chamados/juizes.py:633–642,1572–1579`.
-4. **Cópias do juiz de desligamento.** Juiz registrado único `esta_desligado`, só `situacao`. Adesão passou a delegar. As comparações cruas ainda decidem emissão no cartório e vigia, impedem vínculo e filtram permissão de reativar. `app/core/juizes.py:283`; `app/colaboradores/services/desligamento.py:28–43`; `app/chamados/services/adesao.py:68`; `app/ponto/services/cartorio.py:1803,1868`; `app/ponto/services/vigia_de_hora.py:166`; `app/colaboradores/services/vinculo.py:91`; `app/colaboradores/views.py:1449`.
-5. **Estado e motivo sobrepostos.** `cascade` representa `ENCERRAR`, produzido por regularização, substituição de aceite e reconciliador, além de desligamento. Adesão e renascimento o tratam como veto de desligamento. A nova testemunha marca `recusada_desligamento`, mas o histórico ainda converte `materializada_em` em “o fato ... foi registrado” sem consultar a via. `app/chamados/catalogo/motor.py:88–95`; `app/chamados/models.py:1082,1106,1882`; `app/chamados/services/regularizacao_ext.py:206`; `app/colaboradores/services/vinculo.py:429`; `app/chamados/reconciliador.py:543`; `app/chamados/services/adesao.py:94`; `app/chamados/services/materializacao.py:869,893`; `app/chamados/services/historico.py:96–115`.
-6. **Segundo escritor literal.** A reversão chama `QuerySet.update` em `ChamadoColaborador`, `DisputaSupervisao` e `PerguntaDisputa`, muda os campos canônicos sem as portas e é segundo produtor de `estado_chamado`. A própria cascata também replica a decisão de pergun­ta muda/`SILENCIO`/evento da porta `Disputa.fechar`, embora ambas usem `fechar_por_desligamento`. `app/chamados/management/commands/reparar_passivo_desligamento.py:28–38,239–250`; `app/docs/LEIS.md:65`; `app/colaboradores/services/desligamento.py:211–233`; `app/chamados/models.py:2281–2309,3490–3499`.
-7. **Selo C12 reprovado por execução AST em memória.** O censo devolve exatamente os três sítios reais `1593`, `1882`, `1902`. O selo espera `1587`, `1876`, `1896` e usa `n.lineno`. `app/chamados/tests/e4b_c12_ast.py:27–29,223–226`; `app/chamados/models.py:1593,1882,1902`.
-8. **Reabertura administrativa contorna o veredito se o chamado já está vivo.** Para chamados encerrados, o `True` assinado precede a disputa. Para vivos, fecha-se a seleção e passa direto a reabrir a disputa, consumir quota e abrir pergunta, sem reler desligamento nem consultar `ch.reabrir`. `app/chamados/services/acoes_disputa.py:298–319`; `app/chamados/models.py:2525–2537`.
-
-**Censo dos campos**
-
-- Cadastro. Agendamento, efetivação e reativação escrevem situação/data/motivo pelas portas de cadastro. Admissão escreve estado inicial e ponto escreve afastamento/reversão pela mesma família. Juiz, chamado, I5, disparo, cadastro × realidade e folha leem situação. Cron, vínculo histórico, folha e supra-juiz também leem a data civil, com final de janela e vigência próprios. `app/colaboradores/services/desligamento.py:111–153,262–267`; `app/colaboradores/services/colaborador.py:126–160,164–206`; `app/colaboradores/views.py:1204–1227`; `app/ponto/views.py:2589`; `app/ponto/management/commands/reverter_situacao_afastado.py:73`; `app/chamados/views.py:569–574`; `app/chamados/management/commands/auditar_invariantes_chamados.py:660`; `app/chamados/management/commands/disparar_perguntas_competencia.py:61`; `app/escala/services/cadastro_realidade.py:171`; `app/folha/export.py:54–60,1096,1216,1235,1250`; `app/folha/fora_da_folha.py:172`; `app/folha/retrato_folha.py:1286`; `app/ponto/supra_juiz.py:155–207`.
-- Chamado. `criar`/`abrir` escrevem estado inicial. `_gravar_estado` escreve o trio pelas transições, reconciliação, cancelamento, análise, reabertura e dois fechamentos. Migrations 0038/0039 escrevem legado, e a reversão atual faz UPDATE literal. Motor, gate de fato novo, arquivo, emissão, adesão, justificativa, painel, verbos e I5/I16 leem os campos. `app/chamados/models.py:253–278,327,488,694,874,892,1031–1064,1198,1487–1492,1593,1882,1902`; `app/chamados/migrations/0038_a3_registrado_backfill.py:10`; `app/chamados/migrations/0039_a3_via_backfill.py:24–34`; `app/chamados/views_arquivar.py:64,163–164`; `app/chamados/services/disputa_emissao.py:1996,2033`; `app/chamados/services/adesao.py:93–94`; `app/ponto/services/justificativa.py:372–377`; `app/chamados/services/painel.py:65`; `app/chamados/services/verbos.py:261`.
-- Disputa. `fechar`, `reabrir_admin` e `reabrir_sistema` persistem fecho. Só `reabrir_admin` incrementa a quota. `reabrir_por_colab` mantém o fecho e escreve no questionário. Leem sinais, formulário, ação, emissores, vigia e passivo. `app/chamados/models.py:2305–2313,2525–2556,2629`; `app/chamados/signals.py:29–45,136–175`; `app/chamados/services/fio.py:160,377`; `app/chamados/services/acoes_disputa.py:301–318,348`; `app/chamados/services/disputa_emissao.py:540`; `app/chamados/services/vigia_fio.py:743`; `app/chamados/management/commands/reparar_passivo_desligamento.py:31–37,244`.
-- Pergunta. `_escrever_carimbo` prepara o trio, `carimbar` e `carimbar_identidade` persistem, descarimbos limpam e `encerrar_por_fato_no_espelho`/relavra mudam só via. C6, estado, testemunha, histórico, I5 informativo, filas, materializador, reconciliador, sinais e passivo leem. `app/chamados/models.py:2130–2134,3480–3499,3557–3561,3641–3643,3680–3688,3701–3710,3787–3799`; `app/chamados/services/relavra_via.py:118–128`; `app/chamados/juizes.py:729,1490–1518`; `app/chamados/services/materializacao.py:893`; `app/chamados/services/historico.py:104`; `app/chamados/services/acoes_chamado.py:418–425`; `app/chamados/reconciliador.py:369,1287–1297`; `app/chamados/signals.py:243,273`.
-- Trilha. `_gravar_estado` produz antes/depois/via/motivo/ator; múltiplos gates produzem verbos de recusa. `core.observ.evento` escreve o log, captura PK explícito antes do usuário da requisição e persiste o snapshot de autoria. Reversão escreve evento compensatório. I5 e passivo leem última travessia, histórico e vigia leem as transições. Para legado sem snapshot, autoria após `SET_NULL` continua indisponível por código. `app/chamados/models.py:317–327,1270–1274,1335–1343,1547–1575`; `app/core/observ.py:105–145`; `app/core/models.py:295–307`; `app/chamados/services/trilha_reabertura.py:5–22`; `app/chamados/management/commands/auditar_invariantes_chamados.py:673–687`; `app/chamados/management/commands/reparar_passivo_desligamento.py:74–86,245–250`; `app/chamados/services/historico.py:86–95`; `app/chamados/services/vigia_loop.py:29,114`.
-
-## 28/11 09:04 · sessao 69afeb8a8b3c · - · - · origem=Ronald (tmux)
-
-**REPROVADO** nos caminhos de cascata, passivo, relógio e selo.
-
-1. A reversão grava chamado, disputa e pergunta diretamente por `QuerySet.update`, fora dos escritores de estado. O arquivo anterior à primeira escrita é uma pré-imagem, e `--reverter` exige também a pós-imagem. A reversão preserva notas e atos `SILENCIO`, que têm leitor funcional na tarefa do dia. `app/chamados/management/commands/reparar_passivo_desligamento.py:28`, `:198`, `:211`, `:244` · `app/colaboradores/services/desligamento.py:222`, `:236` · `app/chamados/services/tarefa_do_dia.py:156`, `:182`, `:340`.
-
-2. O apply exclui diretamente os I5f que consegue classificar e seus fios, listando `INCOMPLETO`. Há lacuna para assinatura anterior à c3 cuja FK já virou nula. O signal do outbox está calado, mas o escritor de `SILENCIO` emite `EventoCelula` por outro caminho. O consumidor percorre os vivos do colaborador sem a exclusão I5f do plano, inclusive na rejunção e na retratação. Efeitos em produção [nao verificado]. `app/chamados/management/commands/reparar_passivo_desligamento.py:74`, `:92`, `:109`, `:181` · `app/chamados/services/trilha_reabertura.py:19` · `app/core/models.py:295` · `app/chamados/signals.py:272` · `app/chamados/models.py:3737`, `:4751` · `app/ponto/portas/celula.py:991` · `app/chamados/reconciliador.py:1498`, `:1514`, `:1608` · `app/chamados/rejuncao.py:60`, `:103`.
-
-3. Na efetivação, a lista de perguntas travadas vem das disputas candidatas. O fecho do chamado pode depois relavrar perguntas vinculadas pelo destino em outras disputas fechadas, adquirindo novas linhas de pergunta após a trava inicial em ordem de PK. A cascata também reproduz o corpo de carimbo, silêncio e evento que já existe em `DisputaSupervisao.fechar`. `app/colaboradores/services/desligamento.py:183`, `:200`, `:218` · `app/chamados/models.py:334`, `:2281`, `:3120` · `app/chamados/veredito_lavrado.py:261`, `:280`.
-
-4. O histórico ainda lê `materializada_em` como prova de fato registrado, inclusive para o carimbo de desligamento. `app/chamados/services/historico.py:96`, `:104` · `app/chamados/models.py:3499`. A testemunha de aplicação passa a ler a via corretamente. `app/chamados/services/materializacao.py:868`, `:893`.
-
-5. A view injeta o mesmo dia local no juiz e no executor. O cron captura o dia para consulta e executor, mas omite o argumento ao juiz, que consulta de novo o relógio local. `app/colaboradores/views.py:1472` · `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`, `:51`, `:57` · `app/colaboradores/services/desligamento.py:46` · `app/config/settings/base.py:93`.
-
-6. O censo AST em memória devolveu as três violações em `models.py:1593`, `:1882`, `:1902`. O analisador também levantou `IndexError` ao procurar o sítio S20 em `executar_desligamento`, pois a chamada mudou de função. `app/chamados/tests/e4b_c12_ast.py:27`, `:223` · `app/chamados/tests/e4b_c12_sitios.json:158` · `app/chamados/tests/e4b_c12_verificar.py:92`, `:147` · `app/colaboradores/services/desligamento.py:235`.
-
-O dry tem retorno antes do arquivo e da cascata, e o apply e a reversão passam pelo `atomic` do `handle`. O apply trava, lê a pré-imagem e chama `flush` e `fsync` antes da primeira escrita de domínio. Banco e execução do comando [nao verificado]. `app/chamados/management/commands/reparar_passivo_desligamento.py:45`, `:161`, `:174`, `:188`, `:194`.
-
-_8883 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8885 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
