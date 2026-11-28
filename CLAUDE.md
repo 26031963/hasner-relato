@@ -326,8 +326,8 @@ RAIAS E POUSO (PISTA, 31/10; funde FILA-2-EM-RAIA-PROPRIA, POUSO-EM-COMBOIO e SU
      nao juiz de dominio; selo `bin/tests/test_agente_no_modelo.sh`). Agente nasce para CONSTRUIR ou VERIFICAR e termina quando entrega; o pedido
      declara a linha `PAPEL: construir` ou `PAPEL: verificar` (a LEITURA FINAL do verificador vale como verificar) e passa
      `model` explicito igual ao da sessao (o agente com `model: inherit`, o verificador, pode omitir). Construtor opus so
-     com copia `wt-*` e linha `ARQUIVOS:` que toque models, migrations, motor, core/juizes.py, crons.py ou bin/ (CODEX
-     item 2). Leitura, censo,
+     com copia `wt-*` e linha `ARQUIVOS:` que toque models, migrations, motor, core/juizes.py, crons.py, bin/ ou arquivo de
+     teste (CCM-OPCAO-A: teste e RED so o opus, sem codigo do Codex na mesma linha; CODEX item 2). Leitura, censo,
      sonda e espera em subagente sao recusadas: use bin/codex_pergunta.sh (excecao: CODEX item 2). Entrega dependente de
      suite = comando + caminho do log. Agente ocioso ou relendo log de obra fechada e encerrado no ato. ESPERA DA SESSAO =
      UMA so, que acorda no PRIMEIRO rc novo de QUALQUER obra viva (`logs/*/**/*.rc` mais novo que o inicio da espera) ou
@@ -377,8 +377,9 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
      [--sonda <script.py>] [--anexo <arq>]... <hash> <pergunta> <resposta>` com CODEX_OBRA e CODEX_PAPEL
      (leitura|censo|verificador|sonda|construtor) obrigatorios. Dado de prod so por `--sonda` (envelope unico
      `bin/sonda_leitura.sh`, saida raspada antes do Codex; CODEX-SONDA-LEITURA no CORTES.md). A via pelo chat (Ronald) le a
-     resposta por `bin/gerar_codex_estado.py`. DUAS escritas permitidas, e so elas: (i) teste RED de lote em copia PROPRIA,
-     sob CONTRATO-DE-INSTRUMENTO, revisado pelo Code antes do uso; (ii) o papel construtor abaixo. PROIBIDO: outro sandbox,
+     resposta por `bin/gerar_codex_estado.py`. UMA escrita permitida, e so ela: o papel construtor abaixo, SO codigo -- teste e RED so o opus escreve
+     (aval CCM-OPCAO-A 27/11, que tira a antiga escrita (i) "teste RED de lote"; arquivo de teste no diff = rc 3 pelo caminho, `#G:p_teste`:
+     o que o runner descobre ou le como teste -- modulo `test*.py` em qualquer pasta, tudo sob `tests/`, `app/core/testes_em_quarentena.txt`). PROIBIDO: outro sandbox,
      `-C` na arvore viva, chamada sem wrapper, `--dangerously*`, Codex escrevendo codigo de producao FORA do papel construtor,
      mexer em config do Code, cron novo.
      CONSTRUTOR (L-126, CODEX-CONSTRUTOR-NEGOCIO): copia propria `--construtor ~/wt-codex-<obra>-NNNNNN`, escrita so em
@@ -399,9 +400,9 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
   2. DESPACHO. Todo aval, laudo ou BO e DECOMPOSTO antes de qualquer trabalho, 1 linha no RELATO:
      `DESPACHO <id>: a,b -> Codex | c -> sonnet | d -> opus`. CODEX (primeiro, sempre) = leitura de codigo, rastrear classe,
      censo pela regra, quem-mais-le, autopsia de escritor/leitor, contra-exemplo, sonda de prod (contagem, censo de frota,
-     caso de colab, conferencia de laudo), pre-verificacao de diff, leitura de LOG, REDs e briefs. Codex construtor e o
+     caso de colab, conferencia de laudo), pre-verificacao de diff, leitura de LOG, casos RED DESCRITOS (o teste quem escreve e o opus) e briefs. Codex construtor e o
      PADRAO para todo app/ que bin/codex_pergunta.sh permite; o OPUS (modelo da sessao) constroi SO o que o wrapper proibe
-     (codex_pergunta.sh:646: models, migrations, motor, core/juizes.py, crons.py, bin/ -- tags da lista PROIBIDOS do
+     (codex_pergunta.sh::_INVENTARIO_PY: models, migrations, motor, core/juizes.py, crons.py, bin/, e arquivo de teste (CCM-OPCAO-A: Codex constroi SO codigo; teste e RED so o opus; o teste abre o opus so sem codigo do Codex na mesma linha `ARQUIVOS:`) -- tags da lista PROIBIDOS do
      `_INVENTARIO_PY`, `bin/disjuntor.py::OPUS_CONSTROI_TAGS`) e, fora disso, so verifica e carimba (a leitura final). SONNET em
      subagente SO para leitura, censo ou sonda com rc LIMITE (75) ou falha do Codex: `model: sonnet`, `PAPEL: <papel>`, a
      obra no pedido e a linha `DESPACHO <obra>: ... -> sonnet` citando rc 75 ou falha do Codex no RELATO; espera em
