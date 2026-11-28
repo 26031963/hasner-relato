@@ -1,7 +1,272 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 05:55** · publicado em **28/11/2026 05:55** (UTC-3)
+> Ultima resposta processada: **28/11/2026 06:01** · publicado em **28/11/2026 06:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 06:01 · sessao 0d86d5029112 · CUSTO-DE-COORDENACAO · verificador · origem=Code
+
+Verifiquei a cópia fornecida em modo somente leitura. Rodei `bash -n` nos seis scripts shell do delta e fiz sondas com entradas e mutações em memória. O hash Git independente, o RED anterior à cura, os selos de host que criam fixtures, a suíte integral, o pré-requisito de pouso e as métricas de produção ficam **[nao verificado]**. `bin/tests/test_hook_stop_borda.sh:335`, `bin/tests/test_mao_unica.sh:88`, `CLAUDE.md:428`, `brief_f1.md:9`
+
+## Procedentes da volta 2
+
+| # | Cura da classe e mordida do selo |
+|---|---|
+| **1** | **Parcial.** O CENSO lê as perguntas no brief inteiro e cobre título irmão, item `+`, prosa interrogativa e fecho ATX. Os quatro mutantes têm casos que distinguem essas regressões. Uma variante válida ainda passa. Com `### __Perguntas de lei__` seguido de `- Pode gravar?`, confirmei em memória que a lista fica vazia e o CENSO aprova. O reconhecedor só aceita a ênfase por asteriscos. `bin/disjuntor.py:1639`, `bin/disjuntor.py:1690`, `bin/disjuntor.py:1701`, `bin/disjuntor.py:1738`, `bin/tests/test_censo_antes_da_vaga.sh:117`, `bin/tests/test_censo_antes_da_vaga.sh:825` |
+| **2** | **Parcial.** Seis dígitos, slug exato e empate entre leituras reais estão cobertos. `codex-sem-validar-digitos` e `codex-prefixo-nao-exato` mordem esses casos. A gramática segue duplicada e divergente. O Agent converte o caminho a minúsculas antes de testar o nome. Em memória, `wt-CODEX-OBRA-X-000001` ainda gerou o candidato `OBRA-X`, que a igualdade literal do wrapper rejeita. Isso mantém a classe de candidato Codex indevido. `bin/disjuntor.py:1833`, `bin/disjuntor.py:1840`, `bin/codex_pergunta.sh:460`, `bin/tests/test_censo_antes_da_vaga.sh:739`, `bin/tests/test_censo_antes_da_vaga.sh:858` |
+| **3** | **Parcial.** Estado sem negrito e nota em outra coluna têm mutantes que mordem. O próprio alvo `SUPERADA por ITEM-B` ainda sai como `parado` para o topo e como andável para a lista. `**ABERTA** (a anterior foi **FECHADA**)` também continua sendo lida como fechada. Na cópia, confirmei `ORDEM-VIVA-1511-NOITE` como topo `ok`, embora a linha de 18/11 declare que a substitui. O selo cobre o topo sintético e preserva a leitura das linhas fora do topo. `bin/hook_stop_fila1.py:56`, `bin/hook_stop_fila1.py:172`, `bin/hook_stop_fila1.py:236`, `bin/hook_stop_fila1.py:261`, `app/docs/BACKLOG.md:8`, `app/docs/BACKLOG.md:1926`, `app/docs/BACKLOG.md:2649`, `bin/tests/test_hook_stop_borda.sh:125`, `bin/tests/test_hook_stop_borda.sh:357` |
+| **4** | **Cura o colapso em `max`, com uma transição ainda invisível.** O Stop vê mudanças em qualquer contador e a trilha distingue as impressões. `b3-pelo-maximo`, `b3-sem-n` e `b3-trilha-sem-cauda` têm asserções sobre avisos e IDs distintos. Confirmei em memória que trocar as voltas procedentes de `{1,2,3}` para `{2,3,4}` mantém `(1,3)` e produz a mesma impressão. Uma volta nova pode, portanto, ficar muda quando outra deixa de contar entre dois Stops. `bin/disjuntor.py:1000`, `bin/disjuntor.py:1006`, `bin/hook_stop_fila1.py:1434`, `bin/hook_stop_fila1.py:1657`, `bin/tests/test_hook_stop_borda.sh:222`, `bin/tests/test_hook_stop_borda.sh:365` |
+| **5** | **Parcial, com regressão na porta do merge.** Constantes, atribuições, `.update()`, referências compostas e o registro da árvore candidata entram nas fixtures. Os mutantes de projeção e de omissão da árvore mordem essas formas. O classificador agora executa Python da árvore ainda por julgar, antes de consultar o B3, com `exec` irrestrito e sem prazo. Além disso, a extração continua parcial. `agenda/café.py::f` some em memória porque a regex perde a referência antes da normalização de acentos. `bin/commit_msg.sh:38`, `bin/disjuntor.py:1306`, `bin/disjuntor.py:1313`, `bin/mao_unica.py:44`, `bin/mao_unica.py:54`, `bin/mao_unica.py:99`, `bin/tests/test_mao_unica.sh:62`, `bin/tests/test_mao_unica.sh:157`, `bin/tests/test_mao_unica.sh:239` |
+| **8** | **Parcial, com regressão de ordem.** Stop/PAREI e os blocos do HANDOFF compartilham a leitura. Os mutantes de releitura têm dentes, e o do CENSO cobre só a obra inferida. Com obra explícita e exceção posterior, confirmei duas leituras no `main_pretool`. No Stop, antepor o BACKLOG a B4 e orçamento abriu outro caminho de falha. Com UTF-8 inválido e uma decisão B4 de bloquear disponível, a sonda saiu em `ALLOW` antes de chamar B4. `bin/disjuntor.py:1902`, `bin/disjuntor.py:1954`, `bin/disjuntor.py:2321`, `bin/hook_stop_fila1.py:187`, `bin/hook_stop_fila1.py:1586`, `bin/hook_stop_fila1.py:1666`, `bin/handoff_sessao.sh:309`, `bin/tests/test_censo_antes_da_vaga.sh:727`, `bin/tests/test_hook_stop_borda.sh:359` |
+| **9** | **Parcial.** A prova obrigatória vem antes da borda. O prazo do `flock` preserva o TSV quando a trava está ocupada. Os mutantes de ordem, prazo e morte dentro de `diz` distinguem os casos respectivos. A classe de **confirmar aviso que nunca foi registrado** sobrevive. `_trilha` engole a falha de escrita e `_avisos_por_borda` grava mesmo assim. Injetei a falha em memória e o Stop seguinte calou o aviso. A serialização começa depois da coleta, então um Stop com fotografia antiga também pode gravá-la depois de um Stop com fotografia nova. `bin/hook_stop_fila1.py:45`, `bin/hook_stop_fila1.py:909`, `bin/hook_stop_fila1.py:952`, `bin/hook_stop_fila1.py:968`, `bin/hook_stop_fila1.py:1578`, `bin/hook_stop_fila1.py:1642`, `bin/tests/test_hook_stop_borda.sh:92`, `bin/tests/test_hook_stop_borda.sh:371` |
+| **10** | **Cura a classe triada.** A prova antecede qualquer transição da borda, e a regravação ou zeragem preserva o inode que a prova compara. `borda-desvincula` reintroduz a perda de identidade e tem um caso com hardlink que a distingue quando o Stop grava. O selo ainda aceita um subprocesso que saiu antes de gravar, pois ignora seu resultado e só verifica a rejeição do alias depois. `bin/hook_stop_fila1.py:672`, `bin/hook_stop_fila1.py:683`, `bin/hook_stop_fila1.py:940`, `bin/hook_stop_fila1.py:1578`, `bin/tests/test_hook_stop_borda.sh:278`, `bin/tests/test_hook_stop_borda.sh:387` |
+| **11** | **Parcial.** `faltam-vazio` caiu com `rc=1` e `RED anti-vacuidade` no programa extraído do selo. A outra vacuidade permanece no veredito. Removi `abaixo_limite` da entrada em memória. O controle deu `rc=1`. Com apenas o `if faltam` do veredito trocado por `if False`, deu `rc=0` e ainda imprimiu `o caso MORDE`. A contraprova compartilha o comparador, mas tem uma decisão de saída própria. `bin/tests/test_relato_guarda_pedido_de_patch.sh:297`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:311`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:323`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:354` |
+| **12** | **Cura a concatenação implícita, parcialmente a classe.** `peneira-textual` caiu com `rc=1` e `RED porta cega`. O caminho com literais adjacentes entra, mas confirmei que a expressão constante `'app/docs/' + 'RELATO' + '.md'` fica de fora. A porta só procura o caminho já reunido num literal ou os dois componentes nos argumentos de uma chamada. `bin/tests/test_relato_guarda_pedido_de_patch.sh:117`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:211`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:234`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:355` |
+| **13** | **Parcial.** Os dois mutantes caíram em memória pelos motivos declarados. O `open` interno e `Path(...).open('a')` recebem o veredito certo. Ainda confirmei dois erros da classe. Uma leitura por `Path(...).read_text()` dentro de um `open` externo em `'w'` fica de fora. `Path(...).open('a' + 'b')` entra como leitor porque o modo precisa ser um `ast.Constant`. `bin/tests/test_relato_guarda_pedido_de_patch.sh:88`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:235`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:244`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:356` |
+
+## Escritores, leitores e significado
+
+| Campo ou arquivo | Quem escreve, quem lê e onde divergem |
+|---|---|
+| **`hook_stop_borda.tsv`, `.lock` e `id=` da trilha** | `_borda_grava` escreve `tipo\|obra<TAB>hash16` pela transação `_avisos_por_borda`. `_borda_le` consome a impressão, `_prova_arquivo` consulta a identidade do TSV e da trava, e `_borda_trava` cria e toma a `.lock` por descritor. `_diz` passa a mesma chave e impressão à trilha. O formato concorda. A garantia semântica diverge, pois a presença no TSV pode representar aviso apenas tentado. Os outros escritores vistos são fixtures. `bin/hook_stop_fila1.py:672`, `bin/hook_stop_fila1.py:903`, `bin/hook_stop_fila1.py:923`, `bin/hook_stop_fila1.py:940`, `bin/hook_stop_fila1.py:968`, `bin/hook_stop_fila1.py:1656`, `bin/tests/test_hook_stop_borda.sh:233`, `bin/tests/test_disjuntor.sh:351` |
+| **B3 `(n, nc)`** | `decide_b3` escreve o par em memória a partir de `reprovados` e `codex`. `_com_estado` persiste o estado e `rearma_b3` limpa as listas pela mesma porta. `julga_b3` repassa o mapa, o Stop usa os números, o merge usa presença via `estado_b3`, e o PreToolUse dispara a varredura. O ESTADO lê eventos `DISJUNTOR` e `LIBERA`. Os contadores concordam no caminho normal. No erro de gravação, `(0,0)` também significa **obra segue parada porque a liberação falhou**. O merge respeita a presença e o Stop imprime esses zeros como contagens. A cauda da trilha guarda a impressão, sem expor os números. `bin/disjuntor.py:365`, `bin/disjuntor.py:1006`, `bin/disjuntor.py:1056`, `bin/disjuntor.py:1073`, `bin/disjuntor.py:1082`, `bin/disjuntor.py:1116`, `bin/disjuntor.py:2286`, `bin/disjuntor.py:2433`, `bin/gerar_estado.py:297`, `bin/hook_stop_fila1.py:1434`, `bin/hook_stop_fila1.py:1657` |
+| **`JUIZES` da casa e da árvore a pousar** | `app/core/juizes.py` declara família, pergunta e autoridade. O integrador também regrava o arquivo para baixar `PENDENTES`. `commit_msg.sh` captura a árvore do índice, e `mao_unica` lê casa e blob candidato, executa os dois textos e projeta os caminhos. O gerador do diagrama consulta `JUIZES` por família. Para o registro, o campo identifica quem responde. Para o merge, vira um conjunto de caminhos sensíveis. A projeção perde referências válidas como a do #5. `app/docs/JUIZES.md:10`, `app/core/juizes.py:7`, `app/core/juizes.py:190`, `app/core/integrador_lote.py:435`, `app/core/integrador_lote.py:442`, `bin/commit_msg.sh:20`, `bin/mao_unica.py:59`, `bin/mao_unica.py:76`, `bin/mao_unica.py:97`, `app/core/management/commands/gerar_diagrama.py:752` |
+| **BACKLOG, foto e HANDOFF** | Marcador e bloco são escritos à mão. `backlog_estado.py` muda a coluna `[3]`, e `gerar_backlog.py` preserva e republica a janela. Stop, CENSO e HANDOFF leem os mesmos dados, com os vereditos divergentes do #3. O HANDOFF inicializa o temporário no shell, grava a foto no primeiro bloco Python e a lê nos dois blocos finais. Foto vazia pode representar fila vazia ou primeiro bloco que falhou antes da gravação. O painel publicado vai ao SessionStart, e o Stop lê seu `mtime`. O medidor de interrompidas ainda usa o alvo mesmo com veredito `parado`, e o alarme mantém seu próprio predicado de abertura sobre a linha inteira. `bin/backlog_estado.py:58`, `bin/gerar_backlog.py:103`, `bin/gerar_backlog.py:138`, `bin/disjuntor.py:1800`, `bin/hook_stop_fila1.py:1586`, `bin/handoff_sessao.sh:25`, `bin/handoff_sessao.sh:60`, `bin/handoff_sessao.sh:309`, `bin/handoff_sessao.sh:331`, `bin/handoff_sessao.sh:345`, `.claude/settings.json:40`, `bin/hook_stop_fila1.py:1063`, `bin/interrompidas_estado.py:93`, `bin/interrompidas_estado.py:121`, `bin/alarme_sessao_ociosa.py:89` |
+| **Modo de `open` no selo do RELATO** | O autor do teste escreve o modo na chamada. `_em_escrita` lê sua posição ou `mode=` no AST, e `_entra` decide se o teste integra o universo. O selo lê o RELATO vivo e altera só uma cópia em memória. As rotinas do vigia escrevem o RELATO por `no_relato` e `no_topo`. A semântica coincide para os modos literais cobertos. Diverge quando a AST atribui ao caminho o modo de outra abertura ou deixa de reconhecer um modo computado, como no #13. `app/ponto/tests/test_tela_gestao_he_fatia2_lote_limite.py:239`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:88`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:126`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:262`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:309`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:326`, `app/core/esteira_vigia.py:815`, `app/core/esteira_vigia.py:865` |
+
+## Checklist 5(a) e escopo
+
+- **Juiz e derivação.** `mao_unica` classifica o merge sem reproduzir os juízos de domínio. As derivações paralelas com efeito no delta são as gramáticas do nome da cópia, o veredito de topo versus andável e a projeção incompleta das autoridades. A duplicação do veredito do selo aparece no #11. `CLAUDE.md:258`, `bin/mao_unica.py:141`, `bin/disjuntor.py:1840`, `bin/codex_pergunta.sh:461`, `bin/hook_stop_fila1.py:236`, `bin/hook_stop_fila1.py:261`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:311`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:326`
+- **Escritor, relógio e trava.** O TSV tem um escritor de produção pela transação. A foto do HANDOFF tem dois sítios de escrita no mesmo script, com a ambiguidade de vazio descrita acima. O delta acrescenta zero leituras de relógio em produção. O relógio do CLI já estava na borda e o prazo novo é do `flock`. Na ordem inspecionada, o orçamento solta a trava antes da borda, e a borda já recebe os recados do disjuntor. Ciclo inverso **[nao verificado]**. `bin/hook_stop_fila1.py:940`, `bin/handoff_sessao.sh:26`, `bin/handoff_sessao.sh:61`, `bin/disjuntor.py:2824`, `bin/hook_stop_fila1.py:909`, `bin/hook_stop_fila1.py:1118`, `bin/hook_stop_fila1.py:1642`, `bin/hook_stop_fila1.py:1664`
+- **`except` novo de código: zero.** As duas linhas adicionadas são os textos da âncora e da substituição de `handoff-proximo-rele`. O `except` executável do HANDOFF é preexistente. `bin/tests/test_hook_stop_borda.sh:362`, `bin/tests/test_hook_stop_borda.sh:364`, `bin/handoff_sessao.sh:334`
+- **`test_disjuntor.sh`: procede.** O brief declara o arquivo. O delta só atualiza a âncora e a substituição para `(0,0)`, preservando a asserção de merge recusado se a liberação falhar ao gravar. Apliquei a mutação em memória: o controle deu `PARADA` e o mutante deu `LIVRE`. Os arquivos fora da lista literal do brief são `bin/handoff_sessao.sh` e `bin/tests/test_relato_guarda_pedido_de_patch.sh`. Eles correspondem às curas pedidas na triagem. A autorização formal de ampliar `ARQUIVOS` fica **[nao verificado]**. `brief_f1.md:2`, `triagem.md:2`, `triagem.md:3`, `bin/tests/test_disjuntor.sh:852`, `bin/tests/test_disjuntor.sh:1821`, `bin/disjuntor.py:1056`, `bin/handoff_sessao.sh:25`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:297`
+- **Fila e descarte.** #6 fica no parser isolado de `R100`, fora da via que usa `--no-renames`. #7 fica no critério que une `HEAD...MERGE_HEAD` ao delta da árvore a gravar. #14 permanece descartado pela triagem. `bin/mao_unica.py:165`, `bin/mao_unica.py:172`, `bin/mao_unica.py:195`, `triagem.md:4`, `triagem.md:5`
+
+**REPROVA — bloqueantes nº 1, 2, 3, 4, 5, 8, 9, 11, 12 e 13. Fila nº 6 e 7.** `CLAUDE.md:428`, `triagem.md:4`
+
+## 28/11 05:59 · sessao 6c06e82e37fb · CRON-15-SOMBRA-CABE · leitura · origem=Code
+
+# CRON-15-SOMBRA-CABE · Passo 1 · Medida por etapa
+
+**Só a soma dos comandos já excede o corredor com a folga do aval.** Na janela de 15 a 28/11, o p95 do bloco medido é **5.095 s (84min55s)**. Aplicando ×1,5, dá **127min22,5s**, **72min22,5s acima dos 55 min**. O p95 de ponta a ponta é **nao medido [nao verificado]**. O cronômetro do histórico começa depois da reposição da lavra de cada comando e cobre apenas a execução e a classificação do retorno. `hist.tsv:1445–2507`, `bin/crons_duracao.py:46–51`, `bin/sombra.sh:378–398`.
+
+## 1. Duração diária do bloco
+
+Somei a coluna `segundos`, incluindo os retornos de alarme. A linha `pulado` entra na contagem de linhas e soma 0 s. As referências dos anexos contam a primeira linha de dados como linha 1. O histórico guarda um arquivo por data, que pode ser sobrescrito por outra corrida no mesmo dia. `hist.tsv:1–2507`, `bin/sombra.sh:355–357,380–398`.
+
+| Dia | Linhas | Soma (s) | min:s | Fonte |
+|---|---:|---:|---:|---|
+| 28/10 | 79 | 2865 | 47:45 | `hist.tsv:1–79` |
+| 29/10 | 79 | 3022 | 50:22 | `hist.tsv:80–158` |
+| 30/10 | 80 | 3055 | 50:55 | `hist.tsv:159–238` |
+| 31/10 | 80 | 3260 | 54:20 | `hist.tsv:239–318` |
+| 01/11 | 80 | 3245 | 54:05 | `hist.tsv:319–398` |
+| 02/11 | 80 | 3424 | 57:04 | `hist.tsv:399–478` |
+| 03/11 | 80 | 3212 | 53:32 | `hist.tsv:479–558` |
+| 04/11 | 80 | 3239 | 53:59 | `hist.tsv:559–638` |
+| 05/11 | 80 | 2902 | 48:22 | `hist.tsv:639–718` |
+| 06/11 | 80 | 2720 | 45:20 | `hist.tsv:719–798` |
+| 07/11 | 80 | 2699 | 44:59 | `hist.tsv:799–878` |
+| 08/11 | 80 | 2728 | 45:28 | `hist.tsv:879–958` |
+| **09/11** | 81 | **3441** | **57:21** | `hist.tsv:959–1039` |
+| 10/11 | 81 | 3217 | 53:37 | `hist.tsv:1040–1120` |
+| 11/11 | 81 | 3388 | 56:28 | `hist.tsv:1121–1201` |
+| 12/11 | 81 | 3281 | 54:41 | `hist.tsv:1202–1282` |
+| 13/11 | 81 | 3268 | 54:28 | `hist.tsv:1283–1363` |
+| 14/11 | 81 | 3211 | 53:31 | `hist.tsv:1364–1444` |
+| 15/11 | 81 | 3360 | 56:00 | `hist.tsv:1445–1525` |
+| 16/11 | 81 | 3293 | 54:53 | `hist.tsv:1526–1606` |
+| 17/11 | 81 | 3504 | 58:24 | `hist.tsv:1607–1687` |
+| **18/11** | 82 | **4161** | **69:21** | `hist.tsv:1688–1769` |
+| 19/11 | 82 | 4244 | 70:44 | `hist.tsv:1770–1851` |
+| 20/11 | — | nao medido | — | `[nao verificado]` |
+| 21/11 | 82 | 3632 | 60:32 | `hist.tsv:1852–1933` |
+| **22/11** | 82 | **4515** | **75:15** | `hist.tsv:1934–2015` |
+| 23/11 | 82 | 4546 | 75:46 | `hist.tsv:2016–2097` |
+| 24/11 | 82 | 4815 | 80:15 | `hist.tsv:2098–2179` |
+| 25/11 | 82 | 4882 | 81:22 | `hist.tsv:2180–2261` |
+| 26/11 | 82 | 4797 | 79:57 | `hist.tsv:2262–2343` |
+| 27/11 | 82 | 5145 | 85:45 | `hist.tsv:2344–2425` |
+| 28/11 | 82 | 5095 | 84:55 | `hist.tsv:2426–2507` |
+
+O primeiro salto sustentado de novembro começa **09/11**, com **+713 s** sobre 08/11. `lavrar_cxr_do_motor --apply` aparece nesse dia com **549 s**. Em **18/11**, o bloco sobe mais **657 s** sobre 17/11, com a entrada de `selo_leitores_no_mesmo_numero` a **830 s**. Em **22/11**, sobe **883 s** sobre 21/11, dos quais **646 s** vêm do aumento do selo e **175 s** do CXR. `hist.tsv:879–1039,995,1607–1769,1726,1852–2015`.
+
+Em 28/11, os dois comandos que entraram depois de 01/11 somam **1.808 s** dos **1.850 s** de aumento do bloco entre as duas datas. O saldo das demais entradas é **+42 s**, incluindo mudanças de argumentos. `hist.tsv:319–398,2426–2507,2462,2464`.
+
+## 2. Medida por comando
+
+Usei o **comando completo, com argumentos**, como unidade. Os sete valores de cada linha correspondem a **22, 23, 24, 25, 26, 27 e 28/11**. Para os percentis, usei **15–28/11**, com 13 datas observadas devido à lacuna de 20/11. O p50 é a mediana e o p95 segue a função da cópia, que seleciona o índice `round(0.95 × (n−1))` da série ordenada, começando em zero. `n` conta execuções medidas. `Δ` é 28/11 menos 01/11 para os mesmos argumentos. `—` indica **nao medido [nao verificado]**. Os zeros de `pipeline_placar` são registros de `pulado`. `hist.tsv:319–398,1445–2507`, `bin/crons_duracao.py:46–51`, `bin/sombra.sh:355–357`.
+
+### Top 10 por p95 e por crescimento
+
+Valores em segundos. O ranking de crescimento usa as variantes com medida nas duas pontas. As fontes de cada comando estão na tabela detalhada. `hist.tsv:319–398,1445–2507`.
+
+| Posição | Por p95 | p95 | Por crescimento | Δ |
+|---:|---|---:|---|---:|
+| 1 | `selo_leitores_no_mesmo_numero --rollout --origem cron` | 1222 | `esmeril_espelho --apply` | +151 |
+| 2 | `lavrar_he_pendente --apply` | 670 | `processar_cartorio --empresa 2 --apply` | +102 |
+| 3 | `lavrar_cxr_do_motor --apply` | 634 | `auditar_invariantes_chamados --html` | +55 |
+| 4 | `processar_cartorio --empresa 2 --apply` | 497 | `pre_fechamento --apply` | +45 |
+| 5 | `auditar_invariantes_chamados --html` | 334 | `gerar_celulas` | +19 |
+| 6 | `esmeril_espelho --apply` | 333 | `processar_cartorio --empresa 3 --apply` | +14 |
+| 7 | `vigiar_fio_morto --alarme --alarme-passivo` | 168 | `reconciliar_grade --empresa 2,3,4` | +14 |
+| 8 | `calcular_scores` | 147 | `censo_fase_12x36 --min-plantoes 6 --lavrar` | +9 |
+| 9 | `processar_cartorio --empresa 3 --apply` | 95 | `fechar_becos_disputa --alarme` | +6 |
+| 10 | `reconciliar_grade --empresa 2,3,4` | 90 | `supra_juiz --empresa 2 --encerrada --alarme` | +6 |
+
+Da primeira observação à última, o custo do CXR passa de **549 para 634 s (+85 s)** e o selo de leitores de **830 para 1.174 s (+344 s)**. A base de 01/11 para ambos é **nao medido [nao verificado]**. `hist.tsv:319–398,995,1726,2462,2464`.
+
+### Série por comando em segundos
+
+A última coluna indica a última ocorrência da variante em `hist.tsv`. Os percentis e a base usam as janelas indicadas acima. `hist.tsv:1–2507`.
+
+| Comando | 22–28/11 | n | p50 | p95 | 01/11 | Δ | Linha |
+|---|---|---:|---:|---:|---:|---:|---:|
+| `calcular_metricas` | 17 17 18 18 17 18 17 | 13 | 18 | 18 | 18 | −1 | 2426 |
+| `calcular_scores` | 111 130 147 149 141 147 141 | 13 | 114 | 147 | 190 | −49 | 2427 |
+| `pre_fechamento --apply` | 68 66 70 72 66 72 70 | 13 | 66 | 72 | 25 | +45 | 2428 |
+| `health_crawl` | 3 2 2 2 2 3 2 | 13 | 2 | 3 | 2 | 0 | 2429 |
+| `lavrar_foto_folgas --apply` | 3 3 3 3 3 3 2 | 13 | 3 | 3 | 3 | −1 | 2430 |
+| `gerar_celulas` | 37 36 37 37 34 35 36 | 13 | 34 | 37 | 17 | +19 | 2431 |
+| `termometro_regua --avaliar --lavrar` | 79 78 79 81 78 83 80 | 13 | 79 | 82 | 75 | +5 | 2432 |
+| `tripwire_celulas` | 19 19 19 18 18 18 16 | 13 | 18 | 19 | 16 | 0 | 2433 |
+| `efetivar_desligamentos_agendados --apply` | 1 1 1 2 1 1 2 | 13 | 1 | 2 | 2 | 0 | 2434 |
+| `tripwire_vinculo_orfao --alarme` | 2 2 2 1 2 2 1 | 13 | 2 | 2 | 1 | 0 | 2435 |
+| `sincronizar_status_ferias --apply` | 2 1 2 2 1 2 2 | 13 | 2 | 2 | 1 | +1 | 2436 |
+| `reverter_situacao_afastado --apply` | 1 2 1 1 2 2 1 | 13 | 1 | 2 | 2 | −1 | 2437 |
+| `tripwire_status_ferias --alarme` | 2 2 2 2 1 2 2 | 13 | 2 | 2 | 1 | +1 | 2438 |
+| `tripwire_situacao_afastado --alarme` | 2 1 2 2 2 2 2 | 13 | 2 | 2 | 2 | 0 | 2439 |
+| `reconciliar_grade --empresa 2,3,4` | 87 86 90 88 82 91 84 | 13 | 83 | 90 | 70 | +14 | 2440 |
+| `detectar_cluster_espurio --alarme` | 4 3 4 5 4 4 4 | 13 | 4 | 4 | 4 | 0 | 2441 |
+| `detectar_par_relampago --dias 2 --apply --retratar` | 19 20 21 21 20 — — | 11 | 20 | 21 | 17 | — | 2278 |
+| `detectar_par_relampago --dias 2 --apply` | — — — — — 15 15 | 2 | 15 | 15 | — | — | 2442 |
+| `processar_cartorio --empresa 2 --apply` | 473 482 497 488 481 487 508 | 13 | 481 | 497 | 406 | +102 | 2443 |
+| `processar_cartorio --empresa 3 --apply` | 89 91 95 92 92 96 95 | 13 | 92 | 95 | 81 | +14 | 2444 |
+| `processar_cartorio --empresa 4 --apply` | 19 19 20 20 19 19 20 | 13 | 19 | 20 | 16 | +4 | 2445 |
+| `apurar_furos_diarios` | 22 22 21 22 23 24 23 | 13 | 23 | 30 | 31 | −8 | 2446 |
+| `disparar_perguntas_competencia --comp-corrente --apply` | — — — — — — — | 0 | — | — | 37 | — | 1061 |
+| `disparar_perguntas_competencia --comp-corrente --alarme` | 6 6 8 14 15 17 17 | 13 | 17 | 38 | — | — | 2447 |
+| `reconciliar_perguntas_orfas --apply` | — — — — — — — | 0 | — | — | — | — | 102 |
+| `reconciliar_perguntas_orfas --alarme` | 2 3 4 3 4 3 4 | 13 | 3 | 4 | 2 | +2 | 2448 |
+| `lavrar_deslogados --apply` | 7 7 6 6 6 7 7 | 13 | 6 | 7 | 5 | +2 | 2449 |
+| `lavrar_he_pendente --apply` | 565 570 594 604 586 676 670 | 13 | 565 | 670 | 846 | −176 | 2450 |
+| `recusar_ponta_pequena --apply` | 3 3 4 — — — — | 9 | 5 | 8 | 4 | — | 2123 |
+| `recusar_ponta_pequena --alarme` | — — — 27 23 24 14 | 4 | 23,5 | 27 | — | — | 2451 |
+| `vigiar_txt_dominio --alarme` | 15 16 15 15 15 15 15 | 13 | 15 | 16 | 12 | +3 | 2452 |
+| `lavrar_retrato_folha --apply` | 43 42 45 45 45 47 46 | 13 | 45 | 47 | 87 | −41 | 2453 |
+| `vigiar_pausa_export --alarme` | 9 10 10 11 11 10 10 | 13 | 11 | 11 | 11 | −1 | 2454 |
+| `vigiar_retido_calado --alarme` | 2 1 2 1 1 2 2 | 13 | 2 | 2 | 2 | 0 | 2455 |
+| `vigiar_fio_morto --alarme --alarme-passivo` | 129 130 156 160 161 170 168 | 13 | 151 | 168 | 261 | −93 | 2456 |
+| `reconciliar_geofence --empresa 2 --alarme` | 2 1 1 1 2 1 2 | 13 | 1 | 2 | 1 | +1 | 2457 |
+| `vigiar_carimbo_sem_registro --alarme` | 42 42 45 44 45 46 45 | 13 | 45 | 47 | 42 | +3 | 2458 |
+| `vigiar_ausencia_x_veredito --alarme` | 7 7 7 8 7 7 7 | 13 | 7 | 7 | 6 | +1 | 2459 |
+| `reconciliar_geofence --empresa 3 --alarme` | 2 2 1 1 2 2 2 | 13 | 2 | 2 | 1 | +1 | 2460 |
+| `vigia_pareador_celula --alarme` | 2 3 3 3 3 3 3 | 13 | 3 | 5 | 3 | 0 | 2461 |
+| `lavrar_cxr_do_motor --apply` | 470 508 548 562 553 634 634 | 13 | 516 | 634 | — | — | 2462 |
+| `reconciliar_geofence --empresa 4 --alarme` | 2 2 1 2 2 2 2 | 13 | 2 | 2 | 2 | 0 | 2463 |
+| `selo_leitores_no_mesmo_numero --rollout --origem cron` | 1129 1114 1160 1157 1135 1222 1174 | 10 | 1132 | 1222 | — | — | 2464 |
+| `reconciliar_vinculo --alarme` | 2 2 1 2 2 2 2 | 13 | 2 | 2 | 1 | +1 | 2465 |
+| `detectar_intervalo_ausente --alarme` | 4 3 4 4 4 4 4 | 13 | 4 | 4 | 4 | 0 | 2466 |
+| `verificar_nucleo` | 15 15 16 16 15 15 15 | 13 | 15 | 16 | 14 | +1 | 2467 |
+| `supra_juiz --empresa 2 --executar` | 26 27 32 32 33 35 35 | 13 | 35 | 42 | 48 | −13 | 2468 |
+| `supra_juiz --empresa 3 --executar` | 7 8 8 9 9 9 9 | 13 | 9 | 11 | 13 | −4 | 2469 |
+| `supra_juiz --empresa 4 --executar` | 3 2 3 3 3 4 3 | 13 | 3 | 4 | 4 | −1 | 2470 |
+| `reavaliar_ausencias_feriado --empresa 2 --apply` | — — — — — — — | 0 | — | — | 18 | — | 682 |
+| `reavaliar_ausencias_feriado --empresa 2 --alarme` | 22 23 23 23 23 23 24 | 13 | 23 | 24 | — | — | 2471 |
+| `reavaliar_ausencias_feriado --empresa 3 --apply` | — — — — — — — | 0 | — | — | 5 | — | 683 |
+| `reavaliar_ausencias_feriado --empresa 3 --alarme` | 7 6 7 7 6 7 6 | 13 | 6 | 7 | — | — | 2472 |
+| `reavaliar_ausencias_feriado --empresa 4 --apply` | — — — — — — — | 0 | — | — | 3 | — | 684 |
+| `reavaliar_ausencias_feriado --empresa 4 --alarme` | 2 3 2 2 3 2 3 | 13 | 3 | 3 | — | — | 2473 |
+| `silenciar_chamados_isentos --alarme` | 2 1 1 1 1 1 1 | 13 | 1 | 1 | 1 | 0 | 2474 |
+| `mapa_divergencia --mes=$(date +\%-m) --ano=$(date +\%Y)` | 70 69 72 70 69 73 72 | 13 | 70 | 73 | 74 | −2 | 2475 |
+| `fechar_becos_disputa --alarme` | 17 18 20 20 20 21 20 | 13 | 18 | 20 | 14 | +6 | 2476 |
+| `flip_automatico --competencia --apply` | 3 3 3 10 6 6 7 | 13 | 7 | 12 | 9 | −2 | 2477 |
+| `lavrar_fase_conflitante --apply` | 2 1 2 2 2 2 2 | 13 | 2 | 2 | 1 | +1 | 2478 |
+| `lavrar_vigencia_sem_trilha --apply` | 1 2 1 1 1 2 2 | 13 | 2 | 2 | 2 | 0 | 2479 |
+| `lavrar_vigencia_impossivel --apply` | 2 2 2 2 2 2 1 | 13 | 2 | 2 | 1 | 0 | 2480 |
+| `auditar_invariantes_chamados --html` | 295 291 317 313 316 330 326 | 13 | 313 | 334 | 271 | +55 | 2481 |
+| `vigia_b5_ausencia` | 17 17 17 18 18 18 18 | 13 | 17 | 18 | 14 | +4 | 2482 |
+| `supra_juiz --empresa 2 --encerrada --alarme` | 42 42 44 45 43 43 43 | 13 | 42 | 45 | 37 | +6 | 2483 |
+| `tripwire_tipo_batida --dias 60 --limiar 60` | 16 15 17 16 15 16 16 | 13 | 16 | 17 | 16 | 0 | 2484 |
+| `marcar_foto_ausente_retro --apply` | 2 2 3 2 3 3 3 | 13 | 3 | 3 | 2 | +1 | 2485 |
+| `supra_juiz --empresa 3 --encerrada --alarme` | 12 11 12 12 12 12 12 | 13 | 12 | 12 | 11 | +1 | 2486 |
+| `vigia_plantio_overnight --dias=45` | 53 49 50 54 58 55 58 | 13 | 55 | 58 | 62 | −4 | 2487 |
+| `supra_juiz --empresa 4 --encerrada --alarme` | 3 4 4 4 4 4 3 | 13 | 3 | 4 | 3 | 0 | 2488 |
+| `lavrar_jornada_lixo --apply` | 3 3 3 3 3 3 3 | 13 | 3 | 3 | 3 | 0 | 2489 |
+| `lavrar_previsto_cego --apply` | 3 4 4 4 4 4 5 | 13 | 4 | 6 | 4 | +1 | 2490 |
+| `supra_juiz --empresa 2 --alarme` | 27 27 32 33 33 34 36 | 13 | 34 | 41 | 47 | −11 | 2491 |
+| `supra_juiz --empresa 3 --alarme` | 7 7 8 8 9 9 9 | 13 | 9 | 11 | 13 | −4 | 2492 |
+| `lavrar_furo_sem_canal --apply` | 3 3 4 4 3 4 4 | 13 | 4 | 9 | 1 | +3 | 2493 |
+| `supra_juiz --empresa 4 --alarme` | 3 3 3 3 3 3 3 | 13 | 3 | 4 | 4 | −1 | 2494 |
+| `censo_fase_12x36 --min-plantoes 6 --lavrar` | 24 18 18 25 25 18 26 | 13 | 20 | 25 | 17 | +9 | 2495 |
+| `pipeline_placar --alarme` | 0 0 0 0 0 0 0 | 0 | — | — | — | — | 2496 |
+| `lavrar_teto_do_dia --apply` | 15 15 15 16 16 16 16 | 13 | 16 | 19 | 15 | +1 | 2497 |
+| `alertar_justificativas_sla` | 1 1 2 2 1 1 2 | 13 | 1 | 2 | 2 | 0 | 2498 |
+| `alertar_retornos` | 3 2 3 2 2 3 2 | 13 | 2 | 3 | 2 | 0 | 2499 |
+| `alertar_ferias_vencendo` | 2 2 2 3 3 3 3 | 13 | 3 | 3 | 2 | +1 | 2500 |
+| `pautas_de_ferias --apply` | 2 2 2 1 1 1 2 | 13 | 2 | 2 | 2 | 0 | 2501 |
+| `vigia_entrada_faltante` | 2 2 2 3 2 2 2 | 13 | 2 | 3 | 2 | 0 | 2502 |
+| `escalonar_documentos_ausencia --apply` | 2 2 1 1 2 2 1 | 13 | 2 | 2 | 1 | +1 | 2503 |
+| `alertar_disputas_pendentes` | 2 2 3 3 3 3 2 | 13 | 3 | 4 | 3 | −1 | 2504 |
+| `suporte_hasner --fila` | 2 1 2 2 1 2 2 | 13 | 2 | 2 | 1 | +1 | 2505 |
+| `esmeril_espelho --apply` | 291 285 306 309 311 333 345 | 13 | 296 | 333 | 194 | +151 | 2506 |
+| `pautas_do_esmeril` | 1 1 1 2 2 1 2 | 13 | 2 | 2 | 2 | 0 | 2507 |
+
+## 3. Fases fora dos comandos cronometrados
+
+A cópia agenda o **backup das 04:00** em uma entrada própria. A entrada da sombra chama **`--refazer && --bloco`**. No caminho diário, `--refazer` garante o banco da sombra, escolhe o dump mais recente por mtime de cada schema, recria o banco, restaura `public` e depois `juliani`, roda máscara 1, máscara 2 e selo pessoal. Em seguida, compara colunas e migrations, verifica a completude e carimba a sombra refeita. `app/config/crons.py:282,350–352`, `bin/sombra.sh:236–305,311–325`.
+
+| Fase | O que o código faz | Medida e ponto de coleta |
+|---|---|---|
+| Dump | O backup percorre schemas em série. Cada `pg_dump` grava `.part`, o script renomeia o arquivo e valida o catálogo. O caminho opcional `--dump-agora` faz `juliani` e depois `public` em primeiro plano, em arquivos separados. `scripts/backup_all.sh:5–8`, `scripts/backup_tenant.sh:9–18`, `bin/sombra.sh:239–253` | **nao medido [nao verificado]**. O nome é criado antes do `pg_dump`. Mediria início e fim por schema, mais a validação se a fronteira for o dump pronto para restore. `sombra_tail.log:5,19,33,47`, `scripts/backup_tenant.sh:9–16`, `bin/sombra.sh:244–245` |
+| Restore | `dropdb` → `createdb` → `pg_restore public` → `pg_restore juliani`, no mesmo banco, em primeiro plano e sem `-j`. Depois conta erros de restore fora da exceção de schema `public` já existente. `bin/sombra.sh:255–264` | **nao medido [nao verificado]**. O tail registra `public rc=1`, `juliani rc=0` e **0** erros não aceitos nos quatro dias. Mediria antes e depois de cada restore e também o trecho `dropdb`/`createdb`. `sombra_tail.log:6,20,34,48`, `bin/sombra.sh:255–260` |
+| Máscara 1 | Em uma transação, usa valores temporários antes de gravar CPF e login sintéticos, anonimiza nomes e e-mails, neutraliza push e mascara o nome nos registros de PDF. Confere unicidade e os temporários ao final. `bin/sombra_mascara.py:38–39,51–103` | **nao medido [nao verificado]**. O tail registra contagens e `MASCARA1 ok`. Mediria a chamada completa do container. `sombra_tail.log:7–8,21–22,35–36,49–50`, `bin/sombra.sh:266–268` |
+| Máscara 2 | Em outra transação, aplica regras de vazio, nulo, marcador, cifrado, zero, ano de nascimento e mascaramento de texto e JSON. O timer interno começa após os imports e termina após a transação. `bin/sombra_mascara_pessoal.py:6–66`, `bin/sombra_regras_pessoais.py:29–157` | **25/11 267 s · 26/11 259 s · 27/11 268 s · 28/11 261 s**. A duração de parede da chamada completa é **nao medido [nao verificado]**. Mediria em volta do `container` para incluir a inicialização. `sombra_tail.log:9,23,37,51`, `bin/sombra.sh:272–274` |
+| Selo pessoal | Consulta o catálogo e confronta colunas e conteúdo com as regras do inventário. Se encontra pendência, sai com código 3 e `--refazer` falha. `bin/sombra_selo_pessoal.py:23–97`, `bin/sombra.sh:275–277` | **nao medido [nao verificado]**. Nos quatro dias, o tail registra **154/154** colunas inventariadas, **66** isentas e `OK`. Mediria em volta da chamada completa. `sombra_tail.log:10–11,24–25,38–39,52–53`, `bin/sombra.sh:275–277` |
+
+**Serialização e independência pelo código.** A sequência do `--refazer` é síncrona. Os dois dumps opcionais leem a origem e escrevem arquivos distintos, sem consumir a saída um do outro. Os restores usam o mesmo banco e a independência entre os objetos dos dois arquivos fica **[nao verificado]**. As máscaras escrevem em tabelas comuns, como `Colaborador` e `RegistroPDFAuditavel`, e o selo de conteúdo lê o estado mascarado. Depois dos commits, as consultas de catálogo, migrations e contagens em prod e sombra fornecem resultados independentes até a comparação. As verificações de conteúdo do selo também são leituras independentes entre si até a consolidação. Todas rodam em série na cópia. `bin/sombra.sh:239–305,313–325`, `bin/sombra_mascara.py:64–88`, `bin/sombra_regras_pessoais.py:29–91`, `bin/sombra_selo_pessoal.py:23–96`.
+
+O `ts` de `espera.jsonl` é emitido após adquirir a trava ou atingir o timeout. Nos pares diários abaixo, ambas as esperas são **0 s**. A diferença entre os `ts` mede o intervalo **entre as duas travas**. Esse intervalo inclui o `--refazer`, suas verificações e a transição até `--bloco`. `bin/sombra_trava.sh:21–35`, `bin/sombra.sh:437–451`.
+
+| Dia | Trava `--refazer` | Trava `--bloco` | Intervalo (s) | Fonte |
+|---|---|---|---:|---|
+| 21/11 | 04:11:01 | 04:18:14 | 433 | `espera.jsonl:69–70` |
+| 22/11 | 04:11:01 | 04:17:00 | 359 | `espera.jsonl:96–97` |
+| 23/11 | 04:11:01 | 04:16:46 | 345 | `espera.jsonl:117–118` |
+| 24/11 | 04:11:01 | 04:16:55 | 354 | `espera.jsonl:146–147` |
+| 25/11 | 04:11:01 | 04:17:00 | 359 | `espera.jsonl:282–283` |
+| 26/11 | 04:11:01 | 04:16:58 | 357 | `espera.jsonl:458–459` |
+| 27/11 | 04:11:01 | 04:17:08 | 367 | `espera.jsonl:492–493` |
+| 28/11 | 04:11:01 | 04:16:58 | 357 | `espera.jsonl:521–522` |
+
+Em 25–28/11, descontando o timer interno da máscara 2, sobram **92, 98, 99 e 96 s** no intervalo entre travas para **todas** as demais tarefas e a transição. Em 20/11, o `--refazer` adquiriu a trava após **1.650 s** e a tentativa registrada de `--bloco` atingiu o timeout de **1.800 s** com `ok=0`. `espera.jsonl:16,19,282–283,458–459,492–493,521–522`, `sombra_tail.log:9,23,37,51`, `bin/sombra_trava.sh:26–35`.
+
+## 4. Ordem do bloco e dependências de dado
+
+**São 82 entradas e 81 invocações ensaiadas em série.** `--bloco` pega a trava da sombra, importa a lavra de prod e chama `manage.py crons sombra` no container do ensaio. O renderer filtra comandos diários de horário fixo, expande os que rodam por empresa, insere cada encadeado no último minuto do seu `gatilho` mais um e ordena por minuto, preservando a ordem de inserção nos empates. O `while` usa essa lista em primeiro plano, sem esperar os horários exibidos. Registra `pipeline_placar` como `pulado` porque o comando usa o placar do host. Cada uma das 81 invocações tem uma reposição da lavra antes de `t0`, além da importação inicial. `sombra_tail.log:44–46,58–60`, `bin/sombra.sh:120–125,328–386,451`, `bin/sombra_trava.sh:21–38`, `app/core/management/commands/crons.py:43–48`, `app/config/crons.py:17,1946–1977`.
+
+No crontab que a cópia renderiza, `encadeado.sh --corrente` percorre a corrente em primeiro plano. Cada elo usa `flock` e aguarda os carimbos do gatilho p
+
+[truncado em 20000 de 27319 caracteres]
+
+## 28/11 05:57 · sessao d84a35fe1893 · - · - · origem=Ronald (tmux)
+
+O `--refazer` diário consome os dumps prontos das 04:00. O backup percorre os schemas em série, grava cada dump em `.part`, renomeia e valida o arquivo. O horário no nome vem antes do `pg_dump`. O ramo opcional `--dump-agora` exporta `juliani` e depois `public` em chamadas bloqueantes, com saídas independentes no shell. Duração dos dumps não medida. O ponto de medição é cada `pg_dump`. `app/config/crons.py:282,350-352`, `scripts/backup_all.sh:5-8`, `scripts/backup_tenant.sh:9-18`, `bin/sombra.sh:236-253`.
+
+| Ordem após selecionar os dumps | Implementação | Tempo |
+|---|---|---|
+| Restore | Recria o banco da sombra e restaura `public` antes de `juliani`. Valida os erros dos dois logs. | Não medido. Medir antes e depois de `dropdb`, `createdb` e cada `pg_restore`. `bin/sombra.sh:255-264`. |
+| Máscara 1 | Em uma transação, troca CPF e login para temporários antes dos definitivos, mascara nomes e e-mails, neutraliza push e trata nomes de PDFs. Verifica unicidade e temporários restantes. | Não medido. Medir o contêiner. `bin/sombra.sh:266-268`, `bin/sombra_mascara.py:51-103`. |
+| Máscara 2 | Em outra transação aplica inventário de campos pessoais, incluindo caminhos, cifrados, ano de nascimento, texto e JSON. Usa lotes para atualizações. | 25 a 28/11, **267, 259, 268 e 261 s** internos, sem o arranque do contêiner e do Django. `bin/sombra.sh:272-274`, `bin/sombra_mascara_pessoal.py:14-66`, `sombra_tail.log:9,23,37,51`. |
+| Selo pessoal | Consulta catálogo e valores conforme o inventário. Campo pessoal fora dele ou conteúdo cru provoca saída 3 e falha do `--refazer`. | Não medido. Medir o contêiner. `bin/sombra.sh:275-277`, `bin/sombra_selo_pessoal.py:23-97`. |
+| Divergência e carimbo | Compara colunas e migrations, verifica completude e grava o estado. | Não medido. Medir o conjunto e as consultas. `bin/sombra.sh:286-305,311-325`. |
+
+Os restores escrevem o mesmo banco. A independência entre seus objetos é [nao verificado]. As duas máscaras escrevem nas mesmas tabelas, incluindo `Colaborador` e `RegistroPDFAuditavel`. O selo verifica os dados após a máscara 2 e isenta campos tratados pela máscara 1. As leituras de colunas, migrations e contagens não consomem a saída umas das outras, mas sua consolidação e o carimbo precisam dos resultados. `bin/sombra.sh:255-277,292-305,311-325`, `bin/sombra_mascara.py:66-73,86-88`, `bin/sombra_regras_pessoais.py:50-52,73,80,165-171`.
+
+Intervalo da aquisição da trava de `--refazer` até a aquisição de `--bloco` em 21–28/11, **433, 359, 345, 354, 359, 357, 367 e 357 s**, com **0 s** em ambas as esperas. As sobras após a duração interna da máscara 2 em 25–28/11 foram **92, 98, 99 e 96 s** para o restante do intervalo inteiro. Em 20/11 a trava do `--refazer` veio após **1.650 s**. O `--bloco` registrou timeout após **1.800 s**. `bin/sombra_trava.sh:26-35`, `espera.jsonl:16,19,69-70,96-97,117-118,146-147,282-283,458-459,492-493,521-522`.
+
+Na janela 15–28/11 com 13 dias observados, o p95 das somas do bloco é **5.095 s**, pelo critério de arredondamento do índice da cópia. Com margem dá **7.642,5 s**, **4.342,5 s acima de 55 min**. Somar o intervalo entre travas nos oito dias em que existe dá limite parcial conservador para a janela, **5.452 s** de p95 parcial e **8.178 s** após a margem, **4.878 s acima de 55 min**. O alvo equivale a p95 bruto **≤ 2.200 s**. O p95 recente de ponta a ponta é **não medido** no anexo. O cron registra início, fim e duração no envelope de `placar.jsonl`. `hist.tsv:1445-2507`, `espera.jsonl:69-70,96-97,117-118,146-147,282-283,458-459,492-493,521-522`, `bin/crons_duracao.py:46-51`, `bin/cron_run.sh:5-13`, `app/config/crons.py:350-352`.
+
+A cópia guarda **5.188 s já com margem**, carimbados em **31/10**, para janela declarada de sete dias. Equivalem a **86m28s**, **31m28s acima de 55 min**. O medidor preserva um valor anterior quando não tem amostra nova. `app/config/crons_duracao.json:78,106-110`, `bin/crons_duracao.py:55-76,83-96`.
 
 ## 28/11 05:55 · sessao a867fa742add · - · - · origem=Ronald (tmux)
 
@@ -931,606 +1196,4 @@ bash bin/suite.sh --dir /home/ronald/wt-codex-codigo-dominio-valido-013223 --onl
 - **Alcance do RED.** Os testes criam carimbo temporário e substituem o setting. Checam o valor devolvido, o registro e o argumento recebido pelos dois objetos de rodapé. O controle cobre a precedência de `COMMIT_GIT`. O caminho padrão, a montagem e o texto efetivamente renderizado estão fora dessas asserções. `app/folha/tests/test_retrato_pdf_pacote.py:274–322`.
 - **Import.** O topo de `core.esteira_vigia` carrega biblioteca padrão, cria logger, constantes e compila sete regex. As leituras ficam dentro de funções e o `main` é protegido por `__name__`. A inspeção estática não mostra ciclo nem leitura de disco ou settings pelo corpo do módulo. `utils_audit` resolve o setting na chamada. Tempo de import [nao verificado]. `app/core/esteira_vigia.py:27–36,64,83–109,351–357,605,1653–1654`, `app/relatorios/utils_audit.py:6–20`.
 
-## 28/11 01:34 · sessao df0356fdefca · CODIGO-DOMINIO-VALIDO · leitura · origem=Code
-
-```python
-# Execução na sombra e contagens do recorte [nao verificado].
-import re
-from datetime import date
-
-from django.conf import settings
-from django.db import connection, transaction
-from django_tenants.utils import schema_context
-
-# Guarda da sombra (app/config/settings/sombra.py:29,49,60).
-if (
-    getattr(settings, "HASNER_SOMBRA", False) is not True
-    or connection.settings_dict["NAME"] != "sombra"
-):
-    raise SystemExit(1)
-
-from colaboradores.models import Empresa
-from folha.export import classificar_export, janela_competencia
-
-mes, ano = 11, 2026
-entra = 0
-maior_que_10 = []
-nao_ascii_digito = []
-
-# Schema do executor (bin/sonda_leitura.sh:239-240).
-with schema_context("juliani"), transaction.atomic(durable=True):
-    with connection.cursor() as cursor:
-        # Transação somente leitura (bin/gate_cobranca.sh:23-25).
-        cursor.execute("SET TRANSACTION READ ONLY")
-
-    empresa = Empresa.objects.get(pk=2)
-    # Janela pelo corte da empresa (app/folha/export.py:47-51 e app/ponto/janelas.py:36-57).
-    if janela_competencia(empresa, mes, ano) != (date(2026, 10, 21), date(2026, 11, 20)):
-        raise SystemExit(2)
-
-    # Fechamentos gravados e código já normalizado com strip (app/folha/export.py:774-797,846-850).
-    for item in classificar_export(empresa, mes, ano):
-        if item["status"] != "entra":
-            continue
-        entra += 1
-        codigo = item["codigo_dominio"]
-        pk = item["colaborador_id"]
-        if len(codigo) > 10:
-            maior_que_10.append(pk)
-        if re.fullmatch(r"[0-9]+", codigo) is None:
-            nao_ascii_digito.append(pk)
-
-    transaction.set_rollback(True)
-
-for pk in sorted(maior_que_10):
-    print(f"maior_que_10|col{pk:03d}")
-for pk in sorted(nao_ascii_digito):
-    print(f"nao_ascii_digito|col{pk:03d}")
-
-print(
-    f"S11|entra={entra}|maior_que_10={len(maior_que_10)}"
-    f"|nao_ascii_digito={len(nao_ascii_digito)}"
-)
-```
-
-## 28/11 01:25 · sessao 5f422d0683f6 · RETRATO-PDF-CORTA-POR-QUE · construtor · origem=Code
-
-Implementei os itens 1, 3, 4 e 5 em três arquivos de produção. O item 2 e os arquivos de teste ficaram fora do diff. `folha/views_retrato.py:350` · `relatorios/utils_audit.py:11` · `config/settings/base.py:5`
-
-### Cura por item
-
-- **1 — Download.** A rota responde `attachment; filename="retrato-folha-emp<pk>-<MM>-<AAAA>.pdf"`. O link continua no partial único, sem `target` nem atributos `hx-*`. `folha/views_retrato.py:473` · `templates/folha/_retrato_barra.html:50` · `templates/core/_btn_pdf.html:34`
-- **3 — Escala.** A descrição inteira entra em `Paragraph(escape(...))` na coluna de 38 mm. `folha/views_retrato.py:424` · `folha/views_retrato.py:441` · `folha/views_retrato.py:450`
-- **4 — Ordem e contadores.** Só o papel ordena por Sem ação → Sem leitura → Admin → Colab → Hoje → Entram → Rescisão, com mais dias primeiro e ID crescente no empate. Dentro de cada dono, coloquei `dias=None` depois das linhas com número. O topo imprime `Rótulo: N` com o `numero` de cada pílula de `Depende de` retornada por `quadros_barra_retrato`. A ordem da tela, o recorte, a contagem e o cabeçalho da tabela foram preservados. `folha/views_retrato.py:232` · `folha/views_retrato.py:324` · `folha/views_retrato.py:399` · `folha/views_retrato.py:418` · `folha/views_retrato.py:432` · `folha/views_retrato.py:467`
-- **5 — Carimbo.** `COMMIT_GIT` preenchida tem precedência. Em seguida, o leitor único usa `ler_deploy_stamp` pelo caminho `settings.HASNER_COMMIT_STAMP`. Arquivo ausente retorna `''`. O padrão resolve para `/app/logs/deploy.stamp` no container. O escritor grava no `logs/` da raiz do host e o bind documentado monta `app/` em `/app`. A exposição do carimbo nesse caminho em produção está [nao verificado]. `relatorios/utils_audit.py:11` · `core/esteira_vigia.py:1032` · `config/settings/base.py:4` · `bin/deploy.sh:436` · `CLAUDE.md:88`
-
-### Leitores
-
-- `_recorte_da_barra` é chamado pela tela, pelo PDF e pelo Raio‑X. `folha/views_retrato.py:260` · `folha/views_retrato.py:391` · `folha/views_retrato.py:507`
-- `get_commit_git` é chamado diretamente por `gerar_pdf_auditavel` e pelo espelho informacional. Pela porta auditável, a mudança alcança o retrato, o espelho individual, o lote de espelhos, o histórico de chamados e o PDF de gestão de HE. `relatorios/pdf_base.py:34` · `relatorios/pdf_base.py:135` · `relatorios/pdf_espelho.py:1070` · `folha/views_retrato.py:461` · `relatorios/pdf_espelho.py:1106` · `relatorios/services.py:338` · `relatorios/pdf_chamados.py:168` · `ponto/views.py:887`
-
-### REDs e mutantes para o opus
-
-| RED | Caso e mutantes que deve pegar |
-|---|---|
-| **1. Download** | Conferir o `attachment` e o nome exato pela rota, além do link no HTML cheio e no parcial filtrado. Mutantes `inline`, nome alterado ou `target`/`hx-*` no link. `folha/tests/test_retrato_pdf_pacote.py:187` |
-| **3. Escala** | Usar descrição longa com `<` e `&`, conferir o texto integral no `Paragraph` e a quebra dentro da coluna. Mutantes de string crua, truncamento ou retirada de `escape`. `folha/tests/test_retrato_pdf_pacote.py:210` · `folha/views_retrato.py:441` |
-| **4a. Ordem** | Intercalar os sete estados, incluir dias distintos na mesma faixa e um empate com nomes em ordem inversa à dos IDs. Conferir a ordem da tela e a igualdade do conjunto de IDs. Mutantes de ordem compartilhada, dias crescentes, ordenação por faixa ou desempate por nome. `folha/tests/test_retrato_pdf_pacote.py:228` · `folha/tests/test_retrato_pdf_pacote.py:245` |
-| **4b. Contadores** | Comparar todos os `Rótulo: N` com a tela, usando filtro universal, janela e Admin ativo. Mutantes que contam a partir das linhas visíveis, usam o universo inteiro ou imprimem só a pílula ativa. `folha/tests/test_retrato_pdf_pacote.py:251` · `folha/views_retrato.py:411` |
-| **5a. Fonte do SHA** | Ler um carimbo válido sem `COMMIT_GIT`, repetir com a variável preenchida e com o arquivo ausente. Mutantes que ignoram o caminho configurado, preferem o carimbo ao ambiente ou voltam a consultar Git. `folha/tests/test_retrato_pdf_pacote.py:292` · `folha/tests/test_retrato_pdf_pacote.py:317` · `relatorios/utils_audit.py:11` |
-| **5b. Trilha** | Conferir o SHA inteiro no registro e nas duas chamadas do rodapé, e os oito primeiros caracteres no texto impresso. Mutantes que gravam o SHA só no registro, omitem uma passagem ou truncam o registro. `folha/tests/test_retrato_pdf_pacote.py:300` · `relatorios/pdf_base.py:72` · `relatorios/pdf_base.py:139` · `relatorios/pdf_base.py:164` · `relatorios/pdf_base.py:170` |
-
-**Diff** com **0 `except` adicionados e 1 removido**. A sintaxe dos três arquivos e `git diff --check` foram conferidos. Resultado da suíte e renderização real do PDF [nao verificado]. `relatorios/utils_audit.py:11` · `folha/views_retrato.py:350` · `config/settings/base.py:5`
-
-```bash
-bash bin/suite.sh --dir /home/ronald/wt-codex-retrato-pdf-corta-por-que-012113 --only "folha.tests.test_retrato_pdf_pacote folha.tests.test_retrato_pdf relatorios core.tests.test_selo_teste_sem_relogio"
-```
-
-## 28/11 01:24 · sessao d2ce5ce5364d · INVENTARIO-PELA-REGRA · leitura · origem=Code
-
-```python
-import sys
-
-sys.dont_write_bytecode = True
-
-import json
-import logging
-from collections import defaultdict
-from datetime import date
-from functools import lru_cache
-from html.parser import HTMLParser
-from types import SimpleNamespace
-from typing import NamedTuple
-
-
-def parar(fonte, motivo):
-    print(f"BECO|ABORTOU|{fonte}|{motivo}", flush=True)
-    raise SystemExit(1) from None
-
-
-def fonte_segura(caminho, linha):
-    _, separador, relativo = caminho.rpartition("/app/")
-    return f"{'app/' + relativo if separador else caminho.rsplit('/', 1)[-1]}:{linha}"
-
-
-class FalhasSemDados:
-    def __enter__(self):
-        self.anterior = logging.getLogRecordFactory()
-
-        def fabrica(*args, **kwargs):
-            registro = self.anterior(*args, **kwargs)
-            if registro.levelno >= logging.ERROR or (
-                registro.exc_info and registro.exc_info[0]
-            ):
-                parar(fonte_segura(registro.pathname, registro.lineno), "erro_do_leitor")
-            registro.msg, registro.args = "", ()
-            registro.levelno = logging.NOTSET - 1
-            return registro
-
-        logging.setLogRecordFactory(fabrica)
-
-    def __exit__(self, tipo, erro, quadro):
-        logging.setLogRecordFactory(self.anterior)
-        if tipo is None or (tipo is SystemExit and erro.code == 1):
-            return False
-        while quadro.tb_next is not None:
-            quadro = quadro.tb_next
-        parar(fonte_segura(quadro.tb_frame.f_code.co_filename, quadro.tb_lineno), tipo.__name__)
-
-
-with FalhasSemDados():
-    from django.conf import settings
-    from django.db import connection
-    from django.utils import timezone
-    from django_tenants.utils import schema_context
-
-    if getattr(settings, "HASNER_SOMBRA", False) is not True:
-        parar("bin/sonda_leitura.sh:94", "HASNER_SOMBRA_ausente")
-    db = connection.settings_dict
-    if (db["NAME"], db["HOST"]) != ("sombra", "sombra_db"):
-        parar("bin/sonda_leitura.sh:94", "conexao_fora_da_sombra")
-    if connection.in_atomic_block or not connection.get_autocommit():
-        parar("app/chamados/models.py:761", "sonda_exige_transacao_propria")
-
-    from django.contrib.auth.models import User
-    from django.db.models import Q
-    from django.template import Context, engines
-
-    from chamados.catalogo.motor import TERMINAIS, VIVOS, decidir
-    from chamados.juizes import (
-        _dia_de_turno_da_pergunta,
-        competencia_do_chamado,
-        dia_do_fato,
-        pergunta_viva,
-        perguntas_vivas_de,
-    )
-    from chamados.models import (
-        ChamadoColaborador,
-        DecisaoPergunta,
-        DisputaSupervisao,
-        PerguntaDisputa,
-        motivo_implausivel_validacao,
-    )
-    from chamados.reconciliador import (
-        _veredito_premissa,
-        eventos_pendentes,
-        retencao_da_retratacao,
-    )
-    from chamados.services.acoes_chamado import montar_contexto_detalhe
-    from chamados.services.fio import (
-        chamado_que_lista,
-        contexto_parcial_fio,
-        data_do_fato_de,
-        disputas_do_chamado_em_lote,
-    )
-    from chamados.services.materializacao import (
-        _data_em_disputa,
-        estado_aplicacao_pergunta,
-        espera_declarado_x_gravado,
-    )
-    from chamados.services.tarefa_do_dia import (
-        carga_da_tarefa,
-        exigencia_das_perguntas,
-        porta_da_tarefa,
-    )
-    from chamados.services.validacao import (
-        _e_aceite_de_folga,
-        _resposta_de_hora,
-        entrega_que_barra_a_validacao,
-        fila_validar_classificada,
-    )
-    from chamados.services.verbos import particionar_verbos
-    from chamados.utils import pode_agir_chamado
-    from chamados.views import _is_gestor
-    from chamados.views_cobrar import _pode_validar_lote
-    from colaboradores.mixins import tem_acao
-    from colaboradores.models import Empresa
-    from folha.fora_da_folha import dias_que_seguram
-    from folha.models import RetratoFolha
-    from folha.retrato_folha import TIPO_SEM_CAUSA, TIPOS, dono_da_linha
-    from ponto.janelas import janela_fechamento
-    from ponto.services.declarar_dia import checar_declaracao, o_dia_ja_e_folga
-    from ponto.supra_juiz import perguntas_que_seguram_csf
-
-
-MES, ANO = 11, 2026
-EMPRESAS = (2, 3, 4)
-GESTOR_S1_PK = 909
-NV = "[nao verificado]"
-FAMILIAS = ("a", "b", "c", "d", "e", "e_retido_pelo_fechamento",
-            "e_retido_na_retratacao", "f")
-OBRAS = {
-    "a": ("O261-FIO-MORTO-PELO-RETRATO", 1132),
-    "b": ("ORFAS-VOLTOU", 2102),
-    "c": ("FDS-S1-C2-SEM-ACAO", 2197),
-    "d": ("O261-E-CELULA-20-UM-DONO", 1012),
-    "e": ("FDS-S1-C3-PREMISSA-MORTA", 2198),
-    "f": ("FDS-S1-C1-SEM-SAIDA", 2196),
-}
-ACOES = {"validar_pergunta", "recusar_pergunta", "corrigir_resposta", "conferir_data"}
-
-
-class Linha(NamedTuple):
-    colab: int
-    dia: date | None
-    referencia: str
-    motivo: str
-    fonte: str
-    obra: tuple
-
-
-def ref(pk):
-    return str(pk) if pk is not None else "-"
-
-
-def dia_pergunta(p):
-    # O fallback pela celula e a costura da S1. app/chamados/juizes.py:58,339
-    dia = _dia_de_turno_da_pergunta(p)
-    if dia is None and not p.conversa and p.celula_id:
-        return p.celula.data, "celula"
-    return dia, "dia_do_turno"
-
-
-def consulta_perguntas(emp):
-    return PerguntaDisputa.objects.filter(disputa__colaborador__empresa_id=emp).select_related(
-        "disputa__colaborador__empresa", "disputa__chamado",
-        "chamado_destino__colaborador", "chamado_destino__celula", "celula",
-    ).prefetch_related("decisoes")
-
-
-class Cartoes(HTMLParser):
-    def __init__(self, html, chamado_local=None):
-        super().__init__()
-        self.perguntas = defaultdict(set)
-        self.pares = defaultdict(set)
-        self.formularios = defaultdict(list)
-        self.chamado_local = chamado_local
-        self.formulario = None
-        self.feed(html)
-        self.close()
-
-    def handle_starttag(self, tag, atributos):
-        a = dict(atributos)
-        if "data-beco-pergunta" in a:
-            self.perguntas[int(a["data-beco-pergunta"])].add(int(a["data-beco-chamado"]))
-        if "data-beco-par" in a:
-            self.pares[int(a["data-beco-par"])].add(int(a["data-beco-chamado"]))
-        if tag == "form":
-            self.formulario = {}
-            if "data-beco-conferir" in a:
-                self.formulario.update(
-                    acao="conferir_data",
-                    pergunta_id=a["data-beco-conferir"],
-                    chamado_id=a["data-beco-chamado"],
-                )
-        elif tag == "input" and self.formulario is not None and a.get("type") == "hidden":
-            nome = a.get("name")
-            if nome in {"acao", "pergunta_id", "chamado_id", "confirmar_implausivel"}:
-                self.formulario[nome] = a.get("value", "")
-
-    def handle_endtag(self, tag):
-        if tag != "form" or self.formulario is None:
-            return
-        f, self.formulario = self.formulario, None
-        if f.get("acao") in ACOES:
-            cid = int(f.get("chamado_id", self.chamado_local))
-            self.formularios[int(f["pergunta_id"])].append(
-                (cid, f["acao"], f.get("confirmar_implausivel") == "1")
-            )
-
-
-@lru_cache(maxsize=2)
-def template_marcado(modal):
-    # Marcadores em memoria nas ramificacoes reais. O HTML fica em memoria.
-    # app/templates/chamados/partials/modal_fio.html:160,173,219,470
-    # app/templates/chamados/partials/_pergunta_card.html:28,31
-    engine = engines["django"].engine
-    nome = "modal_fio.html" if modal else "_pergunta_card.html"
-    caminho = f"chamados/partials/{nome}"
-    fonte = engine.get_template(caminho).source
-    pk = "perg.pk"
-    card = "chamado.pk"
-
-    def marca(tipo, pergunta=pk):
-        return f'<span data-beco-{tipo}="{{{{ {pergunta} }}}}" data-beco-chamado="{{{{ {card} }}}}"></span>'
-
-    resposta = (
-        "<strong>Resposta:</strong> {{ perg.resposta_colab }}" if modal
-        else "<strong>Resposta do colab:</strong> {{ perg.resposta_display }}"
-    )
-    pergunta = "{{ perg.pergunta }}</div>"
-    trocas = [(pergunta, marca("pergunta") + pergunta), (resposta, marca("par") + resposta)]
-    if modal:
-        gaveta = "{{ it.dia }}</span>"
-        conferir = """<form hx-post="{% url 'chamados:conferir_data_pergunta' perg.pk %}" """
-        trocas.extend((
-            (gaveta, marca("pergunta", "it.pergunta_id") + gaveta),
-            (conferir, conferir + 'data-beco-conferir="{{ perg.pk }}" data-beco-chamado="{{ chamado.pk }}" '),
-        ))
-    for original, marcado in trocas:
-        if fonte.count(original) != 1:
-            parar(f"app/templates/{caminho}:1", "marcador_do_template_mudou")
-        fonte = fonte.replace(original, marcado, 1)
-    return engine.from_string(fonte)
-
-
-@lru_cache(maxsize=None)
-def chamado_de(pk):
-    return ChamadoColaborador.objects.select_related(
-        "colaborador__empresa", "celula"
-    ).get(pk=pk)
-
-
-def validar_em_leitura(p, confirma):
-    # RECONSTRUIDO: testemunhas da S1, sem executar o ato sob trava.
-    # app/chamados/services/validacao.py:218,755,779,782
-    if not p.respondida or DecisaoPergunta.composta(p).validada_em is not None:
-        return False
-    if not confirma and motivo_implausivel_validacao(p):
-        return False
-    if _e_aceite_de_folga(p):
-        dia, colab = p.data_evento, p.disputa.colaborador
-        return bool(dia and (
-            o_dia_ja_e_folga(colab, dia)
-            or checar_declaracao(colaborador=colab, dias=[dia], tipo="folga")["aceitos"]
-        ))
-    if entrega_que_barra_a_validacao(p):
-        return False
-    if _resposta_de_hora(p):
-        if espera_declarado_x_gravado(p):
-            return False
-        aplicacao = estado_aplicacao_pergunta(p.disputa, p)
-        if aplicacao is None:
-            parar("app/chamados/services/materializacao.py:880", "sem_testemunha_da_resposta_de_hora")
-        return aplicacao["estado"] in ("aplicavel", "ja_satisfeita", "aplicada") [nao verificado]
-    return not (p.tipo_resposta == "data_hora" and _data_em_disputa(p))
-
-
-class TelaGestor:
-    def __init__(self, conta, verbos, lote):
-        self.conta = conta
-        self.req = SimpleNamespace(user=conta, GET={})
-        self.verbos = verbos
-        self.lote = lote
-        self.pode_inline = tem_acao(conta, "gerir_chamados")
-
-    @lru_cache(maxsize=None)
-    def modal(self, colab):
-        # O GET marca lidas. O construtor do parcial le o mesmo fio.
-        # app/chamados/views.py:870,881,890; app/chamados/services/fio.py:573,610
-        ctx = contexto_parcial_fio(self.req, colab)
-        ctx["cor_disputas_map"] = DisputaSupervisao.cor_map_por_colaborador(colab)
-        for ch in ctx["chamados"]:
-            if ch.disputa_obj is not None and ch.explicacao is None:
-                parar("app/chamados/services/fio.py:437", "explicador_sem_resposta")
-            for p in ch.perguntas_disputa:
-                estado = p.estado_aplicacao or {}
-                if estado.get("detalhe") == "estado de aplicacao indisponivel -- sem validar":
-                    parar("app/chamados/services/fio.py:470", "erro_na_testemunha_da_aplicacao")
-        return Cartoes(template_marcado(True).render(Context(ctx, use_l10n=False)))
-
-    @lru_cache(maxsize=None)
-    def local(self, pk):
-        ch = chamado_de(pk)
-        # Colisao GLPI -> detalhe local, igual a casca. app/chamados/views.py:219
-        if ch.ticket_id_glpi is not None:
-            alvo = ChamadoColaborador.objects.filter(
-                pk=ch.ticket_id_glpi, ticket_id_glpi__isnull=True
-            ).values_list("pk", flat=True).first()
-            return self.local(alvo) if alvo is not None else Cartoes("")
-        ctx = montar_contexto_detalhe(self.req, ch, True, ())
-        html = "".join(
-            template_marcado(False).render(Context({**ctx, "perg": p}, use_l10n=False))
-            for p in ctx["perguntas_disputa"]
-        )
-        return Cartoes(html, chamado_local=pk)
-
-    @lru_cache(maxsize=None)
-    def eleita(self, pk):
-        return disputas_do_chamado_em_lote([pk]).get(pk)
-
-    @lru_cache(maxsize=None)
-    def inline(self, pk):
-        ch = chamado_de(pk)
-        if not (self.pode_inline and self.verbos.get(pk) == "validar"
-                and pode_agir_chamado(self.conta, ch)):
-            return set()
-        d = self.eleita(pk)
-        if d is None or d.colaborador_id != ch.colaborador_id:
-            return set()
-        return {p.pk for p in perguntas_vivas_de(d) if p.respondida}
-
-    def formularios(self, p, cartoes, canal):
-        ancora = chamado_que_lista(p)
-        for cid, acao, confirma in cartoes.formularios.get(p.pk, ()):
-            if acao == "conferir_data":
-                # O POST e por pergunta, com a permissao de tela. app/chamados/views.py:1288
-                if self.pode_inline and data_do_fato_de(p)[1] and p.data_conferida_em is None:
-                    yield acao
-                continue
-            if cid != ancora or not pode_agir_chamado(self.conta, chamado_de(cid)):
-                continue
-            if canal == "local" and not p.disputa.aberta:
-                continue
-            if acao == "validar_pergunta":
-                if canal == "fio" and chamado_de(cid).colaborador_id != p.disputa.colaborador_id:
-                    continue
-                if validar_em_leitura(p, confirma):
-                    yield acao
-                continue
-            # app/chamados/services/fio.py:694,709,776
-            if not p.disputa.aberta or (canal == "fio" and self.eleita(cid) is None):
-                continue
-            if DecisaoPergunta.composta(p).validada_em is not None:
-                continue
-            if acao == "recusar_pergunta" and p.respondida and not p.fora_do_fato():
-                yield acao
-            if acao == "corrigir_resposta" and p.tipo_resposta == "hora":
-                yield acao
-
-    def consultar(self, p, ch=None, *, medir_acoes=False):
-        ids = {chamado_que_lista(p), p.disputa.chamado_id, ch.pk if ch else None} - {None}
-        colabs = {p.disputa.colaborador} | {chamado_de(pk).colaborador for pk in ids}
-        canais = [("fio", self.modal(colab)) for colab in sorted(colabs, key=lambda c: c.pk)]
-        canais += [("local", self.local(pk)) for pk in sorted(ids)]
-        no_lote = p.pk in self.lote  # app/chamados/views_cobrar.py:371
-        visivel = no_lote or any(p.pk in c.perguntas for _, c in canais)
-        par = no_lote or any(p.pk in c.pares for _, c in canais)
-        acoes = set()
-        if medir_acoes and par:
-            acoes = {acao for canal, c in canais for acao in self.formularios(p, c, canal)}
-            if (no_lote or any(p.pk in self.inline(pk) for pk in ids)) and validar_em_leitura(p, False):
-                acoes.add("validar_pergunta")
-        return visivel, par, acoes
-
-
-def medir_a(empresa, janela, agora, hoje, vivos, perguntas_dia, tela):
-    universo = dias_que_seguram(empresa, MES, ANO, hoje=hoje)
-    ancoras = defaultdict(set)
-    for ch in vivos.values():
-        dia = dia_do_fato(ch, fortes=True)
-        if dia is not None:
-            ancoras[ch.colaborador_id, dia].add(ch.pk)
-    for chave, perguntas in perguntas_dia.items():
-        for p, _ in perguntas:
-            pk = chamado_que_lista(p)
-            if pk in vivos and vivos[pk].colaborador_id == chave[0]:
-                ancoras[chave].add(pk)
-
-    candidatos = {}
-    for cid, (_, dias) in universo["dias"].items():
-        for r in dias:
-            chave = (cid, r["data"])
-            if chave not in ancoras:
-                candidatos[chave] = r
-    if not candidatos:
-        return []
-
-    colabs = universo["colabs"]
-    carga = carga_da_tarefa(
-        [colabs[cid] for cid in sorted({cid for cid, _ in candidatos})],
-        *janela, agora,
-    )
-    linhas = []
-    for (cid, dia), r in sorted(candidatos.items()):
-        tarefa = carga.tarefa(colabs[cid], dia)
-        porta = porta_da_tarefa(tarefa)
-        fila = (porta or {}).get("fila") or ()
-        if any(pk in vivos and vivos[pk].colaborador_id == cid for pk in fila):
-            continue
-        ps = [p for p, viva in perguntas_dia.get((cid, dia), ()) if viva]
-        if any(tela.consultar(p)[0] for p in ps):
-            continue
-        linhas.append(Linha(
-            cid, dia, "-",
-            f"{r['motivo']} celula={ref(r['celula_id'])} "
-            f"rota_tarefa={(porta or {}).get('rota') or '-'} "
-            f"fio_tarefa={(porta or {}).get('fio') or '-'} nao_sei={int(tarefa['nao_sei'])} "
-            "RECONSTRUIDO: juncao_colab_dia_ancora_e_superficies_admin",
-            "app/folha/export.py:1240", OBRAS["a"],
-        ))
-    return linhas
-
-
-def medir_c(emp, janela, agora, hoje, vivos, tela, sem_dia):
-    pares = defaultdict(set)
-    for ch in vivos.values():
-        motor = decidir(ch.status_local, "RECONCILIAR")
-        if motor.permitido and motor.novo_estado in TERMINAIS:
-            plano = ch._plano_pergunta_viva(motor.novo_estado)
-            if not ch._gate_pergunta_viva(motor.novo_estado, registrar=False, plano=plano):
-                for p in plano[0]:
-                    pares[ch.pk, p.pk].add("pergunta_viva_na_competencia_aberta")
-        if not ch._gate_conversa_do_pai(registrar=False):
-            for pk in perguntas_que_seguram_csf(ch):
-                pares[ch.pk, pk].add("conversa_exige_decisao_humana")
-
-    # A pergunta e relida no estado corrente, pois o plano julgou o pos-estado.
-    ps = consulta_perguntas(emp).in_bulk({pk for _, pk in pares})
-    encontrados = []
-    for (ch_pk, p_pk), guardas in sorted(pares.items()):
-        p = ps.get(p_pk)
-        if p is None or not p.respondida or not pergunta_viva(p, hoje=hoje, agora=agora):
-            continue
-        ch = vivos[ch_pk]
-        dia, fonte_dia = dia_pergunta(p)
-        if dia is None:
-            comp = competencia_do_chamado(ch)
-            dia = comp.dia if comp is not None else None
-            fonte_dia = "competencia_do_chamado"
-        if dia is not None and not janela[0] <= dia <= janela[1]:
-            continue
-        _, par, acoes = tela.consultar(p, ch, medir_acoes=True)
-        if not par or acoes:
-            continue
-        if dia is None:
-            sem_dia["c"] += 1
-            continue
-        encontrados.append((ch, p, dia, fonte_dia, guardas))
-
-    razoes = exigencia_das_perguntas({p.pk for _, p, _, _, _ in encontrados}, agora)
-    linhas = []
-    for ch, p, dia, fonte_dia, guardas in encontrados:
-        razao, _ = razoes[p.pk]
-        nascente = (
-            "app/chamados/models.py:429" if "pergunta_viva_na_competencia_aberta" in guardas
-            else "app/ponto/supra_juiz.py:561"
-        )
-        linhas.append(Linha(
-            p.disputa.colaborador_id, dia, str(ch.pk),
-            f"pergunta={p.pk} disputa={p.disputa_id} ancora={ref(chamado_que_lista(p))} "
-            f"guardas={','.join(sorted(guardas))} tarefa={razao.partition(':')[0]} "
-            f"RECONSTRUIDO: alcance_do_par_gestor_S1_sem_POST dia_por={fonte_dia}",
-            nascente, OBRAS["c"],
-        ))
-    return linhas
-
-
-def medir_e(janela, vivos, com_evento, grupos, sem_dia):
-    # Ordem de producao. app/chamados/management/commands/reconciliar_chamados.py:62,73,79
-    for ch in vivos.values():
-        if ch.colaborador_id in com_evento:
-            continue
-        comp = competencia_do_chamado(ch)
-        dia = comp.dia if comp is not None else None
-        if dia is not None and not janela[0] <= dia <= janela[1]:
-            continue
-        veredito = _veredito_premissa(ch)
-        if veredito is None or veredito.viva:
-            continue
-        ret = retencao_da_retratacao(ch)
-        if ret is not None:
-            fam, det = "e_retido_na_retratacao", f"retencao={ret[0]}"
-        elif not ch.reconciliaria():
-            fam, det = "e_retido_pelo_fechamento", "reconciliaria=False"
-        else:
-            fam, det = "e", "reconciliaria=True"
-        if dia is None:
-            sem_dia[fam] += 1
-            continue
-        grupos[fam].append(Linha(
-            ch.colaborador_id, dia, str(ch.pk), f"{ver
-
-[truncado em 20000 de 32189 caracteres]
-
-_8840 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8843 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
