@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 20:59** · publicado em **27/11/2026 21:00** (UTC-3)
+> Ultima resposta processada: **27/11/2026 21:05** · publicado em **27/11/2026 21:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 21:05 · sessao 96fd5c7b7b0f · FIM-DE-SEMANA-JA · leitura · origem=Code
+
+## 1. Dono L‑099 por linha
+
+**11 CADASTRO, 7 ESTRUTURA, 0 BATIDA**, em 18 dias. As referências a `sombra.out` contam a linha `sonda_leitura` como linha 1. O `dono_motivo` veio `-` nas 18 linhas. O motivo abaixo vem de seguir os insumos até o retorno de `dono_da_divergencia`, chamado por `InsumosDoDono.dono`. `sombra.out:1–21`, `app/docs/LEIS.md:122`, `app/ponto/management/commands/e6_oraculo.py:182–195`.
+
+- **Vínculo ausente.** `sem_vinculo_no_dia` e `sem_vinculo_em_dia_de_trabalho` vieram `true`. Esse ramo prevalece sobre as batidas. A geradora nomeada pela célula estava fora da vigência do dia, e a leitora do vínculo devolve `None` nessa condição. `app/ponto/management/commands/e6_oraculo.py:98–99`, `app/escala/alimentacao.py:269–284`, `app/ponto/supra_juiz.py:206–210`.
+- **Retorno residual.** Os três indicadores de cadastro do primeiro ramo vieram `false`, com zero ou quatro horas no oráculo, sem batida fora de turno, fase deslocada ou presença do dia na lavra CxR. O último retorno dá `ESTRUTURA`. `sombra.out:14–21`, `app/ponto/management/commands/e6_oraculo.py:98–110`.
+
+| Colab · dia de 2026 | Dono | Evidência do dia e ramo decisivo |
+|---|---|---|
+| col97 · 01/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:4`, `e6_oraculo.py:98–99`. |
+| col97 · 03/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:5`, `e6_oraculo.py:98–99`. |
+| col97 · 05/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:6`, `e6_oraculo.py:98–99`. |
+| col97 · 07/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:7`, `e6_oraculo.py:98–99`. |
+| col97 · 09/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:8`, `e6_oraculo.py:98–99`. |
+| col97 · 11/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:9`, `e6_oraculo.py:98–99`. |
+| col97 · 13/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:10`, `e6_oraculo.py:98–99`. |
+| col97 · 15/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:11`, `e6_oraculo.py:98–99`. |
+| col97 · 17/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:12`, `e6_oraculo.py:98–99`. |
+| col97 · 19/11 | CADASTRO | Célula gerada, indefinida, sem vínculo no dia. `sombra.out:13`, `e6_oraculo.py:98–99`. |
+| col296 · 10/11 | ESTRUTURA | `COBRANCA_SEM_FURO`, 660 previstos e 660 realizados. Quatro horas no oráculo e retorno residual. `sombra.out:14`, `e6_oraculo.py:110`. |
+| col327 · 10/11 | ESTRUTURA | `PARCIAL_SEM_PERIODO`, declaração aprovada de 60 min sem início e fim. Quatro horas e retorno residual. `sombra.out:15`, `e6_oraculo.py:110`. |
+| col344 · 07/11 | ESTRUTURA | Célula `concorde`, agendamento 103 cobre o dia e há batida civil apurável. Quatro horas e retorno residual. `sombra.out:16`, `e6_oraculo.py:110`. |
+| col348 · 20/11 | CADASTRO | Célula editada, indefinida, sem vínculo no dia, com 712 min realizados. `sombra.out:17`, `e6_oraculo.py:98–99`. |
+| col354 · 21/10 | ESTRUTURA | `PARCIAL_SEM_PERIODO`, declaração aprovada de 120 min sem início e fim. Quatro horas e retorno residual. `sombra.out:18`, `e6_oraculo.py:110`. |
+| col407 · 29/10 | ESTRUTURA | `FURO_PARCIAL`, 720 previstos e 0 realizados. Oráculo vazio e retorno residual. `sombra.out:19`, `e6_oraculo.py:106–110`. |
+| col655 · 21/10 | ESTRUTURA | `PARCIAL_SEM_PERIODO`, declaração aprovada de 180 min sem início e fim. Quatro horas e retorno residual. `sombra.out:20`, `e6_oraculo.py:110`. |
+| col673 · 21/10 | ESTRUTURA | `FURO_PARCIAL`, 720 previstos e 3 realizados. Oráculo vazio e retorno residual. `sombra.out:21`, `e6_oraculo.py:106–110`. |
+
+Nos 11 casos de vínculo, a célula traz `PREVISTO_COM_DIA_INDEFINIDO`, e `cadastro.falta_previsto` aponta um vínculo que responda pela data. O retrato lavrado inclui as datas dos 11. Para col97, a lista de portas do retrato veio vazia. Para col348, trouxe **Vínculo da escala** e duas entradas **Resolver dia no calendário**. Essas portas vêm da linha do colaborador na competência. `sombra.out:4–13`, `sombra.out:17`, `app/folha/retrato_folha.py:930–935`, `app/folha/retrato_folha.py:1024–1059`.
+
+**Onde o S2 divergiu.** O S2 tratou o protesto `PARCIAL_SEM_PERIODO` como se já fosse a decisão L‑099. O supra-juiz identifica corretamente o campo faltante e manda cobrar o cadastro. O cartório também prevê encaminhar a parcial sem período à lista do admin. Para a **contagem pedida**, a L‑099 aponta para `dono_da_divergencia`. Esse juiz recebe vínculo, folga, batidas, fase e CxR, e os três parciais caíram no retorno `ESTRUTURA`. Os dois `FURO_PARCIAL` tinham dono do fato em aberto no S2 e agora têm `ESTRUTURA` medido. O S2 já descrevia col296 como estrutural na seção de cobrança, mas o deixou fora da soma C1 de 14 + 2 + 1. A S3 também identificou nominalmente o caso de férias e mediu seu dono. `S2_r.md:11–14`, `app/docs/LEIS.md:122`, `app/ponto/supra_juiz.py:395–402`, `app/ponto/services/cartorio.py:423–446`, `app/ponto/management/commands/e6_oraculo.py:53–54`, `app/ponto/management/commands/e6_oraculo.py:98–110`, `sombra.out:14–21`.
+
+## 2. Lista para o Mauricio
+
+**Vínculo da escala**, formulário **Vincular Escala**, é a tela indicada em `tela.previsto` para cada linha abaixo. URL name `colaboradores:painel_vinculo`, template `colaboradores/partials/painel_vinculo.html`. `app/folha/retrato_folha.py:1003–1006`, `app/colaboradores/urls.py:12–13`, `app/colaboradores/views.py:306`, `app/templates/colaboradores/partials/painel_vinculo.html:128–137`.
+
+| Colab | Dia de 2026 | Motivo para o DP e cadastro faltante | Tela |
+|---|---|---|---|
+| col97 | 01/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:4`. | Vínculo da escala |
+| col97 | 03/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:5`. | Vínculo da escala |
+| col97 | 05/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:6`. | Vínculo da escala |
+| col97 | 07/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:7`. | Vínculo da escala |
+| col97 | 09/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:8`. | Vínculo da escala |
+| col97 | 11/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:9`. | Vínculo da escala |
+| col97 | 13/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:10`. | Vínculo da escala |
+| col97 | 15/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:11`. | Vínculo da escala |
+| col97 | 17/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:12`. | Vínculo da escala |
+| col97 | 19/11 | Falta vínculo de escala que cubra o dia. A geradora 12×36 terminou em 30/10. `sombra.out:13`. | Vínculo da escala |
+| col348 | 20/11 | Houve trabalho registrado e falta vínculo de escala que cubra o dia. A geradora intermitente terminou em 20/10. `sombra.out:17`. | Vínculo da escala |
+
+## 3. ESTRUTURA, ato faltante, escritor e obra
+
+Nas sete linhas, a S3 encontrou `colab_na_lista=true`, `dia_na_lista=false`, `dono_lavrado=null`, `mesa_admin=false` e `destino_DP=-`. A consulta à lista distingue a presença do colaborador da presença daquele dia. Em todas, o calendário da tarefa veio `false` e o retrato de 27/11 inclui a data. `sombra.out:14–16`, `sombra.out:18–21`, `app/chamados/services/vigia_fio.py:202–241`.
+
+| Caso · célula | Linha C1 preenchida com a evidência disponível | Ato, escritor canônico e BACKLOG |
+|---|---|---|
+| **col296 · 10/11** · 137154 | Chamado 38343 `turno_aberto` ainda aberto, 38318 resolvido. Perguntas 56532 e 56545 ancoradas em 38343, C6 `true`, sem resposta ou ato. A 56612 tem C6 `false` e projeção `fantasma`. Tarefa sem porta e fila vazia. Retrato com **Cobrar no fio** e **Vínculo da escala**. `sombra.out:14`. | Baixa de 38343 e rejulgamento, **se o gate autorizar**. O cartório chama a reconciliação em `app/ponto/services/cartorio.py:_julgar_colab_corpo:1618–1629`. A baixa passa por `app/chamados/models.py:ChamadoColaborador.reconciliar:661–675`. **E4B-SCA-25-COBRANCA-INDEVIDA** é a obra da classe. Inclusão nominal no estoque dos 25 e motivo da permanência [nao verificado]. Faltam `vivos`/`_protestam` da lavra e resultado ou recusa da reconciliação de 38343. `app/docs/BACKLOG.md:2318`, `app/ponto/services/cartorio.py:1498–1507`, `app/chamados/models.py:683–712`. |
+| **col327 · 10/11** · 122970 | Declaração 5515, 60 min, `hora_ini=null`, `hora_fim=null`. Chamado 38375 `ausencia_colab` resolvido. Sem pergunta, ato, porta ou link no retrato. `sombra.out:15`. | Falta publicar o dia para o admin e declarar o período da ausência. Escritores e obra candidata das três parciais abaixo. |
+| **col344 · 07/11** · 136655 | Agendamento 103, de 06/10 a 07/11, concluído, aquisitivo 639 concedido. Batida civil 148780, `E`, às 18:33:49 locais. Chamado 37604 registrado. Pergunta 55062, âncora e fila 37605, C6 `true`. `porta_pergunta` publica `validar` com `nao_sei=true`, e a instância está `passivo_sem_linha`. Retrato com **Validar no fio**. `sombra.out:16`. | No fio, falta `DecisaoPergunta` de **resposta** para 55062 em `2026-11-07T21:33:56.900522+00:00`. Escritor do passivo abaixo. Para férias, **HJ‑090, item 7**, é a obra da lista com dono L‑099. Ela referencia `CASOS-103-114-PELA-PORTA`, cuja decisão depende das datas do DP. Falta a linha `Ausencia(tipo=ferias)` de 07/11, com status e agendamento de origem, para confirmar entrada no relatório da obra. A correção do agendamento ou da batida fica [nao verificado]. `app/docs/BACKLOG.md:2137`, `app/docs/BACKLOG.md:751`, `app/ferias/management/commands/listar_ferias_com_batida.py:1–12`, `app/ferias/management/commands/listar_ferias_com_batida.py:41–65`. |
+| **col354 · 21/10** · 128888 | Declaração 5125, 120 min, `hora_ini=null`, `hora_fim=null`. Sem chamado, pergunta ou ato. Tarefa sem porta. Retrato com **Resolver dia no calendário**. `sombra.out:18`. | Falta publicar o dia para o admin e declarar o período da ausência. Escritores e obra candidata das três parciais abaixo. |
+| **col407 · 29/10** · 133670 | Chamado e âncora 35801 fechados. Pergunta 51727, C6 `true`, sequência vazia, resposta só na projeção. Instância `passivo_sem_linha`, fio `nao_sei`, sem rota ou fila. Retrato com duas entradas **Resolver dia no calendário**. `sombra.out:19`. | Falta `DecisaoPergunta` de **resposta** para 51727 em `2026-11-01T10:02:34.925352+00:00`. **FIO-E0-V4-E4B** é a obra do passivo. Escritor abaixo. `app/docs/BACKLOG.md:2315`. |
+| **col655 · 21/10** · 129497 | Declaração 5076, 180 min, `hora_ini=null`, `hora_fim=null`. Chamados 33158 e 33163 resolvidos, com 33158 no cartório. Sem pergunta ou ato. Tarefa sem porta. Retrato com **Cobrar no fio**. `sombra.out:20`. | Falta publicar o dia para o admin e declarar o período da ausência. Escritores e obra candidata das três parciais abaixo. |
+| **col673 · 21/10** · 135708 | Âncora 33282 fechada. 33494 resolvido, 34029 fechado. A pergunta 46935 tem C6 `true`, sequência vazia e `passivo_sem_linha`. A 46936 tem C6 `false` e projeção materializada por `declaracao`. Fio `nao_sei`, sem rota, fila ou link no retrato. `sombra.out:21`. | Falta `DecisaoPergunta` de **resposta** para 46935 em `2026-10-22T10:08:24.022007+00:00`. **FIO-E0-V4-E4B** é a obra do passivo. O BACKLOG nomeia col673 e a pergunta **46936** em **DIA-DA-BATIDA-JUIZ-UNICO**, para a atribuição da batida ao turno. `app/docs/BACKLOG.md:2315`, `app/docs/BACKLOG.md:1864`. |
+
+**Três parciais.** O ato de cadastro é salvar o início e o fim declarados pelo DP no painel `ponto:painel_ausencia`, template `ponto/partials/painel_ausencia.html`. O POST `ponto:editar_periodo_ausencia` chama `decidir`, que grava pela função `app/ponto/services/ausencia.py:_aplicar_periodo:1051–1054` e persiste em `app/ponto/services/ausencia.py:_decidir_no_ato:1101–1104`. Para o encaminhamento ausente, **COBPARC-B-CAUSA-NO-MOTOR** descreve a classe. O escritor atual das causas CxR é `app/ponto/motor_calculo_v2.py:_acusa_cadastro_x_realidade:1766–1783`, com chamadas nas pontas da janela de HE. A ausência das três datas na lista está medida. A causa exata da omissão e o escritor que deveria publicar essas três linhas ficam [nao verificado]. Faltam a assinatura por `(colab, dia)` na origem da lista e o resultado da sua publicação. **BO2910-ESTRUTURA (05)** cobre a aprovação pela tela sem exigir período. Para atribuir essa falha histórica a uma das três declarações, faltam canal e trilha da aprovação. `app/ponto/urls.py:68–72`, `app/ponto/views.py:2836–2849`, `app/ponto/services/cartorio.py:423–446`, `app/ponto/motor_calculo_v2.py:1822–1824`, `app/ponto/motor_calculo_v2.py:1860–1862`, `app/docs/BACKLOG.md:1105`, `app/docs/BACKLOG.md:1191`, `sombra.out:15`, `sombra.out:18`, `sombra.out:20`.
+
+**Três respostas sem linha.** O escritor canônico é `app/chamados/models.py:DecisaoPergunta.registrar:4590–4609`. O backfill despacha a recomposição em `app/chamados/management/commands/backfill_fio_morto_e4b.py:_executar_dia:161–164`. A correspondência exige a mesma pergunta, o mesmo ato e o mesmo instante. **E4C-F8** trata da migração de leitores da projeção para a leitura do ato. A inclusão nominal de 51727 ou 46935 nas nove unidades dessa obra fica [nao verificado], pois falta identificar o leitor específico na lista de escopo da F8. `app/chamados/models.py:4416–4447`, `app/docs/BACKLOG.md:2211`, `app/docs/BACKLOG.md:2315`, `sombra.out:16`, `sombra.out:19`, `sombra.out:21`.
+
+**Férias de col344.** A Folha já publica a retenção a partir do agendamento e do dia civil da batida. A S3 incluiu o caso pelo ramo sem porta **do tipo** `ferias`. A tarefa e o retrato puderam publicar **Validar no fio** pela pergunta. O ato de férias ainda depende de confirmar o gozo real, o dia de turno, a origem da batida e a decisão do DP. Se o DP confirmar datas diferentes, o escritor das datas é `app/ferias/services.py:_trocar_janela:694–729`. A tela encontrada é `ferias:secao_ferias_colab`, template `ferias/_secao_colab.html`. `s3.py:92–97`, `sombra.out:16`, `app/folha/export.py:490–504`, `app/folha/export.py:885–893`, `app/folha/retrato_folha.py:1003–1017`, `app/ferias/views.py:851–861`.
+
+## 4. O que segue [nao verificado]
+
+- **Identidade Git da cópia, execução independente da S3 e equivalência com produção.** A cópia consultada está sem metadados Git. O cabeçalho do anexo identifica a sonda, e o código traz as guardas de ambiente da sombra. O resultado disponível é a saída raspada fornecida. `sombra.out:1–3`, `s3.py:16–22`. [nao verificado]
+- **Valores corretos e histórico das correções.** Faltam o vínculo e a vigência corretos para col97/col348, os horários declarados das três parciais, o retorno histórico do gate de 38343 e a decisão do DP sobre a sobreposição de férias. A saída mostra o estado consultado e a sobreposição civil. `sombra.out:4–21`, `app/chamados/models.py:683–712`, `app/folha/export.py:490–504`. [nao verificado]
+- **Origem e elegibilidade das três respostas sem linha.** Faltam o escritor original, a trilha do ato, a presença no plano do backfill e o estado da competência no gate. A sonda mede a falta da linha, e o backfill ainda aplica seus critérios de alcance, competência e entrega. `sombra.out:16`, `sombra.out:19`, `sombra.out:21`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:307–343`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:383–405`. [nao verificado]
+- **Alcance por um ator e efeito na Folha.** O anexo traz rótulo e URL name das portas do retrato. Faltam o destino completo de cada link, o perfil e a autorização do ator, o resultado da ação e uma nova classificação da Folha. Liberação do TXT e efeito em pagamento ficam [nao verificado]. `sombra.out:14–21`, `app/folha/retrato_folha.py:1024–1065`, `app/folha/export.py:699`, `app/folha/export.py:774`.
 
 ## 27/11 20:59 · sessao 5e148d3706d5 · FERIADO-UM-JUIZ · construtor · origem=Code
 
@@ -2188,12 +2267,4 @@ Propostas de fatia com dono formal [nao verificado]:
 - **REGISTRA-ACHADOS**. No drawer do retrato, exibir `dias_sem_leitura` por data. RED em dia sem leitura na mesma linha de outro dia com porta, preservando a distinção de `Sem porta`. Exceção à mão dupla por tocar Folha. `app/folha/retrato_folha.py:1244`, `app/templates/folha/_retrato_o_que_fazer.html:46`.
 - **RECONCILIAR-SEM-GATILHO**, se o diagnóstico reproduzir cobrança com premissa morta apta à reconciliação. RED com os dois ramos da cobrança indevida, e controle de conversa divergente ainda à espera do admin. A alteração no cartório ou na retenção fica na exceção à mão dupla. `app/ponto/services/cartorio.py:1498–1508`, `app/folha/export.py:1282–1303`, `app/ponto/services/lastro.py:207–228`.
 
-## 27/11 19:54 · sessao d801de3a13af · - · - · origem=Ronald (tmux)
-
-A prévia fiel à porta da cópia usa `recalcular_fechamento_mes(somente_leitura=True, retornar_objeto=True, lavrar_dias_pagos=False)` e entrega os mesmos objetos a `classificar_export` e `montar_linhas_export`. A montagem devolve linhas em memória. O gerador oficial aprova, audita e registra a exportação. [app/folha/views.py:214](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:214) [app/folha/views.py:253](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:253) [app/folha/export.py:699](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:699)
-
-O FM grava horas decimais de duas casas e guarda relógios gerais separados em minutos. Falta em dias vem da consulta de ausências aprovadas usada pela montagem. A versão do motor pertence a `DiaPago`, e `FechamentoMensal` só guarda o horário da derivação. [app/ponto/models.py:374](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/models.py:374) [app/ponto/models.py:412](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/models.py:412) [app/ponto/models.py:464](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/models.py:464) [app/folha/export.py:749](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:749)
-
-A sonda precisa impedir que o recálculo omita vínculo em falha. O serviço registra nome ao capturar erro individual e continua. Um interceptador local do método `logger.error` que levanta `SystemExit`, a conferência de igualdade do universo e a impressão após rollback cobrem esse caminho. A execução em sessão já inicializada com logging silenciado evita a emissão normal em arquivo. [app/ponto/services/fechamento.py:1010](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1010) [app/ponto/services/fechamento.py:1327](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1327) [app/config/settings/saas.py:118](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/config/settings/saas.py:118)
-
-_8787 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8788 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
