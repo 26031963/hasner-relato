@@ -331,7 +331,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | HX-AUTOR-MUDO-REGEX | INSTRUMENTO | Detecta autor vazio mesmo quando escrito de outra forma. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:982 |
 | FIO-ESTADO-LE-O-ALCANCE | INSTRUMENTO | Mostra no painel o alcance real dos dias sem atendimento. | - | F5; cinco itens de fila | .......++ | REGISTRADA (núcleo fechado; fila restante) | BACKLOG:986 |
 | ALERTA-DESCARTES-DO-CODEX | INSTRUMENTO | Mostra achados descartados e cobra a justificativa da classificação. | - | contrato do instrumento | .+....... | REGISTRADA | BACKLOG:1004 |
-| CODEX-ESCREVE-RED-WRAPPER | INSTRUMENTO | Permite escrever testes de falha em cópia isolada. | - | contrato; verificação do instrumento | .+....... | REGISTRADA | BACKLOG:1005 |
+| CODEX-ESCREVE-RED-WRAPPER | INSTRUMENTO | Permite escrever testes de falha em cópia isolada. | - | contrato; verificação do instrumento | .+....... | SUPERADA (CCM-OPCAO-A) | BACKLOG:1005 |
 | FIO-DO-ADMIN-NO-ESTADO | INSTRUMENTO | Mostra no painel os dias que dependem do admin. | - | FIO-MORTO-DONO-NA-LISTA | .+....... | REGISTRADA | BACKLOG:1006 |
 | VETO-VIGIA-NO-PLACAR | INSTRUMENTO | Mostra no placar chamados vivos em dias vetados. | - | VETO-A | ......... | REGISTRADA | BACKLOG:1010 |
 | TESTES-QUE-NAO-PROVAM-[nome] | INSTRUMENTO | Faz testes comprovarem o nascimento do chamado prometido. | - | ? (não indicada) | ......... | REGISTRADA | BACKLOG:1012 |

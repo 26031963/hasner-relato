@@ -1,13 +1,13 @@
 # PLACAR da GRADE-MESTRA
 
-medido em 28/11/2026 00:00 @59600163c
+medido em 28/11/2026 00:07 @59600163c
 
 | balde | obras | no ar hoje | em voo | parada+interrompida | registrada | media % |
 |---|---|---|---|---|---|---|
 | ESPINHA-E | 77 | 0 | 0 | 15 | 62 | 26.2 |
 | 20/20 | 5 | 1 | 1 | 0 | 3 | 32.2 |
 | LATERAL-ESTRUTURA | 158 | 0 | 3 | 22 | 133 | 19.5 |
-| INSTRUMENTO | 180 | 0 | 0 | 17 | 163 | 15.0 |
+| INSTRUMENTO | 179 | 0 | 0 | 17 | 162 | 15.1 |
 | UI | 42 | 0 | 0 | 9 | 33 | 19.0 |
 | CEREJA | 1 | 0 | 0 | 0 | 1 | 11.1 |
 | ? | 5 | 0 | 0 | 0 | 5 | 11.1 |
@@ -26,7 +26,7 @@ medido em 28/11/2026 00:00 @59600163c
 | ATA-NAO-DISPENSA-JUSTIFICADA | 67 | Acesso para aplicar o acervo da 10 |
 | H12H06-SEPARA-E-CRONTAB | 67 | censo de trava; desenho da parte B |
 
-resolve preenchido 13/468
+resolve preenchido 13/467
 
 casos ESTRUTURA sem obra: 2 (logs/GRADE-MESTRA/resolve/quadro.md)
 
@@ -41,9 +41,10 @@ fecha BO por estado: EM VOO 2; BRIEF PRONTO 1; REGISTRADA 9; INTERROMPIDA 0; PAR
 | CONTRATO-DE-ENTRADA-DO-FIO (compl.) | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com E3 (chamados/juizes.py) | BRIEF PRONTO |
 | O232 (compl.) | 1 (roteiro BO-[nome]-1311 / mapa HJ) | colisao com JUSTIFICATIVA-PAGA-O-PERIODO (app/ponto/turnos.py alterado sem commit na wt-justif-040525 @eb584c2b0, git status 14/11 10:5x) | REGISTRADA |
 
-casas cheias na frota: cen 236, lei 320, con 75, R/G 33, mut 3, ver 14, opus 9, pou 43, ar 37
+casas cheias na frota: cen 236, lei 319, con 75, R/G 33, mut 3, ver 14, opus 9, pou 43, ar 37
 
-obras lidas: 468
+obras lidas: 467
 
-nao lidas: 1
+nao lidas: 2
 - L124 CADEIA-DO-CONTRATO-20: colunas=11
+- L334 CODEX-ESCREVE-RED-WRAPPER: estado='SUPERADA (CCM-OPCAO-A)'
