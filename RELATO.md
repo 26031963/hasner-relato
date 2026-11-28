@@ -11003,6 +11003,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 05:55:52 disjuntor (NEGOU MODELO)** -- agente principal -- Agent general-purpose -- alvo sha1:f19c8408b4 (41 car., na trilha privada)
+
+**28/11 05:55:35 disjuntor (NEGOU MODELO)** -- agente principal -- Agent general-purpose -- alvo sha1:f19c8408b4 (41 car., na trilha privada)
+
 **28/11 05:46:59 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:771a297a21 (283 car., na trilha privada)
 
 **28/11 04:16:47 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:ae84963439 (207 car., na trilha privada)
@@ -14955,6 +14959,9 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 05:47 colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_handoff_sessao.rc (05:46 rc 1) e pos_test_relato_guarda_pedido_de_patch (rc 0): handoff_sessao VERMELHO apos curas da volta 3 -- cobrar na entrega do opus.
 - 05:47 colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_hook_stop_vivo.rc (05:47 rc 0).
 - 05:48 colhido CODIGO-DOMINIO-VALIDO smoke/sombra.rc (05:48 rc 0): SMOKE VERDE -- s12 na sombra de hoje com arvore 3545ebc07: col1041 fora por codigo_dominio_invalido (unico), TXT 11 emp2 linhas=358 erros_layout=0, itens=474 entra=220 fora=254 (entra 219->220 = sombra refeita hoje). deploy.rc 0. CDV NO AR.
+- 05:53 colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_disjuntor.rc (05:53 rc 0): verde no rerun do opus a9bcda6b (era rc 2 05:40); falta pos_test_handoff_sessao (rc 1), opus segue
+- 05:56 DESPACHO RETRATO-PDF item 2 REDs -> opus construtor (wt-red-retrato-item2-055540 = main 3545ebc07 + merge c1 44e03c9a4; conflito views_retrato.py::retrato_pdf resolvido pela sessao pela uniao: _estilo_motivo+detalhe_do_motivo do main, _st_escala+Paragraph escape da c1). DECIDIDO PELA LEI (LEI-AKITA 7, nada em branco): janela com zero pares -> Por que com os rotulos sem datas | contestavel. Brief logs/RETRATO-PDF-CORTA-POR-QUE/item2/red/brief.md
+- 05:54 entrega opus a9bcda6b F1 v2 volta 3: 5 commits dcb07151d..7ce2048c4, 11 procedentes curados com RED/GREEN/mutante; #6 #7 fila, #14 nao procede; test_handoff_sessao e test_hook_nao_e_copia rc 1 = mesmas linhas na base 3bf4b6858 (conferido: so o caminho difere; wt sem .claude/settings.json nem .git/hooks); test_disjuntor.sh fora do ARQUIVOS (so ancora de mutante) -> Codex verificador ver3 (logs/CUSTO-DE-COORDENACAO/f1v2/ver3/r.rc)
 - 05:49 DESPACHO CRON-15-SOMBRA-CABE passo 1 (medida por etapa) -> Codex leitura (logs/CRON-15-SOMBRA-CABE/m1/r.rc; anexos hist de resultado_hist, espera, fim do sombra.log). Hoje: bloco 82 cmds soma 5095 s, 5 comandos = 3312 s (selo_leitores 1174, lavrar_he 670, lavrar_cxr 634, processar_cartorio 508, esmeril 345); fim 05:43. RETRATO item 2: travada por vaga opus (REDs antes do construtor Codex; F1 v3 na vaga).
 - 02:59 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO c3 (arquivo de teste e so do opus, CCM-OPCAO-A; Codex nao escreve teste): PUXADA CODIGO-DOMINIO-VALIDO c3 -> vaga opus construtor (wt-codex-codigo-dominio-valido-013223), mordidas P1/P2/rescisao+VIGIA do opus final logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md item 2
 - 02:26 PUXADA CODIGO-DOMINIO-VALIDO c2 -> vaga Codex construtor: so docstrings (citacao O256 restaurada com a excecao do `codigo` gravado; docstring do codigo_dominio_e_numerico sem o 'apos strip') -> logs/CODIGO-DOMINIO-VALIDO/c2/r.rc
