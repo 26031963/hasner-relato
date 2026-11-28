@@ -11012,6 +11012,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 11:46:39 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:58ee70a294 (347 car., na trilha privada)
+
 **28/11 11:46:03 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:77387ae047 (267 car., na trilha privada)
 
 **28/11 11:40:57 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:7c876a3bd4 (350 car., na trilha privada)
@@ -15230,6 +15232,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 11:41 colhido C7-TELA-ADMIN-ENCERRA c1/r.rc (11:37 rc 0): Codex construtor entregou 4 arquivos na wt-codex-c7-tela-admin-encerra-113127 (chamados/urls.py, chamados/views_disputa_admin.py, templates/chamados/disputa_admin.html, fio_colaborador.html link Disputas); 1 except ValueError em volta de disputa.admin_encerra (a conferir contra o PROIBIDO do brief); proximo: testes RED pelo opus (6 linhas da tabela do r.md), aceite RED-CERTO, verificador, smoke do Ronald nas DUAS cascas (front)
 - 11:41 colhido E4C-F5-INSTANTE canario/a3/r.rc (11:32 rc 0): 21 blocos (item 1 selo core.observ, item 2 ligacoes str, item 3 censo com tabela de ligacoes, item 4 dois saves); aceite RED-CERTO em montagem no molde aceiteA2
 - 11:46 superado FERIADO-UM-JUIZ d3/diff/diff.rc (11:44 rc 9): lado antes sem ponto de montagem /app/staticfiles na copia b82a5ef08; mkdir e relancado lanca2.sh (rc anterior guardado em diff.rc.lanca2a)
+- 11:50 colhido E4D-MATRIZ canario/v4/r.rc (11:46 rc 0): B = contexto HTMX sem folha_julga_pontualidade (views.py:404-405, cura de 1 bloco); C11 propoe campo DecisaoPergunta.pedido_id + migracao 0057 + registrar(acordar=); C44 propoe modo --aplicar-respostas-da-projecao no backfill. SCHEMA = mao unica, construtor opus; entra na vaga opus depois da FUJ-FECHA e do CUSTO F1v2 (CUSTO-SOBE-2811-1022). Aceite RED-CERTO v4 a montar sobre o apv3.py
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
@@ -15239,3 +15242,15 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - arvore certificada: inteira logs/CODIGO-DOMINIO-VALIDO/c4/inteira/i.log, AMBIENTE sha=9fe5de435, Ran 18128, OK, rc 0; cmp dos 15 arquivos contra a wt = 0 diferencas.
 - sombra --conferir rc 0 (STATUS=OK, 05:44); deploy --sem-migrate a seguir, smoke abaixo.
 - fila: CDV-D1..D4 e CDV-CODIGO-11-DIGITOS no BACKLOG.
+
+## 11:53 FUJ-FECHA (1) -- DIFF de impacto da comp 11 PUBLICADO ANTES do apply (L-113, opus2 item 4)
+LEI-AKITA: origem=ponto/feriado (FUJ 349adabd3 no ar), testemunha=FechamentoMensal da 11 + montar_linhas_export, RED=n/a (medida), quem-mais-le=TXT 11/espelho/previa, juizes novos=0, padrao=n/a (medida)
+- fonte: logs/FERIADO-UM-JUIZ/d3/diff/compara.tsv (sombra; antes = copia b82a5ef08, depois = arvore viva 349adabd3). d3 == d2 em FOLHA e TOTAL (diff 0 linhas): a arvore do pouso nao moveu numero.
+- colunas: gravado (FM de hoje) | antes (codigo sem FUJ) | depois (FUJ) | efeito = depois-antes | delta_apply = depois-gravado.
+- emp2 (475 gravado x 474 recalc): he100_feriado 917,95 -> 1293,49 (+375,54 h, efeito todo FUJ); trabalhadas 57819,83 -> 57458,28 (-361,55; FUJ -375,55, deriva +14,00); he100_noturna +6,99; noturnas +1,91 (deriva); falta +22,00 h (DERIVA gravado->antes); sai_antecipada -4,67; banco +58,66; turnos_abertos +1.
+- emp3 (117 x 114): he100_feriado 98,91 -> 166,01 (+67,10, FUJ); trabalhadas -74,20 (FUJ); o resto 0 em horas; abonados +13439 min (deriva).
+- emp4 (23 x 22): FUJ efeito 0 em toda rubrica; DERIVA: trabalhadas -32,45, falta +18,00, sai_antecipada -7,11, banco +169,95, turnos_abertos -3.
+- TXT 11 emp2: 358 -> 362 linhas (1 sai, 5 entram, todas rubrica 0110 do dia 02/11); emp3 62 = 62, emp4 16 = 16, sem linha mudada.
+- universo: os colabs fora do recalc (emp2 col929/939/951/997; emp3 col746/946/963; emp4 col510) saem do FM por nao estarem mais no universo de apuracao -- mesma regra da GUARDA-10-B.
+- comp 12 so medida (corrente, nao entra no apply deste aval).
+- apply: logs/FERIADO-UM-JUIZ/apply11/apply11.sh (recalcular_fechamento --apply, emp 1-4, mes 11); reversao snap 09:08 + reversao_antes_deploy_1135.out; hash das exportadas (FM 06-10 + ExportacaoDominio) antes/depois no mesmo script. TXT 11 NAO gerado entre deploy e apply.
