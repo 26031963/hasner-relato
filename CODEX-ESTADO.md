@@ -1,7 +1,395 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 13:37** · publicado em **28/11/2026 13:41** (UTC-3)
+> Ultima resposta processada: **28/11/2026 14:12** · publicado em **28/11/2026 14:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 14:12 · sessao d7103919d556 · C7-TELA-ADMIN-ENCERRA · leitura · origem=Code
+
+**Resumo** — Módulo completo abaixo, com 7 testes e 6 mutantes de um hunk. `app/chamados/urls.py:22`, `app/chamados/models.py:2210`  
+Os seis diffs passaram em `git apply --check`. O selo AST passou na cópia e acusou o pai, a chamada removida e a escrita direta. `app/chamados/views_disputa_admin.py:49`, `app/chamados/views_disputa_admin.py:57`  
+Próximo na sessão: rodar o módulo em `b82a5ef08`, em `d04973b65` e com cada mutante isolado. HTTP, ORM e trilha em execução seguem [nao verificado].
+
+## 1. `app/chamados/tests/test_c7_tela_admin_encerra.py`
+
+Copiei o molde de `TestCase` com `Empresa`, `Praca`, `Posto` e `Colaborador` da base C7, o usuário `sistema` do teste de reabertura vizinho e o relógio de `2026-10-22 15:00:00` congelado com `freezegun` da C7. A sessão `via_app` segue o teste das cascas. `app/chamados/tests/test_c7_red_minimos.py:88`, `app/chamados/tests/test_c7_red_minimos.py:92`, `app/chamados/tests/test_c7_red_minimos.py:127`, `app/chamados/tests/test_reabrir_disputa_admin_sem_aberta.py:9`, `app/core/tests/test_casca_telas_colab.py:35`
+
+A recusa de `fechar` e o POST válido exercitam a mesma disputa muda. No pai, a recusa já existe e o RED esperado é a asserção de que o POST delegou à porta. As URLs literais deixam o teste do link chegar ao HTML da ficha. No teste de permissão, o controle positivo com staff impede que o 404 de rota ausente satisfaça o teste inteiro. `b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/models.py:2141`, `b82a5ef08988438256b90c5d0b9d94f4552156e5/app/chamados/urls.py:21`, `b82a5ef08988438256b90c5d0b9d94f4552156e5/app/templates/chamados/fio_colaborador.html:9`, `app/chamados/views_disputa_admin.py:36`
+
+```python
+import ast
+import re
+from datetime import date, datetime, timezone
+from pathlib import Path
+from unittest.mock import patch
+
+from django.conf import settings
+from django.contrib.auth.models import Group, User
+from django.test import TestCase
+from freezegun import freeze_time
+
+from chamados.models import DecisaoPergunta, DisputaSupervisao, PerguntaDisputa
+from colaboradores.models import Colaborador, Empresa, Posto, Praca
+from core.models import LogAuditoria
+
+
+RELOGIO = '2026-10-22 15:00:00'
+INSTANTE = datetime.fromisoformat(RELOGIO).replace(tzinfo=timezone.utc)
+MOTIVO = 'Plantão conferido com a supervisão'
+SUCESSO = 'A disputa foi encerrada e o motivo ficou registrado.'
+
+
+@freeze_time(RELOGIO)
+class C7TelaAdminEncerraTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.get_or_create(username='sistema')
+        empresa = Empresa.objects.create(
+            razao_social='C7 TELA LTDA', cnpj='19131243000197', ativa=True,
+        )
+        praca = Praca.objects.create(nome='Praça C7', cidade='Londrina', estado='PR')
+        posto = Posto.objects.create(nome='Posto C7', empresa=empresa, praca=praca)
+        cls.staff = User.objects.create_user('c7_tela_staff', is_staff=True)
+        cls.admin = User.objects.create_user('c7_tela_admin')
+        cls.gestor = User.objects.create_user('c7_tela_gestor')
+        cls.admin.groups.add(Group.objects.get_or_create(name='admin_ti')[0])
+        cls.gestor.groups.add(Group.objects.get_or_create(name='gestor')[0])
+        cls.colab = Colaborador.objects.create(
+            nome='Colaborador C7 Tela', cpf='[cpf]', empresa=empresa,
+            posto=posto, situacao='ativo', data_admissao=date(2026, 1, 1),
+        )
+
+    def setUp(self):
+        self.ficha_url = f'/chamados/colaborador/{self.colab.pk}/'
+        self.lista_url = f'{self.ficha_url}disputas/'
+        self.encerrar_url = f'{self.lista_url}encerrar/'
+        self.disputa = DisputaSupervisao.objects.create(
+            colaborador=self.colab, motivos=['orfao_14h', 'intervalo_volta'],
+        )
+        self.pergunta = PerguntaDisputa.objects.create(
+            disputa=self.disputa, motivo='orfao_14h', data_evento=date(2026, 10, 20),
+            pergunta='A que horas terminou o plantão?', tipo_resposta='hora',
+        )
+
+    def _estado(self):
+        self.disputa.refresh_from_db()
+        return (
+            self.disputa.fechada_em, self.disputa.fechada_por_id,
+            self.disputa.resolucao, self.disputa.motivo_fechamento,
+        )
+
+    def _trilha(self):
+        return LogAuditoria.objects.filter(
+            modelo='DisputaSupervisao', objeto_id=self.disputa.pk, acao='disputa_fechada',
+        )
+
+    def _assert_aberta_sem_trilha(self):
+        self.assertEqual(self._estado(), (None, None, '', ''))
+        self.pergunta.refresh_from_db()
+        self.assertIsNone(self.pergunta.materializada_em)
+        self.assertIsNone(self.pergunta.materializada_por_id)
+        self.assertEqual(self.pergunta.via_resolucao, '')
+        self.assertFalse(self.pergunta.decisoes.exists())
+        self.assertFalse(self._trilha().exists())
+
+    def _login_app(self, ator):
+        self.client.force_login(ator)
+        sessao = self.client.session
+        sessao['via_app'] = True
+        sessao['plataforma_sessao'] = 'app'
+        sessao.save()
+
+    def test_ficha_mostra_link_so_para_staff_ou_admin_ti(self):
+        link = rf'<a\b[^>]*\bhref="{re.escape(self.lista_url)}"[^>]*>\s*Disputas\s*</a>'
+        for ator in (self.staff, self.admin):
+            with self.subTest(ator=ator.username):
+                self.client.force_login(ator)
+                resposta = self.client.get(self.ficha_url)
+                self.assertEqual(resposta.status_code, 200)
+                self.assertRegex(resposta.content.decode(), link)
+        self.client.force_login(self.gestor)
+        resposta = self.client.get(self.ficha_url)
+        self.assertEqual(resposta.status_code, 200)
+        self.assertNotRegex(resposta.content.decode(), link)
+
+    def test_lista_todas_as_perguntas_antes_do_form(self):
+        irma = PerguntaDisputa.objects.create(
+            disputa=self.disputa, motivo='intervalo_volta', data_evento=date(2026, 10, 19),
+            pergunta='A que horas voltou do intervalo?', tipo_resposta='hora',
+            resposta_colab='13:00', respondida_em=INSTANTE,
+        )
+        esperadas = ((self.pergunta, 'Pendente'), (irma, 'Respondida'))
+        self._login_app(self.admin)
+        resposta = self.client.get(self.lista_url)
+        self.assertContains(resposta, f'id="disputa-{self.disputa.pk}"')
+        self.assertTemplateUsed(resposta, 'base_app.html')
+
+        antes, inicio_form, formulario = resposta.content.decode().partition(
+            f'<form method="post" action="{self.encerrar_url}">',
+        )
+        self.assertTrue(inicio_form, 'O formulário precisa apontar para a porta HTTP.')
+        secao = antes.split(f'id="disputa-{self.disputa.pk}"', 1)[1]
+        itens = re.findall(
+            r'<li\b[^>]*>\s*<strong>Pergunta #(\d+)</strong>(.*?)</li>', secao, re.S,
+        )
+        self.assertCountEqual([pk for pk, _ in itens], [str(p.pk) for p, _ in esperadas])
+        por_pk = dict(itens)
+        for pergunta, estado in esperadas:
+            item = por_pk[str(pergunta.pk)]
+            self.assertIn(estado, item)
+            self.assertIn(f'Marco: {pergunta.instancia_marco}', item)
+            self.assertIn(f'Dia: {pergunta.data_evento:%d/%m/%Y}', item)
+            self.assertIn(pergunta.pergunta, item)
+
+        formulario = formulario.split('</form>', 1)[0]
+        self.assertIn(f'name="disputa_pk" value="{self.disputa.pk}"', formulario)
+        self.assertIn('name="csrfmiddlewaretoken"', formulario)
+        self.assertRegex(formulario, r'<textarea\b[^>]*\bname="motivo"[^>]*\brequired\b')
+        self.assertIn('Encerrar disputa com motivo', formulario)
+
+    def test_fechar_recusa_muda_e_post_com_motivo_delega(self):
+        with self.assertRaisesRegex(ValueError, 'Encerrar com motivo'):
+            self.disputa.fechar(self.staff)
+        self._assert_aberta_sem_trilha()
+
+        self.client.force_login(self.staff)
+        motivo_postado = f'  {MOTIVO}  '
+        porta_real = DisputaSupervisao.admin_encerra
+        with patch.object(DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=porta_real) as porta:
+            resposta = self.client.post(self.encerrar_url, {
+                'disputa_pk': self.disputa.pk, 'motivo': motivo_postado,
+            })
+        porta.assert_called_once_with(self.disputa, self.staff, motivo_postado)
+        self.assertContains(resposta, SUCESSO)
+        self.assertTemplateUsed(resposta, 'base.html')
+        self.assertEqual(
+            self._estado(),
+            (INSTANTE, self.staff.pk, MOTIVO, DisputaSupervisao.FECHOU_ADMIN_ENCERRA),
+        )
+        self.pergunta.refresh_from_db()
+        self.assertEqual(self.pergunta.via_resolucao, PerguntaDisputa.VIA_ADMIN_DECIDIU)
+        self.assertEqual(self.pergunta.materializada_por_id, self.staff.pk)
+        self.assertEqual(self.pergunta.materializada_em, INSTANTE)
+        self.assertEqual(list(self.pergunta.decisoes.values_list('ato', 'ato_por_id', 'ato_motivo')), [
+            (DecisaoPergunta.SILENCIO, self.staff.pk, f'admin_encerra: {MOTIVO}'),
+        ])
+        self.assertEqual(list(self._trilha().values_list('usuario_id', 'valor_depois')), [
+            (self.staff.pk, {'motivo_fechamento': 'admin_encerra', 'resolucao': MOTIVO}),
+        ])
+
+    def test_post_sem_motivo_mostra_recusa_e_preserva_disputa(self):
+        self.client.force_login(self.staff)
+        porta_real = DisputaSupervisao.admin_encerra
+        for vazio in (None, '', ' \t  '):
+            with self.subTest(motivo=vazio):
+                dados = {'disputa_pk': self.disputa.pk}
+                if vazio is not None:
+                    dados['motivo'] = vazio
+                with patch.object(
+                    DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=porta_real,
+                ) as porta:
+                    resposta = self.client.post(self.encerrar_url, dados)
+                porta.assert_called_once_with(self.disputa, self.staff, vazio)
+                self._assert_aberta_sem_trilha()
+                self.assertContains(resposta, 'exige o MOTIVO escrito')
+
+    def test_reenvio_delega_e_preserva_uma_linha_de_trilha(self):
+        self.assertIs(self.disputa.admin_encerra(self.admin, MOTIVO), True)
+        estado = self._estado()
+        trilha = list(self._trilha().values_list('pk', flat=True))
+        decisoes = self.pergunta.decisoes.values_list('pk', 'ato', 'ato_em', 'ato_motivo')
+        antes = list(decisoes.all())
+        self.assertEqual(len(trilha), 1)
+        self.assertEqual([linha[1] for linha in antes], [DecisaoPergunta.SILENCIO])
+
+        retornos = []
+        porta_real = DisputaSupervisao.admin_encerra
+
+        def observar(disputa, ator, motivo):
+            retorno = porta_real(disputa, ator, motivo)
+            retornos.append(retorno)
+            return retorno
+
+        self._login_app(self.admin)
+        motivo_postado = f'  {MOTIVO}  '
+        with freeze_time('2026-10-22 16:00:00'), patch.object(
+            DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=observar,
+        ) as porta:
+            resposta = self.client.post(self.encerrar_url, {
+                'disputa_pk': self.disputa.pk, 'motivo': motivo_postado,
+            })
+        porta.assert_called_once_with(self.disputa, self.admin, motivo_postado)
+        self.assertEqual(retornos, [False])
+        self.assertContains(resposta, 'Nada mudou: a disputa já estava encerrada com este motivo.')
+        self.assertTemplateUsed(resposta, 'base_app.html')
+        self.assertEqual(self._estado(), estado)
+        self.assertEqual(list(self._trilha().values_list('pk', flat=True)), trilha)
+        self.assertEqual(list(decisoes.all()), antes)
+        self.pergunta.refresh_from_db()
+        self.assertEqual(self.pergunta.materializada_em, INSTANTE)
+
+    def test_sem_permissao_recusa_get_e_post_sem_tocar_na_disputa(self):
+        dados = {'disputa_pk': self.disputa.pk, 'motivo': MOTIVO}
+        self.client.force_login(self.gestor)
+        porta_real = DisputaSupervisao.admin_encerra
+        with patch.object(DisputaSupervisao, 'admin_encerra', autospec=True, side_effect=porta_real) as porta:
+            lista = self.client.get(self.lista_url)
+            escrita = self.client.post(self.encerrar_url, dados)
+        self.assertIn(lista.status_code, (403, 404))
+        self.assertIn(escrita.status_code, (403, 404))
+        porta.assert_not_called()
+        self._assert_aberta_sem_trilha()
+
+        self.client.force_login(self.staff)
+        self.assertEqual(self.client.get(self.encerrar_url).status_code, 405)
+        self.assertEqual(
+            self.client.post(self.encerrar_url, dados).status_code, 200,
+            'O mesmo POST precisa estar disponível ao staff.',
+        )
+
+    def test_ast_view_so_delega_a_decisao_de_fechamento(self):
+        fonte = Path(settings.BASE_DIR) / 'chamados' / 'views_disputa_admin.py'
+        self.assertTrue(fonte.is_file(), 'Falta a view que delega o encerramento à porta.')
+        nos = list(ast.walk(ast.parse(fonte.read_text(encoding='utf-8'))))
+        chamadas = [no for no in nos if isinstance(no, ast.Call)]
+        self.assertEqual([
+            ast.unparse(no) for no in chamadas
+            if isinstance(no.func, ast.Attribute) and no.func.attr == 'admin_encerra'
+        ], ['disputa.admin_encerra(request.user, motivo)'])
+
+        funcoes_http = {'_exigir_admin', '_renderizar_disputas', 'get_object_or_404', 'render', 'str'}
+        self.assertEqual([
+            (no.lineno, no.func.id) for no in chamadas
+            if isinstance(no.func, ast.Name) and no.func.id not in funcoes_http
+        ], [])
+        atributos_http = {
+            'user.is_staff', 'user.groups', "user.groups.filter(name='admin_ti').exists",
+            'user.groups.filter', 'colaborador.disputas', 'colaborador.disputas.filter',
+            'colaborador.disputas.filter(fechada_em__isnull=True).prefetch_related',
+            'request.user', 'request.POST', 'request.POST.get', 're.fullmatch',
+            'DisputaSupervisao.objects', 'DisputaSupervisao.objects.select_related',
+            'disputa.admin_encerra', 'disputa.colaborador',
+        }
+        self.assertEqual([
+            (no.lineno, ast.unparse(no)) for no in nos if isinstance(no, ast.Attribute)
+            if not isinstance(no.ctx, ast.Load) or ast.unparse(no) not in atributos_http
+        ], [])
+        self.assertCountEqual(
+            [ast.unparse(no.test) for no in nos if isinstance(no, ast.If)],
+            [
+                "not (user.is_staff or user.groups.filter(name='admin_ti').exists())",
+                "disputa_pk is None or not re.fullmatch('[0-9]{1,19}', disputa_pk)",
+                'encerrou',
+            ],
+        )
+        self.assertEqual(
+            [no.lineno for no in nos if isinstance(no, (ast.IfExp, ast.Match, ast.While))], [],
+        )
+```
+
+## 2. Mutantes
+
+**M1 — Remover a chamada à porta.** Devem falhar `test_fechar_recusa_muda_e_post_com_motivo_delega`, `test_post_sem_motivo_mostra_recusa_e_preserva_disputa`, `test_reenvio_delega_e_preserva_uma_linha_de_trilha` e `test_ast_view_so_delega_a_decisao_de_fechamento`. As três falhas HTTP são esperadas [nao verificado]. `app/chamados/views_disputa_admin.py:52`
+
+```diff
+--- a/app/chamados/views_disputa_admin.py
++++ b/app/chamados/views_disputa_admin.py
+@@ -49,7 +49,7 @@
+     motivo = request.POST.get('motivo')
+     # A recusa de negócio da porta precisa chegar ao admin com o motivo original.
+     try:
+-        encerrou = disputa.admin_encerra(request.user, motivo)
++        encerrou = True
+     except ValueError as e:
+         tipo_mensagem = 'error'
+         mensagem = str(e)
+```
+
+**M2 — Aceitar motivo ausente, vazio ou em branco.** Deve falhar `test_post_sem_motivo_mostra_recusa_e_preserva_disputa` na asserção de disputa aberta [nao verificado]. `app/chamados/models.py:2214`
+
+```diff
+--- a/app/chamados/models.py
++++ b/app/chamados/models.py
+@@ -2212,8 +2212,6 @@
+         OBRIGATORIO -- *"a opcao coerente que o admin nao tinha"*. As mudas saem com `admin_decidiu` e trilha
+         (quem, quando, motivo). Resposta sem veredito continua recusando: a porta e para o silencio. -> bool"""
+         texto = (motivo or '').strip()
+-        if not texto:
+-            raise ValueError('Encerrar a disputa #%s exige o MOTIVO escrito (auditoria CLT).' % self.pk)
+         return self.fechar(user, resolucao=texto, motivo=self.FECHOU_ADMIN_ENCERRA)
+ 
+     def aparar_motivo_respondido(self, motivo):
+```
+
+**M3 — Abrir a permissão ao usuário autenticado.** Deve falhar `test_sem_permissao_recusa_get_e_post_sem_tocar_na_disputa` no status da lista do gestor [nao verificado]. `app/chamados/views_disputa_admin.py:13`, `app/chamados/views_disputa_admin.py:28`, `app/chamados/views_disputa_admin.py:36`
+
+```diff
+--- a/app/chamados/views_disputa_admin.py
++++ b/app/chamados/views_disputa_admin.py
+@@ -12,7 +12,7 @@
+ 
+ def _exigir_admin(user):
+     if not (user.is_staff or user.groups.filter(name='admin_ti').exists()):
+-        raise PermissionDenied
++        return
+ 
+ 
+ def _renderizar_disputas(request, colaborador, *, mensagem=None, tipo_mensagem=None):
+```
+
+**M4 — Remover o link da ficha.** Deve falhar `test_ficha_mostra_link_so_para_staff_ou_admin_ti` na asserção do link renderizado [nao verificado]. `app/templates/chamados/fio_colaborador.html:11`
+
+```diff
+--- a/app/templates/chamados/fio_colaborador.html
++++ b/app/templates/chamados/fio_colaborador.html
+@@ -8,9 +8,6 @@
+ 
+ <div class="mb-4">
+   {% include "core/_voltar.html" with voltar_url=voltar_url voltar_rotulo="Voltar" %}
+-  {% if is_admin_ti %}
+-  <a class="hx-btn" href="{% url 'chamados:disputas_admin_colaborador' colaborador.pk %}{% if request.GET.app == '1' %}?app=1{% endif %}">Disputas</a>
+-  {% endif %}
+ </div>
+ <div class="painel-acompanhamento" style="border:1px solid #e0e6ef;border-radius:10px;padding:16px;margin-bottom:16px;background:#fafcff;">
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+```
+
+**M5 — Mostrar só a primeira pergunta.** Deve falhar `test_lista_todas_as_perguntas_antes_do_form` na comparação dos PKs visíveis antes do formulário [nao verificado]. `app/templates/chamados/disputa_admin.html:18`
+
+```diff
+--- a/app/templates/chamados/disputa_admin.html
++++ b/app/templates/chamados/disputa_admin.html
+@@ -15,7 +15,7 @@
+     <h2 id="disputa-{{ disputa.pk|unlocalize }}">Disputa #{{ disputa.pk|unlocalize }}</h2>
+     <p>O encerramento vale para a disputa inteira, incluindo todas as perguntas abaixo.</p>
+     <ul>
+-      {% for pergunta in disputa.perguntas.all %}
++      {% for pergunta in disputa.perguntas.all|slice:":1" %}
+       <li class="mb-2">
+         <strong>Pergunta #{{ pergunta.pk|unlocalize }}</strong> · {{ pergunta.estado|capfirst }}<br>
+         Marco: {% if pergunta.instancia_marco %}{{ pergunta.instancia_marco }}{% else %}Sem marco registrado{% endif %} ·
+```
+
+**M6 — Gravar estado diretamente na view.** `test_ast_view_so_delega_a_decisao_de_fechamento` falhou na checagem em memória. O mutante mantém a chamada à porta e repete uma gravação com o mesmo valor para exercitar o selo de escrita independentemente do valor final. `app/chamados/views_disputa_admin.py:52`, `app/chamados/views_disputa_admin.py:57`, `app/chamados/models.py:2199`
+
+```diff
+--- a/app/chamados/views_disputa_admin.py
++++ b/app/chamados/views_disputa_admin.py
+@@ -55,6 +55,8 @@
+         mensagem = str(e)
+     else:
+         if encerrou:
++            disputa.motivo_fechamento = DisputaSupervisao.FECHOU_ADMIN_ENCERRA
++            disputa.save(update_fields=['motivo_fechamento'])
+             tipo_mensagem = 'success'
+             mensagem = (
+                 'A disputa foi encerrada e o motivo ficou registrado. '
+```
+
+## 3. Quem escreve e quem lê
+
+O registro de autoridades aponta `DisputaSupervisao.pode_fechar` para C7 e `pergunta_respondida` para C21. Na tela, a view lê `fechada_em` para listar abertas e consome o retorno de `admin_encerra` no POST. A escrita persistente do fechamento está em `DisputaSupervisao.fechar`. `app/docs/JUIZES.md:62`, `app/docs/JUIZES.md:102`
+
+[truncado em 20000 de 26212 caracteres]
 
 ## 28/11 13:37 · sessao bfebdada828f · O30-F3-CONSTRUIR · leitura · origem=Code
 
@@ -807,14 +1195,4 @@ Os marcadores de mordida são `Regra 11: o primeiro pedido deixa ato na pergunta
 
 As âncoras entregues à raiz têm contagem 1 por leitura em memória. Execução ORM e migração [nao verificado]. `app/chamados/models.py:4373,4395,4590,4622` · `app/chamados/services/disputa_emissao.py:1631,1674–1675,1683,1723` · `app/chamados/tests/e4d_matriz_mutantes.py:650–654`.
 
-## 28/11 11:42 · sessao 6746c6da5887 · - · - · origem=Ronald (tmux)
-
-**Caso 44.** O log mostra `[] != [(RESPOSTA, T0, '08:00')]` na primeira importação. `M44DuplicaRetry` para no controle inicial, por uma asserção da regra. O wrapper duplicador ainda não entrou. `aceite_v3.txt` (anexo) · `app/chamados/tests/test_e4d_matriz_reds.py:809–830` · `app/chamados/tests/e4d_matriz_mutantes.py:248–266,585–605`
-
-A fixture cai no horizonte, com `DIA=14/10/2026`, corte em 21/09 e competência iniciada no dia 21. A lacuna está no comando. `linhas_a_criar` mede as respostas faltantes e o `--aplicar` percorre colisões e silêncios. O `backfill_fio_morto_e4b` já preserva a identidade no seu recorte de fio morto, como mostra o teste com duas chamadas, e opera só na competência corrente. A importação geral de respostas do caso 44 exige cura própria. `app/chamados/tests/cortes_f2_f9_apoio.py:31–43` · `app/chamados/models.py:2714` · `app/chamados/management/commands/backfill_decisoes_pergunta.py:1–13,44–92,328–377,628–631` · `app/chamados/management/commands/backfill_fio_morto_e4b.py:161–164,297–311` · `app/chamados/tests/test_e4_passivo.py:57–72`
-
-Enviei blocos para um modo público `--aplicar-respostas-da-projecao`, com escrita dentro de `aplicar` e de seu `atomic` existente. A modalidade limita a seleção ao horizonte datado, confere exportação e relê a correspondência sob a trava `C → D → P`. O payload vem de `linhas_da_projecao_sem_linha`; `registrar` insere com o instante original e com a emissão de eventos desativada expressamente para esse lote. O teste mantém o primeiro ato, compara todos os campos, inclusive PK, no retry e prova a entrada posterior de outra pergunta. A modalidade anterior conserva seus chamadores. Âncoras conferidas em memória com contagem 1. Execução Django/PostgreSQL da proposta [nao verificado]. `app/chamados/management/commands/backfill_decisoes_pergunta.py:193,240–264,455–463,486–489` · `app/chamados/tests/test_e1_v7_catracas.py:253–292,512–516` · `app/chamados/services/fio.py:1471–1481,1716–1747` · `app/chamados/models.py:2940–3006,4415–4448,4590–4623` · `app/chamados/tests/test_e4d_matriz_reds.py:228–229,809–830`
-
-A fixture escreve o par legado com `cartao`. Em produção, a porta de resposta grava o texto e o carimbo em `disputa_emissao`; a validação grava autor e instante em `validacao`; o modelo grava o trio de materialização. O backfill lê o par legado, `linhas_da_projecao_sem_linha` produz `RESPOSTA`, instante, texto, motivo e marca de conservação da validação, e `registrar` faz o `INSERT`. O teste lê o par e os demais RVM por `foto`, o ato por `values_list` e sua identidade integral por `foto_dos_atos`. `eventos()` conta as linhas de `EventoCelula`, cuja escrita passa por `emitir_evento_celula`. `app/chamados/tests/test_e4d_matriz_reds.py:52–53,166–176,208–229,809–830` · `app/chamados/services/disputa_emissao.py:1531–1569` · `app/chamados/services/validacao.py:164–179` · `app/chamados/models.py:3428–3432,4344–4373,4438–4442,4606–4623` · `app/ponto/portas/celula.py:981–991`
-
-_8926 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8927 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
