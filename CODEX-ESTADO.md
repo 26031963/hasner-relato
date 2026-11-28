@@ -1,7 +1,34 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 15:05** · publicado em **28/11/2026 15:10** (UTC-3)
+> Ultima resposta processada: **28/11/2026 15:21** · publicado em **28/11/2026 15:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 15:21 · sessao 3bd917403db0 · E4C-F5-INSTANTE · construtor · origem=Code
+
+1. `CargaDaTarefa.tarefa::ler` publica `chamados_do_colab` consultando a escada uma vez por PK e seguindo a ordem do mapa do dia. Com a tabela vigente, isso preserva o conjunto e a ordem do filtro anterior. `app/chamados/services/tarefa_do_dia.py:697`, `app/chamados/services/tarefa_do_dia.py:759`, `app/chamados/juizes.py:1787`
+2. `fora_da_folha::_destinos_da_retencao` lê a chave da carga, inclusive quando a porta é `None`. A chave integra o retorno da carga, e os contratos de chaves de `porta_da_tarefa` e `_portas_da_tarefa` seguem iguais. `app/folha/fora_da_folha.py:125`, `app/chamados/services/tarefa_do_dia.py:817`, `app/chamados/services/tarefa_do_dia.py:821`, `app/chamados/tests/test_e3_portas_tarefa.py:257`, `app/chamados/tests/test_e3_c8b_sem_banco.py:95`
+3. **Censo do código de aplicação.** Só `_destinos_da_retencao` usa a chave. Os demais leitores preservam seu resultado: `_porta`, `o_que_segura` e a pauta indireta (`app/folha/fora_da_folha.py:73`, `app/folha/fora_da_folha.py:309`, `app/ponto/services/pautas_dos_discordantes.py:87`), `censo` e `censo_alcance` (`app/chamados/services/vigia_fio.py:391`, `app/chamados/services/vigia_fio.py:634`), `medir` (`app/chamados/services/furo_sem_canal.py:97`), `beco_em_lote` (`app/escala/services/cadastro_realidade.py:557`) e o backfill (`app/chamados/management/commands/backfill_fio_morto_e4b.py:90`). A fachada `tarefa_do_dia` repassa a chave, e `diff_e3_sombra` continua lendo a projeção, inclusive `verbos`. `app/chamados/services/tarefa_do_dia.py:852`, `app/chamados/management/commands/diff_e3_sombra.py:77`, `app/chamados/management/commands/diff_e3_sombra.py:145`
+4. **RED para o Opus.** Na carga, com `{41: 'cobrar', 20: 'validar', 7: 'decidir', 3: None}`, remapeie `cobrar` para `admin` e `validar` e `decidir` para `colab`. Exija `(7, 20)` na ordem canônica. Na folha, injete uma tarefa sem rota com a chave `(20, 7)` e `verbos` apontando para o PK `41`. Exija `[('chamado', 20), ('chamado', 7)]`. Cubra também a chave vazia e reaplique os selos Haiku e L-129. `app/chamados/services/tarefa_do_dia.py:697`, `app/chamados/services/tarefa_do_dia.py:759`, `app/folha/fora_da_folha.py:131`, `app/folha/tests/test_haiku_fora_da_folha.py:227`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:79`
+5. **Mutantes para o Opus.** Fixar `cobrar` na derivação, aplicar a escada ao mapa inteiro, selecionar `admin`, parar no primeiro PK, reordenar na folha ou devolver a tradução à folha. Sintaxe e `git diff --check` conferidos. Suíte, RED, mutantes executados e produção [nao verificado]. `app/chamados/services/tarefa_do_dia.py:697`, `app/folha/fora_da_folha.py:131`
+
+## 28/11 15:18 · sessao fc4926ac4efb · E4C-F5-INSTANTE · construtor · origem=Code
+
+- `app/folha/fora_da_folha.py::_destinos_da_retencao` abre os chamados de cobrança indevida cujo verbo tem fio `colab`. `app/folha/fora_da_folha.py:125`
+- O filtro chama `fio_pelos_verbos({pk: verbo})` para cada chamado, usando a função pública do juiz. `app/folha/fora_da_folha.py:135`, `app/chamados/juizes.py:1792`
+- Pela tabela vigente, só `cobrar` tem fio `colab`, então o filtro preserva os mesmos PKs e a ordem da carga. `app/chamados/juizes.py:1787`, `app/folha/fora_da_folha.py:133`
+- Na busca em produção, esse foi o único acesso direto a `carga.tarefa(...)['verbos']`. O comando `diff_e3_sombra` lê o campo pela projeção `porta_da_tarefa`. `app/folha/fora_da_folha.py:133`, `app/chamados/management/commands/diff_e3_sombra.py:77`, `app/chamados/management/commands/diff_e3_sombra.py:145`
+- A entrega altera só o leitor, e `git diff --check` passou. O selo L-129 ainda proíbe a chamada. A execução da suíte e do RED fica `[nao verificado]`. `app/folha/fora_da_folha.py:131`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:16`
+
+**RED para o Opus**
+
+- **Delegação ao juiz.** Com carga falsa, forneça `{41: 'cobrar', 20: 'validar', 7: 'decidir', 3: None}`. No teste, substitua temporariamente `FIO_DO_VERBO` por uma tabela em que `cobrar` tenha fio `admin` e `validar` e `decidir` tenham fio `colab`. Espere `[('chamado', 20), ('chamado', 7)]`. A base retornaria apenas o PK `41`. `5d183096b:app/folha/fora_da_folha.py:133`, `app/chamados/juizes.py:1799`
+- **Selo AST.** Reaplique o selo Haiku à base para capturar o literal `cobrar`. No L-129, permita `fio_pelos_verbos` apenas no recorte de cobrança indevida com um chamado por consulta. Preserve a proibição do C17 e do acesso direto a `FIO_DO_VERBO`. `app/folha/tests/test_haiku_fora_da_folha.py:227`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:16`, `app/folha/tests/test_l129_fora_da_folha_so_le_a_tarefa.py:104`
+- **Controle de paridade.** Com a tabela vigente e a tarefa sem rota, use `{41: 'cobrar', 20: 'validar', 7: 'cobrar', 3: None}` e espere `[('chamado', 41), ('chamado', 7)]`. Com mapa vazio, espere `[]`. `app/chamados/juizes.py:1787`, `app/folha/fora_da_folha.py:133`, `app/folha/fora_da_folha.py:247`
+
+**Mutantes para o Opus**
+
+- Restaurar `verbo == 'cobrar'` ou copiar a tabela para a folha. O RED de delegação e o selo Haiku devem capturar essas regressões. `app/folha/fora_da_folha.py:135`, `app/folha/tests/test_haiku_fora_da_folha.py:227`
+- Consultar `fio_pelos_verbos(verbos)` com o mapa inteiro, trocar `colab` por `admin` ou parar no primeiro PK elegível. O caso misto com dois destinos deve capturar os três mutantes. `app/folha/fora_da_folha.py:134`, `app/chamados/juizes.py:1799`
 
 ## 28/11 15:05 · sessao 27b144c710dd · E4C-F5-INSTANTE · leitura · origem=Code
 
@@ -1562,27 +1589,4 @@ O pronto é o DIFF da comp. 11 por rubrica no RELATO, limitado aos minutos da ob
 - No censo AST, localizar leituras cruas de `orfas` e `n_orfas`, incluindo ata antiga, espelho, PDF e efeito no fechamento. O aval de construção prevê o selo catraca e `sobras_sem_razao` (`app/escala/services/leitor_celula.py:180`, `app/ponto/services/espelho.py:703`, `app/relatorios/pdf_espelho.py:477`, `app/folha/causas.py:43`, `app/ponto/services/fechamento.py:1117`, `backlog.txt:2109`).
 - **REDs registrados** — R1–R6, A1, A2, V1 e V2 (`relato.txt:14654`). Enunciados individuais e causa do erro [não verificado].
 
-## 28/11 12:34 · sessao 4ff1449fdd7f · SONDA-ESPURIAS-RAMO2 · leitura · origem=Code
-
-- **Estado.** Sonda s2 pronta com `rc 0`. Os quatro lados cobriram 963 colabs nas empresas 2/3/4, comp. 11, com 99 sobras dia a dia. RAMO2 mudou 0 dos 14 colabs do teto. (backlog.txt:2246, relato.txt:14229)
-- **Trava.** A pausa da sonda foi retirada às 14:43. A c2u do RAMO2-CRUZA aguarda vaga do opus. (relato.txt:14632, 14447)
-- **Próximo passo andável.** Ronald envia o aviso do CASO-LITERAL-14 para contraprova. A etapa do Codex na sonda já foi concluída. (backlog.txt:2111, relato.txt:14229)
-- **Lei.** Nenhuma pergunta aberta registrada para a sonda. A regra do RAMO2 está decidida. A âncora preserva o trabalhado e L-097 só classifica a HE. (backlog.txt:2183, 2246)
-
-## 28/11 12:28 · sessao 4b8be07b248d · TESTE-DO-ESTRANHO · leitura · origem=Code
-
-**RESUMO — acertou 0 · parcial 5 · travou 0.** A nota considera todos os pontos explícitos de cada tarefa no gabarito. `gabarito.md:2`, `gabarito.md:6`, `gabarito.md:10`, `gabarito.md:12`, `gabarito.md:19`
-
-- **T1 — parcial.** Acertou a ordem `ORDEM-VIVA-2811-1200`, as duas sequências e a meta. Faltou explicitar que o hook usa `ORDEM-VIVA-TOPO` como autoridade e que o marcador ficou na `1511-NOITE` até 28/11. Destino → glossário. `resposta.md:8`, `app/docs/BACKLOG.md:8`, `app/docs/BACKLOG.md:1926`, `app/docs/BACKLOG.md:1927`, `bin/hook_stop_fila1.py:188`
-- **T2 — parcial.** A causa confere. As perguntas 61520/61521 foram emitidas em 23/11 às 12h36, quando a célula 122468 previa 11h/12h, e ficaram pendentes após a regeneração das 12h42 retirar o intervalo. É órfã de regeneração, com cura de classe no E2 `retirar_contexto`. Faltou identificar o 40588 como um dos seis da `CHAMADO-PRESO-CLASSE-PORTAS-2611` e dizer que a porta `admin_encerra` já estava no ar, sem tela que a oferecesse. Destino → diagrama. `resposta.md:18`, `resposta.md:20`, `app/docs/RELATO.md:15208`, `app/docs/BACKLOG.md:836`, `app/docs/BACKLOG.md:1640`
-- **T3 — parcial.** Identificou o juiz da dobra, `MotorBase._feriado_dobra_no_dia`. Faltou explicar que a guarda L-097 soma os minutos a `minutos_fora_janela`, zera o trabalhado e colapsa o par. O `FERIADO-UM-JUIZ` pousou em `a497c0cce`. A cura da virada no 6x1, `dc876f5d1`, foi reprovada por perder 240 minutos e ficou fora do pouso. Destino → diagrama. `resposta.md:28`, `resposta.md:30`, `app/core/juizes.py:320`, `app/ponto/motor_calculo_v2.py:941`, `app/ponto/motor_calculo_v2.py:1585`, `app/docs/RELATO.md:14867`, `app/docs/RELATO.md:14872`, `app/docs/RELATO.md:15231`
-- **T4 — parcial.** Faltaram o comando exato da suíte, a verificação na sequência geral, o arquivo de reversão em `logs/` e a linha `LEI-AKITA` no commit. Rito do gabarito → cópia `wt` → `bin/suite.sh --dir <copia> --motivo "pouso <OBRA>"` na árvore do pouso → verificador ou Opus final → reversão prévia em `logs/` → `git merge --no-ff --no-commit`, commit com `OBRA:` e `LEI-AKITA`, e `bin/deploy.sh` no mesmo ato. Reversão do merge → `git revert -m 1 <merge>` e `bin/deploy.sh`. `resposta.md:38`, `CLAUDE.md:318`, `CLAUDE.md:105`, `CLAUDE.md:347`, `CLAUDE.md:429`, `CLAUDE.md:456`, `CLAUDE.md:63`, `CLAUDE.md:91`, `bin/commit_msg.sh:29`, `app/docs/RELATO.md:15081`
-- **T5 — parcial.** Começou pelo handoff e pulou a comparação com a ordem mais nova e a consulta explícita ao hook. A sequência é marcador × ordem mais nova → saída de `bin/hook_stop_fila1.py` → `PAREI` e `lei` no topo do RELATO → `python3 bin/rc_sem_colher.py` → processos e jobs vivos (`bin/trava_teste.sh --quem`, `bin/codex_vagas_estado.py` e pista) → `HANDOFF-SESSAO.md`. Destino → diagrama. `resposta.md:50`, `gabarito.md:20`, `app/docs/BACKLOG.md:1926`, `bin/hook_stop_fila1.py:188`, `CLAUDE.md:272`, `CLAUDE.md:278`, `CLAUDE.md:338`, `bin/rc_sem_colher.py:13`, `bin/trava_teste.sh:16`, `bin/codex_vagas_estado.py:2`, `app/docs/HANDOFF-SESSAO.md:3`
-
-- TESTE-DO-ESTRANHO T1: explicitar a autoridade de `ORDEM-VIVA-TOPO` e registrar o marcador preso na ordem anterior -> glossário (`bin/hook_stop_fila1.py:188`, `app/docs/BACKLOG.md:1927`)
-- TESTE-DO-ESTRANHO T2: ligar o 40588 à fatia dos seis chamados e mostrar a porta admin ainda sem tela -> diagrama (`app/docs/BACKLOG.md:836`, `app/docs/BACKLOG.md:1640`)
-- TESTE-DO-ESTRANHO T3: mostrar onde a L-097 zera o par e registrar a reprovação da cura da virada 6x1 -> diagrama (`app/ponto/motor_calculo_v2.py:1585`, `app/docs/RELATO.md:14872`)
-- TESTE-DO-ESTRANHO T4: registrar comando da suíte, verificação, arquivo de reversão e linha `LEI-AKITA` no rito de pouso -> inventário (`CLAUDE.md:105`, `CLAUDE.md:429`, `CLAUDE.md:456`, `CLAUDE.md:63`) [nao verificado]
-- TESTE-DO-ESTRANHO T5: ordenar o diagnóstico da fila vazia, da comparação do marcador até o handoff -> diagrama (`gabarito.md:20`, `app/docs/BACKLOG.md:1927`, `app/docs/HANDOFF-SESSAO.md:3`)
-
-_8937 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8939 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
