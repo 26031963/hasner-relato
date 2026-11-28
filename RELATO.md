@@ -10993,6 +10993,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
+
 **27/11 22:14:50 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:f3d921f246 (45 car., na trilha privada)
 
 **27/11 21:14:50 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:fb5f93150b (187 car., na trilha privada)
@@ -14719,3 +14721,10 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 22:22 colhido CODEX-CONSTROI-MOTOR c2/censo.rc (22:22 rc 0): selo vizinho verde na c2
 - 22:23 colhido CODEX-CONSTROI-MOTOR c2/selo_proporcao.rc (22:22 rc 0): selo vizinho verde na c2
 - 22:29 colhido CODEX-CONSTROI-MOTOR c2/suite_sh.rc (22:28 rc 0): selo vizinho verde na c2
+- 22:35 colhido CODEX-CONSTROI-MOTOR c2/disjuntor.rc (rc 0) e c2/lei_protege_sitio.rc (22:35 rc 1, vermelho na c2: o construtor ve e cura antes do commit; a sessao confere no relatorio)
+- 22:35 colhido CODEX-CONSTROI-MOTOR c2/lei_protege_sitio.rc (22:35 rc 1): VERMELHO -- range sem citar L-085 (ponto/turnos.py::turnos_do_colab) e L-120 (bin/gerar_estado.py::gerar); confere se o range e o da c2 ou o do push (114 a frente do origin)
+- 22:36 colhido CODEX-CONSTROI-MOTOR c2/leis_indice_base.rc (22:35 rc 1): vermelho do selo de indice de LEIS na c2 -- construtor ve no lote
+- 22:36 nota: test_leis_indice tambem VERMELHO na arvore viva (rc 1, cortes sem linha em LEIS.md) -- pre-existente, fora da c2; linha de fila, nao trabalho agora
+- 22:40 colhido FERIADO-UM-JUIZ c11/g/g.rc (22:38 rc 1): inteira Ran 18180 FAILED failures=1 -- so a catraca test_medida_turno_do_par (linhas do fechamento.py +1 pelo import da c11); c12 697aea4b2 registra 9 linhas, censo real = registro
+- 22:40 superado DESLIGADO-PORTA-DO-CHAMADO c2/rec/rec.rc (22:38 rc 3): copia mudou durante a espera (f35ecacff -> 71616345a), nao rodou; relancado em c2/rec2 contra 71616345a
+- 22:40 lancado logs/FERIADO-UM-JUIZ/c12/g/lanca.sh: recorte DESLIGADO c2/rec2 e depois inteira FERIADO-UM-JUIZ c12/g (VM, pista fora)
