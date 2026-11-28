@@ -1,7 +1,547 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 01:19** · publicado em **28/11/2026 01:20** (UTC-3)
+> Ultima resposta processada: **28/11/2026 01:25** · publicado em **28/11/2026 01:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 01:25 · sessao 5f422d0683f6 · RETRATO-PDF-CORTA-POR-QUE · construtor · origem=Code
+
+Implementei os itens 1, 3, 4 e 5 em três arquivos de produção. O item 2 e os arquivos de teste ficaram fora do diff. `folha/views_retrato.py:350` · `relatorios/utils_audit.py:11` · `config/settings/base.py:5`
+
+### Cura por item
+
+- **1 — Download.** A rota responde `attachment; filename="retrato-folha-emp<pk>-<MM>-<AAAA>.pdf"`. O link continua no partial único, sem `target` nem atributos `hx-*`. `folha/views_retrato.py:473` · `templates/folha/_retrato_barra.html:50` · `templates/core/_btn_pdf.html:34`
+- **3 — Escala.** A descrição inteira entra em `Paragraph(escape(...))` na coluna de 38 mm. `folha/views_retrato.py:424` · `folha/views_retrato.py:441` · `folha/views_retrato.py:450`
+- **4 — Ordem e contadores.** Só o papel ordena por Sem ação → Sem leitura → Admin → Colab → Hoje → Entram → Rescisão, com mais dias primeiro e ID crescente no empate. Dentro de cada dono, coloquei `dias=None` depois das linhas com número. O topo imprime `Rótulo: N` com o `numero` de cada pílula de `Depende de` retornada por `quadros_barra_retrato`. A ordem da tela, o recorte, a contagem e o cabeçalho da tabela foram preservados. `folha/views_retrato.py:232` · `folha/views_retrato.py:324` · `folha/views_retrato.py:399` · `folha/views_retrato.py:418` · `folha/views_retrato.py:432` · `folha/views_retrato.py:467`
+- **5 — Carimbo.** `COMMIT_GIT` preenchida tem precedência. Em seguida, o leitor único usa `ler_deploy_stamp` pelo caminho `settings.HASNER_COMMIT_STAMP`. Arquivo ausente retorna `''`. O padrão resolve para `/app/logs/deploy.stamp` no container. O escritor grava no `logs/` da raiz do host e o bind documentado monta `app/` em `/app`. A exposição do carimbo nesse caminho em produção está [nao verificado]. `relatorios/utils_audit.py:11` · `core/esteira_vigia.py:1032` · `config/settings/base.py:4` · `bin/deploy.sh:436` · `CLAUDE.md:88`
+
+### Leitores
+
+- `_recorte_da_barra` é chamado pela tela, pelo PDF e pelo Raio‑X. `folha/views_retrato.py:260` · `folha/views_retrato.py:391` · `folha/views_retrato.py:507`
+- `get_commit_git` é chamado diretamente por `gerar_pdf_auditavel` e pelo espelho informacional. Pela porta auditável, a mudança alcança o retrato, o espelho individual, o lote de espelhos, o histórico de chamados e o PDF de gestão de HE. `relatorios/pdf_base.py:34` · `relatorios/pdf_base.py:135` · `relatorios/pdf_espelho.py:1070` · `folha/views_retrato.py:461` · `relatorios/pdf_espelho.py:1106` · `relatorios/services.py:338` · `relatorios/pdf_chamados.py:168` · `ponto/views.py:887`
+
+### REDs e mutantes para o opus
+
+| RED | Caso e mutantes que deve pegar |
+|---|---|
+| **1. Download** | Conferir o `attachment` e o nome exato pela rota, além do link no HTML cheio e no parcial filtrado. Mutantes `inline`, nome alterado ou `target`/`hx-*` no link. `folha/tests/test_retrato_pdf_pacote.py:187` |
+| **3. Escala** | Usar descrição longa com `<` e `&`, conferir o texto integral no `Paragraph` e a quebra dentro da coluna. Mutantes de string crua, truncamento ou retirada de `escape`. `folha/tests/test_retrato_pdf_pacote.py:210` · `folha/views_retrato.py:441` |
+| **4a. Ordem** | Intercalar os sete estados, incluir dias distintos na mesma faixa e um empate com nomes em ordem inversa à dos IDs. Conferir a ordem da tela e a igualdade do conjunto de IDs. Mutantes de ordem compartilhada, dias crescentes, ordenação por faixa ou desempate por nome. `folha/tests/test_retrato_pdf_pacote.py:228` · `folha/tests/test_retrato_pdf_pacote.py:245` |
+| **4b. Contadores** | Comparar todos os `Rótulo: N` com a tela, usando filtro universal, janela e Admin ativo. Mutantes que contam a partir das linhas visíveis, usam o universo inteiro ou imprimem só a pílula ativa. `folha/tests/test_retrato_pdf_pacote.py:251` · `folha/views_retrato.py:411` |
+| **5a. Fonte do SHA** | Ler um carimbo válido sem `COMMIT_GIT`, repetir com a variável preenchida e com o arquivo ausente. Mutantes que ignoram o caminho configurado, preferem o carimbo ao ambiente ou voltam a consultar Git. `folha/tests/test_retrato_pdf_pacote.py:292` · `folha/tests/test_retrato_pdf_pacote.py:317` · `relatorios/utils_audit.py:11` |
+| **5b. Trilha** | Conferir o SHA inteiro no registro e nas duas chamadas do rodapé, e os oito primeiros caracteres no texto impresso. Mutantes que gravam o SHA só no registro, omitem uma passagem ou truncam o registro. `folha/tests/test_retrato_pdf_pacote.py:300` · `relatorios/pdf_base.py:72` · `relatorios/pdf_base.py:139` · `relatorios/pdf_base.py:164` · `relatorios/pdf_base.py:170` |
+
+**Diff** com **0 `except` adicionados e 1 removido**. A sintaxe dos três arquivos e `git diff --check` foram conferidos. Resultado da suíte e renderização real do PDF [nao verificado]. `relatorios/utils_audit.py:11` · `folha/views_retrato.py:350` · `config/settings/base.py:5`
+
+```bash
+bash bin/suite.sh --dir /home/ronald/wt-codex-retrato-pdf-corta-por-que-012113 --only "folha.tests.test_retrato_pdf_pacote folha.tests.test_retrato_pdf relatorios core.tests.test_selo_teste_sem_relogio"
+```
+
+## 28/11 01:24 · sessao d2ce5ce5364d · INVENTARIO-PELA-REGRA · leitura · origem=Code
+
+```python
+import sys
+
+sys.dont_write_bytecode = True
+
+import json
+import logging
+from collections import defaultdict
+from datetime import date
+from functools import lru_cache
+from html.parser import HTMLParser
+from types import SimpleNamespace
+from typing import NamedTuple
+
+
+def parar(fonte, motivo):
+    print(f"BECO|ABORTOU|{fonte}|{motivo}", flush=True)
+    raise SystemExit(1) from None
+
+
+def fonte_segura(caminho, linha):
+    _, separador, relativo = caminho.rpartition("/app/")
+    return f"{'app/' + relativo if separador else caminho.rsplit('/', 1)[-1]}:{linha}"
+
+
+class FalhasSemDados:
+    def __enter__(self):
+        self.anterior = logging.getLogRecordFactory()
+
+        def fabrica(*args, **kwargs):
+            registro = self.anterior(*args, **kwargs)
+            if registro.levelno >= logging.ERROR or (
+                registro.exc_info and registro.exc_info[0]
+            ):
+                parar(fonte_segura(registro.pathname, registro.lineno), "erro_do_leitor")
+            registro.msg, registro.args = "", ()
+            registro.levelno = logging.NOTSET - 1
+            return registro
+
+        logging.setLogRecordFactory(fabrica)
+
+    def __exit__(self, tipo, erro, quadro):
+        logging.setLogRecordFactory(self.anterior)
+        if tipo is None or (tipo is SystemExit and erro.code == 1):
+            return False
+        while quadro.tb_next is not None:
+            quadro = quadro.tb_next
+        parar(fonte_segura(quadro.tb_frame.f_code.co_filename, quadro.tb_lineno), tipo.__name__)
+
+
+with FalhasSemDados():
+    from django.conf import settings
+    from django.db import connection
+    from django.utils import timezone
+    from django_tenants.utils import schema_context
+
+    if getattr(settings, "HASNER_SOMBRA", False) is not True:
+        parar("bin/sonda_leitura.sh:94", "HASNER_SOMBRA_ausente")
+    db = connection.settings_dict
+    if (db["NAME"], db["HOST"]) != ("sombra", "sombra_db"):
+        parar("bin/sonda_leitura.sh:94", "conexao_fora_da_sombra")
+    if connection.in_atomic_block or not connection.get_autocommit():
+        parar("app/chamados/models.py:761", "sonda_exige_transacao_propria")
+
+    from django.contrib.auth.models import User
+    from django.db.models import Q
+    from django.template import Context, engines
+
+    from chamados.catalogo.motor import TERMINAIS, VIVOS, decidir
+    from chamados.juizes import (
+        _dia_de_turno_da_pergunta,
+        competencia_do_chamado,
+        dia_do_fato,
+        pergunta_viva,
+        perguntas_vivas_de,
+    )
+    from chamados.models import (
+        ChamadoColaborador,
+        DecisaoPergunta,
+        DisputaSupervisao,
+        PerguntaDisputa,
+        motivo_implausivel_validacao,
+    )
+    from chamados.reconciliador import (
+        _veredito_premissa,
+        eventos_pendentes,
+        retencao_da_retratacao,
+    )
+    from chamados.services.acoes_chamado import montar_contexto_detalhe
+    from chamados.services.fio import (
+        chamado_que_lista,
+        contexto_parcial_fio,
+        data_do_fato_de,
+        disputas_do_chamado_em_lote,
+    )
+    from chamados.services.materializacao import (
+        _data_em_disputa,
+        estado_aplicacao_pergunta,
+        espera_declarado_x_gravado,
+    )
+    from chamados.services.tarefa_do_dia import (
+        carga_da_tarefa,
+        exigencia_das_perguntas,
+        porta_da_tarefa,
+    )
+    from chamados.services.validacao import (
+        _e_aceite_de_folga,
+        _resposta_de_hora,
+        entrega_que_barra_a_validacao,
+        fila_validar_classificada,
+    )
+    from chamados.services.verbos import particionar_verbos
+    from chamados.utils import pode_agir_chamado
+    from chamados.views import _is_gestor
+    from chamados.views_cobrar import _pode_validar_lote
+    from colaboradores.mixins import tem_acao
+    from colaboradores.models import Empresa
+    from folha.fora_da_folha import dias_que_seguram
+    from folha.models import RetratoFolha
+    from folha.retrato_folha import TIPO_SEM_CAUSA, TIPOS, dono_da_linha
+    from ponto.janelas import janela_fechamento
+    from ponto.services.declarar_dia import checar_declaracao, o_dia_ja_e_folga
+    from ponto.supra_juiz import perguntas_que_seguram_csf
+
+
+MES, ANO = 11, 2026
+EMPRESAS = (2, 3, 4)
+GESTOR_S1_PK = 909
+NV = "[nao verificado]"
+FAMILIAS = ("a", "b", "c", "d", "e", "e_retido_pelo_fechamento",
+            "e_retido_na_retratacao", "f")
+OBRAS = {
+    "a": ("O261-FIO-MORTO-PELO-RETRATO", 1132),
+    "b": ("ORFAS-VOLTOU", 2102),
+    "c": ("FDS-S1-C2-SEM-ACAO", 2197),
+    "d": ("O261-E-CELULA-20-UM-DONO", 1012),
+    "e": ("FDS-S1-C3-PREMISSA-MORTA", 2198),
+    "f": ("FDS-S1-C1-SEM-SAIDA", 2196),
+}
+ACOES = {"validar_pergunta", "recusar_pergunta", "corrigir_resposta", "conferir_data"}
+
+
+class Linha(NamedTuple):
+    colab: int
+    dia: date | None
+    referencia: str
+    motivo: str
+    fonte: str
+    obra: tuple
+
+
+def ref(pk):
+    return str(pk) if pk is not None else "-"
+
+
+def dia_pergunta(p):
+    # O fallback pela celula e a costura da S1. app/chamados/juizes.py:58,339
+    dia = _dia_de_turno_da_pergunta(p)
+    if dia is None and not p.conversa and p.celula_id:
+        return p.celula.data, "celula"
+    return dia, "dia_do_turno"
+
+
+def consulta_perguntas(emp):
+    return PerguntaDisputa.objects.filter(disputa__colaborador__empresa_id=emp).select_related(
+        "disputa__colaborador__empresa", "disputa__chamado",
+        "chamado_destino__colaborador", "chamado_destino__celula", "celula",
+    ).prefetch_related("decisoes")
+
+
+class Cartoes(HTMLParser):
+    def __init__(self, html, chamado_local=None):
+        super().__init__()
+        self.perguntas = defaultdict(set)
+        self.pares = defaultdict(set)
+        self.formularios = defaultdict(list)
+        self.chamado_local = chamado_local
+        self.formulario = None
+        self.feed(html)
+        self.close()
+
+    def handle_starttag(self, tag, atributos):
+        a = dict(atributos)
+        if "data-beco-pergunta" in a:
+            self.perguntas[int(a["data-beco-pergunta"])].add(int(a["data-beco-chamado"]))
+        if "data-beco-par" in a:
+            self.pares[int(a["data-beco-par"])].add(int(a["data-beco-chamado"]))
+        if tag == "form":
+            self.formulario = {}
+            if "data-beco-conferir" in a:
+                self.formulario.update(
+                    acao="conferir_data",
+                    pergunta_id=a["data-beco-conferir"],
+                    chamado_id=a["data-beco-chamado"],
+                )
+        elif tag == "input" and self.formulario is not None and a.get("type") == "hidden":
+            nome = a.get("name")
+            if nome in {"acao", "pergunta_id", "chamado_id", "confirmar_implausivel"}:
+                self.formulario[nome] = a.get("value", "")
+
+    def handle_endtag(self, tag):
+        if tag != "form" or self.formulario is None:
+            return
+        f, self.formulario = self.formulario, None
+        if f.get("acao") in ACOES:
+            cid = int(f.get("chamado_id", self.chamado_local))
+            self.formularios[int(f["pergunta_id"])].append(
+                (cid, f["acao"], f.get("confirmar_implausivel") == "1")
+            )
+
+
+@lru_cache(maxsize=2)
+def template_marcado(modal):
+    # Marcadores em memoria nas ramificacoes reais. O HTML fica em memoria.
+    # app/templates/chamados/partials/modal_fio.html:160,173,219,470
+    # app/templates/chamados/partials/_pergunta_card.html:28,31
+    engine = engines["django"].engine
+    nome = "modal_fio.html" if modal else "_pergunta_card.html"
+    caminho = f"chamados/partials/{nome}"
+    fonte = engine.get_template(caminho).source
+    pk = "perg.pk"
+    card = "chamado.pk"
+
+    def marca(tipo, pergunta=pk):
+        return f'<span data-beco-{tipo}="{{{{ {pergunta} }}}}" data-beco-chamado="{{{{ {card} }}}}"></span>'
+
+    resposta = (
+        "<strong>Resposta:</strong> {{ perg.resposta_colab }}" if modal
+        else "<strong>Resposta do colab:</strong> {{ perg.resposta_display }}"
+    )
+    pergunta = "{{ perg.pergunta }}</div>"
+    trocas = [(pergunta, marca("pergunta") + pergunta), (resposta, marca("par") + resposta)]
+    if modal:
+        gaveta = "{{ it.dia }}</span>"
+        conferir = """<form hx-post="{% url 'chamados:conferir_data_pergunta' perg.pk %}" """
+        trocas.extend((
+            (gaveta, marca("pergunta", "it.pergunta_id") + gaveta),
+            (conferir, conferir + 'data-beco-conferir="{{ perg.pk }}" data-beco-chamado="{{ chamado.pk }}" '),
+        ))
+    for original, marcado in trocas:
+        if fonte.count(original) != 1:
+            parar(f"app/templates/{caminho}:1", "marcador_do_template_mudou")
+        fonte = fonte.replace(original, marcado, 1)
+    return engine.from_string(fonte)
+
+
+@lru_cache(maxsize=None)
+def chamado_de(pk):
+    return ChamadoColaborador.objects.select_related(
+        "colaborador__empresa", "celula"
+    ).get(pk=pk)
+
+
+def validar_em_leitura(p, confirma):
+    # RECONSTRUIDO: testemunhas da S1, sem executar o ato sob trava.
+    # app/chamados/services/validacao.py:218,755,779,782
+    if not p.respondida or DecisaoPergunta.composta(p).validada_em is not None:
+        return False
+    if not confirma and motivo_implausivel_validacao(p):
+        return False
+    if _e_aceite_de_folga(p):
+        dia, colab = p.data_evento, p.disputa.colaborador
+        return bool(dia and (
+            o_dia_ja_e_folga(colab, dia)
+            or checar_declaracao(colaborador=colab, dias=[dia], tipo="folga")["aceitos"]
+        ))
+    if entrega_que_barra_a_validacao(p):
+        return False
+    if _resposta_de_hora(p):
+        if espera_declarado_x_gravado(p):
+            return False
+        aplicacao = estado_aplicacao_pergunta(p.disputa, p)
+        if aplicacao is None:
+            parar("app/chamados/services/materializacao.py:880", "sem_testemunha_da_resposta_de_hora")
+        return aplicacao["estado"] in ("aplicavel", "ja_satisfeita", "aplicada") [nao verificado]
+    return not (p.tipo_resposta == "data_hora" and _data_em_disputa(p))
+
+
+class TelaGestor:
+    def __init__(self, conta, verbos, lote):
+        self.conta = conta
+        self.req = SimpleNamespace(user=conta, GET={})
+        self.verbos = verbos
+        self.lote = lote
+        self.pode_inline = tem_acao(conta, "gerir_chamados")
+
+    @lru_cache(maxsize=None)
+    def modal(self, colab):
+        # O GET marca lidas. O construtor do parcial le o mesmo fio.
+        # app/chamados/views.py:870,881,890; app/chamados/services/fio.py:573,610
+        ctx = contexto_parcial_fio(self.req, colab)
+        ctx["cor_disputas_map"] = DisputaSupervisao.cor_map_por_colaborador(colab)
+        for ch in ctx["chamados"]:
+            if ch.disputa_obj is not None and ch.explicacao is None:
+                parar("app/chamados/services/fio.py:437", "explicador_sem_resposta")
+            for p in ch.perguntas_disputa:
+                estado = p.estado_aplicacao or {}
+                if estado.get("detalhe") == "estado de aplicacao indisponivel -- sem validar":
+                    parar("app/chamados/services/fio.py:470", "erro_na_testemunha_da_aplicacao")
+        return Cartoes(template_marcado(True).render(Context(ctx, use_l10n=False)))
+
+    @lru_cache(maxsize=None)
+    def local(self, pk):
+        ch = chamado_de(pk)
+        # Colisao GLPI -> detalhe local, igual a casca. app/chamados/views.py:219
+        if ch.ticket_id_glpi is not None:
+            alvo = ChamadoColaborador.objects.filter(
+                pk=ch.ticket_id_glpi, ticket_id_glpi__isnull=True
+            ).values_list("pk", flat=True).first()
+            return self.local(alvo) if alvo is not None else Cartoes("")
+        ctx = montar_contexto_detalhe(self.req, ch, True, ())
+        html = "".join(
+            template_marcado(False).render(Context({**ctx, "perg": p}, use_l10n=False))
+            for p in ctx["perguntas_disputa"]
+        )
+        return Cartoes(html, chamado_local=pk)
+
+    @lru_cache(maxsize=None)
+    def eleita(self, pk):
+        return disputas_do_chamado_em_lote([pk]).get(pk)
+
+    @lru_cache(maxsize=None)
+    def inline(self, pk):
+        ch = chamado_de(pk)
+        if not (self.pode_inline and self.verbos.get(pk) == "validar"
+                and pode_agir_chamado(self.conta, ch)):
+            return set()
+        d = self.eleita(pk)
+        if d is None or d.colaborador_id != ch.colaborador_id:
+            return set()
+        return {p.pk for p in perguntas_vivas_de(d) if p.respondida}
+
+    def formularios(self, p, cartoes, canal):
+        ancora = chamado_que_lista(p)
+        for cid, acao, confirma in cartoes.formularios.get(p.pk, ()):
+            if acao == "conferir_data":
+                # O POST e por pergunta, com a permissao de tela. app/chamados/views.py:1288
+                if self.pode_inline and data_do_fato_de(p)[1] and p.data_conferida_em is None:
+                    yield acao
+                continue
+            if cid != ancora or not pode_agir_chamado(self.conta, chamado_de(cid)):
+                continue
+            if canal == "local" and not p.disputa.aberta:
+                continue
+            if acao == "validar_pergunta":
+                if canal == "fio" and chamado_de(cid).colaborador_id != p.disputa.colaborador_id:
+                    continue
+                if validar_em_leitura(p, confirma):
+                    yield acao
+                continue
+            # app/chamados/services/fio.py:694,709,776
+            if not p.disputa.aberta or (canal == "fio" and self.eleita(cid) is None):
+                continue
+            if DecisaoPergunta.composta(p).validada_em is not None:
+                continue
+            if acao == "recusar_pergunta" and p.respondida and not p.fora_do_fato():
+                yield acao
+            if acao == "corrigir_resposta" and p.tipo_resposta == "hora":
+                yield acao
+
+    def consultar(self, p, ch=None, *, medir_acoes=False):
+        ids = {chamado_que_lista(p), p.disputa.chamado_id, ch.pk if ch else None} - {None}
+        colabs = {p.disputa.colaborador} | {chamado_de(pk).colaborador for pk in ids}
+        canais = [("fio", self.modal(colab)) for colab in sorted(colabs, key=lambda c: c.pk)]
+        canais += [("local", self.local(pk)) for pk in sorted(ids)]
+        no_lote = p.pk in self.lote  # app/chamados/views_cobrar.py:371
+        visivel = no_lote or any(p.pk in c.perguntas for _, c in canais)
+        par = no_lote or any(p.pk in c.pares for _, c in canais)
+        acoes = set()
+        if medir_acoes and par:
+            acoes = {acao for canal, c in canais for acao in self.formularios(p, c, canal)}
+            if (no_lote or any(p.pk in self.inline(pk) for pk in ids)) and validar_em_leitura(p, False):
+                acoes.add("validar_pergunta")
+        return visivel, par, acoes
+
+
+def medir_a(empresa, janela, agora, hoje, vivos, perguntas_dia, tela):
+    universo = dias_que_seguram(empresa, MES, ANO, hoje=hoje)
+    ancoras = defaultdict(set)
+    for ch in vivos.values():
+        dia = dia_do_fato(ch, fortes=True)
+        if dia is not None:
+            ancoras[ch.colaborador_id, dia].add(ch.pk)
+    for chave, perguntas in perguntas_dia.items():
+        for p, _ in perguntas:
+            pk = chamado_que_lista(p)
+            if pk in vivos and vivos[pk].colaborador_id == chave[0]:
+                ancoras[chave].add(pk)
+
+    candidatos = {}
+    for cid, (_, dias) in universo["dias"].items():
+        for r in dias:
+            chave = (cid, r["data"])
+            if chave not in ancoras:
+                candidatos[chave] = r
+    if not candidatos:
+        return []
+
+    colabs = universo["colabs"]
+    carga = carga_da_tarefa(
+        [colabs[cid] for cid in sorted({cid for cid, _ in candidatos})],
+        *janela, agora,
+    )
+    linhas = []
+    for (cid, dia), r in sorted(candidatos.items()):
+        tarefa = carga.tarefa(colabs[cid], dia)
+        porta = porta_da_tarefa(tarefa)
+        fila = (porta or {}).get("fila") or ()
+        if any(pk in vivos and vivos[pk].colaborador_id == cid for pk in fila):
+            continue
+        ps = [p for p, viva in perguntas_dia.get((cid, dia), ()) if viva]
+        if any(tela.consultar(p)[0] for p in ps):
+            continue
+        linhas.append(Linha(
+            cid, dia, "-",
+            f"{r['motivo']} celula={ref(r['celula_id'])} "
+            f"rota_tarefa={(porta or {}).get('rota') or '-'} "
+            f"fio_tarefa={(porta or {}).get('fio') or '-'} nao_sei={int(tarefa['nao_sei'])} "
+            "RECONSTRUIDO: juncao_colab_dia_ancora_e_superficies_admin",
+            "app/folha/export.py:1240", OBRAS["a"],
+        ))
+    return linhas
+
+
+def medir_c(emp, janela, agora, hoje, vivos, tela, sem_dia):
+    pares = defaultdict(set)
+    for ch in vivos.values():
+        motor = decidir(ch.status_local, "RECONCILIAR")
+        if motor.permitido and motor.novo_estado in TERMINAIS:
+            plano = ch._plano_pergunta_viva(motor.novo_estado)
+            if not ch._gate_pergunta_viva(motor.novo_estado, registrar=False, plano=plano):
+                for p in plano[0]:
+                    pares[ch.pk, p.pk].add("pergunta_viva_na_competencia_aberta")
+        if not ch._gate_conversa_do_pai(registrar=False):
+            for pk in perguntas_que_seguram_csf(ch):
+                pares[ch.pk, pk].add("conversa_exige_decisao_humana")
+
+    # A pergunta e relida no estado corrente, pois o plano julgou o pos-estado.
+    ps = consulta_perguntas(emp).in_bulk({pk for _, pk in pares})
+    encontrados = []
+    for (ch_pk, p_pk), guardas in sorted(pares.items()):
+        p = ps.get(p_pk)
+        if p is None or not p.respondida or not pergunta_viva(p, hoje=hoje, agora=agora):
+            continue
+        ch = vivos[ch_pk]
+        dia, fonte_dia = dia_pergunta(p)
+        if dia is None:
+            comp = competencia_do_chamado(ch)
+            dia = comp.dia if comp is not None else None
+            fonte_dia = "competencia_do_chamado"
+        if dia is not None and not janela[0] <= dia <= janela[1]:
+            continue
+        _, par, acoes = tela.consultar(p, ch, medir_acoes=True)
+        if not par or acoes:
+            continue
+        if dia is None:
+            sem_dia["c"] += 1
+            continue
+        encontrados.append((ch, p, dia, fonte_dia, guardas))
+
+    razoes = exigencia_das_perguntas({p.pk for _, p, _, _, _ in encontrados}, agora)
+    linhas = []
+    for ch, p, dia, fonte_dia, guardas in encontrados:
+        razao, _ = razoes[p.pk]
+        nascente = (
+            "app/chamados/models.py:429" if "pergunta_viva_na_competencia_aberta" in guardas
+            else "app/ponto/supra_juiz.py:561"
+        )
+        linhas.append(Linha(
+            p.disputa.colaborador_id, dia, str(ch.pk),
+            f"pergunta={p.pk} disputa={p.disputa_id} ancora={ref(chamado_que_lista(p))} "
+            f"guardas={','.join(sorted(guardas))} tarefa={razao.partition(':')[0]} "
+            f"RECONSTRUIDO: alcance_do_par_gestor_S1_sem_POST dia_por={fonte_dia}",
+            nascente, OBRAS["c"],
+        ))
+    return linhas
+
+
+def medir_e(janela, vivos, com_evento, grupos, sem_dia):
+    # Ordem de producao. app/chamados/management/commands/reconciliar_chamados.py:62,73,79
+    for ch in vivos.values():
+        if ch.colaborador_id in com_evento:
+            continue
+        comp = competencia_do_chamado(ch)
+        dia = comp.dia if comp is not None else None
+        if dia is not None and not janela[0] <= dia <= janela[1]:
+            continue
+        veredito = _veredito_premissa(ch)
+        if veredito is None or veredito.viva:
+            continue
+        ret = retencao_da_retratacao(ch)
+        if ret is not None:
+            fam, det = "e_retido_na_retratacao", f"retencao={ret[0]}"
+        elif not ch.reconciliaria():
+            fam, det = "e_retido_pelo_fechamento", "reconciliaria=False"
+        else:
+            fam, det = "e", "reconciliaria=True"
+        if dia is None:
+            sem_dia[fam] += 1
+            continue
+        grupos[fam].append(Linha(
+            ch.colaborador_id, dia, str(ch.pk), f"{ver
+
+[truncado em 20000 de 32189 caracteres]
 
 ## 28/11 01:19 · sessao 49d483221237 · CODIGO-DOMINIO-VALIDO · leitura · origem=Code
 
@@ -804,105 +1344,4 @@ Os períodos, a FT e as rubricas usam o dia da jornada do motor quando há mapa.
 - **Juiz, escritor, relógio e travas.** O delta acrescenta a verificação de procedência. A classificação segue pela partição existente, e as duas versões escrevem pela mesma `lavrar`. O relógio do furo é lido uma vez na borda da passada, e as duas lavras recebem a mesma lista. A revisão mantém Empresa por PK → Colaborador → Batida por PK. O savepoint entra depois dessas travas. O degrau da sombra exige sucesso da lavra `motor` e competência a partir de 10/2026. A classificação de feriado do mensal tem seu degrau em 11/2026. `app/ponto/services/dia_pago.py:317` `app/ponto/services/dia_pago.py:365` `app/ponto/services/fechamento.py:680` `app/ponto/services/fechamento.py:997` `app/ponto/services/fechamento.py:1152` `app/ponto/services/fechamento.py:1262` `app/ponto/services/fechamento.py:1279` `app/ponto/services/fechamento.py:1293` `app/ponto/services/fechamento.py:1325` `app/ponto/services/par_relampago_na_lista.py:172` `app/ponto/services/par_relampago_na_lista.py:479` `app/folha/export.py:385`
 - **Contagem e prova.** O delta acrescenta **0 cláusulas `except`** e remove **0**. O `except` da sombra já existia e mudou de efeito. A ocorrência textual acrescentada no mutante é uma string. Rodei **52 testes de controle**, com uma falha esperada, **41 estruturais** e oito comandos de mutação, todos com o resultado previsto. Os seis arquivos alterados batem com os hashes de saída do diff fornecido. A identidade da árvore inteira pelo Git, a execução individual dos testes na VM, o DIFF de frota e os efeitos em produção ficam **[nao verificado]**. `app/ponto/services/fechamento.py:1329` `app/ponto/tests/feriado_um_juiz_mutantes.py:496` `app/ponto/tests/feriado_um_juiz_mutantes.py:545` `app/ponto/tests/feriado_um_juiz_mutantes.py:716` `app/ponto/tests/test_feriado_um_juiz.py:942`
 
-## 27/11 23:05 · sessao e0a1f79b52c6 · DESLIGADO-PORTA-DO-CHAMADO · censo · origem=Code
-
-# DESLIGADO-PORTA-DO-CHAMADO — censo c3
-
-## CENSO
-
-Os sete bloqueantes procedem na cópia. Duas ressalvas delimitam a cura: `abrir` já serializa a inserção com o cadastro e a falha dessa porta está no retorno antecipado do dedup. As três falhas do C12 vêm de referências deslocadas aos mesmos escritores. `app/chamados/models.py:988`, `app/chamados/models.py:1010`, `app/chamados/models.py:1064`, `app/chamados/tests/e4b_c12_ast.py:27`, `app/chamados/models.py:1593`, `app/chamados/models.py:1882`, `app/chamados/models.py:1902`.
-
-Reproduzi **11 testes, 3 falhas** no selo C12 sem banco. Os **11 mutantes** compilaram em memória. A execução dos testes Django/PostgreSQL, a morte dos mutantes nesses testes, o hash Git da cópia, o volume atual do passivo e a execução em produção ficam [nao verificado]. `app/chamados/tests/test_e4b_c12_selo.py:22`, `app/chamados/tests/desligado_porta_do_chamado_mutantes.py:102`.
-
-### decisões
-
-#### 1. Passivo e universo da cascata
-
-- **Origem da cura.** A seleção do universo da cascata mora em `app/colaboradores/services/desligamento.py:executar_desligamento:153`. O fecho de perguntas mora na exceção `FECHOU_DESLIGAMENTO` de `app/chamados/models.py:DisputaSupervisao.fechar:2214`, com releitura sob trava e persistência por `app/chamados/models.py:PerguntaDisputa.fechar_por_desligamento:3490`. Na exceção de desligamento, usar a opção `ignorar_tranca=True` do juiz existente para incluir a resposta sem veredito. Na disputa previamente fechada, a mesma exceção deve tratar a pergunta residual sem reabrir a disputa nem substituir autor, data, motivo ou resolução do fecho anterior. Confirmar o cadastro com `esta_desligado` sob a trava. `app/chamados/models.py:2089`, `app/chamados/models.py:2130`, `app/chamados/models.py:2184`, `app/chamados/models.py:2253`, `app/chamados/models.py:2265`, `app/core/juizes.py:283`, `app/docs/CORTES.md:546`.
-- **RED do passivo em dia livre.** Cadastro já desligado, disputa já fechada, chamado vivo do sistema e pergunta `hora` respondida `07:15`, sem validação, carimbo ou luz concordante. O DRY deve achar os alvos. O APPLY deve tornar a pergunta terminal pela via `desligamento`, conservar seu texto, instante e ato de resposta, manter o fecho original da disputa e encerrar o chamado pela porta. Rerrodar deve produzir zero novas alterações. Hoje o cron exclui o cadastro, o executor exclui a disputa e o fecho comum devolve `False` para repetição idêntica ou levanta `ValueError` para outra entrada. `app/chamados/juizes.py:1525`, `app/chamados/juizes.py:1537`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38`, `app/colaboradores/services/desligamento.py:156`, `app/chamados/models.py:2184`, `app/chamados/models.py:2287`.
-- **RED da tranca.** Executar o desligamento com disputa aberta e repetir com cadastro já desligado e disputa fechada. Em ambos, usar pergunta respondida sem veredito e sem carimbo, num dia trancado, que voltaria à fila após perder a tranca. Ela deve receber a via `desligamento` e seguir fora da fila depois de reabrir a competência. Controle com pergunta muda viva em dia livre deve registrar `SILENCIO`. Controle com resposta já decidida deve conservar o ato anterior. O C6 hoje retira o dia trancado antes de ler a resposta, e o fecho usa `respostas_sem_veredito` com a tranca ligada. O teste da respondida parte de uma pergunta já viva, o teste do vigia fecha o passivo manualmente e o teste do cron de cadastro já desligado espera zero efetivações. Nenhum deles exige reparar esses estoques. `app/chamados/juizes.py:1503`, `app/chamados/models.py:2130`, `app/chamados/models.py:2213`, `app/chamados/models.py:2294`, `app/chamados/tests/test_desligado_porta_do_chamado.py:353`, `app/chamados/tests/test_desligado_porta_do_chamado.py:436`, `app/colaboradores/tests/test_lote3_desligado_sem_porta.py:192`.
-- **Porta operacional e reversão.** Proposta para o brief: expor `--passivo` explícito em `efetivar_desligamentos_agendados`, com DRY padrão e APPLY explícito. O modo chama o trecho compartilhado da cascata, pelas portas `DisputaSupervisao.fechar` e `ChamadoColaborador.encerrar` via `transicionar_com_pauta`. A seleção dos já desligados é própria do passivo. Reexecutar o desligamento integral repetiria ações de credencial, histórico, vínculo e S89. O cron atual tem DRY somente para agendados. `vigiar_fio_morto` mede o estoque visível pelo C6. O APPLY de cluster trata encerrados por `RECONCILIAR` e já pula desligados antes de escrever. `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:19`, `app/colaboradores/services/desligamento.py:127`, `app/colaboradores/services/desligamento.py:153`, `app/chamados/services/fecho_runtime.py:146`, `app/chamados/management/commands/vigiar_fio_morto.py:192`, `app/ponto/services/cluster_espurio.py:107`, `app/ponto/services/cluster_espurio.py:275`, `app/ponto/services/cluster_espurio.py:286`, `app/ponto/tests/test_o169_legado_encerrado_por_idade.py:168`.
-- **Contrato do arquivo proposto.** `logs/desligado_porta_do_chamado/reversao_<schema>_<instante>.json` é nome proposto. Exigir `--reversao <arquivo>` no APPLY e gravar o antes de forma exclusiva antes da primeira mutação. O DRY imprime por empresa e PK de cadastro, disputa, pergunta e chamado, com o dia, estado, via e ação prevista, sem escrever banco ou arquivo. O JSON precisa conter as pré-imagens do fecho da disputa, do chamado e da pergunta, incluindo via, autor, instante, resposta, validação, cache de veredito, vínculos e alterações indiretas feitas pelas portas. Registrar a identidade dos atos, notas e trilhas gerados para a reversão compensatória. Sob a trava, conferir que o antes corresponde ao arquivo. Na reversão, conferir o estado produzido pelo lote e recusar divergência posterior. RED com falha ao gravar o arquivo deve deixar zero mutações. RED de ida e volta deve restaurar o estado de negócio e manter a trilha dos dois atos. O molde de DRY, arquivo anterior à escrita e reversão pela porta existe em `reatar_beco_folga_ao_limbo`. A 0057 só declara a choice e o caminho de reversão deste passivo fica [nao verificado]. `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:33`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:90`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:99`, `app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:123`, `app/chamados/models.py:2294`, `app/chamados/signals.py:42`, `app/chamados/migrations/0057_via_desligamento.py:12`.
-
-#### 2. Decisão antes da trava
-
-- **Origem da cura.** `app/chamados/models.py:ChamadoColaborador.criar:1153` deve ler a linha entregue por `trava_na_ordem` dentro do atomic que insere. `app/chamados/models.py:ChamadoColaborador.abrir:919` já tem a trava. Consultar o juiz também no ramo encontrado pelo dedup e impedir que um vivo de desligado seja entregue ao emissor como alvo utilizável. O encerrado já consulta o juiz no renascimento e tem contrato de retornar a peça histórica com `criado=False`. `app/chamados/models.py:ChamadoColaborador.transicionar:140` e `app/chamados/models.py:ChamadoColaborador.reabrir:1507` precisam travar e reler antes de decidir, até o último efeito da operação. `_gravar_estado` já trava para salvar, depois das decisões em questão. A transição `analisar`, que também decide sobre a instância antes de aguardar a trava do escritor, precisa herdar a proteção contra foto obsoleta. `app/chamados/models.py:314`, `app/chamados/models.py:781`, `app/chamados/models.py:886`, `app/chamados/models.py:988`, `app/chamados/models.py:1007`, `app/chamados/models.py:1100`, `app/chamados/models.py:1159`, `app/chamados/models.py:1197`, `app/chamados/models.py:1519`, `app/chamados/models.py:1537`, `app/chamados/models.py:3094`, `app/chamados/tests/test_desligado_porta_do_chamado.py:161`.
-- **Segundo desligamento.** A validação definitiva mora em `app/colaboradores/services/desligamento.py:executar_desligamento:82`, para view e cron herdarem. Usar o mesmo `julgar_desligamento` sobre a linha relida depois de travar, com o dia da borda. A guarda de `salvar_inteiro` impede que uma cópia velha volte para outro estado. Para o destino `desligado`, ela retorna cedo e aceita o segundo ato. Tanto a view quanto o cron precisam consumir a recusa da operação efetiva. `app/colaboradores/services/desligamento.py:38`, `app/colaboradores/services/desligamento.py:106`, `app/colaboradores/services/desligamento.py:128`, `app/colaboradores/services/colaborador.py:63`, `app/colaboradores/services/colaborador.py:90`, `app/colaboradores/services/colaborador.py:159`, `app/colaboradores/views.py:1472`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:51`.
-- **RED com concorrência real.** Usar `TransactionTestCase`, duas conexões e pontos de sincronização na leitura e na tentativa de trava. No código atual, A lê o ativo em `criar`, B efetiva e confirma, A prossegue para o INSERT. No reparo, forçar B a vencer a trava e A a esperar, liberando B sem esperar a conclusão de A. A deve reler desligado, devolver `None` e não criar chamado ou evento de célula. Testar a ordem inversa também: A cria enquanto detém a trava, B espera e a cascata alcança o chamado criado. O teste chamado `Concorrencia` completa o desligamento antes de chamar ambas as portas. O teste de duas threads da C2 disputa dois `abrir`, sem efetivação. `app/chamados/models.py:1159`, `app/chamados/models.py:1197`, `app/chamados/models.py:1200`, `app/colaboradores/services/desligamento.py:158`, `app/chamados/tests/test_desligado_porta_do_chamado.py:391`, `app/chamados/tests/test_c2_corrida_do_abrir.py:127`.
-- **Mais três interleavings.** A carrega `aberto`, B fecha na cascata, A tenta `em_analise` sem motivo. Deve continuar fechado, sem nova linha de estado. A lê chamado já fechado e cadastro ativo em `reabrir`, B efetiva, A tenta gravar: deve receber recusa e deixar chamado e perguntas intactos. Dois POSTs obtêm veredito enquanto ativos, com datas ou motivos distintos: só o vencedor deve gravar desligamento, vínculo, credencial e S89. O teste de releitura de `reabrir` cobre uma instância velha cujo chamado já está vivo antes da chamada. O teste de redesligar faz os POSTs em sequência. Acrescentar também `abrir` com vivo legado preexistente em cadastro já desligado, pois o atual RED de inserção usa lookup vazio. `app/chamados/models.py:146`, `app/chamados/models.py:224`, `app/chamados/models.py:244`, `app/chamados/models.py:1519`, `app/chamados/models.py:1593`, `app/colaboradores/services/desligamento.py:128`, `app/chamados/tests/test_reabrir_decide_pelo_banco.py:57`, `app/colaboradores/tests/test_desligar_guards.py:36`, `app/chamados/tests/test_desligado_porta_do_chamado.py:140`.
-
-#### 3. Chamadores e resgate pela tranca
-
-- **Origem da cura.** O contrato de recusa sai de `app/chamados/models.py:ChamadoColaborador.criar:1161` e `app/chamados/models.py:ChamadoColaborador.abrir:1017`. Cada escritor dependente deve parar antes dos seus próprios efeitos, com as ações por sítio na lista abaixo. No resgate, a coleta mora no formulário/botão de `app/templates/chamados/partials/_lista_chamados.html:120`, e a resposta em `app/chamados/views_arquivar.py:desarquivar_chamado:52` deve refletir a recusa da porta de reabertura. Hoje o `fetch` só manda o cabeçalho CSRF e a view atribui qualquer `False` ao motivo do desligado. `app/chamados/views_arquivar.py:64`, `app/chamados/models.py:1498`.
-- **RED das rotas.** Cadastro desligado, sem duplicata, acionar abertura DP, mensagem rápida e envio de agenda com rascunhos. Esperar resposta de recusa, zero push/GLPI/nota de abertura e agenda ainda em rascunho. Repetir pelas rotas de cada efeito da lista de chamadores com controle ativo. Os testes de abertura e mensagem exercitam o sucesso e o teste de agenda cobra justamente a promoção para `proposta`. O teste de nascimento de desligado para na porta do modelo. `app/chamados/services/abertura.py:194`, `app/chamados/views.py:982`, `app/chamados/views.py:995`, `app/colaboradores/views.py:2412`, `app/colaboradores/views.py:2427`, `app/colaboradores/views.py:2443`, `app/chamados/tests/test_views.py:100`, `app/chamados/tests/test_views.py:182`, `app/colaboradores/tests/test_agenda_endpoints.py:124`, `app/chamados/tests/test_desligado_porta_do_chamado.py:124`.
-- **RED do resgate.** Cadastro desligado e chamado fechado por tranca. Acionar o botão renderizado, mandar motivo próprio, conferir a travessia e o autor na trilha e comparar a foto de disputa/perguntas. Motivo vazio deixa arquivo e estado intactos. Cadastro ativo, mesma via e irmão vivo: mostrar a causa real da recusa, preservando o redirecionamento da porta quando couber. O teste atual cria um POST já preenchido por `RequestFactory`, portanto o botão pode omitir o corpo sem que a asserção perceba. `app/templates/chamados/partials/_lista_chamados.html:120`, `app/chamados/views_arquivar.py:66`, `app/chamados/views_arquivar.py:75`, `app/chamados/models.py:1562`, `app/chamados/tests/test_desligado_porta_do_chamado.py:242`, `app/chamados/tests/test_desligado_porta_do_chamado.py:250`.
-
-#### 4. Reaberturas divergentes
-
-- **Origem da cura.** `app/chamados/models.py:ChamadoColaborador.recusa_da_reabertura:1455` já reúne o veredito de domínio. `transicionar` deve consultá-lo na travessia `ENCERRADOS → VIVOS`, mantendo a matriz de perfil e destino no motor. `reabrir` deve usar o mesmo veredito com o cadastro e o estado sob trava. Pedir ator identificado e motivo próprio para o desligado. A excepcionalidade humana não derruba a exigência vigente de fato novo no fecho de admin. `app/chamados/models.py:140`, `app/chamados/models.py:1477`, `app/chamados/models.py:1487`, `app/chamados/models.py:1537`, `app/chamados/catalogo/motor.py:139`, `app/docs/BACKLOG.md:733`, `app/docs/BACKLOG.md:1823`.
-- **Disputa.** O veto do LU-12 deve morar nas duas portas que limpam o fecho, `app/chamados/models.py:DisputaSupervisao.reabrir_admin:2502` e `app/chamados/models.py:DisputaSupervisao.reabrir_sistema:2539`, com o juiz cadastral sob a trava. `acao_reabrir_disputa_admin` precisa consumir o resultado antes de criar conversa, nota e pushes. A reabertura por colaborador é correção de questionário de disputa aberta, já recusa disputa fechada sob trava. A reabertura humana do chamado de desligado deve ser apenas do chamado, inclusive quando o resgate tenta ressuscitar perguntas pela segunda vez. Hoje a exclusão da ressuscitação identifica somente a via nova e as vias fora do fato. `app/docs/CORTES.md:546`, `app/core/juizes.py:283`, `app/chamados/services/acoes_disputa.py:296`, `app/chamados/services/acoes_disputa.py:300`, `app/chamados/services/acoes_disputa.py:304`, `app/chamados/services/acoes_disputa.py:311`, `app/chamados/services/acoes_disputa.py:340`, `app/chamados/models.py:1637`, `app/chamados/models.py:2614`, `app/chamados/views_arquivar.py:84`.
-- **RED.** Desligado, chamado fechado via `admin`, dia identificável sem fato novo, ator autorizado e motivo bom. Detalhe e `reabrir` devem recusar pelo mesmo motivo. Com fato novo e demais guardas satisfeitas, os dois caminhos só reabrem o chamado. Em disputa fechada de desligado, bater tanto no POST administrativo quanto em `reabrir_sistema`: fecho, quota, perguntas, notas e notificações ficam sem alteração. O teste atual de motivo no detalhe usa o fecho da cascata e prova a reabertura por essa rota. O teste do POST administrativo prova o caminho feliz sem exigir o veto LU-12. `app/chamados/models.py:150`, `app/chamados/models.py:1491`, `app/chamados/models.py:1539`, `app/chamados/services/acoes_disputa.py:300`, `app/chamados/tests/test_desligado_porta_do_chamado.py:229`, `app/chamados/tests/test_reabrir_disputa_admin_sem_aberta.py:22`.
-
-#### 5. Testemunha, I5e/I5f e S89
-
-- **Origem da cura.** `app/chamados/services/materializacao.py:estado_aplicacao_pergunta:880` deve representar `desligamento` como encerramento sem aplicação antes do atalho por carimbo. O juiz de fato já responde `False` para a via. Fio e filtro de template interpretam `None` em hora respondida como testemunha indisponível, portanto precisam de um resultado inteligível para esse terminal. O histórico também precisa ler a via antes de dizer que o fato foi registrado. `app/chamados/services/materializacao.py:890`, `app/chamados/services/materializacao.py:903`, `app/chamados/juizes.py:729`, `app/chamados/services/fio.py:461`, `app/chamados/templatetags/chamados_tags.py:131`, `app/chamados/services/historico.py:104`.
-- **Ator e atomicidade.** `app/chamados/models.py:ChamadoColaborador._gravar_estado:226` é a origem da atribuição durável do ato humano, no JSON de `estado_chamado`, além da FK. `app/chamados/management/commands/auditar_invariantes_chamados.py:Command.handle:673` deve ler essa evidência, com tratamento compatível para linhas anteriores. A FK é `SET_NULL`. Para S89, `app/colaboradores/services/desligamento.py:executar_desligamento:167` deve exigir confirmação da trilha no atomic da efetivação, usando o escritor de auditoria existente. `registrar_log` descarta o retorno e `evento` engole sua falha num savepoint. Há precedente de exigir o retorno de `evento` na operação crítica de cluster. `app/chamados/models.py:319`, `app/core/models.py:295`, `app/core/auditoria.py:17`, `app/core/observ.py:124`, `app/core/observ.py:133`, `app/ponto/services/cluster_espurio.py:296`, `app/docs/LEIS.md:65`.
-- **RED de aplicação.** Hora `07:15` carimbada por desligamento, com resposta preservada, sem batida e sem validação. C6 e SQL devem tirá-la da fila. A testemunha, o cartão e o histórico devem dizer encerrada por desligamento, sem oferecer aplicação nem alegar plantio. Ter controles de hora efetivamente plantada e das recusas de paridade e colisão. O teste da respondida confere carimbo e preservação da sequência. O teste da muda usa escolha e não entra no ramo errado da testemunha de hora. `app/chamados/juizes.py:1518`, `app/chamados/models.py:3903`, `app/chamados/services/materializacao.py:868`, `app/chamados/services/materializacao.py:901`, `app/chamados/services/historico.py:104`, `app/chamados/tests/test_desligado_porta_do_chamado.py:353`, `app/chamados/tests/test_desligado_porta_do_chamado.py:378`.
-- **RED de auditoria.** Reabrir com usuário real e motivo, apagar o usuário e rodar o vigia. A reabertura deve continuar em I5f e fora de I5e. Separadamente, fazer falhar somente o INSERT do S89 e conferir o rollback da efetivação, credencial, vínculo, perguntas e chamados, com recusa visível à borda. O teste de vigia mantém o usuário, e o teste de S89 lê uma trilha inserida normalmente. Adicionar controle pelo cron com autoria declarada de sistema. `app/core/models.py:295`, `app/chamados/management/commands/auditar_invariantes_chamados.py:678`, `app/colaboradores/services/desligamento.py:127`, `app/colaboradores/services/desligamento.py:167`, `app/chamados/tests/test_desligado_porta_do_chamado.py:300`, `app/chamados/tests/test_desligado_porta_do_chamado.py:436`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:64`.
-
-#### 6. Dia civil lido duas vezes
-
-- **Origem da cura.** `app/colaboradores/services/desligamento.py:julgar_desligamento:35` recebe `hoje` obrigatório. A view e o cron leem uma vez e passam o mesmo dia à seleção, ao julgamento e ao executor. A data de demissão é dia civil. Os instantes `executado_em`, `fechada_em` e o do carimbo continuam instantes dos atos. `app/colaboradores/services/desligamento.py:40`, `app/colaboradores/services/desligamento.py:60`, `app/colaboradores/services/desligamento.py:82`, `app/colaboradores/services/desligamento.py:151`, `app/colaboradores/views.py:1472`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`, `app/chamados/models.py:2305`, `app/chamados/models.py:3598`, `app/docs/PLANO-PADROES.md:101`.
-- **RED.** Cadastro ativo, São Paulo ainda em 27/11 às 22h30, processo de teste emulando dia 28/11, pedido para 28/11. Esperar agendamento, acesso e vínculo vigentes e zero
-
-[truncado em 20000 de 57061 caracteres]
-
-## 27/11 22:51 · sessao 1a331d144fe3 · DESLIGADO-PORTA-DO-CHAMADO · verificador · origem=Code
-
-O diff realiza parte do aval. O passivo ficou sem reparo e reversão, há corridas que permitem criar ou reabrir depois do desligamento, e três subtestes do selo E4B C12 falham na cópia. Os três arquivos centrais conferidos têm os hashes de blob do diff fornecido. O hash do commit, a execução em produção e o tamanho do passivo ficam [nao verificado]. `app/colaboradores/services/desligamento.py:156`, `app/chamados/models.py:1159`, `app/chamados/models.py:1593`, `app/chamados/migrations/0057_via_desligamento.py:12`, `app/chamados/tests/test_e4b_c12_selo.py:22`.
-
-## 1. As quatro frases do aval
-
-| Frase | Onde é realizada | O que fica de fora |
-|---|---|---|
-| **“portas criar/abrir perguntam esta_desligado”** | `criar` relê o cadastro e recusa com trilha. `abrir` consulta o cadastro da própria trava no caminho de inserção. Um encerrado encontrado no dedup passa pelo renascimento, que também pergunta ao juiz. `app/chamados/models.py:991`, `:1007`, `:1013`, `:1100`, `:1159`, `:1312`, `:1321`. | `abrir` devolve um vivo encontrado sem consultar o juiz. O retorno `None` quebra chamadores existentes, e em `criar` cabe um desligamento inteiro entre a leitura e a inserção. `app/chamados/models.py:992`, `:1010`, `:1197`, `app/chamados/services/abertura.py:172`, `:194`, `app/chamados/views.py:982`, `:995`. |
-| **“S89 informativo”** | O executor efetivo grava `editar/Colaborador` com data, motivo, autor e instante. O detalhe do chamado mostra dia, pergunta e resposta preservada. O cron do agendado chama o mesmo executor. `app/colaboradores/services/desligamento.py:167`, `app/chamados/services/acoes_chamado.py:416`, `app/templates/chamados/detalhe_local.html:374`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:51`. | A gravação do informativo é best-effort, de modo que o desligamento pode concluir sem essa linha. O quadro de perguntas depende de estas já terem a via nova e estarem ligadas ao chamado exibido. `app/core/auditoria.py:17`, `app/core/observ.py:94`, `:133`, `app/chamados/services/acoes_chamado.py:418`. |
-| **“pergunta sem veredito morre no desligamento”** | A cascata visita disputas abertas. A porta reúne as vivas e as respondidas sem veredito retornadas pelo juiz, grava `desligamento` antes de salvar a disputa, conserva a resposta e só registra `SILENCIO` quando a pergunta estava muda. Depois vêm o signal do pai e `encerrar` dos chamados restantes. `app/colaboradores/services/desligamento.py:155`, `:163`, `app/chamados/models.py:2212`, `:2281`, `:3490`, `app/chamados/signals.py:29`. | Disputa já fechada fica fora. Pergunta respondida sem veredito em dia trancado pode ficar fora **das duas** listas. A testemunha de aplicação ainda interpreta o carimbo da via nova como batida aplicada. `app/colaboradores/services/desligamento.py:156`, `app/chamados/models.py:2130`, `app/chamados/juizes.py:1511`, `app/chamados/services/materializacao.py:890`, `:903`. |
-| **“passivo pela porta com reversao”** | O vigia mede vivos de desligados. O vigia de fio já mede perguntas vivas em disputas fechadas. O APPLY de cluster trata outro universo, o de clusters encerrados por `RECONCILIAR` com assinatura ainda viva. `app/chamados/management/commands/auditar_invariantes_chamados.py:660`, `:683`, `app/chamados/services/vigia_fio.py:746`, `app/ponto/services/cluster_espurio.py:88`, `:107`. | A parte executável do passivo e a reversão estão ausentes do diff fornecido. O executor só visita disputas abertas, a porta comum recusa disputa já fechada, e a 0057 só altera as `choices`. O backlog descreve DRY e APPLY pela porta. `app/colaboradores/services/desligamento.py:156`, `app/chamados/models.py:2184`, `app/chamados/migrations/0057_via_desligamento.py:12`, `app/docs/BACKLOG.md:732`. |
-
-## 2. Escritores, leitores e significado
-
-**Cadastro e relógio.** O registro vivo aponta para `esta_desligado`, que responde exclusivamente pelo estado gravado. `ativo` com demissão passada, de hoje ou futura dá `False` até a efetivação. `desligado` dá `True` mesmo com data futura ou nula. `afastado` dá `False`. Agendar grava data e motivo, efetivar grava também situação e reativar limpa a demissão e volta a `ativo`. O `DateField` representa dia civil. O juiz de agendamento usa `>` para futuro e aceita o teto de 90 dias inclusive. O cron seleciona `<= hoje` com `timezone.localdate()`. Na folha, `sai_pela_rescisao` usa `<= fim_janela`, e a regra de cadastro do `supra_juiz` usa `data > data_demissao`, preservando o próprio dia. São perguntas diferentes. A divergência de relógio é entre `date.today()` no juiz do agendamento e o dia local da borda, configurado como `America/Sao_Paulo`. `app/core/juizes.py:283`, `app/colaboradores/models.py:325`, `app/colaboradores/services/desligamento.py:23`, `:40`, `:60`, `:78`, `:106`, `:128`, `:190`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`, `app/colaboradores/views.py:1472`, `app/folha/export.py:54`, `app/ponto/supra_juiz.py:207`, `app/config/settings/base.py:93`.
-
-**Leitores de `esta_desligado`.** Na cópia, as chamadas diretas estão na própria validação de desligamento, nas portas de situação e reativação do cadastro, no adaptador dos chamados, no detalhe, no vigia I5, no disparo por competência, no cadastro versus realidade e nas leituras da folha. As decisões cruas que continuam na rota de emissão incluem adesão e cartório, que comparam com `desligado`, e reconciliador e renascimento, que exigem `ativo`. Afastado passa pela primeira pergunta e falha na segunda. A própria via `cascade` continua vetando renascimento após reativação. `app/colaboradores/services/desligamento.py:38`, `app/colaboradores/services/colaborador.py:63`, `:66`, `:196`, `app/chamados/models.py:1325`, `:1104`, `:1106`, `app/chamados/views.py:557`, `app/chamados/management/commands/auditar_invariantes_chamados.py:660`, `app/chamados/management/commands/disparar_perguntas_competencia.py:61`, `app/escala/services/cadastro_realidade.py:171`, `app/folha/export.py:1216`, `:1235`, `app/folha/fora_da_folha.py:172`, `app/folha/retrato_folha.py:1286`, `app/chamados/services/adesao.py:67`, `app/chamados/reconciliador.py:942`, `app/ponto/services/cartorio.py:1803`, `:1868`.
-
-| Campo ou valor | Quem escreve | Quem lê e divergências |
-|---|---|---|
-| **`PerguntaDisputa.via_resolucao='desligamento'`** | O único produtor nominal do valor é `fechar_por_desligamento` → `carimbar` → `_escrever_carimbo`. A mesma escrita grava `materializada_em` e `materializada_por`. A disputa gera a trilha `pergunta_encerrada_com_a_disputa` e, para a muda, `DecisaoPergunta.SILENCIO`. A 0057 declara o valor permitido. `app/chamados/models.py:2281`, `:2294`, `:3490`, `:3559`, `:3598`, `:3643`, `app/chamados/migrations/0057_via_desligamento.py:14`. | Leitores específicos são a idempotência da porta, o filtro de ressuscitação, o juiz de materialização de fato, o C6 e sua face SQL pela tupla comum, e o detalhe. O card de atendimento usa o display do campo. C6 lê um **instante** e considera o carimbo no próprio instante, pois só o retira da projeção quando `materializada > agora`. O estado derivado pode ser `RESOLVIDA`, enquanto a aplicação responde `aplicada` para uma `hora` respondida, mesmo sem plantio. `app/chamados/models.py:1643`, `:2947`, `:3484`, `:3497`, `:3903`, `app/chamados/juizes.py:729`, `:1480`, `:1518`, `app/chamados/services/acoes_chamado.py:421`, `app/templates/chamados/partials/_card_atendimento.html:195`, `app/chamados/services/materializacao.py:897`. |
-| **`motivo_reabertura` do chamado** | `detalhe_local.html` fornece texto livre. `acao_resposta_livre` e `desarquivar_chamado` leem o POST, tiram espaços e passam a `transicionar` e `reabrir`, respectivamente. `_gravar_estado` grava o texto na descrição e no JSON de `estado_chamado`. O escritor também aceita o texto em transições que não são reaberturas. `app/templates/chamados/detalhe_local.html:411`, `app/chamados/services/acoes_chamado.py:323`, `app/chamados/views_arquivar.py:66`, `app/chamados/models.py:149`, `:224`, `:319`, `:1593`. | Leitores específicos são as duas guardas e I5f, que exige transição `ENCERRADOS → VIVOS`, motivo não branco e FK de usuário. Histórico e tela de auditoria leem a trilha/descrição. O mesmo nome no POST de **disputa** é um código do catálogo e tem `justificativa_admin` separada. O antigo campo homônimo de `DecisaoPergunta` virou `ato_motivo`. `app/chamados/models.py:150`, `:1477`, `app/chamados/management/commands/auditar_invariantes_chamados.py:673`, `app/chamados/services/historico.py:86`, `app/templates/core/log_auditoria.html:73`, `app/templates/chamados/partials/modal_fio.html:424`, `app/chamados/services/acoes_disputa.py:287`, `app/chamados/migrations/0050_resposta_anterior.py:24`, `app/chamados/migrations/0051_decisao_pergunta.py:45`. |
-| **`LogAuditoria.acao='reabertura_recusada'`** | `_trilha_do_desligado` escreve `motivo='desligado'` para `renascer` e `reabrir`, e usa `nascimento_recusado` no `criar` e no `abrir`. Os escritores anteriores desse mesmo verbo são `_trilha_do_veto`, a recusa por fechamento de admin sem fato novo, a premissa regularizada e a mudança de universo sob trava. A transição manual sem motivo só levanta `ValueError`, que a ação de tela devolve. O `INSERT` é de `core.observ.evento`. `app/chamados/models.py:1270`, `:1335`, `:1101`, `:1539`, `:1547`, `:1553`, `:1572`, `:154`, `app/chamados/services/acoes_chamado.py:336`, `app/core/observ.py:133`. | I5g soma **linhas de tentativas**, sem janela, para os dois verbos com `motivo='desligado'` e sem chave `veto`, apesar do rótulo falar só em nascimento. `_trilha_do_veto` lê a sua própria trilha para dedup. A auditoria geral lê as linhas pelo verbo/modelo. `app/chamados/management/commands/auditar_invariantes_chamados.py:691`, `app/chamados/models.py:1275`, `app/core/views.py:705`. |
-| **`ChamadoColaborador.status_local` e `via_encerramento`** | `abrir` e `criar` escrevem o estado inicial. As transições produtivas localizadas escrevem por `_gravar_estado`, chamado de `_aplicar`, `reconciliar`, `cancelar`, `analisar`, `reabrir`, `encerrar` e `encerrar_por_competencia_trancada`. As migrations 0038 e 0039 e suas reversões escrevem diretamente. `app/chamados/models.py:1031`, `:1064`, `:1198`, `:253`, `:270`, `:327`, `:488`, `:694`, `:874`, `:892`, `:1593`, `:1882`, `:1902`, `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `:15`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `:33`. | O signal da disputa tenta `resolvido/sistema`; a cascata tenta `fechado/cascade`. `registrado` é `VIVOS` e fica fora de `COBRANCA`. A via `cascade` identifica o verbo `ENCERRAR`, usado também na regularização externa, no vínculo e no reconciliador. É insuficiente para identificar um desligamento. Os leitores diretos da via, além das portas do modelo, estão em adesão, arquivo, competência, emissão de disputa, I16, cluster, furos sem cobrança e justificativa. `app/chamados/signals.py:34`, `:43`, `app/colaboradores/services/desligamento.py:158`, `app/chamados/catalogo/motor.py:24`, `:95`, `app/chamados/services/regularizacao_ext.py:206`, `app/colaboradores/services/vinculo.py:406`, `app/chamados/reconciliador.py:543`, `app/chamados/services/adesao.py:91`, `app/chamados/views_arquivar.py:64`, `:163`, `app/chamados/services/competencia_trancada.py:288`, `app/chamados/services/disputa_emissao.py:1994`, `:2033`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1096`, `app/ponto/services/cluster_espurio.py:110`, `:289`, `app/ponto/services/furos_sem_cobranca.py:69`, `app/ponto/services/justificativa.py:372`. |
-| **S89** | A emissão antiga de `desligamento_revisao` foi removida, junto com o push. O produtor atual do informativo é o executor, por `registrar_log` → `evento`. `data_demissao` é dia civil em texto ISO. `executado_em` é instante ISO de `timezone.now()`, distinto de `LogAuditoria.criado_em`, preenchido no `INSERT`. No cron, `executado_por_id` pode ser nulo e o nome distingue o sistema. `app/colaboradores/services/desligamento.py:94`, `:149`, `:167`, `app/core/auditoria.py:8`, `app/core/models.py:295`, `:307`. | A auditoria geral exibe o novo informativo. Para o S89 antigo, continuam os leitores de natureza de registro, dia do fato/chave `data_demissao`, exceção à tranca, rótulo, comentário de rotina e janela do colaborador. A migration 0038 também reconhece o módulo antigo. Os leitores legados consomem um chamado, e o registro novo está em outra entidade. `app/core/views.py:705`, `app/templates/core/log_auditoria.html:73`, `app/chamados/catalogo/natureza.py:20`, `app/chamados/catalogo/modulos.py:141`, `:219`, `:265`, `app/chamados/services/desenlace.py:30`, `app/chamados/services/verbos.py:176`, `app/chamados/services/janela_colab.py:36`, `app/chamados/migrations/0038_a3_registrado_backfill.py:3`. |
-
-**Outras portas e leitores da pergunta.** `fechar` grava estado da disputa, e `reabrir_admin` e `reabrir_sistema` limpam o fecho. A via da pergunta em geral pode ser trocada ou limpa por `carimbar_identidade`, `descarimbar`, `descarimbar_em_lote`, fechamento por fato no espelho e relavra. Os dois descarimbos só protegem `VIAS_FORA_DO_FATO`, que exclui `desligamento`. A relavra ordinária exige via derivada, e a que desfaz carimbo consulta C6. O comando de encerrar por fato restringe seu universo às vias sem história. `app/chamados/models.py:2305`, `:2525`, `:2549`, `:3659`, `:3691`, `:3701`, `:3787`, `:3791`, `app/chamados/services/relavra_via.py:118`, `:238`, `:242`, `app/chamados/management/commands/encerrar_perguntas_com_fato.py:41`.
-
-**Outros leitores diretos da coluna genérica `via_resolucao`.** Há filtros de identidade, projeção e diagnóstico em `app/chamados/services/fio.py:1260`, `:1327`, `:1407`, `:1684`, `:1767`, `:2208`, `:2244`, `:2266`, `:2312`, `app/chamados/services/disputa_emissao.py:337`, `:409`, `:428`, `:446`, `:1688`, `:2182`, `app/chamados/services/tarefa_do_dia.py:262`, `app/chamados/services/fabrica_da_celula.py:149`, `app/chamados/services/competencia_trancada.py:280`, `app/chamados/services/passivo_validado.py:69`, `:147`, `:578`, `app/chamados/services/validacao.py:377`, `:471`, `app/chamados/services/materializacao.py:275`, `:307`, `:1202`, `:1245`, `:1786`, `app/chamados/reconciliador.py:1287`, `app/api/foto_recebida.py:45`, `app/ponto/services/flip_auto.py:129`, `app/ponto/services/cartorio.py:1705`. Há leitores em comandos de auditoria, backfill, relavra e reparo em `app/chamados/management/commands/auditar_invariantes_chamados.py:204`, `:435`, `:546`, `:982`, `:1759`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:129`, `:364`, `:432`, `:540`, `app/chamados/management/commands/relavrar_via_i6.py:58`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70`, `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:59`, `app/chamados/management/commands/bug_par_103.py:67`.
-
-**Censo de `status_local`.** Além das portas e leitores da via já citados, os consumidores centrais de estado são os signals, os juízes de fio e tarefa, o reconciliador, a fila, painel, vigias, histórico, APIs e telas. O censo E4B varre os escritores em produção por AST e exclui testes e migrations. A exaustividade de todos os leitores indiretos do campo genérico, incluindo aliases, projeções e consumidores de API, fica [nao verificado]. `app/chamados/signals.py:87`, `:186`, `:203`, `:287`, `:356`, `app/chamados/juizes.py:839`, `:2619`, `app/chamados/services/tarefa_do_dia.py:454`, `app/chamados/reconciliador.py:247`, `:961`, `:1058`, `app/chamados/services/fila.py:126`, `app/chamados/services/painel.py:139`, `:213`, `app/chamados/services/vigia_loop.py:29`, `:114`, `app/chamados/services/vigia_fio.py:322`, `app/chamados/services/historico.py:158`, `app/api/views.py:1037`, `:1135`, `app/api/views_mensageria.py:417`, `app/relatorios/views.py:811`, `app/templates/chamados/partials/_lista_chamados.html:33`, `app/chamados/tests/e4b_c12_ast.py:34`.
-
-## 3. Classes de reprovação
-
-| Classe | Resposta |
-|---|---|
-| **(a) Segundo juiz** | **Sim no repositório.** As portas novas delegam ao registrado, mas adesão e cartório ainda respondem à mesma pergunta comparando a situação crua. O registro está em `app/core/juizes.py:283`. A tabela se declara consulta ao registro vivo. `app/docs/JUIZES.md:10`, `app/chamados/models.py:1321`, `app/chamados/services/adesao.py:67`, `app/ponto/services/cartorio.py:1803`, `:1868`. |
-| **(b) Segundo escritor fora da porta** | **Sim no sentido literal, em migrations históricas e fixtures. Não encontrei um novo escritor produtivo direto de status/via do chamado.** As três falhas do selo apontam chamadas ao núcleo do modelo em linhas deslocadas. `app/chamados/migrations/0038_a3_registrado_backfill.py:10`, `app/chamados/migrations/0039_a3_via_backfill.py:24`, `app/chamados/tests/test_desligado_porta_do_chamado.py:440`, `app/chamados/tests/e4b_c12_ast.py:27`, `app/chamados/models.py:1593`, `:1882`, `:1902`. |
-| **(c) Relógio fora da borda** | **Sim, herdado no juiz de agendamento.** `julgar_desligamento` lê `date.today()` para default e de novo para decidir. A view e o cron têm outro `hoje`. O juiz `esta_desligado` é puro, e os `now()` do executor e do carimbo são instantes de escrita. `app/colaboradores/services/desligamento.py:32`, `:40`, `:60`, `:151`, `app/colaboradores/views.py:1475`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37`, `app/chamados/models.py:3598`, `app/docs/PLANO-PADROES.md:101`. |
-| **(d) Derivação paralela** | **Sim.** A alteração manual decide a exceção de reabertura separadamente de `recusa_da_reabertura`. O detalhe mostra o campo com base na matriz de estados. A testemunha de aplicação infere plantio pelo carimbo, apesar do juiz de fato. `app/chamados/models.py:140`, `:1477`, `:1487`, `app/chamados/views.py:555`, `app/chamados/services/materializacao.py:903`, `app/chamados/juizes.py:729`. |
-| **(e) Selo/RED sem mordida** | **Sim.** Rodei o selo E4B C12 sem banco. Foram **11 testes e 3 falhas**. A tabela espera `1587`, `1876`, `1896`, e as chamadas estão em `1593`, `1882`, `1902`. Os testes novos do detalhe substituem `render`, e o de desarquivar monta o POST com o motivo à mão. Retirar o `<input>` ou deixar o botão real sem POST do motivo não contraria essas asserções. `app/chamados/tests/test_e4b_c12_selo.py:22`, `app/chamados/tests/e4b_c12_ast.py:27`, `app/chamados/models.py:1593`, `:1882`, `:1902`, `app/chamados/tests/test_desligado_porta_do_chamado_bordas.py:25`, `app/chamados/tests/test_desligado_porta_do_chamado.py:250`, `app/templates/chamados/detalhe_local.html:414`, `app/templates/chamados/partials/_lista_chamados.html:120`. |
-| **(f) Ordem de trava** | **Sim.** `abrir` trava antes do lookup e lê a situação daquela mesma consulta. `criar` lê antes do `atomic` da inserção. `reabrir` relê status sem trava e julga antes da trava tomada na gravação. `transicionar` usa o status da instância antes de qualquer releitura do chamado. `DisputaSupervisao.fechar` reavalia o universo sob trava. `app/chamados/models.py:988`, `:1159`, `:1197`, `:1519`, `:1537`, `:314`, `:146`, `:2253`, `:2272`. |
-| **(g) Pouso antes do pré-requisito** | **Não no diff.** 0057 e o escritor estão no mesmo material entregue, e a migration depende da 0056 e altera as `choices` do `CharField` existente. O script normal migra antes do reload. Ordem efetiva em produção e leitura por workers antigos durante um rollback [nao verificado]. `app/chamados/migrations/0057_via_desligamento.py:1`, `:8`, `:12`, `app/chamados/models.py:3499`, `bin/deploy.sh:308`, `:317`, `:320`. |
-| **(h) Campo com dois significados** | **Sim.** `materializada_em` passa a significar também encerramento sem aplicação, mas a testemunha ainda o lê como `aplicada`. `via_encerramento='cascade'` também reúne desligamento e outros fechamentos, embora a adesão a descreva como cascata de desligamento. `app/chamados/models.py:3499`, `:3949`, `app/chamados/services/materializacao.py:903`, `app/chamados/catalogo/
-
-[truncado em 20000 de 29645 caracteres]
-
-_8820 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8822 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
