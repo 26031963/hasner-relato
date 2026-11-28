@@ -1,7 +1,166 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 21:36** · publicado em **27/11/2026 21:39** (UTC-3)
+> Ultima resposta processada: **27/11/2026 21:43** · publicado em **27/11/2026 21:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 21:43 · sessao 4b6e1be2ce2a · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
+
+- O APPLY agora consulta `recusa_da_reabertura()` sob a trava, depois de reconferir o universo. Só `desligado` recebe o novo `parado` e pula a porta de renascimento. [cluster_espurio.py:276](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/services/cluster_espurio.py:276)
+- A busca do autor ocorre após o renascimento. O APPLY só guarda o autor para reutilização depois que a transação da linha termina com sucesso. [cluster_espurio.py:290](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/services/cluster_espurio.py:290)
+- Em memória, o RED mordeu pela trilha simulada, o controle passou e os seis mutantes foram mordidos. O comando serializou o novo `parado` com `aplicadas=0`. O RED existente ainda exige o texto antigo na linha 175. Suite Django [nao verificado]. [detectar_cluster_espurio.py:55](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/management/commands/detectar_cluster_espurio.py:55) · [test_o169_legado_encerrado_por_idade.py:175](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/tests/test_o169_legado_encerrado_por_idade.py:175) [nao verificado]
+
+```diff
+--- a/app/ponto/services/cluster_espurio.py
++++ b/app/ponto/services/cluster_espurio.py
+@@ -271,8 +271,6 @@
+     for linha in r['linhas']:
+         if linha['acao'] != REABRIR:
+             continue
+-        if autor is None:
+-            autor = get_user_sistema()
+         cid = ChamadoColaborador.objects.filter(pk=linha['pk']).values_list('colaborador_id', flat=True).get()
+         try:
+             with transaction.atomic():
+@@ -283,21 +281,28 @@
+                 if ch.pk not in contador_cluster_encerrado_sem_lastro(colaborador_id=cid)['pks']:
+                     linha['parado'] = 'saiu do universo antes do apply'
+                     continue
++                # DESLIGADO-PORTA-DO-CHAMADO c2: o APPLY legado nao escreve trilha de recusa do desligado.
++                # A trilha cabe as portas criar/abrir, que I5g conta.
++                if ch.recusa_da_reabertura()[0] == 'desligado':
++                    linha['parado'] = 'colaborador desligado: a porta recusaria'
++                    continue
+                 antes = {'status_local': ch.status_local, 'via_encerramento': ch.via_encerramento}
+                 if not ch._renascer_por_premissa_viva():
+                     linha['parado'] = 'a porta de renascimento recusou'
+                     continue
+                 ch.refresh_from_db(fields=['status_local', 'via_encerramento'])
++                ator = get_user_sistema() if autor is None else autor
+                 if evento(ACAO_LEGADO_REABRIR, 'ChamadoColaborador', ch.pk,
+                           descricao='O169 legado: encerrado por RECONCILIAR com a assinatura viva no dia %s (universo '
+                                     'do contador cluster_encerrado_sem_lastro); reaberto pela porta de renascimento '
+                                     '(aval TRES-ITENS (2) 10/11).' % linha['dia'],
+                           antes=antes, depois={'status_local': ch.status_local, 'via_encerramento': ch.via_encerramento},
+-                          ator=autor) is None:
++                          ator=ator) is None:
+                     raise _SemTrilha
+         except _SemTrilha:
+             linha['parado'] = SEM_TRILHA
+             continue
++        autor = ator
+         linha['aplicado'] = True [nao verificado]
+         r['aplicadas'] += 1 [nao verificado]
+     return r
+```
+
+<details>
+<summary>Comandos do RED e dos mutantes em memória</summary>
+
+```bash
+prova() {
+  PYTHONDONTWRITEBYTECODE=1 python3 - "$1" <<'PY'
+import sys
+from contextlib import nullcontext
+from pathlib import Path
+from types import SimpleNamespace as NS
+from unittest.mock import Mock, patch
+
+mode = sys.argv[1]
+path = Path('ponto/services/cluster_espurio.py')
+source = path.read_text()
+guard = "ch.recusa_da_reabertura()[0] == 'desligado'"
+lookup = 'ator = get_user_sistema() if autor is None else autor'
+mutants = {
+    'sem-guarda': (guard, 'False'),
+    'recusa-antiga': (guard, "linha['recusa'] == 'desligado'"),
+    'toda-recusa': (guard, 'ch.recusa_da_reabertura()[0] is not None'),
+    'autor-cedo': ('        cid = ChamadoColaborador',
+                   '        if autor is None:\n            autor = get_user_sistema()\n        cid = ChamadoColaborador'),
+    'sem-memo': (lookup, 'ator = get_user_sistema()'),
+    'memo-rollback': (lookup, 'autor = ' + lookup),
+}
+mutation = mutants.get('sem-guarda' if mode == 'red' else mode)
+if mutation:
+    old, new = mutation
+    assert source.count(old) == 1, 'alvo de mutacao'
+    source = source.replace(old, new, 1)
+scope = {}
+exec(compile(source, str(path), 'exec'), scope)
+
+def apply(reasons, event_results=()):
+    trace, audit = [], []
+    pks = list(range(1, len(reasons) + 1))
+
+    def ticket(pk, reason):
+        def renascer():
+            trace.append('porta')
+            if reason == 'desligado':
+                audit.append('reabertura_recusada')
+            return reason is None
+        return Mock(pk=pk, colaborador=NS(situacao='ativo'), status_local='fechado',
+                    via_encerramento='sistema', _dia_em_competencia_trancada=Mock(return_value=False),
+                    recusa_da_reabertura=Mock(return_value=(reason, None)),
+                    _renascer_por_premissa_viva=renascer)
+
+    query = Mock()
+    query.filter.return_value = query.values_list.return_value = query.select_related.return_value = query
+    query.order_by.return_value = [ticket(pk, None) for pk in pks]
+    current = {pk: ticket(pk, reason) for pk, reason in zip(pks, reasons)}
+    query.get.side_effect = lambda **kw: current[kw['pk']] if kw else 7
+    results = iter(event_results)
+    modules = {
+        'django.db': NS(transaction=NS(atomic=nullcontext)),
+        'chamados.juizes': NS(dia_do_fato=Mock()),
+        'chamados.models': NS(ChamadoColaborador=NS(objects=query), PerguntaDisputa=NS(trava_na_ordem=Mock())),
+        'core.utils': NS(get_user_sistema=lambda: trace.append('autor') or object()),
+        'core.observ': NS(evento=lambda *a, **kw: trace.append('evento') or next(results, True)),
+    }
+    scope['contador_cluster_encerrado_sem_lastro'] = lambda **kw: {'pks': pks}
+    with patch.dict(sys.modules, modules):
+        report = scope['tratar_legado_encerrado_sem_lastro'](aplicar=True, esperados=pks)
+    return report, trace, audit
+
+def check():
+    report, trace, audit = apply(['desligado'])
+    assert not audit, 'APPLY gravou reabertura_recusada'
+    assert not trace, 'APPLY buscou autor sem reabrir'
+    assert report['linhas'][0]['parado'] == 'colaborador desligado: a porta recusaria'
+    assert report['aplicadas'] == 0 [nao verificado]
+    for reason in ('veto_do_dia', 'admin_sem_fato_novo'):
+        report, trace, _ = apply([reason])
+        assert trace == ['porta'], 'outra recusa deixou de passar pela porta'
+        assert report['linhas'][0]['parado'] == 'a porta de renascimento recusou'
+    report, trace, _ = apply([None, None])
+    assert trace == ['porta', 'autor', 'evento', 'porta', 'evento'], 'ordem ou memoizacao do autor'
+    assert report['aplicadas'] == 2 [nao verificado]
+    report, trace, _ = apply([None, None], (None, True))
+    assert trace == ['porta', 'autor', 'evento', 'porta', 'autor', 'evento'], 'autor reutilizado apos rollback'
+    assert report['aplicadas'] == 1 and not report['linhas'][0]['aplicado'] [nao verificado]
+
+if mode in mutants:
+    try:
+        check()
+    except AssertionError as err:
+        print(f'{mode}: mordido ({err})')
+    else:
+        raise AssertionError(f'mutante sobreviveu: {mode}')
+else:
+    check()
+    print(f'{mode}: passou') [nao verificado]
+PY
+}
+
+prova red             # rc 1 esperado
+prova controle
+prova sem-guarda
+prova recusa-antiga
+prova toda-recusa
+prova autor-cedo
+prova sem-memo
+prova memo-rollback
+```
+
+</details>
 
 ## 27/11 21:36 · sessao 894a7f223a11 · DESLIGADO-PORTA-DO-CHAMADO · leitura · origem=Code
 
@@ -1543,15 +1702,4 @@ Linha C1 faltante por dia: `celula_id|veredito_em|dono_L099|insumos_dono|chamado
 
 O registro não altera a classificação diretamente. O **tipo eleito** alimenta estado de aplicação e a leitura de validação C2/C4/C5, com janela, paridade e espera. Também pode ser lido pela vitalidade C6 via `_slot_esperado`, alcançando C1 e guardas auxiliares C3. A causa de premissa `turno_aberto` ou `filhos_vivos` em C3 vem do juiz próprio, não do aviso. Quantas classes mudariam com uma autoridade de tipo corrigida [nao verificado]. Faltaria `S1|AVISO_CASO|classe/fase/caller|colab/dia/chamado/disputa/pergunta|tipo_chamado|tipo_ata|tipo_eleito|estado_aplicacao|C6|resultado_porta`, com o resultado da autoridade válida para o mesmo caso. `app/chamados/services/materializacao.py:927`, `:935`, `:968`; `app/chamados/services/fio.py:461`, `:582`; `app/chamados/juizes.py:408`, `:802`, `:1587`; `app/chamados/reconciliador.py:248`.
 
-## 27/11 20:34 · sessao 24a4ce798286 · - · - · origem=Ronald (tmux)
-
-### C5
-
-- **Escritor e leitor.** `executar_desligamento` grava a situação e desativa a credencial, tenta fechar primeiro cada disputa sem resposta pendente de veredito e depois chama `encerrar` para os chamados. `encerrar` relê o estado sob trava, aplica o motor e o gate de pergunta viva, que aceita o fechamento se a lista estiver vazia ou se todas as perguntas puderem ser reatadas. A gravação do estado passa por `_gravar_estado`. O sinal de fechamento da disputa tenta `reconciliar` no pai antes da etapa `encerrar`, por isso `csf_pai_recusa` no anexo descreve outro caminho. [app/colaboradores/services/desligamento.py:128] [app/colaboradores/services/desligamento.py:164] [app/colaboradores/services/desligamento.py:175] [app/colaboradores/services/desligamento.py:182] [app/chamados/models.py:393] [app/chamados/models.py:429] [app/chamados/models.py:1779] [app/chamados/models.py:213] [app/chamados/signals.py:43]
-- **`so_saida_pelo_desligado` — 31 chamados, quatro colabs.** A sonda usa o plano e o gate reais em modo seco. A parte “só saída” é uma composição dos cartões, três verbos de pergunta e uma conta DP, mais a elegibilidade estimada para login novo. A escrita passa pelos POSTs, com autenticação, conferência de vitalidade e validação da resposta. O chamador pode ter outras portas, como decisão na célula ou `admin_encerra` para o silêncio com motivo. A disponibilidade dessas portas nos 31 chamados é [nao verificado]. O rótulo não prova recusa histórica na cascata. `criado=antes` compara com o instante S89, cuja descrição afirma sempre que a cascata fechou. [hasner.txt:67] [hasner.txt:78] [app/chamados/services/fio.py:213] [app/api/login_helpers.py:118] [app/api/views.py:2607] [app/chamados/views.py:1228] [app/chamados/models.py:177] [app/chamados/models.py:2210] [app/colaboradores/services/desligamento.py:195]
-- **`sem_guarda` — #36413, col427.** A foto seca mostra `aberto`, criado antes do S89, sem bloqueio de `ENCERRAR` e sem recusa de conversa do pai. O plano também passa quando há perguntas vivas e todas podem ser reatadas. Mesmo com o retorno vazio, a transição humana verifica justificativa pendente e disputa viva, e a execução sob trava pode ter uma foto diferente. Encerrar genericamente pode esconder a justificativa pendente ou perder a âncora de perguntas que precisavam ser reatadas. [hasner.txt:113] [app/chamados/catalogo/motor.py:114] [app/chamados/models.py:140] [app/chamados/models.py:393] [app/chamados/models.py:451] [app/chamados/models.py:761]
-- **Dono e origem.** ESTRUTURA para a incoerência de ciclo de vida, com o sítio único `executar_desligamento`. A causa histórica de cada registro é [nao verificado]. `C7-DISPUTA-FECHA-POR-UM-JUIZ` figura `EM CURSO` e toca esse sítio; seu uso da porta `DisputaSupervisao.fechar` está na cópia. A obra específica é `O50-DESLIGAR-ENCERRA-TUDO` (d), `DESLIGAR-LIQUIDA-TUDO`, com despacho de censo e sonda, e a grade registra separadamente o complemento de reabertura. Padrão da fatia (d): **Single Writer Principle**. A O50 usa também o padrão bitemporal para vínculos. O contraexemplo do teste mantém aberto o chamado da resposta sem veredito e encerra o da pergunta muda, preservando a resposta do colaborador segundo a porta da cópia. [app/docs/LEIS.md:122] [app/colaboradores/services/desligamento.py:164] [app/docs/BACKLOG.md:732] [app/docs/BACKLOG.md:733] [app/docs/BACKLOG.md:1466] [app/docs/BACKLOG.md:1632] [app/docs/GLOSSARIO.md:12] [app/docs/GLOSSARIO.md:27] [app/chamados/tests/test_o261e_f1_porta_encerramento.py:327] [nao verificado]
-- **Linha faltante.** `C5|chamado|s89|estado_antes/depois|disputa|C7_perguntas_e_resultado|ENCERRAR_perguntas_reatas_e_resultado|eventos_estado/via/recusa_ate_hoje|justificativa|ator/canal_e_motivo_da_recusa`. Isso permite distinguir tentativa recusada, fechamento seguido de reabertura e ausência de tentativa, hoje [nao verificado]. [app/chamados/models.py:304] [app/chamados/models.py:416] [app/chamados/models.py:1428] [app/colaboradores/services/desligamento.py:182]
-- **Aviso.** `_tipo_pelo_marco` conta divergência entre o tipo do marco cobrado e o tipo do marco mais próximo na ata; o retorno escolhido pode alimentar a aplicação e o slot usado em ramos do C6. `_div` é descartado pelo chamador. A testemunha de aplicação exige resposta e o slot não usa texto sem resposta vigente, portanto não se atribui o aviso à pergunta muda do C5 pela etiqueta. A ocorrência em outras perguntas consultadas para o mesmo chamado é [nao verificado]. Falta `AVISO_CASO|classe|chamado|pergunta|chamador|tipo_cobrado|tipo_ata|tipo_usado|resultado_relevante`. [hasner.txt:79] [app/chamados/services/materializacao.py:567] [app/chamados/services/materializacao.py:595] [app/chamados/services/materializacao.py:683] [app/chamados/services/materializacao.py:897] [app/chamados/juizes.py:409] [app/chamados/juizes.py:802] [app/chamados/juizes.py:1580]
-
-_8798 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8799 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
