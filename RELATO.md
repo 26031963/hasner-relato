@@ -11003,6 +11003,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 04:16:47 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:ae84963439 (207 car., na trilha privada)
+
+**28/11 04:11:37 disjuntor (NEGOU ESPERA)** -- agente principal -- Bash -- alvo sha1:abedc87489 (231 car., na trilha privada)
+
 **28/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
 
 **28/11 02:59:03 disjuntor (NEGOU B1)** -- agente acd12f2e6b1212ae1 -- Bash -- alvo sha1:2e837b7a25 (261 car., na trilha privada)
@@ -14926,6 +14930,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 03:55 colhido CUSTO-DE-COORDENACAO f1v2/cura_f4/pos_test_relato_guarda_pedido_de_patch.rc (03:55 rc 0): passo intermediario do opus construtor aaf48022 -- a regressao da F4 ficou VERDE na wt apos a cura (hook_stop_borda rc 0 idem).
 - 03:56 colhido CUSTO-DE-COORDENACAO entrega opus aaf48022: b7238e355 (cura do selo test_relato_guarda: porta _alcanca_o_vivo nao conta escrita de copia nem tupla de exclusao; 5 formas de leitura seguem contando, mutante morde) + 3b4061cf4 (F1 v2); 5 selos pos-commit rc 0, pautas OK Ran 164 (pista). Proximo: Codex verificador f1v2/ver1 (diff 93e305860..3b4061cf4).
 - 04:03 colhido CUSTO-DE-COORDENACAO f1v2/ver1/r.rc (04:02 rc 0): Codex verificador BLOQUEIA, 19 achados; triagem f1v2/ver1/triagem.md: 12 procedentes + mutante do 17 (amostra #12 e #8 conferida no vivo), 6 fila, 0 descartados. MOTIVO-AGENTE f1v2-v2 (bin/ + testes = opus constroi, CCM-OPCAO-A): opus volta 2 -> logs/CUSTO-DE-COORDENACAO/f1v2/v2/.
+- 04:11 colhido CODIGO-DOMINIO-VALIDO c4/inteira/i.rc (04:11 rc 0): inteira de POUSO na arvore 9fe5de435, OK (skipped=42, expected failures=39), Ran 18128; main ainda 627303c71. Pouso espera o ensaio da sombra do dia (cron em curso, --conferir REFEITA) para merge+deploy no mesmo ato (templates caem na hora).
 - 02:59 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO c3 (arquivo de teste e so do opus, CCM-OPCAO-A; Codex nao escreve teste): PUXADA CODIGO-DOMINIO-VALIDO c3 -> vaga opus construtor (wt-codex-codigo-dominio-valido-013223), mordidas P1/P2/rescisao+VIGIA do opus final logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md item 2
 - 02:26 PUXADA CODIGO-DOMINIO-VALIDO c2 -> vaga Codex construtor: so docstrings (citacao O256 restaurada com a excecao do `codigo` gravado; docstring do codigo_dominio_e_numerico sem o 'apos strip') -> logs/CODIGO-DOMINIO-VALIDO/c2/r.rc
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
