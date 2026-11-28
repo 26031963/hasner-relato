@@ -14947,6 +14947,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 05:31 colhido CUSTO-DE-COORDENACAO f1v2/v3/green_mao_unica.rc (05:31 rc 0): GREEN do achado 5, opus volta 3.
 - 05:32 colhido CUSTO-DE-COORDENACAO f1v2/v3/red_11_12_13_relato.rc (05:32 rc 1): RED esperado dos achados 11-13, opus volta 3.
 - 05:33 colhido CUSTO-DE-COORDENACAO f1v2/v3/green_relato.rc (05:33 rc 0): GREEN dos achados 11-13, opus volta 3.
+- 05:40 colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_disjuntor.rc (05:40 rc 2): selo test_disjuntor vermelho depois das curas da volta 3; opus segue, veredito na entrega.
 - 02:59 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO c3 (arquivo de teste e so do opus, CCM-OPCAO-A; Codex nao escreve teste): PUXADA CODIGO-DOMINIO-VALIDO c3 -> vaga opus construtor (wt-codex-codigo-dominio-valido-013223), mordidas P1/P2/rescisao+VIGIA do opus final logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md item 2
 - 02:26 PUXADA CODIGO-DOMINIO-VALIDO c2 -> vaga Codex construtor: so docstrings (citacao O256 restaurada com a excecao do `codigo` gravado; docstring do codigo_dominio_e_numerico sem o 'apos strip') -> logs/CODIGO-DOMINIO-VALIDO/c2/r.rc
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md

@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 05:35:22.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (310.6 MB). Acoes na janela: **1598**.
+**Medido em 28/11/2026 05:42:14.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (310.7 MB). Acoes na janela: **1603**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:40:28 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 05:40:24 | Bash | Lê a espera e a sombra | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/be0iy3akp.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; bash bin/sombra.sh --conferir; echo sombra=$?` |
+| 05:40:15 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 05:40:12 | Bash | Marca o passo no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') i=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado) ',l)) L.insert(i+1,f"- {h} colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_disjuntor.rc (05:40 rc 2): selo test_disjuntor vermelho depois das curas da volta 3; opus segue, veredito na  ...` |
+| 05:40:07 | Bash | Lê a espera e a sombra | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bkda8ok2c.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; bash bin/sombra.sh --conferir; echo sombra=$?` |
+| 05:39:09 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 05:39:05 | Bash | Lê a espera e a sombra | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/blq3l3vmz.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; bash bin/sombra.sh --conferir; echo sombra=$?` |
 | 05:34:08 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
 | 05:34:00 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 05:33:57 | Bash | Marca o GREEN no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') i=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado) ',l)) L.insert(i+1,f"- {h} colhido CUSTO-DE-COORDENACAO f1v2/v3/green_relato.rc (05:33 rc 0): GREEN dos achados 11-13, opus volta 3.") open(p,'w').write('\n'.join(L)) EOF python3 bin ...` |
@@ -1606,5 +1613,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:50:01 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bqz3vwln7.output; date +%H:%M` |
 | 17:45:31 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 17:45:28 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bdmufeyeu.output; date +%H:%M` |
-| 17:40:23 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 17:40:19 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bjxwkbeb4.output; date +%H:%M` |
