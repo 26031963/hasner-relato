@@ -11003,6 +11003,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 05:46:59 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:771a297a21 (283 car., na trilha privada)
+
 **28/11 04:16:47 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:ae84963439 (207 car., na trilha privada)
 
 **28/11 04:11:37 disjuntor (NEGOU ESPERA)** -- agente principal -- Bash -- alvo sha1:abedc87489 (231 car., na trilha privada)
@@ -14948,8 +14950,20 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 05:32 colhido CUSTO-DE-COORDENACAO f1v2/v3/red_11_12_13_relato.rc (05:32 rc 1): RED esperado dos achados 11-13, opus volta 3.
 - 05:33 colhido CUSTO-DE-COORDENACAO f1v2/v3/green_relato.rc (05:33 rc 0): GREEN dos achados 11-13, opus volta 3.
 - 05:40 colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_disjuntor.rc (05:40 rc 2): selo test_disjuntor vermelho depois das curas da volta 3; opus segue, veredito na entrega.
+- 05:45 superado CODIGO-DOMINIO-VALIDO smoke/sombra.rc (05:45 rc 125): copia git archive sem app/logs e app/media (ponto de montagem do tmpfs); relancado com as pastas.
+- 05:46 superado CODIGO-DOMINIO-VALIDO smoke/sombra.rc (05:45 rc 125, 2a): faltava tambem app/staticfiles na copia; relancado. Colhido tambem f1v2/v3/pos_test_censo_antes_da_vaga.rc (rc 0).
+- 05:47 colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_handoff_sessao.rc (05:46 rc 1) e pos_test_relato_guarda_pedido_de_patch (rc 0): handoff_sessao VERMELHO apos curas da volta 3 -- cobrar na entrega do opus.
+- 05:47 colhido CUSTO-DE-COORDENACAO f1v2/v3/pos_test_hook_stop_vivo.rc (05:47 rc 0).
+- 05:48 colhido CODIGO-DOMINIO-VALIDO smoke/sombra.rc (05:48 rc 0): SMOKE VERDE -- s12 na sombra de hoje com arvore 3545ebc07: col1041 fora por codigo_dominio_invalido (unico), TXT 11 emp2 linhas=358 erros_layout=0, itens=474 entra=220 fora=254 (entra 219->220 = sombra refeita hoje). deploy.rc 0. CDV NO AR.
+- 05:49 DESPACHO CRON-15-SOMBRA-CABE passo 1 (medida por etapa) -> Codex leitura (logs/CRON-15-SOMBRA-CABE/m1/r.rc; anexos hist de resultado_hist, espera, fim do sombra.log). Hoje: bloco 82 cmds soma 5095 s, 5 comandos = 3312 s (selo_leitores 1174, lavrar_he 670, lavrar_cxr 634, processar_cartorio 508, esmeril 345); fim 05:43. RETRATO item 2: travada por vaga opus (REDs antes do construtor Codex; F1 v3 na vaga).
 - 02:59 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO c3 (arquivo de teste e so do opus, CCM-OPCAO-A; Codex nao escreve teste): PUXADA CODIGO-DOMINIO-VALIDO c3 -> vaga opus construtor (wt-codex-codigo-dominio-valido-013223), mordidas P1/P2/rescisao+VIGIA do opus final logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md item 2
 - 02:26 PUXADA CODIGO-DOMINIO-VALIDO c2 -> vaga Codex construtor: so docstrings (citacao O256 restaurada com a excecao do `codigo` gravado; docstring do codigo_dominio_e_numerico sem o 'apos strip') -> logs/CODIGO-DOMINIO-VALIDO/c2/r.rc
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
+
+## 05:44 POUSO CODIGO-DOMINIO-VALIDO (folha, mao unica) -- aval CODIGO-DOMINIO-VALIDO-2811-0115
+- LEI-AKITA: padrao=Single Source of Truth, juizes novos=0 (linha inteira no corpo do commit).
+- arvore certificada: inteira logs/CODIGO-DOMINIO-VALIDO/c4/inteira/i.log, AMBIENTE sha=9fe5de435, Ran 18128, OK, rc 0; cmp dos 15 arquivos contra a wt = 0 diferencas.
+- sombra --conferir rc 0 (STATUS=OK, 05:44); deploy --sem-migrate a seguir, smoke abaixo.
+- fila: CDV-D1..D4 e CDV-CODIGO-11-DIGITOS no BACKLOG.
